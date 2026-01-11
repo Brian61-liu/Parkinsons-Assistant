@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import '../l10n/app_localizations.dart';
 import '../pages/tremor_test_page.dart';
 import '../pages/gait_assist_page.dart';
 import '../widgets/big_button.dart';
@@ -10,6 +11,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       // 使用 iOS 风格的导航栏（CupertinoNavigationBar）
       appBar: PreferredSize(
@@ -17,9 +19,9 @@ class HomePage extends StatelessWidget {
         child: CupertinoNavigationBar(
           backgroundColor: Colors.blue[50],
           border: null,
-          middle: const Text(
-            '帕金森康复助手',
-            style: TextStyle(
+          middle: Text(
+            l10n.appTitle,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 26, // 增大导航栏字体
               color: Colors.black87,
@@ -33,9 +35,9 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              '请选择您要进行的训练',
-              style: TextStyle(
+            Text(
+              l10n.selectTraining,
+              style: const TextStyle(
                 fontSize: 26, // 增大字体：22 -> 26
                 color: Colors.black87,
                 fontWeight: FontWeight.w500,
@@ -44,14 +46,15 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 50), // 增大间距：40 -> 50
             BigButton(
-              title: '手部震颤测试',
+              title: l10n.tremorTest,
               icon: Icons.back_hand,
               color: Colors.orange.shade100,
               textColor: Colors.deepOrange,
               onTap: () {
                 Navigator.push(
                   context,
-                  CupertinoPageRoute( // 使用 iOS 风格的路由转场
+                  CupertinoPageRoute(
+                    // 使用 iOS 风格的路由转场
                     builder: (context) => const TremorTestPage(),
                   ),
                 );
@@ -59,14 +62,15 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 36), // 增大间距：30 -> 36
             BigButton(
-              title: '步态节律辅助',
+              title: l10n.gaitAssist,
               icon: Icons.directions_walk,
               color: Colors.green.shade100,
               textColor: Colors.green.shade800,
               onTap: () {
                 Navigator.push(
                   context,
-                  CupertinoPageRoute( // 使用 iOS 风格的路由转场
+                  CupertinoPageRoute(
+                    // 使用 iOS 风格的路由转场
                     builder: (context) => const GaitAssistPage(),
                   ),
                 );

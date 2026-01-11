@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
+import '../l10n/app_localizations.dart';
 import '../services/audio_service.dart';
 import '../services/database_service.dart';
 import '../models/gait_record.dart';
@@ -127,9 +128,9 @@ class _GaitAssistPageState extends State<GaitAssistPage> {
         child: CupertinoNavigationBar(
           backgroundColor: Colors.green[50],
           border: null,
-          middle: const Text(
-            '步态节律辅助',
-            style: TextStyle(
+          middle: Text(
+            AppLocalizations.of(context)!.gaitAssistTitle,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 24,
               color: Colors.black87,
@@ -141,45 +142,48 @@ class _GaitAssistPageState extends State<GaitAssistPage> {
           ),
         ),
       ),
-      body: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(24), // 增大内边距：20 -> 24
-        child: Column(
-          children: [
-            // 说明文字
-            Card(
-              color: Colors.green[50],
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0), // 增大内边距：16 -> 20
-                child: const Text(
-                  '跟随节拍器进行步态训练',
-                  style: TextStyle(
-                    fontSize: 22, // 增大字体：18 -> 22
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            const SizedBox(height: 40),
-
-            // BPM显示和调节
-            Card(
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(28.0), // 增大内边距：24 -> 28
-                child: Column(
-                  children: [
-                    const Text(
-                      '节拍速度 (BPM)',
-                      style: TextStyle(
+      body: Builder(
+        builder: (context) {
+          final l10n = AppLocalizations.of(context)!;
+          return Container(
+            color: Colors.white,
+            padding: const EdgeInsets.all(24), // 增大内边距：20 -> 24
+            child: Column(
+              children: [
+                // 说明文字
+                Card(
+                  color: Colors.green[50],
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0), // 增大内边距：16 -> 20
+                    child: Text(
+                      l10n.gaitInstruction,
+                      style: const TextStyle(
                         fontSize: 22, // 增大字体：18 -> 22
+                        fontWeight: FontWeight.bold,
                         color: Colors.black87,
-                        fontWeight: FontWeight.w600,
                       ),
+                      textAlign: TextAlign.center,
                     ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+
+                // BPM显示和调节
+                Card(
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(28.0), // 增大内边距：24 -> 28
+                    child: Column(
+                      children: [
+                        Text(
+                          l10n.tempoSpeed,
+                          style: const TextStyle(
+                            fontSize: 22, // 增大字体：18 -> 22
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                     const SizedBox(height: 20), // 增大间距：16 -> 20
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -293,34 +297,36 @@ class _GaitAssistPageState extends State<GaitAssistPage> {
 
             const Spacer(),
 
-            // 开始/停止按钮（使用 Material Design，点击反馈明显）
-            SizedBox(
-              width: double.infinity,
-              height: 70, // 增大按钮高度：60 -> 70
-              child: ElevatedButton(
-                onPressed: _isPlaying ? _stopTraining : _startTraining,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _isPlaying ? Colors.red : Colors.green,
-                  foregroundColor: Colors.white,
-                  elevation: 4, // Material Design 阴影效果
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(35),
+                // 开始/停止按钮（使用 Material Design，点击反馈明显）
+                SizedBox(
+                  width: double.infinity,
+                  height: 70, // 增大按钮高度：60 -> 70
+                  child: ElevatedButton(
+                    onPressed: _isPlaying ? _stopTraining : _startTraining,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _isPlaying ? Colors.red : Colors.green,
+                      foregroundColor: Colors.white,
+                      elevation: 4, // Material Design 阴影效果
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(35),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: Text(
+                      _isPlaying ? l10n.stopTraining : l10n.startTraining,
+                      style: const TextStyle(
+                        fontSize: 28, // 增大字体：24 -> 28
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: Text(
-                  _isPlaying ? '停止训练' : '开始训练',
-                  style: const TextStyle(
-                    fontSize: 28, // 增大字体：24 -> 28
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-              ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

@@ -1,0 +1,55 @@
+{
+  "@@locale": "zh",
+  "appTitle": "帕金森康复助手",
+  "selectTraining": "请选择您要进行的训练",
+  "tremorTest": "手部震颤测试",
+  "gaitAssist": "步态节律辅助",
+  "tremorTestTitle": "手部震颤测试",
+  "tremorTestInstruction": "请将手机握在手中，保持手臂静止30秒",
+  "remainingTime": "剩余时间: {time} 秒",
+  "@remainingTime": {
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "readyToTest": "准备开始测试",
+  "frequency": "频率",
+  "amplitude": "幅度",
+  "waitingForData": "等待数据...",
+  "startTest": "开始测试",
+  "stopTest": "停止测试",
+  "testCompleted": "测试完成",
+  "averageFrequency": "平均频率: {frequency} Hz",
+  "@averageFrequency": {
+    "placeholders": {
+      "frequency": {
+        "type": "String"
+      }
+    }
+  },
+  "averageAmplitude": "平均幅度: {amplitude}",
+  "@averageAmplitude": {
+    "placeholders": {
+      "amplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "maxAmplitude": "最大幅度: {maxAmplitude}",
+  "@maxAmplitude": {
+    "placeholders": {
+      "maxAmplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "ok": "确定",
+  "sensorPermissionRequired": "需要传感器权限才能进行测试",
+  "gaitAssistTitle": "步态节律辅助",
+  "gaitInstruction": "跟随节拍器进行步态训练",
+  "tempoSpeed": "节拍速度 (BPM)",
+  "startTraining": "开始训练",
+  "stopTraining": "停止训练"
+}

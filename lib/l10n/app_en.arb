@@ -1,0 +1,119 @@
+{
+  "@@locale": "en",
+  "appTitle": "Parkinson Rehabilitation Assistant",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  "selectTraining": "Please select the training you want to perform",
+  "@selectTraining": {
+    "description": "Instruction text on home page"
+  },
+  "tremorTest": "Hand Tremor Test",
+  "@tremorTest": {
+    "description": "Hand tremor test button title"
+  },
+  "gaitAssist": "Gait Rhythm Assist",
+  "@gaitAssist": {
+    "description": "Gait rhythm assist button title"
+  },
+  "tremorTestTitle": "Hand Tremor Test",
+  "@tremorTestTitle": {
+    "description": "Hand tremor test page title"
+  },
+  "tremorTestInstruction": "Please hold your phone in your hand and keep your arm still for 30 seconds",
+  "@tremorTestInstruction": {
+    "description": "Instruction text for tremor test"
+  },
+  "remainingTime": "Remaining time: {time} seconds",
+  "@remainingTime": {
+    "description": "Remaining time display",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "readyToTest": "Ready to start test",
+  "@readyToTest": {
+    "description": "Ready state text"
+  },
+  "frequency": "Frequency",
+  "@frequency": {
+    "description": "Frequency label"
+  },
+  "amplitude": "Amplitude",
+  "@amplitude": {
+    "description": "Amplitude label"
+  },
+  "waitingForData": "Waiting for data...",
+  "@waitingForData": {
+    "description": "Waiting for data message"
+  },
+  "startTest": "Start Test",
+  "@startTest": {
+    "description": "Start test button text"
+  },
+  "stopTest": "Stop Test",
+  "@stopTest": {
+    "description": "Stop test button text"
+  },
+  "testCompleted": "Test Completed",
+  "@testCompleted": {
+    "description": "Test completed dialog title"
+  },
+  "averageFrequency": "Average Frequency: {frequency} Hz",
+  "@averageFrequency": {
+    "description": "Average frequency display",
+    "placeholders": {
+      "frequency": {
+        "type": "String"
+      }
+    }
+  },
+  "averageAmplitude": "Average Amplitude: {amplitude}",
+  "@averageAmplitude": {
+    "description": "Average amplitude display",
+    "placeholders": {
+      "amplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "maxAmplitude": "Max Amplitude: {maxAmplitude}",
+  "@maxAmplitude": {
+    "description": "Max amplitude display",
+    "placeholders": {
+      "maxAmplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button text"
+  },
+  "sensorPermissionRequired": "Sensor permission required to perform test",
+  "@sensorPermissionRequired": {
+    "description": "Sensor permission error message"
+  },
+  "gaitAssistTitle": "Gait Rhythm Assist",
+  "@gaitAssistTitle": {
+    "description": "Gait assist page title"
+  },
+  "gaitInstruction": "Follow the metronome for gait training",
+  "@gaitInstruction": {
+    "description": "Gait training instruction"
+  },
+  "tempoSpeed": "Tempo Speed (BPM)",
+  "@tempoSpeed": {
+    "description": "Tempo speed label"
+  },
+  "startTraining": "Start Training",
+  "@startTraining": {
+    "description": "Start training button text"
+  },
+  "stopTraining": "Stop Training",
+  "@stopTraining": {
+    "description": "Stop training button text"
+  }
+}
