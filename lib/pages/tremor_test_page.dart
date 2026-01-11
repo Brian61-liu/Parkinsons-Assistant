@@ -280,8 +280,8 @@ class _TremorTestPageState extends State<TremorTestPage> {
             // 实时数据显示
             if (_isRecording || _chartData.isNotEmpty) ...[
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(width: 8),
                   _buildMetricCard(
                     '频率',
                     '${_currentFrequency.toStringAsFixed(2)} Hz',
@@ -293,7 +293,6 @@ class _TremorTestPageState extends State<TremorTestPage> {
                     _currentAmplitude.toStringAsFixed(3),
                     Colors.green,
                   ),
-                  const SizedBox(width: 8),
                 ],
               ),
               const SizedBox(height: 24), // 增大间距：20 -> 24
@@ -406,6 +405,7 @@ class _TremorTestPageState extends State<TremorTestPage> {
           padding: const EdgeInsets.all(20.0), // 增大内边距：16 -> 20
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 label,
@@ -414,6 +414,7 @@ class _TremorTestPageState extends State<TremorTestPage> {
                   color: color,
                   fontWeight: FontWeight.w600,
                 ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12), // 增大间距：8 -> 12
               Text(
@@ -424,6 +425,7 @@ class _TremorTestPageState extends State<TremorTestPage> {
                   color: color,
                   letterSpacing: 1.0,
                 ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
