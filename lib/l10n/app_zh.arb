@@ -51,5 +51,20 @@
   "gaitInstruction": "跟随节拍器进行步态训练",
   "tempoSpeed": "节拍速度 (BPM)",
   "startTraining": "开始训练",
-  "stopTraining": "停止训练"
+  "stopTraining": "停止训练",
+  "language": "语言",
+  "changeLanguage": "切换语言",
+  "selectLanguage": "选择语言",
+  "english": "English",
+  "chinese": "简体中文",
+  "chineseTraditional": "繁體中文",
+  "spanish": "Español",
+  "french": "Français",
+  "german": "Deutsch",
+  "japanese": "日本語",
+  "korean": "한국어",
+  "portuguese": "Português",
+  "italian": "Italiano",
+  "russian": "Русский",
+  "arabic": "العربية"
 }

@@ -5,7 +5,16 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_ar.dart';
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
+import 'app_localizations_it.dart';
+import 'app_localizations_ja.dart';
+import 'app_localizations_ko.dart';
+import 'app_localizations_pt.dart';
+import 'app_localizations_ru.dart';
 import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
@@ -94,14 +103,24 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('ar'),
+    Locale('de'),
     Locale('en'),
+    Locale('es'),
+    Locale('fr'),
+    Locale('it'),
+    Locale('ja'),
+    Locale('ko'),
+    Locale('pt'),
+    Locale('ru'),
     Locale('zh'),
+    Locale('zh', 'TW'),
   ];
 
   /// Application title
   ///
   /// In en, this message translates to:
-  /// **'Parkinson Rehabilitation Assistant'**
+  /// **'Kineo'**
   String get appTitle;
 
   /// Instruction text on home page
@@ -241,6 +260,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stop Training'**
   String get stopTraining;
+
+  /// Language label
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// Change language button text
+  ///
+  /// In en, this message translates to:
+  /// **'Change Language'**
+  String get changeLanguage;
+
+  /// Language selection dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
+  String get selectLanguage;
+
+  /// English language option
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// Simplified Chinese language option
+  ///
+  /// In en, this message translates to:
+  /// **'简体中文'**
+  String get chinese;
+
+  /// Traditional Chinese language option
+  ///
+  /// In en, this message translates to:
+  /// **'繁體中文'**
+  String get chineseTraditional;
+
+  /// Spanish language option
+  ///
+  /// In en, this message translates to:
+  /// **'Español'**
+  String get spanish;
+
+  /// French language option
+  ///
+  /// In en, this message translates to:
+  /// **'Français'**
+  String get french;
+
+  /// German language option
+  ///
+  /// In en, this message translates to:
+  /// **'Deutsch'**
+  String get german;
+
+  /// Japanese language option
+  ///
+  /// In en, this message translates to:
+  /// **'日本語'**
+  String get japanese;
+
+  /// Korean language option
+  ///
+  /// In en, this message translates to:
+  /// **'한국어'**
+  String get korean;
+
+  /// Portuguese language option
+  ///
+  /// In en, this message translates to:
+  /// **'Português'**
+  String get portuguese;
+
+  /// Italian language option
+  ///
+  /// In en, this message translates to:
+  /// **'Italiano'**
+  String get italian;
+
+  /// Russian language option
+  ///
+  /// In en, this message translates to:
+  /// **'Русский'**
+  String get russian;
+
+  /// Arabic language option
+  ///
+  /// In en, this message translates to:
+  /// **'العربية'**
+  String get arabic;
 }
 
 class _AppLocalizationsDelegate
@@ -253,18 +362,59 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'ar',
+    'de',
+    'en',
+    'es',
+    'fr',
+    'it',
+    'ja',
+    'ko',
+    'pt',
+    'ru',
+    'zh',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when language+country codes are specified.
+  switch (locale.languageCode) {
+    case 'zh':
+      {
+        switch (locale.countryCode) {
+          case 'TW':
+            return AppLocalizationsZhTw();
+        }
+        break;
+      }
+  }
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'ar':
+      return AppLocalizationsAr();
+    case 'de':
+      return AppLocalizationsDe();
     case 'en':
       return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'ja':
+      return AppLocalizationsJa();
+    case 'ko':
+      return AppLocalizationsKo();
+    case 'pt':
+      return AppLocalizationsPt();
+    case 'ru':
+      return AppLocalizationsRu();
     case 'zh':
       return AppLocalizationsZh();
   }

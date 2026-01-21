@@ -1,0 +1,70 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Kineo",
+  "selectTraining": "Пожалуйста, выберите упражнение, которое хотите выполнить",
+  "tremorTest": "Тест на Тремор Рук",
+  "gaitAssist": "Помощь в Ритме Походки",
+  "tremorTestTitle": "Тест на Тремор Рук",
+  "tremorTestInstruction": "Пожалуйста, держите телефон в руке и держите руку неподвижно в течение 30 секунд",
+  "remainingTime": "Осталось времени: {time} секунд",
+  "@remainingTime": {
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "readyToTest": "Готов к началу теста",
+  "frequency": "Частота",
+  "amplitude": "Амплитуда",
+  "waitingForData": "Ожидание данных...",
+  "startTest": "Начать Тест",
+  "stopTest": "Остановить Тест",
+  "testCompleted": "Тест Завершен",
+  "averageFrequency": "Средняя Частота: {frequency} Гц",
+  "@averageFrequency": {
+    "placeholders": {
+      "frequency": {
+        "type": "String"
+      }
+    }
+  },
+  "averageAmplitude": "Средняя Амплитуда: {amplitude}",
+  "@averageAmplitude": {
+    "placeholders": {
+      "amplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "maxAmplitude": "Максимальная Амплитуда: {maxAmplitude}",
+  "@maxAmplitude": {
+    "placeholders": {
+      "maxAmplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "ok": "OK",
+  "sensorPermissionRequired": "Для выполнения теста требуется разрешение датчика",
+  "gaitAssistTitle": "Помощь в Ритме Походки",
+  "gaitInstruction": "Следуйте метроному для тренировки походки",
+  "tempoSpeed": "Скорость Темпа (BPM)",
+  "startTraining": "Начать Тренировку",
+  "stopTraining": "Остановить Тренировку",
+  "language": "Язык",
+  "changeLanguage": "Изменить Язык",
+  "selectLanguage": "Выбрать Язык",
+  "english": "English",
+  "chinese": "简体中文",
+  "chineseTraditional": "繁體中文",
+  "spanish": "Español",
+  "french": "Français",
+  "german": "Deutsch",
+  "japanese": "日本語",
+  "korean": "한국어",
+  "portuguese": "Português",
+  "italian": "Italiano",
+  "russian": "Русский",
+  "arabic": "العربية"
+}

@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Parkinson Rehabilitation Assistant';
+  String get appTitle => 'Kineo';
 
   @override
   String get selectTraining => 'Please select the training you want to perform';
@@ -89,4 +89,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stopTraining => 'Stop Training';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get changeLanguage => 'Change Language';
+
+  @override
+  String get selectLanguage => 'Select Language';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get chinese => '简体中文';
+
+  @override
+  String get chineseTraditional => '繁體中文';
+
+  @override
+  String get spanish => 'Español';
+
+  @override
+  String get french => 'Français';
+
+  @override
+  String get german => 'Deutsch';
+
+  @override
+  String get japanese => '日本語';
+
+  @override
+  String get korean => '한국어';
+
+  @override
+  String get portuguese => 'Português';
+
+  @override
+  String get italian => 'Italiano';
+
+  @override
+  String get russian => 'Русский';
+
+  @override
+  String get arabic => 'العربية';
 }

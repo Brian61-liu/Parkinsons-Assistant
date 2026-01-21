@@ -1,0 +1,70 @@
+{
+  "@@locale": "it",
+  "appTitle": "Kineo",
+  "selectTraining": "Si prega di selezionare l'allenamento che si desidera eseguire",
+  "tremorTest": "Test del Tremore della Mano",
+  "gaitAssist": "Assistenza al Ritmo del Passo",
+  "tremorTestTitle": "Test del Tremore della Mano",
+  "tremorTestInstruction": "Si prega di tenere il telefono in mano e mantenere il braccio fermo per 30 secondi",
+  "remainingTime": "Tempo rimanente: {time} secondi",
+  "@remainingTime": {
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "readyToTest": "Pronto per iniziare il test",
+  "frequency": "Frequenza",
+  "amplitude": "Ampiezza",
+  "waitingForData": "In attesa di dati...",
+  "startTest": "Avvia Test",
+  "stopTest": "Ferma Test",
+  "testCompleted": "Test Completato",
+  "averageFrequency": "Frequenza Media: {frequency} Hz",
+  "@averageFrequency": {
+    "placeholders": {
+      "frequency": {
+        "type": "String"
+      }
+    }
+  },
+  "averageAmplitude": "Ampiezza Media: {amplitude}",
+  "@averageAmplitude": {
+    "placeholders": {
+      "amplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "maxAmplitude": "Ampiezza Massima: {maxAmplitude}",
+  "@maxAmplitude": {
+    "placeholders": {
+      "maxAmplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "ok": "OK",
+  "sensorPermissionRequired": "Autorizzazione sensore richiesta per eseguire il test",
+  "gaitAssistTitle": "Assistenza al Ritmo del Passo",
+  "gaitInstruction": "Segui il metronomo per l'allenamento del passo",
+  "tempoSpeed": "Velocità del Tempo (BPM)",
+  "startTraining": "Avvia Allenamento",
+  "stopTraining": "Ferma Allenamento",
+  "language": "Lingua",
+  "changeLanguage": "Cambia Lingua",
+  "selectLanguage": "Seleziona Lingua",
+  "english": "English",
+  "chinese": "简体中文",
+  "chineseTraditional": "繁體中文",
+  "spanish": "Español",
+  "french": "Français",
+  "german": "Deutsch",
+  "japanese": "日本語",
+  "korean": "한국어",
+  "portuguese": "Português",
+  "italian": "Italiano",
+  "russian": "Русский",
+  "arabic": "العربية"
+}

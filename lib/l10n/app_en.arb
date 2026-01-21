@@ -115,5 +115,65 @@
   "stopTraining": "Stop Training",
   "@stopTraining": {
     "description": "Stop training button text"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language label"
+  },
+  "changeLanguage": "Change Language",
+  "@changeLanguage": {
+    "description": "Change language button text"
+  },
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Language selection dialog title"
+  },
+  "english": "English",
+  "@english": {
+    "description": "English language option"
+  },
+  "chinese": "简体中文",
+  "@chinese": {
+    "description": "Simplified Chinese language option"
+  },
+  "chineseTraditional": "繁體中文",
+  "@chineseTraditional": {
+    "description": "Traditional Chinese language option"
+  },
+  "spanish": "Español",
+  "@spanish": {
+    "description": "Spanish language option"
+  },
+  "french": "Français",
+  "@french": {
+    "description": "French language option"
+  },
+  "german": "Deutsch",
+  "@german": {
+    "description": "German language option"
+  },
+  "japanese": "日本語",
+  "@japanese": {
+    "description": "Japanese language option"
+  },
+  "korean": "한국어",
+  "@korean": {
+    "description": "Korean language option"
+  },
+  "portuguese": "Português",
+  "@portuguese": {
+    "description": "Portuguese language option"
+  },
+  "italian": "Italiano",
+  "@italian": {
+    "description": "Italian language option"
+  },
+  "russian": "Русский",
+  "@russian": {
+    "description": "Russian language option"
+  },
+  "arabic": "العربية",
+  "@arabic": {
+    "description": "Arabic language option"
   }
 }

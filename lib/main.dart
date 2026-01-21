@@ -7,14 +7,28 @@ void main() {
   runApp(const ParkinsonApp());
 }
 
-class ParkinsonApp extends StatelessWidget {
+class ParkinsonApp extends StatefulWidget {
   const ParkinsonApp({super.key});
+
+  @override
+  State<ParkinsonApp> createState() => _ParkinsonAppState();
+}
+
+class _ParkinsonAppState extends State<ParkinsonApp> {
+  Locale _locale = const Locale('zh', ''); // 默认中文
+
+  void changeLanguage(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Kineo',
       debugShowCheckedModeBanner: false,
+      locale: _locale, // 设置当前语言
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -22,8 +36,18 @@ class ParkinsonApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('en', ''), // 英语
-        Locale('zh', ''), // 中文
+        Locale('ar', ''), // 阿拉伯语 Arabic
+        Locale('zh', ''), // 简体中文 Chinese Simplified
+        Locale('zh', 'TW'), // 繁體中文 Chinese Traditional
+        Locale('en', ''), // 英语 English
+        Locale('fr', ''), // 法语 French
+        Locale('de', ''), // 德语 German
+        Locale('it', ''), // 意大利语 Italian
+        Locale('ja', ''), // 日语 Japanese
+        Locale('ko', ''), // 韩语 Korean
+        Locale('pt', ''), // 葡萄牙语 Portuguese
+        Locale('ru', ''), // 俄语 Russian
+        Locale('es', ''), // 西班牙语 Spanish
       ],
       theme: ThemeData(
         useMaterial3: true,
@@ -49,7 +73,7 @@ class ParkinsonApp extends StatelessWidget {
           child: child!,
         );
       },
-      home: const HomePage(),
+      home: HomePage(onLanguageChange: changeLanguage),
     );
   }
 }

@@ -43,21 +43,30 @@ class BigButton extends StatelessWidget {
               ),
             ],
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 56, color: textColor), // 增大图标：48 -> 56
-              const SizedBox(width: 24),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 32, // 增大字体：28 -> 32
-                  fontWeight: FontWeight.bold,
-                  color: textColor,
-                  letterSpacing: 1.2, // 增加字间距，提高可读性
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: 50, color: textColor), // 稍微减小图标
+                const SizedBox(width: 20),
+                Flexible(
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    maxLines: 2, // 允许最多两行
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 28, // 适当减小字体以适应更长的文本
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                      letterSpacing: 0.5,
+                      height: 1.2, // 行高
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -1,0 +1,70 @@
+{
+  "@@locale": "es",
+  "appTitle": "Kineo",
+  "selectTraining": "Por favor, seleccione el entrenamiento que desea realizar",
+  "tremorTest": "Prueba de Temblor de Mano",
+  "gaitAssist": "Asistencia de Ritmo de Marcha",
+  "tremorTestTitle": "Prueba de Temblor de Mano",
+  "tremorTestInstruction": "Por favor, sostenga el teléfono en su mano y mantenga el brazo quieto durante 30 segundos",
+  "remainingTime": "Tiempo restante: {time} segundos",
+  "@remainingTime": {
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "readyToTest": "Listo para comenzar la prueba",
+  "frequency": "Frecuencia",
+  "amplitude": "Amplitud",
+  "waitingForData": "Esperando datos...",
+  "startTest": "Iniciar Prueba",
+  "stopTest": "Detener Prueba",
+  "testCompleted": "Prueba Completada",
+  "averageFrequency": "Frecuencia Promedio: {frequency} Hz",
+  "@averageFrequency": {
+    "placeholders": {
+      "frequency": {
+        "type": "String"
+      }
+    }
+  },
+  "averageAmplitude": "Amplitud Promedio: {amplitude}",
+  "@averageAmplitude": {
+    "placeholders": {
+      "amplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "maxAmplitude": "Amplitud Máxima: {maxAmplitude}",
+  "@maxAmplitude": {
+    "placeholders": {
+      "maxAmplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "ok": "OK",
+  "sensorPermissionRequired": "Se requiere permiso de sensor para realizar la prueba",
+  "gaitAssistTitle": "Asistencia de Ritmo de Marcha",
+  "gaitInstruction": "Siga el metrónomo para el entrenamiento de marcha",
+  "tempoSpeed": "Velocidad del Tempo (BPM)",
+  "startTraining": "Iniciar Entrenamiento",
+  "stopTraining": "Detener Entrenamiento",
+  "language": "Idioma",
+  "changeLanguage": "Cambiar Idioma",
+  "selectLanguage": "Seleccionar Idioma",
+  "english": "English",
+  "chinese": "简体中文",
+  "chineseTraditional": "繁體中文",
+  "spanish": "Español",
+  "french": "Français",
+  "german": "Deutsch",
+  "japanese": "日本語",
+  "korean": "한국어",
+  "portuguese": "Português",
+  "italian": "Italiano",
+  "russian": "Русский",
+  "arabic": "العربية"
+}

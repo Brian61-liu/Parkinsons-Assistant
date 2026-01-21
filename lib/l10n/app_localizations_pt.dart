@@ -1,0 +1,138 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Portuguese (`pt`).
+class AppLocalizationsPt extends AppLocalizations {
+  AppLocalizationsPt([String locale = 'pt']) : super(locale);
+
+  @override
+  String get appTitle => 'Kineo';
+
+  @override
+  String get selectTraining =>
+      'Por favor, selecione o treinamento que deseja realizar';
+
+  @override
+  String get tremorTest => 'Teste de Tremor de Mão';
+
+  @override
+  String get gaitAssist => 'Assistência de Ritmo de Marcha';
+
+  @override
+  String get tremorTestTitle => 'Teste de Tremor de Mão';
+
+  @override
+  String get tremorTestInstruction =>
+      'Por favor, segure o telefone na mão e mantenha o braço parado por 30 segundos';
+
+  @override
+  String remainingTime(int time) {
+    return 'Tempo restante: $time segundos';
+  }
+
+  @override
+  String get readyToTest => 'Pronto para iniciar o teste';
+
+  @override
+  String get frequency => 'Frequência';
+
+  @override
+  String get amplitude => 'Amplitude';
+
+  @override
+  String get waitingForData => 'Aguardando dados...';
+
+  @override
+  String get startTest => 'Iniciar Teste';
+
+  @override
+  String get stopTest => 'Parar Teste';
+
+  @override
+  String get testCompleted => 'Teste Concluído';
+
+  @override
+  String averageFrequency(String frequency) {
+    return 'Frequência Média: $frequency Hz';
+  }
+
+  @override
+  String averageAmplitude(String amplitude) {
+    return 'Amplitude Média: $amplitude';
+  }
+
+  @override
+  String maxAmplitude(String maxAmplitude) {
+    return 'Amplitude Máxima: $maxAmplitude';
+  }
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get sensorPermissionRequired =>
+      'Permissão de sensor necessária para realizar o teste';
+
+  @override
+  String get gaitAssistTitle => 'Assistência de Ritmo de Marcha';
+
+  @override
+  String get gaitInstruction => 'Siga o metrônomo para o treinamento de marcha';
+
+  @override
+  String get tempoSpeed => 'Velocidade do Tempo (BPM)';
+
+  @override
+  String get startTraining => 'Iniciar Treinamento';
+
+  @override
+  String get stopTraining => 'Parar Treinamento';
+
+  @override
+  String get language => 'Idioma';
+
+  @override
+  String get changeLanguage => 'Alterar Idioma';
+
+  @override
+  String get selectLanguage => 'Selecionar Idioma';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get chinese => '简体中文';
+
+  @override
+  String get chineseTraditional => '繁體中文';
+
+  @override
+  String get spanish => 'Español';
+
+  @override
+  String get french => 'Français';
+
+  @override
+  String get german => 'Deutsch';
+
+  @override
+  String get japanese => '日本語';
+
+  @override
+  String get korean => '한국어';
+
+  @override
+  String get portuguese => 'Português';
+
+  @override
+  String get italian => 'Italiano';
+
+  @override
+  String get russian => 'Русский';
+
+  @override
+  String get arabic => 'العربية';
+}

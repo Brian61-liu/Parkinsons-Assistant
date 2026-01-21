@@ -1,0 +1,70 @@
+{
+  "@@locale": "de",
+  "appTitle": "Kineo",
+  "selectTraining": "Bitte wählen Sie das Training aus, das Sie durchführen möchten",
+  "tremorTest": "Handzitter-Test",
+  "gaitAssist": "Gang-Rhythmus-Hilfe",
+  "tremorTestTitle": "Handzitter-Test",
+  "tremorTestInstruction": "Bitte halten Sie das Telefon in der Hand und halten Sie den Arm 30 Sekunden lang still",
+  "remainingTime": "Verbleibende Zeit: {time} Sekunden",
+  "@remainingTime": {
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "readyToTest": "Bereit, den Test zu starten",
+  "frequency": "Frequenz",
+  "amplitude": "Amplitude",
+  "waitingForData": "Warten auf Daten...",
+  "startTest": "Test Starten",
+  "stopTest": "Test Stoppen",
+  "testCompleted": "Test Abgeschlossen",
+  "averageFrequency": "Durchschnittliche Frequenz: {frequency} Hz",
+  "@averageFrequency": {
+    "placeholders": {
+      "frequency": {
+        "type": "String"
+      }
+    }
+  },
+  "averageAmplitude": "Durchschnittliche Amplitude: {amplitude}",
+  "@averageAmplitude": {
+    "placeholders": {
+      "amplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "maxAmplitude": "Maximale Amplitude: {maxAmplitude}",
+  "@maxAmplitude": {
+    "placeholders": {
+      "maxAmplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "ok": "OK",
+  "sensorPermissionRequired": "Sensorberechtigung erforderlich, um den Test durchzuführen",
+  "gaitAssistTitle": "Gang-Rhythmus-Hilfe",
+  "gaitInstruction": "Folgen Sie dem Metronom für das Gang-Training",
+  "tempoSpeed": "Tempo-Geschwindigkeit (BPM)",
+  "startTraining": "Training Starten",
+  "stopTraining": "Training Stoppen",
+  "language": "Sprache",
+  "changeLanguage": "Sprache Ändern",
+  "selectLanguage": "Sprache Auswählen",
+  "english": "English",
+  "chinese": "简体中文",
+  "chineseTraditional": "繁體中文",
+  "spanish": "Español",
+  "french": "Français",
+  "german": "Deutsch",
+  "japanese": "日本語",
+  "korean": "한국어",
+  "portuguese": "Português",
+  "italian": "Italiano",
+  "russian": "Русский",
+  "arabic": "العربية"
+}

@@ -1,0 +1,70 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Kineo",
+  "selectTraining": "Veuillez sélectionner l'entraînement que vous souhaitez effectuer",
+  "tremorTest": "Test de Tremblement de Main",
+  "gaitAssist": "Assistance au Rythme de Marche",
+  "tremorTestTitle": "Test de Tremblement de Main",
+  "tremorTestInstruction": "Veuillez tenir le téléphone dans votre main et garder le bras immobile pendant 30 secondes",
+  "remainingTime": "Temps restant : {time} secondes",
+  "@remainingTime": {
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "readyToTest": "Prêt à commencer le test",
+  "frequency": "Fréquence",
+  "amplitude": "Amplitude",
+  "waitingForData": "En attente de données...",
+  "startTest": "Démarrer le Test",
+  "stopTest": "Arrêter le Test",
+  "testCompleted": "Test Terminé",
+  "averageFrequency": "Fréquence Moyenne : {frequency} Hz",
+  "@averageFrequency": {
+    "placeholders": {
+      "frequency": {
+        "type": "String"
+      }
+    }
+  },
+  "averageAmplitude": "Amplitude Moyenne : {amplitude}",
+  "@averageAmplitude": {
+    "placeholders": {
+      "amplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "maxAmplitude": "Amplitude Maximale : {maxAmplitude}",
+  "@maxAmplitude": {
+    "placeholders": {
+      "maxAmplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "ok": "OK",
+  "sensorPermissionRequired": "Autorisation de capteur requise pour effectuer le test",
+  "gaitAssistTitle": "Assistance au Rythme de Marche",
+  "gaitInstruction": "Suivez le métronome pour l'entraînement à la marche",
+  "tempoSpeed": "Vitesse du Tempo (BPM)",
+  "startTraining": "Commencer l'Entraînement",
+  "stopTraining": "Arrêter l'Entraînement",
+  "language": "Langue",
+  "changeLanguage": "Changer de Langue",
+  "selectLanguage": "Sélectionner la Langue",
+  "english": "English",
+  "chinese": "简体中文",
+  "chineseTraditional": "繁體中文",
+  "spanish": "Español",
+  "french": "Français",
+  "german": "Deutsch",
+  "japanese": "日本語",
+  "korean": "한국어",
+  "portuguese": "Português",
+  "italian": "Italiano",
+  "russian": "Русский",
+  "arabic": "العربية"
+}

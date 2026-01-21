@@ -1,0 +1,70 @@
+{
+  "@@locale": "ja",
+  "appTitle": "Kineo",
+  "selectTraining": "実施したいトレーニングを選択してください",
+  "tremorTest": "手の震えテスト",
+  "gaitAssist": "歩行リズム補助",
+  "tremorTestTitle": "手の震えテスト",
+  "tremorTestInstruction": "スマートフォンを手に持ち、30秒間腕を静止させてください",
+  "remainingTime": "残り時間: {time} 秒",
+  "@remainingTime": {
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "readyToTest": "テスト開始準備完了",
+  "frequency": "周波数",
+  "amplitude": "振幅",
+  "waitingForData": "データを待っています...",
+  "startTest": "テスト開始",
+  "stopTest": "テスト停止",
+  "testCompleted": "テスト完了",
+  "averageFrequency": "平均周波数: {frequency} Hz",
+  "@averageFrequency": {
+    "placeholders": {
+      "frequency": {
+        "type": "String"
+      }
+    }
+  },
+  "averageAmplitude": "平均振幅: {amplitude}",
+  "@averageAmplitude": {
+    "placeholders": {
+      "amplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "maxAmplitude": "最大振幅: {maxAmplitude}",
+  "@maxAmplitude": {
+    "placeholders": {
+      "maxAmplitude": {
+        "type": "String"
+      }
+    }
+  },
+  "ok": "OK",
+  "sensorPermissionRequired": "テストを実施するにはセンサーの許可が必要です",
+  "gaitAssistTitle": "歩行リズム補助",
+  "gaitInstruction": "メトロノームに合わせて歩行トレーニングを行ってください",
+  "tempoSpeed": "テンポ速度 (BPM)",
+  "startTraining": "トレーニング開始",
+  "stopTraining": "トレーニング停止",
+  "language": "言語",
+  "changeLanguage": "言語を変更",
+  "selectLanguage": "言語を選択",
+  "english": "English",
+  "chinese": "简体中文",
+  "chineseTraditional": "繁體中文",
+  "spanish": "Español",
+  "french": "Français",
+  "german": "Deutsch",
+  "japanese": "日本語",
+  "korean": "한국어",
+  "portuguese": "Português",
+  "italian": "Italiano",
+  "russian": "Русский",
+  "arabic": "العربية"
+}
