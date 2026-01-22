@@ -18,9 +18,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tremorTest => '손 떨림 테스트';
 
   @override
-  String get gaitAssist => '보행 리듬 보조';
-
-  @override
   String get tremorTestTitle => '손 떨림 테스트';
 
   @override
@@ -72,21 +69,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get sensorPermissionRequired => '테스트를 수행하려면 센서 권한이 필요합니다';
-
-  @override
-  String get gaitAssistTitle => '보행 리듬 보조';
-
-  @override
-  String get gaitInstruction => '메트로놈을 따라 보행 훈련을 수행하세요';
-
-  @override
-  String get tempoSpeed => '템포 속도 (BPM)';
-
-  @override
-  String get startTraining => '훈련 시작';
-
-  @override
-  String get stopTraining => '훈련 중지';
 
   @override
   String get language => '언어';

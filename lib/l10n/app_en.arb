@@ -12,10 +12,6 @@
   "@tremorTest": {
     "description": "Hand tremor test button title"
   },
-  "gaitAssist": "Gait Rhythm Assist",
-  "@gaitAssist": {
-    "description": "Gait rhythm assist button title"
-  },
   "tremorTestTitle": "Hand Tremor Test",
   "@tremorTestTitle": {
     "description": "Hand tremor test page title"
@@ -95,26 +91,6 @@
   "sensorPermissionRequired": "Sensor permission required to perform test",
   "@sensorPermissionRequired": {
     "description": "Sensor permission error message"
-  },
-  "gaitAssistTitle": "Gait Rhythm Assist",
-  "@gaitAssistTitle": {
-    "description": "Gait assist page title"
-  },
-  "gaitInstruction": "Follow the metronome for gait training",
-  "@gaitInstruction": {
-    "description": "Gait training instruction"
-  },
-  "tempoSpeed": "Tempo Speed (BPM)",
-  "@tempoSpeed": {
-    "description": "Tempo speed label"
-  },
-  "startTraining": "Start Training",
-  "@startTraining": {
-    "description": "Start training button text"
-  },
-  "stopTraining": "Stop Training",
-  "@stopTraining": {
-    "description": "Stop training button text"
   },
   "language": "Language",
   "@language": {

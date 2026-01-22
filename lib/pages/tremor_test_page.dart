@@ -228,9 +228,12 @@ class _TremorTestPageState extends State<TremorTestPage> {
             AppLocalizations.of(context)!.tremorTestTitle,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 24,
+              fontSize: 20,
               color: Colors.black87,
             ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
           leading: CupertinoNavigationBarBackButton(
             color: Colors.deepOrange,
@@ -238,86 +241,87 @@ class _TremorTestPageState extends State<TremorTestPage> {
           ),
         ),
       ),
-      body: Builder(
-        builder: (context) {
-          final l10n = AppLocalizations.of(context)!;
-          return Container(
-            color: Colors.white,
-            padding: const EdgeInsets.all(24), // 增大内边距：20 -> 24
-            child: Column(
-              children: [
-                // 说明文字
-                Card(
-                  color: Colors.orange[50],
-                  elevation: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0), // 增大内边距：16 -> 20
-                    child: Text(
-                      l10n.tremorTestInstruction,
+      body: SafeArea(
+        child: Builder(
+          builder: (context) {
+            final l10n = AppLocalizations.of(context)!;
+            return Container(
+              color: Colors.white,
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  // 说明文字
+                  Card(
+                    color: Colors.orange[50],
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        l10n.tremorTestInstruction,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // 倒计时显示
+                  if (_isRecording)
+                    Text(
+                      l10n.remainingTime(_remainingTime),
                       style: const TextStyle(
-                        fontSize: 22, // 增大字体：18 -> 22
+                        fontSize: 36,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: Colors.orange,
+                        letterSpacing: 1.5,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 32), // 增大间距：20 -> 32
-                // 倒计时显示
-                if (_isRecording)
-                  Text(
-                    l10n.remainingTime(_remainingTime),
-                    style: const TextStyle(
-                      fontSize: 42, // 增大字体：32 -> 42
-                      fontWeight: FontWeight.bold,
-                      color: Colors.orange,
-                      letterSpacing: 1.5,
-                    ),
-                  )
-                else
-                  Text(
-                    l10n.readyToTest,
-                    style: const TextStyle(
-                      fontSize: 28, // 增大字体：24 -> 28
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-
-                const SizedBox(height: 40), // 增大间距：30 -> 40
-                // 实时数据显示
-                if (_isRecording || _chartData.isNotEmpty) ...[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildMetricCard(
-                        l10n.frequency,
-                        '${_currentFrequency.toStringAsFixed(2)} Hz',
-                        Colors.blue,
+                    )
+                  else
+                    Text(
+                      l10n.readyToTest,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500,
                       ),
-                      const SizedBox(width: 16),
-                      _buildMetricCard(
-                        l10n.amplitude,
-                        _currentAmplitude.toStringAsFixed(3),
-                        Colors.green,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24), // 增大间距：20 -> 24
-                  // 数据图表（增大图表区域）
-                  Expanded(
-                    child: Card(
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0), // 增大内边距：16 -> 20
-                        child: _chartData.isEmpty
-                            ? Center(
-                                child: Text(
-                                  l10n.waitingForData,
-                                  style: const TextStyle(fontSize: 22),
-                                ),
-                              )
+                    ),
+                  const SizedBox(height: 24),
+                  // 实时数据显示
+                  if (_isRecording || _chartData.isNotEmpty) ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildMetricCard(
+                          l10n.frequency,
+                          '${_currentFrequency.toStringAsFixed(2)} Hz',
+                          Colors.blue,
+                        ),
+                        const SizedBox(width: 12),
+                        _buildMetricCard(
+                          l10n.amplitude,
+                          _currentAmplitude.toStringAsFixed(3),
+                          Colors.green,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    // 数据图表
+                    Expanded(
+                      child: Card(
+                        elevation: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: _chartData.isEmpty
+                              ? Center(
+                                  child: Text(
+                                    l10n.waitingForData,
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                )
                             : LineChart(
                                 LineChartData(
                                   gridData: const FlGridData(show: true),
@@ -365,62 +369,66 @@ class _TremorTestPageState extends State<TremorTestPage> {
                       ),
                     ),
                   ),
-                ] else
-                  Expanded(
-                    child: Center(
-                      child: Icon(
-                        Icons.back_hand,
-                        size: 150, // 增大图标：120 -> 150
-                        color: Colors.orange[300],
+                  ] else
+                    Expanded(
+                      child: Center(
+                        child: Icon(
+                          Icons.back_hand,
+                          size: 140,
+                          color: Colors.orange[300],
+                        ),
+                      ),
+                    ),
+                  const SizedBox(height: 20),
+                  // 开始/停止按钮
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _isRecording ? _stopTest : _startTest,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _isRecording ? Colors.red : Colors.orange,
+                        foregroundColor: Colors.white,
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 18,
+                          horizontal: 24,
+                        ),
+                        minimumSize: const Size(double.infinity, 60),
+                      ),
+                      child: Text(
+                        _isRecording ? l10n.stopTest : l10n.startTest,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.visible,
                       ),
                     ),
                   ),
-
-                const SizedBox(height: 24), // 增大间距：20 -> 24
-                // 开始/停止按钮（使用 Material Design，点击反馈明显）
-                SizedBox(
-                  width: double.infinity,
-                  height: 70, // 增大按钮高度：60 -> 70
-                  child: ElevatedButton(
-                    onPressed: _isRecording ? _stopTest : _startTest,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _isRecording
-                          ? Colors.red
-                          : Colors.orange,
-                      foregroundColor: Colors.white,
-                      elevation: 4, // Material Design 阴影效果
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(35),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    child: Text(
-                      _isRecording ? l10n.stopTest : l10n.startTest,
-                      style: const TextStyle(
-                        fontSize: 28, // 增大字体：24 -> 28
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
-  // 构建指标卡片（增大尺寸）
+  // 构建指标卡片
   Widget _buildMetricCard(String label, String value, Color color) {
     return Expanded(
       child: Card(
         color: color.withValues(alpha: 0.1),
         elevation: 2,
         child: Padding(
-          padding: const EdgeInsets.all(20.0), // 增大内边距：16 -> 20
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -428,17 +436,17 @@ class _TremorTestPageState extends State<TremorTestPage> {
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: 20, // 增大字体：16 -> 20
+                  fontSize: 18,
                   color: color,
                   fontWeight: FontWeight.w600,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 12), // 增大间距：8 -> 12
+              const SizedBox(height: 8),
               Text(
                 value,
                 style: TextStyle(
-                  fontSize: 32, // 增大字体：24 -> 32
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: color,
                   letterSpacing: 1.0,

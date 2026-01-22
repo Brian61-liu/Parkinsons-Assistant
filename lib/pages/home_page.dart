@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../l10n/app_localizations.dart';
 import '../pages/tremor_test_page.dart';
-import '../pages/gait_assist_page.dart';
 import '../widgets/big_button.dart';
 
 // 主页面
@@ -77,9 +76,11 @@ class HomePage extends StatelessWidget {
             l10n.appTitle,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 26, // 增大导航栏字体
+              fontSize: 24,
               color: Colors.black87,
             ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
           ),
           trailing: CupertinoButton(
             padding: EdgeInsets.zero,
@@ -114,33 +115,16 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 40),
-            BigButton(
-              title: l10n.tremorTest,
-              icon: Icons.back_hand,
-              color: Colors.orange.shade100,
-              textColor: Colors.deepOrange,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    // 使用 iOS 风格的路由转场
-                    builder: (context) => const TremorTestPage(),
-                  ),
-                );
-              },
-            ),
-              const SizedBox(height: 30),
               BigButton(
-                title: l10n.gaitAssist,
-                icon: Icons.directions_walk,
-                color: Colors.green.shade100,
-                textColor: Colors.green.shade800,
+                title: l10n.tremorTest,
+                icon: Icons.back_hand,
+                color: Colors.orange.shade100,
+                textColor: Colors.deepOrange,
                 onTap: () {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      // 使用 iOS 风格的路由转场
-                      builder: (context) => const GaitAssistPage(),
+                      builder: (context) => const TremorTestPage(),
                     ),
                   );
                 },

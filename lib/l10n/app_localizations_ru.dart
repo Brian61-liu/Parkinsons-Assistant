@@ -19,9 +19,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tremorTest => 'Тест на Тремор Рук';
 
   @override
-  String get gaitAssist => 'Помощь в Ритме Походки';
-
-  @override
   String get tremorTestTitle => 'Тест на Тремор Рук';
 
   @override
@@ -75,21 +72,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get sensorPermissionRequired =>
       'Для выполнения теста требуется разрешение датчика';
-
-  @override
-  String get gaitAssistTitle => 'Помощь в Ритме Походки';
-
-  @override
-  String get gaitInstruction => 'Следуйте метроному для тренировки походки';
-
-  @override
-  String get tempoSpeed => 'Скорость Темпа (BPM)';
-
-  @override
-  String get startTraining => 'Начать Тренировку';
-
-  @override
-  String get stopTraining => 'Остановить Тренировку';
 
   @override
   String get language => 'Язык';

@@ -135,12 +135,6 @@ abstract class AppLocalizations {
   /// **'Hand Tremor Test'**
   String get tremorTest;
 
-  /// Gait rhythm assist button title
-  ///
-  /// In en, this message translates to:
-  /// **'Gait Rhythm Assist'**
-  String get gaitAssist;
-
   /// Hand tremor test page title
   ///
   /// In en, this message translates to:
@@ -230,36 +224,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sensor permission required to perform test'**
   String get sensorPermissionRequired;
-
-  /// Gait assist page title
-  ///
-  /// In en, this message translates to:
-  /// **'Gait Rhythm Assist'**
-  String get gaitAssistTitle;
-
-  /// Gait training instruction
-  ///
-  /// In en, this message translates to:
-  /// **'Follow the metronome for gait training'**
-  String get gaitInstruction;
-
-  /// Tempo speed label
-  ///
-  /// In en, this message translates to:
-  /// **'Tempo Speed (BPM)'**
-  String get tempoSpeed;
-
-  /// Start training button text
-  ///
-  /// In en, this message translates to:
-  /// **'Start Training'**
-  String get startTraining;
-
-  /// Stop training button text
-  ///
-  /// In en, this message translates to:
-  /// **'Stop Training'**
-  String get stopTraining;
 
   /// Language label
   ///

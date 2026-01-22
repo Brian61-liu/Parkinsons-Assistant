@@ -18,9 +18,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tremorTest => '手の震えテスト';
 
   @override
-  String get gaitAssist => '歩行リズム補助';
-
-  @override
   String get tremorTestTitle => '手の震えテスト';
 
   @override
@@ -72,21 +69,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get sensorPermissionRequired => 'テストを実施するにはセンサーの許可が必要です';
-
-  @override
-  String get gaitAssistTitle => '歩行リズム補助';
-
-  @override
-  String get gaitInstruction => 'メトロノームに合わせて歩行トレーニングを行ってください';
-
-  @override
-  String get tempoSpeed => 'テンポ速度 (BPM)';
-
-  @override
-  String get startTraining => 'トレーニング開始';
-
-  @override
-  String get stopTraining => 'トレーニング停止';
 
   @override
   String get language => '言語';

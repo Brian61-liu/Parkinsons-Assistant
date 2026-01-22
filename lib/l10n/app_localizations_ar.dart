@@ -18,9 +18,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tremorTest => 'اختبار رعشة اليد';
 
   @override
-  String get gaitAssist => 'مساعدة إيقاع المشي';
-
-  @override
   String get tremorTestTitle => 'اختبار رعشة اليد';
 
   @override
@@ -73,21 +70,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sensorPermissionRequired => 'يتطلب إذن المستشعر لإجراء الاختبار';
-
-  @override
-  String get gaitAssistTitle => 'مساعدة إيقاع المشي';
-
-  @override
-  String get gaitInstruction => 'اتبع المترونوم لتدريب المشي';
-
-  @override
-  String get tempoSpeed => 'سرعة الإيقاع (BPM)';
-
-  @override
-  String get startTraining => 'بدء التدريب';
-
-  @override
-  String get stopTraining => 'إيقاف التدريب';
 
   @override
   String get language => 'اللغة';

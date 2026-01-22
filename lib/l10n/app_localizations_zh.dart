@@ -18,9 +18,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tremorTest => '手部震颤测试';
 
   @override
-  String get gaitAssist => '步态节律辅助';
-
-  @override
   String get tremorTestTitle => '手部震颤测试';
 
   @override
@@ -72,21 +69,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sensorPermissionRequired => '需要传感器权限才能进行测试';
-
-  @override
-  String get gaitAssistTitle => '步态节律辅助';
-
-  @override
-  String get gaitInstruction => '跟随节拍器进行步态训练';
-
-  @override
-  String get tempoSpeed => '节拍速度 (BPM)';
-
-  @override
-  String get startTraining => '开始训练';
-
-  @override
-  String get stopTraining => '停止训练';
 
   @override
   String get language => '语言';
@@ -148,9 +130,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get tremorTest => '手部顫抖測試';
 
   @override
-  String get gaitAssist => '步態節律輔助';
-
-  @override
   String get tremorTestTitle => '手部顫抖測試';
 
   @override
@@ -202,21 +181,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get sensorPermissionRequired => '需要感測器權限才能進行測試';
-
-  @override
-  String get gaitAssistTitle => '步態節律輔助';
-
-  @override
-  String get gaitInstruction => '跟隨節拍器進行步態訓練';
-
-  @override
-  String get tempoSpeed => '節拍速度 (BPM)';
-
-  @override
-  String get startTraining => '開始訓練';
-
-  @override
-  String get stopTraining => '停止訓練';
 
   @override
   String get language => '語言';

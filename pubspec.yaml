@@ -47,9 +47,6 @@ dependencies:
   path_provider: ^2.1.0  # 路径管理
   path: ^1.8.3  # 路径操作工具
 
-  # 音频播放（节拍器）
-  audioplayers: ^5.2.0  # 音频播放
-
   # 图表（用于数据可视化）
   fl_chart: ^0.65.0
 

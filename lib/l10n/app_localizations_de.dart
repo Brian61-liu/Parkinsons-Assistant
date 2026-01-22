@@ -19,9 +19,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get tremorTest => 'Handzitter-Test';
 
   @override
-  String get gaitAssist => 'Gang-Rhythmus-Hilfe';
-
-  @override
   String get tremorTestTitle => 'Handzitter-Test';
 
   @override
@@ -75,21 +72,6 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get sensorPermissionRequired =>
       'Sensorberechtigung erforderlich, um den Test durchzuführen';
-
-  @override
-  String get gaitAssistTitle => 'Gang-Rhythmus-Hilfe';
-
-  @override
-  String get gaitInstruction => 'Folgen Sie dem Metronom für das Gang-Training';
-
-  @override
-  String get tempoSpeed => 'Tempo-Geschwindigkeit (BPM)';
-
-  @override
-  String get startTraining => 'Training Starten';
-
-  @override
-  String get stopTraining => 'Training Stoppen';
 
   @override
   String get language => 'Sprache';

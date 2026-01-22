@@ -19,9 +19,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tremorTest => 'Prueba de Temblor de Mano';
 
   @override
-  String get gaitAssist => 'Asistencia de Ritmo de Marcha';
-
-  @override
   String get tremorTestTitle => 'Prueba de Temblor de Mano';
 
   @override
@@ -75,22 +72,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get sensorPermissionRequired =>
       'Se requiere permiso de sensor para realizar la prueba';
-
-  @override
-  String get gaitAssistTitle => 'Asistencia de Ritmo de Marcha';
-
-  @override
-  String get gaitInstruction =>
-      'Siga el metrónomo para el entrenamiento de marcha';
-
-  @override
-  String get tempoSpeed => 'Velocidad del Tempo (BPM)';
-
-  @override
-  String get startTraining => 'Iniciar Entrenamiento';
-
-  @override
-  String get stopTraining => 'Detener Entrenamiento';
 
   @override
   String get language => 'Idioma';
