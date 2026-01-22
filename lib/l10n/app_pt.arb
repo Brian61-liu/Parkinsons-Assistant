@@ -5,7 +5,7 @@
   "tremorTest": "Teste de Tremor de Mão",
   "tremorTestTitle": "Teste de Tremor de Mão",
   "tremorTestInstruction": "Por favor, segure o telefone na mão e mantenha o braço parado por 30 segundos",
-  "remainingTime": "Tempo restante: {time} segundos",
+  "remainingTime": "{time}s restante",
   "@remainingTime": {
     "placeholders": {
       "time": {
@@ -60,5 +60,18 @@
   "portuguese": "Português",
   "italian": "Italiano",
   "russian": "Русский",
-  "arabic": "العربية"
+  "arabic": "العربية",
+  "realtimeWaveform": "Forma de Onda",
+  "tremorSeverity": "Severidade",
+  "tremorFrequency": "Frequência",
+  "avgAmplitude": "Amp. Média",
+  "maxAmp": "Amp. Máxima",
+  "variability": "Variabilidade",
+  "sampleRate": "Amostra",
+  "dataPoints": "Pontos",
+  "severityNormal": "Normal",
+  "severityMild": "Leve",
+  "severityModerate": "Moderado",
+  "severityModerateSevere": "Mod-Grave",
+  "severitySevere": "Grave"
 }

@@ -25,7 +25,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String remainingTime(int time) {
-    return '残り時間: $time 秒';
+    return '残り $time秒';
   }
 
   @override
@@ -114,4 +114,43 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get arabic => 'العربية';
+
+  @override
+  String get realtimeWaveform => 'リアルタイム波形';
+
+  @override
+  String get tremorSeverity => '重症度';
+
+  @override
+  String get tremorFrequency => '周波数';
+
+  @override
+  String get avgAmplitude => '平均振幅';
+
+  @override
+  String get maxAmp => '最大振幅';
+
+  @override
+  String get variability => '変動性';
+
+  @override
+  String get sampleRate => 'サンプル';
+
+  @override
+  String get dataPoints => 'データ';
+
+  @override
+  String get severityNormal => '正常';
+
+  @override
+  String get severityMild => '軽度';
+
+  @override
+  String get severityModerate => '中度';
+
+  @override
+  String get severityModerateSevere => '中重度';
+
+  @override
+  String get severitySevere => '重度';
 }

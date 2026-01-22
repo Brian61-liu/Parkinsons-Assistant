@@ -60,5 +60,18 @@
   "portuguese": "Português",
   "italian": "Italiano",
   "russian": "Русский",
-  "arabic": "العربية"
+  "arabic": "العربية",
+  "realtimeWaveform": "الموجة",
+  "tremorSeverity": "الشدة",
+  "tremorFrequency": "التردد",
+  "avgAmplitude": "متوسط السعة",
+  "maxAmp": "السعة القصوى",
+  "variability": "التباين",
+  "sampleRate": "العينة",
+  "dataPoints": "البيانات",
+  "severityNormal": "طبيعي",
+  "severityMild": "خفيف",
+  "severityModerate": "معتدل",
+  "severityModerateSevere": "متوسط-شديد",
+  "severitySevere": "شديد"
 }

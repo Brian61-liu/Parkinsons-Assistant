@@ -5,7 +5,7 @@
   "tremorTest": "Тест на Тремор Рук",
   "tremorTestTitle": "Тест на Тремор Рук",
   "tremorTestInstruction": "Пожалуйста, держите телефон в руке и держите руку неподвижно в течение 30 секунд",
-  "remainingTime": "Осталось времени: {time} секунд",
+  "remainingTime": "Осталось {time}с",
   "@remainingTime": {
     "placeholders": {
       "time": {
@@ -60,5 +60,18 @@
   "portuguese": "Português",
   "italian": "Italiano",
   "russian": "Русский",
-  "arabic": "العربية"
+  "arabic": "العربية",
+  "realtimeWaveform": "Волна",
+  "tremorSeverity": "Тяжесть",
+  "tremorFrequency": "Частота",
+  "avgAmplitude": "Ср. Ампл.",
+  "maxAmp": "Макс Ампл.",
+  "variability": "Изменчив.",
+  "sampleRate": "Частота",
+  "dataPoints": "Данные",
+  "severityNormal": "Норма",
+  "severityMild": "Легко",
+  "severityModerate": "Умеренно",
+  "severityModerateSevere": "Ум-Тяжело",
+  "severitySevere": "Тяжело"
 }

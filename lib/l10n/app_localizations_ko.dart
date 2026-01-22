@@ -25,7 +25,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String remainingTime(int time) {
-    return '남은 시간: $time 초';
+    return '$time초 남음';
   }
 
   @override
@@ -114,4 +114,43 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get arabic => 'العربية';
+
+  @override
+  String get realtimeWaveform => '실시간 파형';
+
+  @override
+  String get tremorSeverity => '중증도';
+
+  @override
+  String get tremorFrequency => '주파수';
+
+  @override
+  String get avgAmplitude => '평균 진폭';
+
+  @override
+  String get maxAmp => '최대 진폭';
+
+  @override
+  String get variability => '변동성';
+
+  @override
+  String get sampleRate => '샘플링';
+
+  @override
+  String get dataPoints => '데이터';
+
+  @override
+  String get severityNormal => '정상';
+
+  @override
+  String get severityMild => '경미';
+
+  @override
+  String get severityModerate => '중등도';
+
+  @override
+  String get severityModerateSevere => '중증도';
+
+  @override
+  String get severitySevere => '심각';
 }

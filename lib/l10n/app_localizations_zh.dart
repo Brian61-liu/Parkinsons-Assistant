@@ -25,7 +25,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String remainingTime(int time) {
-    return '剩余时间: $time 秒';
+    return '剩余 $time 秒';
   }
 
   @override
@@ -114,6 +114,45 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get arabic => 'العربية';
+
+  @override
+  String get realtimeWaveform => '实时波形';
+
+  @override
+  String get tremorSeverity => '震颤程度';
+
+  @override
+  String get tremorFrequency => '震颤频率';
+
+  @override
+  String get avgAmplitude => '平均振幅';
+
+  @override
+  String get maxAmp => '最大振幅';
+
+  @override
+  String get variability => '变异度';
+
+  @override
+  String get sampleRate => '采样率';
+
+  @override
+  String get dataPoints => '数据点';
+
+  @override
+  String get severityNormal => '正常';
+
+  @override
+  String get severityMild => '轻度';
+
+  @override
+  String get severityModerate => '中度';
+
+  @override
+  String get severityModerateSevere => '中重度';
+
+  @override
+  String get severitySevere => '重度';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -226,4 +265,43 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get arabic => 'العربية';
+
+  @override
+  String get realtimeWaveform => '即時波形';
+
+  @override
+  String get tremorSeverity => '顫抖程度';
+
+  @override
+  String get tremorFrequency => '顫抖頻率';
+
+  @override
+  String get avgAmplitude => '平均振幅';
+
+  @override
+  String get maxAmp => '最大振幅';
+
+  @override
+  String get variability => '變異度';
+
+  @override
+  String get sampleRate => '採樣率';
+
+  @override
+  String get dataPoints => '數據點';
+
+  @override
+  String get severityNormal => '正常';
+
+  @override
+  String get severityMild => '輕度';
+
+  @override
+  String get severityModerate => '中度';
+
+  @override
+  String get severityModerateSevere => '中重度';
+
+  @override
+  String get severitySevere => '重度';
 }

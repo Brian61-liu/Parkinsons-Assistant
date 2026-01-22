@@ -5,7 +5,7 @@
   "tremorTest": "Handzitter-Test",
   "tremorTestTitle": "Handzitter-Test",
   "tremorTestInstruction": "Bitte halten Sie das Telefon in der Hand und halten Sie den Arm 30 Sekunden lang still",
-  "remainingTime": "Verbleibende Zeit: {time} Sekunden",
+  "remainingTime": "{time}s verbleibend",
   "@remainingTime": {
     "placeholders": {
       "time": {
@@ -60,5 +60,18 @@
   "portuguese": "Português",
   "italian": "Italiano",
   "russian": "Русский",
-  "arabic": "العربية"
+  "arabic": "العربية",
+  "realtimeWaveform": "Echtzeit-Welle",
+  "tremorSeverity": "Schweregrad",
+  "tremorFrequency": "Frequenz",
+  "avgAmplitude": "Ø Amplitude",
+  "maxAmp": "Max Amplitude",
+  "variability": "Variabilität",
+  "sampleRate": "Abtastrate",
+  "dataPoints": "Punkte",
+  "severityNormal": "Normal",
+  "severityMild": "Leicht",
+  "severityModerate": "Mäßig",
+  "severityModerateSevere": "Mäßig-Schwer",
+  "severitySevere": "Schwer"
 }

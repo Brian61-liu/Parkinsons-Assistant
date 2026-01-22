@@ -115,4 +115,43 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get arabic => 'العربية';
+
+  @override
+  String get realtimeWaveform => 'الموجة';
+
+  @override
+  String get tremorSeverity => 'الشدة';
+
+  @override
+  String get tremorFrequency => 'التردد';
+
+  @override
+  String get avgAmplitude => 'متوسط السعة';
+
+  @override
+  String get maxAmp => 'السعة القصوى';
+
+  @override
+  String get variability => 'التباين';
+
+  @override
+  String get sampleRate => 'العينة';
+
+  @override
+  String get dataPoints => 'البيانات';
+
+  @override
+  String get severityNormal => 'طبيعي';
+
+  @override
+  String get severityMild => 'خفيف';
+
+  @override
+  String get severityModerate => 'معتدل';
+
+  @override
+  String get severityModerateSevere => 'متوسط-شديد';
+
+  @override
+  String get severitySevere => 'شديد';
 }

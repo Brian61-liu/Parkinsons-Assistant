@@ -1,91 +1,181 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:sensors_plus/sensors_plus.dart';
+import '../utils/constants.dart';
 
-// 传感器服务类
+/// 传感器服务类 - 轻量级震颤检测
+/// 优化性能，适配90%手机
 class SensorService {
   StreamSubscription<AccelerometerEvent>? _accelerometerSubscription;
-  final List<double> _accelerometerData = [];
+  
+  // 使用固定大小数组提高性能
+  final List<double> _data = [];
+  
+  // 简单一阶滤波状态
+  double _lastFiltered = 0;
+  double _gravity = 9.8; // 重力估计值
+  
+  int _sampleCount = 0;
+  DateTime? _startTime;
+  double _actualSampleRate = AppConstants.tremorSampleRate;
+  
   bool _isRecording = false;
 
-  // 获取加速度数据流
+  // 50Hz 采样率 - 低功耗，足够检测3-7Hz震颤
   Stream<AccelerometerEvent> get accelerometerStream =>
-      accelerometerEventStream();
+      accelerometerEventStream(samplingPeriod: const Duration(milliseconds: 20));
 
-  // 开始记录数据
   void startRecording() {
     _isRecording = true;
-    _accelerometerData.clear();
+    _data.clear();
+    _lastFiltered = 0;
+    _gravity = 9.8;
+    _sampleCount = 0;
+    _startTime = DateTime.now();
     _accelerometerSubscription?.cancel();
 
-    _accelerometerSubscription = accelerometerEventStream().listen((event) {
-      if (_isRecording) {
-        // 计算加速度的模长（总加速度）
-        final magnitude = sqrt(
-          event.x * event.x + event.y * event.y + event.z * event.z,
-        );
-        _accelerometerData.add(magnitude);
+    _accelerometerSubscription = accelerometerStream.listen(_onSensorData);
+  }
+  
+  void _onSensorData(AccelerometerEvent event) {
+    if (!_isRecording) return;
+    
+    _sampleCount++;
+    
+    // 计算加速度模长
+    final magnitude = sqrt(
+      event.x * event.x + event.y * event.y + event.z * event.z
+    );
+    
+    // 简单高通滤波去除重力
+    _gravity = _gravity * 0.9 + magnitude * 0.1;
+    final filtered = magnitude - _gravity;
+    
+    // 简单低通滤波平滑
+    _lastFiltered = _lastFiltered * 0.7 + filtered.abs() * 0.3;
+    
+    _data.add(_lastFiltered);
+    
+    // 限制数据量
+    if (_data.length > AppConstants.dataBufferSize) {
+      _data.removeAt(0);
+    }
+    
+    // 每秒更新一次采样率
+    if (_sampleCount % 50 == 0 && _startTime != null) {
+      final elapsed = DateTime.now().difference(_startTime!).inMilliseconds / 1000.0;
+      if (elapsed > 0) {
+        _actualSampleRate = _sampleCount / elapsed;
       }
-    });
+    }
   }
 
-  // 停止记录数据
   void stopRecording() {
     _isRecording = false;
     _accelerometerSubscription?.cancel();
   }
 
-  // 获取记录的数据
   List<double> getRecordedData() {
-    return List.unmodifiable(_accelerometerData);
+    return List.from(_data);
   }
 
-  // 计算震颤频率（简化版本：通过峰值计数）
-  double calculateFrequency(List<double> data, {int sampleRate = 50}) {
-    if (data.isEmpty) return 0.0;
-
-    // 计算平均值
-    final mean = data.reduce((a, b) => a + b) / data.length;
-
-    // 计算标准差作为阈值
-    final variance =
-        data.map((x) => pow(x - mean, 2)).reduce((a, b) => a + b) / data.length;
-    final stdDev = sqrt(variance);
-    final threshold = mean + stdDev * 0.5;
-
-    // 计算峰值数量（过阈值次数）
-    int peakCount = 0;
-    bool wasAbove = false;
-    for (final value in data) {
-      if (value > threshold && !wasAbove) {
-        peakCount++;
-        wasAbove = true;
-      } else if (value <= threshold) {
-        wasAbove = false;
-      }
-    }
-
-    // 频率 = 峰值数 / 时间（秒）
-    final duration = data.length / sampleRate;
-    return duration > 0 ? peakCount / (2 * duration) : 0.0; // 除以2得到完整周期
+  double getActualSampleRate() {
+    return _actualSampleRate;
   }
 
-  // 计算平均幅度
+  /// 快速计算振幅（用于实时显示）
   double calculateAverageAmplitude(List<double> data) {
     if (data.isEmpty) return 0.0;
-    final mean = data.reduce((a, b) => a + b) / data.length;
-    return data.map((x) => (x - mean).abs()).reduce((a, b) => a + b) /
-        data.length;
+    double sum = 0;
+    for (final v in data) {
+      sum += v;
+    }
+    return sum / data.length;
   }
 
-  // 计算最大幅度
-  double calculateMaxAmplitude(List<double> data) {
-    if (data.isEmpty) return 0.0;
-    final mean = data.reduce((a, b) => a + b) / data.length;
-    return data.map((x) => (x - mean).abs()).reduce(max);
+  /// 快速计算频率 - 简单峰值计数
+  double calculateFrequency(List<double> data) {
+    if (data.length < 25) return 0.0; // 至少0.5秒
+    
+    // 只用最近2秒数据
+    final recentData = data.length > 100 ? data.sublist(data.length - 100) : data;
+    
+    // 计算均值和阈值
+    double sum = 0;
+    double maxVal = 0;
+    for (final v in recentData) {
+      sum += v;
+      if (v > maxVal) maxVal = v;
+    }
+    final mean = sum / recentData.length;
+    final threshold = mean + (maxVal - mean) * 0.3;
+    
+    // 简单峰值计数
+    int peaks = 0;
+    for (int i = 1; i < recentData.length - 1; i++) {
+      if (recentData[i] > threshold &&
+          recentData[i] > recentData[i - 1] &&
+          recentData[i] > recentData[i + 1]) {
+        peaks++;
+        i += 3; // 跳过最小间隔
+      }
+    }
+    
+    // 频率 = 峰值数 / 时间
+    final duration = recentData.length / _actualSampleRate;
+    return duration > 0 ? peaks / duration : 0.0;
   }
 
-  // 清理资源
+  /// 最终分析（测试结束时调用）
+  Map<String, dynamic> getDetailedAnalysis() {
+    if (_data.length < AppConstants.minDataForAnalysis) {
+      return {
+        'status': 'insufficient_data',
+        'message': '数据不足',
+      };
+    }
+    
+    final data = List<double>.from(_data);
+    
+    // 计算振幅
+    double sum = 0, maxVal = 0;
+    for (final v in data) {
+      sum += v;
+      if (v > maxVal) maxVal = v;
+    }
+    final amplitude = sum / data.length;
+    
+    // 计算频率
+    final frequency = calculateFrequency(data);
+    
+    // 震颤等级
+    String severity;
+    if (amplitude < AppConstants.tremorThreshold) {
+      severity = 'minimal';
+    } else if (amplitude < AppConstants.mildTremorAmplitude) {
+      severity = 'mild';
+    } else if (amplitude < AppConstants.moderateTremorAmplitude) {
+      severity = 'moderate';
+    } else if (amplitude < AppConstants.severeTremorAmplitude) {
+      severity = 'moderateSevere';
+    } else {
+      severity = 'severe';
+    }
+    
+    return {
+      'status': 'success',
+      'frequency': frequency,
+      'amplitude': amplitude,
+      'maxAmplitude': maxVal,
+      'variability': 0.0,
+      'energyRatio': 0.0,
+      'severity': severity,
+      'sampleRate': _actualSampleRate,
+      'dataPoints': data.length,
+      'duration': data.length / _actualSampleRate,
+    };
+  }
+
   void dispose() {
     stopRecording();
   }

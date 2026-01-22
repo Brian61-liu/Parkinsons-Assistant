@@ -27,7 +27,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String remainingTime(int time) {
-    return 'Tempo restante: $time segundos';
+    return '${time}s restante';
   }
 
   @override
@@ -117,4 +117,43 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get arabic => 'العربية';
+
+  @override
+  String get realtimeWaveform => 'Forma de Onda';
+
+  @override
+  String get tremorSeverity => 'Severidade';
+
+  @override
+  String get tremorFrequency => 'Frequência';
+
+  @override
+  String get avgAmplitude => 'Amp. Média';
+
+  @override
+  String get maxAmp => 'Amp. Máxima';
+
+  @override
+  String get variability => 'Variabilidade';
+
+  @override
+  String get sampleRate => 'Amostra';
+
+  @override
+  String get dataPoints => 'Pontos';
+
+  @override
+  String get severityNormal => 'Normal';
+
+  @override
+  String get severityMild => 'Leve';
+
+  @override
+  String get severityModerate => 'Moderado';
+
+  @override
+  String get severityModerateSevere => 'Mod-Grave';
+
+  @override
+  String get severitySevere => 'Grave';
 }

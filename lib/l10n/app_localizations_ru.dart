@@ -27,7 +27,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String remainingTime(int time) {
-    return 'Осталось времени: $time секунд';
+    return 'Осталось $timeс';
   }
 
   @override
@@ -117,4 +117,43 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get arabic => 'العربية';
+
+  @override
+  String get realtimeWaveform => 'Волна';
+
+  @override
+  String get tremorSeverity => 'Тяжесть';
+
+  @override
+  String get tremorFrequency => 'Частота';
+
+  @override
+  String get avgAmplitude => 'Ср. Ампл.';
+
+  @override
+  String get maxAmp => 'Макс Ампл.';
+
+  @override
+  String get variability => 'Изменчив.';
+
+  @override
+  String get sampleRate => 'Частота';
+
+  @override
+  String get dataPoints => 'Данные';
+
+  @override
+  String get severityNormal => 'Норма';
+
+  @override
+  String get severityMild => 'Легко';
+
+  @override
+  String get severityModerate => 'Умеренно';
+
+  @override
+  String get severityModerateSevere => 'Ум-Тяжело';
+
+  @override
+  String get severitySevere => 'Тяжело';
 }

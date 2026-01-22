@@ -150,7 +150,7 @@ abstract class AppLocalizations {
   /// Remaining time display
   ///
   /// In en, this message translates to:
-  /// **'Remaining time: {time} seconds'**
+  /// **'Remaining: {time}s'**
   String remainingTime(int time);
 
   /// Ready state text
@@ -314,6 +314,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'العربية'**
   String get arabic;
+
+  /// Chart title
+  ///
+  /// In en, this message translates to:
+  /// **'Real-time Waveform'**
+  String get realtimeWaveform;
+
+  /// Tremor severity label
+  ///
+  /// In en, this message translates to:
+  /// **'Tremor Severity'**
+  String get tremorSeverity;
+
+  /// Tremor frequency label
+  ///
+  /// In en, this message translates to:
+  /// **'Tremor Frequency'**
+  String get tremorFrequency;
+
+  /// Average amplitude label
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Amplitude'**
+  String get avgAmplitude;
+
+  /// Maximum amplitude label
+  ///
+  /// In en, this message translates to:
+  /// **'Max Amplitude'**
+  String get maxAmp;
+
+  /// Variability label
+  ///
+  /// In en, this message translates to:
+  /// **'Variability'**
+  String get variability;
+
+  /// Sample rate label
+  ///
+  /// In en, this message translates to:
+  /// **'Sample Rate'**
+  String get sampleRate;
+
+  /// Data points label
+  ///
+  /// In en, this message translates to:
+  /// **'Data Points'**
+  String get dataPoints;
+
+  /// Normal severity
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get severityNormal;
+
+  /// Mild severity
+  ///
+  /// In en, this message translates to:
+  /// **'Mild'**
+  String get severityMild;
+
+  /// Moderate severity
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get severityModerate;
+
+  /// Moderate to severe
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate-Severe'**
+  String get severityModerateSevere;
+
+  /// Severe severity
+  ///
+  /// In en, this message translates to:
+  /// **'Severe'**
+  String get severitySevere;
 }
 
 class _AppLocalizationsDelegate

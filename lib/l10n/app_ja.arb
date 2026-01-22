@@ -5,7 +5,7 @@
   "tremorTest": "手の震えテスト",
   "tremorTestTitle": "手の震えテスト",
   "tremorTestInstruction": "スマートフォンを手に持ち、30秒間腕を静止させてください",
-  "remainingTime": "残り時間: {time} 秒",
+  "remainingTime": "残り {time}秒",
   "@remainingTime": {
     "placeholders": {
       "time": {
@@ -60,5 +60,18 @@
   "portuguese": "Português",
   "italian": "Italiano",
   "russian": "Русский",
-  "arabic": "العربية"
+  "arabic": "العربية",
+  "realtimeWaveform": "リアルタイム波形",
+  "tremorSeverity": "重症度",
+  "tremorFrequency": "周波数",
+  "avgAmplitude": "平均振幅",
+  "maxAmp": "最大振幅",
+  "variability": "変動性",
+  "sampleRate": "サンプル",
+  "dataPoints": "データ",
+  "severityNormal": "正常",
+  "severityMild": "軽度",
+  "severityModerate": "中度",
+  "severityModerateSevere": "中重度",
+  "severitySevere": "重度"
 }

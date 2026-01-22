@@ -60,5 +60,18 @@
   "portuguese": "Português",
   "italian": "Italiano",
   "russian": "Русский",
-  "arabic": "العربية"
+  "arabic": "العربية",
+  "realtimeWaveform": "即時波形",
+  "tremorSeverity": "顫抖程度",
+  "tremorFrequency": "顫抖頻率",
+  "avgAmplitude": "平均振幅",
+  "maxAmp": "最大振幅",
+  "variability": "變異度",
+  "sampleRate": "採樣率",
+  "dataPoints": "數據點",
+  "severityNormal": "正常",
+  "severityMild": "輕度",
+  "severityModerate": "中度",
+  "severityModerateSevere": "中重度",
+  "severitySevere": "重度"
 }

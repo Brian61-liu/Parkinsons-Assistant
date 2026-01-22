@@ -5,7 +5,7 @@
   "tremorTest": "손 떨림 테스트",
   "tremorTestTitle": "손 떨림 테스트",
   "tremorTestInstruction": "휴대폰을 손에 들고 30초 동안 팔을 정지 상태로 유지하세요",
-  "remainingTime": "남은 시간: {time} 초",
+  "remainingTime": "{time}초 남음",
   "@remainingTime": {
     "placeholders": {
       "time": {
@@ -60,5 +60,18 @@
   "portuguese": "Português",
   "italian": "Italiano",
   "russian": "Русский",
-  "arabic": "العربية"
+  "arabic": "العربية",
+  "realtimeWaveform": "실시간 파형",
+  "tremorSeverity": "중증도",
+  "tremorFrequency": "주파수",
+  "avgAmplitude": "평균 진폭",
+  "maxAmp": "최대 진폭",
+  "variability": "변동성",
+  "sampleRate": "샘플링",
+  "dataPoints": "데이터",
+  "severityNormal": "정상",
+  "severityMild": "경미",
+  "severityModerate": "중등도",
+  "severityModerateSevere": "중증도",
+  "severitySevere": "심각"
 }

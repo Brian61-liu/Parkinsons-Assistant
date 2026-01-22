@@ -20,7 +20,7 @@
   "@tremorTestInstruction": {
     "description": "Instruction text for tremor test"
   },
-  "remainingTime": "Remaining time: {time} seconds",
+  "remainingTime": "Remaining: {time}s",
   "@remainingTime": {
     "description": "Remaining time display",
     "placeholders": {
@@ -151,5 +151,57 @@
   "arabic": "العربية",
   "@arabic": {
     "description": "Arabic language option"
+  },
+  "realtimeWaveform": "Real-time Waveform",
+  "@realtimeWaveform": {
+    "description": "Chart title"
+  },
+  "tremorSeverity": "Tremor Severity",
+  "@tremorSeverity": {
+    "description": "Tremor severity label"
+  },
+  "tremorFrequency": "Tremor Frequency",
+  "@tremorFrequency": {
+    "description": "Tremor frequency label"
+  },
+  "avgAmplitude": "Avg Amplitude",
+  "@avgAmplitude": {
+    "description": "Average amplitude label"
+  },
+  "maxAmp": "Max Amplitude",
+  "@maxAmp": {
+    "description": "Maximum amplitude label"
+  },
+  "variability": "Variability",
+  "@variability": {
+    "description": "Variability label"
+  },
+  "sampleRate": "Sample Rate",
+  "@sampleRate": {
+    "description": "Sample rate label"
+  },
+  "dataPoints": "Data Points",
+  "@dataPoints": {
+    "description": "Data points label"
+  },
+  "severityNormal": "Normal",
+  "@severityNormal": {
+    "description": "Normal severity"
+  },
+  "severityMild": "Mild",
+  "@severityMild": {
+    "description": "Mild severity"
+  },
+  "severityModerate": "Moderate",
+  "@severityModerate": {
+    "description": "Moderate severity"
+  },
+  "severityModerateSevere": "Moderate-Severe",
+  "@severityModerateSevere": {
+    "description": "Moderate to severe"
+  },
+  "severitySevere": "Severe",
+  "@severitySevere": {
+    "description": "Severe severity"
   }
 }
