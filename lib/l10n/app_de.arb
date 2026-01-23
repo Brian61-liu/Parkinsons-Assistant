@@ -73,5 +73,23 @@
   "severityMild": "Leicht",
   "severityModerate": "Mäßig",
   "severityModerateSevere": "Mäßig-Schwer",
-  "severitySevere": "Schwer"
+  "severitySevere": "Schwer",
+  "appSubtitle": "Ihr persönlicher Parkinson-Assistent für Bewegungsverfolgung und -analyse",
+  "signInWithGoogle": "Mit Google anmelden",
+  "privacyNotice": "Mit der Anmeldung stimmen Sie unseren Nutzungsbedingungen und Datenschutzrichtlinien zu",
+  "loginError": "Anmeldefehler",
+  "confirm": "Bestätigen",
+  "cancel": "Abbrechen",
+  "logout": "Abmelden",
+  "logoutConfirm": "Sind Sie sicher, dass Sie sich abmelden möchten?",
+  "welcome": "Willkommen, {name}",
+  "@welcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "syncToCloud": "In Cloud synchronisieren",
+  "dataSynced": "Daten erfolgreich synchronisiert"
 }

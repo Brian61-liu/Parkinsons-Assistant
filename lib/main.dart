@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'l10n/app_localizations.dart';
 import 'pages/home_page.dart';
+import 'pages/login_page.dart';
 
-void main() {
-  runApp(const ParkinsonApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const KineoApp());
 }
 
-class ParkinsonApp extends StatefulWidget {
-  const ParkinsonApp({super.key});
+class KineoApp extends StatefulWidget {
+  const KineoApp({super.key});
 
   @override
-  State<ParkinsonApp> createState() => _ParkinsonAppState();
+  State<KineoApp> createState() => _KineoAppState();
 }
 
-class _ParkinsonAppState extends State<ParkinsonApp> {
+class _KineoAppState extends State<KineoApp> {
   Locale _locale = const Locale('zh', ''); // 默认中文
 
   void changeLanguage(Locale locale) {
@@ -28,7 +33,7 @@ class _ParkinsonAppState extends State<ParkinsonApp> {
     return MaterialApp(
       title: 'Kineo',
       debugShowCheckedModeBanner: false,
-      locale: _locale, // 设置当前语言
+      locale: _locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -52,7 +57,6 @@ class _ParkinsonAppState extends State<ParkinsonApp> {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        // 增大整体字体尺寸
         textTheme: const TextTheme(
           displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
@@ -64,16 +68,33 @@ class _ParkinsonAppState extends State<ParkinsonApp> {
           bodyMedium: TextStyle(fontSize: 16),
         ),
       ),
-      // 启用 iOS 风格的路由转场动画
       builder: (context, child) {
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: const TextScaler.linear(1.1), // 全局放大字体 10%
-          ),
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: const TextScaler.linear(1.1)),
           child: child!,
         );
       },
-      home: HomePage(onLanguageChange: changeLanguage),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          // 正在检查登录状态
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
+
+          // 已登录 -> 显示主页
+          if (snapshot.hasData) {
+            return HomePage(onLanguageChange: changeLanguage);
+          }
+
+          // 未登录 -> 显示登录页
+          return LoginPage(onLanguageChange: changeLanguage);
+        },
+      ),
     );
   }
 }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "57479493999",
+    "project_id": "kineo-4c039",
+    "storage_bucket": "kineo-4c039.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57479493999:android:4c70d1790771b9f5f4909a",
+        "android_client_info": {
+          "package_name": "com.kineo.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "57479493999-mq6n89ogs682p1k7esse2cvrrukl9fn7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM6IAN1GWddGo4F9skur3s0Vq_gR-2tF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "57479493999-mq6n89ogs682p1k7esse2cvrrukl9fn7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

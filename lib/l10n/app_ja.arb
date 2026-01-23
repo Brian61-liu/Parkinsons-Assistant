@@ -73,5 +73,23 @@
   "severityMild": "軽度",
   "severityModerate": "中度",
   "severityModerateSevere": "中重度",
-  "severitySevere": "重度"
+  "severitySevere": "重度",
+  "appSubtitle": "パーキンソン病の動作追跡と分析のためのパーソナルアシスタント",
+  "signInWithGoogle": "Googleでサインイン",
+  "privacyNotice": "サインインすることで、利用規約とプライバシーポリシーに同意したことになります",
+  "loginError": "ログインエラー",
+  "confirm": "確認",
+  "cancel": "キャンセル",
+  "logout": "ログアウト",
+  "logoutConfirm": "本当にログアウトしますか？",
+  "welcome": "ようこそ、{name}",
+  "@welcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "syncToCloud": "クラウドに同期",
+  "dataSynced": "データが正常に同期されました"
 }

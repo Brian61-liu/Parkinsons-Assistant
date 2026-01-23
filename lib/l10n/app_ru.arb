@@ -73,5 +73,23 @@
   "severityMild": "Легко",
   "severityModerate": "Умеренно",
   "severityModerateSevere": "Ум-Тяжело",
-  "severitySevere": "Тяжело"
+  "severitySevere": "Тяжело",
+  "appSubtitle": "Ваш персональный помощник при болезни Паркинсона для отслеживания и анализа движений",
+  "signInWithGoogle": "Войти через Google",
+  "privacyNotice": "Входя, вы соглашаетесь с нашими Условиями обслуживания и Политикой конфиденциальности",
+  "loginError": "Ошибка Входа",
+  "confirm": "Подтвердить",
+  "cancel": "Отмена",
+  "logout": "Выйти",
+  "logoutConfirm": "Вы уверены, что хотите выйти?",
+  "welcome": "Добро пожаловать, {name}",
+  "@welcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "syncToCloud": "Синхронизация с облаком",
+  "dataSynced": "Данные успешно синхронизированы"
 }

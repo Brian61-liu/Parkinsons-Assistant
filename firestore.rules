@@ -1,0 +1,106 @@
+rules_version = '2';
+
+// Kineo - 帕金森辅助应用 Firestore 安全规则
+// 遵循 HIPAA/GDPR 医疗数据安全标准
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ============================================
+    // 辅助函数
+    // ============================================
+    
+    // 检查用户是否已认证
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // 检查是否是资源所有者
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // 验证时间戳字段
+    function isValidTimestamp(field) {
+      return field is timestamp;
+    }
+    
+    // 验证数值范围（用于频率、振幅等）
+    function isValidNumber(value, min, max) {
+      return value is number && value >= min && value <= max;
+    }
+    
+    // 验证字符串长度
+    function isValidString(value, maxLength) {
+      return value is string && value.size() <= maxLength;
+    }
+    
+    // ============================================
+    // 用户文档规则
+    // ============================================
+    match /users/{userId} {
+      // 只有用户本人可以读取自己的数据
+      allow read: if isOwner(userId);
+      
+      // 只有用户本人可以创建/更新自己的数据
+      allow create: if isOwner(userId) 
+        && request.resource.data.keys().hasAll(['uid', 'email', 'createdAt'])
+        && request.resource.data.uid == userId;
+      
+      allow update: if isOwner(userId)
+        // 禁止修改 uid 和 createdAt
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['uid', 'createdAt']));
+      
+      // 允许用户删除自己的账户（GDPR 要求）
+      allow delete: if isOwner(userId);
+      
+      // ============================================
+      // 震颤测试记录 - 高度敏感的医疗数据
+      // ============================================
+      match /tremor_records/{recordId} {
+        // 只有用户本人可以读取
+        allow read: if isOwner(userId);
+        
+        // 只有用户本人可以创建，且必须包含必要字段
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasAll(['frequency', 'amplitude', 'severity', 'timestamp', 'createdAt'])
+          && isValidNumber(request.resource.data.frequency, 0, 30)  // 帕金森震颤频率范围 3-12Hz
+          && isValidNumber(request.resource.data.amplitude, 0, 100)
+          && isValidString(request.resource.data.severity, 50);
+        
+        // 不允许更新医疗记录（数据完整性）
+        allow update: if false;
+        
+        // 允许删除（GDPR 数据删除权）
+        allow delete: if isOwner(userId);
+      }
+      
+      // ============================================
+      // 用户设置
+      // ============================================
+      match /settings/{settingId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      // ============================================
+      // 隐私同意记录
+      // ============================================
+      match /consent_records/{consentId} {
+        allow read: if isOwner(userId);
+        
+        // 只允许创建同意记录，不允许修改（审计需要）
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasAll(['type', 'version', 'acceptedAt', 'ipHash']);
+        
+        allow update, delete: if false;
+      }
+    }
+    
+    // ============================================
+    // 默认：拒绝所有其他访问
+    // ============================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

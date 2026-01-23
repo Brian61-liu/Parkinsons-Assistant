@@ -392,6 +392,330 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Severe'**
   String get severitySevere;
+
+  /// App subtitle on login page
+  ///
+  /// In en, this message translates to:
+  /// **'Your personal Parkinson\'s assistant for movement tracking and analysis'**
+  String get appSubtitle;
+
+  /// Google sign in button text
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Google'**
+  String get signInWithGoogle;
+
+  /// Privacy notice on login page
+  ///
+  /// In en, this message translates to:
+  /// **'By signing in, you agree to our Terms of Service and Privacy Policy'**
+  String get privacyNotice;
+
+  /// Login error dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Login Error'**
+  String get loginError;
+
+  /// Confirm button text
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// Cancel button text
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Logout button text
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// Logout confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout?'**
+  String get logoutConfirm;
+
+  /// Welcome message with user name
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome, {name}'**
+  String welcome(String name);
+
+  /// Sync to cloud button text
+  ///
+  /// In en, this message translates to:
+  /// **'Sync to Cloud'**
+  String get syncToCloud;
+
+  /// Data sync success message
+  ///
+  /// In en, this message translates to:
+  /// **'Data synced successfully'**
+  String get dataSynced;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @privacyPolicyIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Introduction'**
+  String get privacyPolicyIntro;
+
+  /// No description provided for @privacyPolicyIntroText.
+  ///
+  /// In en, this message translates to:
+  /// **'Kineo is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information in compliance with HIPAA and GDPR regulations.'**
+  String get privacyPolicyIntroText;
+
+  /// No description provided for @dataCollection.
+  ///
+  /// In en, this message translates to:
+  /// **'Data We Collect'**
+  String get dataCollection;
+
+  /// No description provided for @dataCollectionText.
+  ///
+  /// In en, this message translates to:
+  /// **'We collect: 1) Account information (email, name) for authentication; 2) Movement sensor data during tremor tests; 3) Test results including frequency, amplitude, and severity assessments. We follow the principle of data minimization and only collect what is necessary.'**
+  String get dataCollectionText;
+
+  /// No description provided for @dataUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'How We Use Your Data'**
+  String get dataUsage;
+
+  /// No description provided for @dataUsageText.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is used solely to: 1) Provide tremor analysis and tracking; 2) Generate health reports for you and your healthcare providers; 3) Improve our algorithms (only with anonymized data and your consent).'**
+  String get dataUsageText;
+
+  /// No description provided for @dataStorage.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Storage & Security'**
+  String get dataStorage;
+
+  /// No description provided for @dataStorageText.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is stored securely on Google Firebase servers with end-to-end encryption. All data transmissions use TLS 1.3 encryption. We implement strict access controls and regular security audits.'**
+  String get dataStorageText;
+
+  /// No description provided for @dataSharing.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Sharing'**
+  String get dataSharing;
+
+  /// No description provided for @dataSharingText.
+  ///
+  /// In en, this message translates to:
+  /// **'We NEVER sell your personal health data. Data is only shared: 1) With your explicit consent; 2) With healthcare providers you designate; 3) When required by law. Aggregated, anonymized data may be used for research.'**
+  String get dataSharingText;
+
+  /// No description provided for @userRights.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Rights (GDPR)'**
+  String get userRights;
+
+  /// No description provided for @userRightsText.
+  ///
+  /// In en, this message translates to:
+  /// **'You have the right to: 1) Access your data; 2) Export your data (data portability); 3) Delete your data (right to be forgotten); 4) Withdraw consent at any time; 5) Lodge a complaint with a supervisory authority.'**
+  String get userRightsText;
+
+  /// No description provided for @dataSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Security Measures'**
+  String get dataSecurity;
+
+  /// No description provided for @dataSecurityText.
+  ///
+  /// In en, this message translates to:
+  /// **'We implement: 1) AES-256 encryption at rest; 2) TLS 1.3 for data in transit; 3) Multi-factor authentication; 4) Regular penetration testing; 5) Comprehensive audit logging; 6) Employee security training.'**
+  String get dataSecurityText;
+
+  /// No description provided for @contactUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Us'**
+  String get contactUs;
+
+  /// No description provided for @contactUsText.
+  ///
+  /// In en, this message translates to:
+  /// **'For privacy inquiries or to exercise your data rights, contact our Data Protection Officer at: privacy@kineo-app.com'**
+  String get contactUsText;
+
+  /// No description provided for @lastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Updated'**
+  String get lastUpdated;
+
+  /// No description provided for @version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get version;
+
+  /// No description provided for @dataManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Management'**
+  String get dataManagement;
+
+  /// No description provided for @gdprRights.
+  ///
+  /// In en, this message translates to:
+  /// **'Under GDPR and HIPAA, you have the right to access, export, and delete your personal health data at any time.'**
+  String get gdprRights;
+
+  /// No description provided for @exportData.
+  ///
+  /// In en, this message translates to:
+  /// **'Export My Data'**
+  String get exportData;
+
+  /// No description provided for @exportDataDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Download a complete copy of all your data in JSON format. This includes your profile information and all tremor test records.'**
+  String get exportDataDescription;
+
+  /// No description provided for @export.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get export;
+
+  /// No description provided for @exporting.
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting...'**
+  String get exporting;
+
+  /// No description provided for @exportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Successful'**
+  String get exportSuccess;
+
+  /// No description provided for @exportSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data has been copied to the clipboard. You can paste it into a text file to save.'**
+  String get exportSuccessMessage;
+
+  /// No description provided for @deleteAllRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete All Test Records'**
+  String get deleteAllRecords;
+
+  /// No description provided for @deleteAllRecordsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently delete all your tremor test records. This action cannot be undone.'**
+  String get deleteAllRecordsDescription;
+
+  /// No description provided for @deleteAllData.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete All Data'**
+  String get deleteAllData;
+
+  /// No description provided for @deleteAllDataConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete all your test records? This action is irreversible.'**
+  String get deleteAllDataConfirm;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @deleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Deletion Successful'**
+  String get deleteSuccess;
+
+  /// No description provided for @deleteSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'All your test records have been permanently deleted.'**
+  String get deleteSuccessMessage;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently delete your account and all associated data. This includes all test records and personal information.'**
+  String get deleteAccountDescription;
+
+  /// No description provided for @deleteAccountWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently delete your account and ALL your data. This action CANNOT be undone.'**
+  String get deleteAccountWarning;
+
+  /// No description provided for @deleteAccountFinalWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'FINAL WARNING: Once deleted, your account and all data will be gone forever. Are you absolutely sure?'**
+  String get deleteAccountFinalWarning;
+
+  /// No description provided for @finalWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Final Warning'**
+  String get finalWarning;
+
+  /// No description provided for @deleteForever.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Forever'**
+  String get deleteForever;
+
+  /// No description provided for @continue_.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continue_;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get error;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
 }
 
 class _AppLocalizationsDelegate

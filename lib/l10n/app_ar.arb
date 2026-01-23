@@ -73,5 +73,23 @@
   "severityMild": "خفيف",
   "severityModerate": "معتدل",
   "severityModerateSevere": "متوسط-شديد",
-  "severitySevere": "شديد"
+  "severitySevere": "شديد",
+  "appSubtitle": "مساعدك الشخصي لمرض باركنسون لتتبع وتحليل الحركة",
+  "signInWithGoogle": "تسجيل الدخول باستخدام Google",
+  "privacyNotice": "من خلال تسجيل الدخول، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا",
+  "loginError": "خطأ في تسجيل الدخول",
+  "confirm": "تأكيد",
+  "cancel": "إلغاء",
+  "logout": "تسجيل الخروج",
+  "logoutConfirm": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+  "welcome": "مرحباً، {name}",
+  "@welcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "syncToCloud": "مزامنة مع السحابة",
+  "dataSynced": "تمت مزامنة البيانات بنجاح"
 }

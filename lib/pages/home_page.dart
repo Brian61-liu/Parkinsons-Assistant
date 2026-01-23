@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../l10n/app_localizations.dart';
 import '../pages/tremor_test_page.dart';
+import '../pages/data_management_page.dart';
+import '../pages/privacy_policy_page.dart';
 import '../widgets/big_button.dart';
+import '../services/auth_service.dart';
 
 // 主页面
 class HomePage extends StatelessWidget {
   final Function(Locale) onLanguageChange;
+  final AuthService _authService = AuthService();
 
-  const HomePage({super.key, required this.onLanguageChange});
+  HomePage({super.key, required this.onLanguageChange});
 
   void _showLanguageDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -62,16 +67,130 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  void _showLogoutDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(l10n.logout),
+        content: Text(l10n.logoutConfirm),
+        actions: [
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(l10n.cancel),
+          ),
+          CupertinoDialogAction(
+            onPressed: () async {
+              Navigator.pop(context);
+              await _authService.signOut();
+            },
+            child: Text(l10n.confirm),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSettingsMenu(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: Text(
+          l10n.settings,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => const DataManagementPage(),
+                ),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(CupertinoIcons.shield_lefthalf_fill, color: Colors.blue),
+                const SizedBox(width: 8),
+                Text(l10n.dataManagement),
+              ],
+            ),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => const PrivacyPolicyPage(),
+                ),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(CupertinoIcons.doc_text, color: Colors.green),
+                const SizedBox(width: 8),
+                Text(l10n.privacyPolicy),
+              ],
+            ),
+          ),
+          CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+              _showLogoutDialog(context);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(CupertinoIcons.square_arrow_left, color: Colors.red),
+                const SizedBox(width: 8),
+                Text(l10n.logout),
+              ],
+            ),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          isDefaultAction: true,
+          child: Text(l10n.cancel),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final user = FirebaseAuth.instance.currentUser;
+    
     return Scaffold(
-      // 使用 iOS 风格的导航栏（CupertinoNavigationBar）
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: CupertinoNavigationBar(
           backgroundColor: Colors.blue[50],
           border: null,
+          leading: CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: () => _showSettingsMenu(context),
+            child: const Icon(
+              CupertinoIcons.gear,
+              color: Colors.blue,
+              size: 26,
+            ),
+          ),
           middle: Text(
             l10n.appTitle,
             style: const TextStyle(
@@ -100,6 +219,31 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // 用户欢迎信息
+              if (user != null) ...[
+                CircleAvatar(
+                  radius: 40,
+                  backgroundImage: user.photoURL != null 
+                      ? NetworkImage(user.photoURL!)
+                      : null,
+                  backgroundColor: Colors.blue[100],
+                  child: user.photoURL == null 
+                      ? Icon(Icons.person, size: 40, color: Colors.blue[700])
+                      : null,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  l10n.welcome(user.displayName ?? user.email ?? 'User'),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 30),
+              ],
+              
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
@@ -111,7 +255,7 @@ class HomePage extends StatelessWidget {
                     height: 1.3,
                   ),
                   textAlign: TextAlign.center,
-                  maxLines: 3, // 允许多行显示
+                  maxLines: 3,
                 ),
               ),
               const SizedBox(height: 40),

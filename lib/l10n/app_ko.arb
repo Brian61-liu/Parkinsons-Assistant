@@ -73,5 +73,23 @@
   "severityMild": "경미",
   "severityModerate": "중등도",
   "severityModerateSevere": "중증도",
-  "severitySevere": "심각"
+  "severitySevere": "심각",
+  "appSubtitle": "움직임 추적 및 분석을 위한 파킨슨 개인 도우미",
+  "signInWithGoogle": "Google로 로그인",
+  "privacyNotice": "로그인하면 서비스 약관 및 개인정보 보호정책에 동의하게 됩니다",
+  "loginError": "로그인 오류",
+  "confirm": "확인",
+  "cancel": "취소",
+  "logout": "로그아웃",
+  "logoutConfirm": "정말 로그아웃하시겠습니까?",
+  "welcome": "환영합니다, {name}",
+  "@welcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "syncToCloud": "클라우드에 동기화",
+  "dataSynced": "데이터가 성공적으로 동기화되었습니다"
 }

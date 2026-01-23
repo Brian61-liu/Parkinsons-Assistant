@@ -73,5 +73,23 @@
   "severityMild": "Leve",
   "severityModerate": "Moderado",
   "severityModerateSevere": "Mod-Severo",
-  "severitySevere": "Severo"
+  "severitySevere": "Severo",
+  "appSubtitle": "Tu asistente personal de Parkinson para seguimiento y análisis de movimientos",
+  "signInWithGoogle": "Iniciar sesión con Google",
+  "privacyNotice": "Al iniciar sesión, aceptas nuestros Términos de Servicio y Política de Privacidad",
+  "loginError": "Error de Inicio de Sesión",
+  "confirm": "Confirmar",
+  "cancel": "Cancelar",
+  "logout": "Cerrar Sesión",
+  "logoutConfirm": "¿Estás seguro de que quieres cerrar sesión?",
+  "welcome": "Bienvenido, {name}",
+  "@welcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "syncToCloud": "Sincronizar en la Nube",
+  "dataSynced": "Datos sincronizados con éxito"
 }

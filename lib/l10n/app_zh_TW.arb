@@ -73,5 +73,23 @@
   "severityMild": "輕度",
   "severityModerate": "中度",
   "severityModerateSevere": "中重度",
-  "severitySevere": "重度"
+  "severitySevere": "重度",
+  "appSubtitle": "您的帕金森運動追蹤與分析助手",
+  "signInWithGoogle": "使用 Google 帳號登入",
+  "privacyNotice": "登入即表示您同意我們的服務條款和隱私政策",
+  "loginError": "登入錯誤",
+  "confirm": "確認",
+  "cancel": "取消",
+  "logout": "登出",
+  "logoutConfirm": "確定要登出嗎？",
+  "welcome": "歡迎, {name}",
+  "@welcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "syncToCloud": "同步到雲端",
+  "dataSynced": "資料同步成功"
 }
