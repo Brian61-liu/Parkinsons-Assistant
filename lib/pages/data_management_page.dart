@@ -370,7 +370,7 @@ color: const Color(0xFF4facfe).withValues(alpha: 0.1),
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
                 backgroundColor: isDestructive 
-                    ? Colors.red.withOpacity(0.8) 
+                    ? Colors.red.withValues(alpha: 0.8) 
                     : const Color(0xFF4facfe),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 14),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import '../l10n/app_localizations.dart';
 
 /// 隐私政策页面
@@ -67,14 +66,14 @@ class PrivacyPolicyPage extends StatelessWidget {
                 Text(
                   '${l10n.lastUpdated}: 2026-01-23',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     fontSize: 12,
                   ),
                 ),
                 Text(
                   '${l10n.version}: 1.0.0',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     fontSize: 12,
                   ),
                 ),
@@ -105,7 +104,7 @@ class PrivacyPolicyPage extends StatelessWidget {
             content,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withOpacity(0.85),
+              color: Colors.white.withValues(alpha: 0.85),
               height: 1.6,
             ),
           ),

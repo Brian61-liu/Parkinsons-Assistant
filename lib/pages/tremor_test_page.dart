@@ -221,9 +221,9 @@ class _TremorTestPageState extends State<TremorTestPage> {
             const SizedBox(height: 16),
             _buildResultRow(Icons.speed, l10n.tremorFrequency, '${frequency.toStringAsFixed(2)} Hz', _primaryColor),
             const SizedBox(height: 10),
-            _buildResultRow(Icons.show_chart, l10n.avgAmplitude, '${avgAmplitude.toStringAsFixed(3)}', _secondaryColor),
+            _buildResultRow(Icons.show_chart, l10n.avgAmplitude, avgAmplitude.toStringAsFixed(3), _secondaryColor),
             const SizedBox(height: 10),
-            _buildResultRow(Icons.trending_up, l10n.maxAmp, '${maxAmplitude.toStringAsFixed(3)}', const Color(0xFF8B5CF6)),
+            _buildResultRow(Icons.trending_up, l10n.maxAmp, maxAmplitude.toStringAsFixed(3), const Color(0xFF8B5CF6)),
           ],
         ),
         actions: [
