@@ -135,5 +135,15 @@
   "deleteForever": "Elimina per Sempre",
   "continue_": "Continua",
   "error": "Errore",
-  "settings": "Impostazioni"
+  "settings": "Impostazioni",
+  "testHistory": "Cronologia",
+  "noTestRecords": "Nessun record di test",
+  "noTestRecordsHint": "Completa un test di tremore per vedere i tuoi risultati qui",
+  "testDate": "Data del Test",
+  "deleteRecord": "Elimina Record",
+  "deleteRecordConfirm": "Sei sicuro di voler eliminare questo record di test?",
+  "recordDeleted": "Record eliminato",
+  "duration": "Durata",
+  "seconds": "s",
+  "tapToCancel": "Tocca per annullare"
 }

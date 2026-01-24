@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
+import '../services/database_service.dart';
 
 /// 数据管理页面
 /// GDPR 合规：数据可携带权、数据删除权
@@ -16,6 +17,7 @@ class DataManagementPage extends StatefulWidget {
 
 class _DataManagementPageState extends State<DataManagementPage> {
   final AuthService _authService = AuthService();
+  final DatabaseService _databaseService = DatabaseService();
   bool _isExporting = false;
   bool _isDeletingRecords = false;
   bool _isDeletingAccount = false;
@@ -79,10 +81,19 @@ class _DataManagementPageState extends State<DataManagementPage> {
     setState(() => _isDeletingRecords = true);
 
     try {
-      await _authService.deleteAllTremorRecords().timeout(
-        const Duration(seconds: _operationTimeout),
-        onTimeout: () => throw Exception('操作超时，请检查网络连接'),
-      );
+      // 删除本地数据库记录
+      await _databaseService.deleteAllTremorRecords();
+      
+      // 尝试删除云端记录（如果失败不影响本地删除）
+      try {
+        await _authService.deleteAllTremorRecords().timeout(
+          const Duration(seconds: _operationTimeout),
+          onTimeout: () => throw Exception('云端同步超时'),
+        );
+      } catch (e) {
+        // 云端删除失败，但本地已删除成功
+        debugPrint('云端记录删除失败: $e');
+      }
       
       if (mounted) {
         _showSuccessDialog(l10n.deleteSuccess, l10n.deleteSuccessMessage);

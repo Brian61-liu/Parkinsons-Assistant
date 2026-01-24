@@ -65,6 +65,12 @@ class DatabaseService {
     return await db.delete('tremor_records', where: 'id = ?', whereArgs: [id]);
   }
 
+  // 删除所有震颤测试记录
+  Future<int> deleteAllTremorRecords() async {
+    final db = await database;
+    return await db.delete('tremor_records');
+  }
+
   // 关闭数据库
   Future<void> close() async {
     final db = await database;

@@ -342,4 +342,36 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get settings => 'Einstellungen';
+
+  @override
+  String get testHistory => 'Verlauf';
+
+  @override
+  String get noTestRecords => 'Keine Testaufzeichnungen';
+
+  @override
+  String get noTestRecordsHint =>
+      'Führen Sie einen Zittertest durch, um Ihre Ergebnisse hier zu sehen';
+
+  @override
+  String get testDate => 'Testdatum';
+
+  @override
+  String get deleteRecord => 'Aufzeichnung Löschen';
+
+  @override
+  String get deleteRecordConfirm =>
+      'Möchten Sie diese Testaufzeichnung wirklich löschen?';
+
+  @override
+  String get recordDeleted => 'Aufzeichnung gelöscht';
+
+  @override
+  String get duration => 'Dauer';
+
+  @override
+  String get seconds => 's';
+
+  @override
+  String get tapToCancel => 'Zum Abbrechen tippen';
 }

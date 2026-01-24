@@ -135,5 +135,15 @@
   "deleteForever": "حذف نهائي",
   "continue_": "متابعة",
   "error": "خطأ",
-  "settings": "الإعدادات"
+  "settings": "الإعدادات",
+  "testHistory": "السجل",
+  "noTestRecords": "لا توجد سجلات اختبار",
+  "noTestRecordsHint": "أكمل اختبار الرعشة لرؤية نتائجك هنا",
+  "testDate": "تاريخ الاختبار",
+  "deleteRecord": "حذف السجل",
+  "deleteRecordConfirm": "هل أنت متأكد من حذف سجل الاختبار هذا؟",
+  "recordDeleted": "تم حذف السجل",
+  "duration": "المدة",
+  "seconds": "ث",
+  "tapToCancel": "انقر للإلغاء"
 }

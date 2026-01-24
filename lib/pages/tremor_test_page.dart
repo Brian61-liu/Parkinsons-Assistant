@@ -306,7 +306,23 @@ class _TremorTestPageState extends State<TremorTestPage> {
                     ),
                   ),
                   const SizedBox(width: 14),
-                  Text(l10n.tremorTestTitle, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: _textPrimary)),
+                  Expanded(
+                    child: Text(l10n.tremorTestTitle, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: _textPrimary)),
+                  ),
+                  // 历史记录按钮
+                  GestureDetector(
+                    onTap: () => _showHistorySheet(context),
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [BoxShadow(color: _primaryColor.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 2))],
+                      ),
+                      child: const Icon(CupertinoIcons.clock, color: _primaryColor, size: 22),
+                    ),
+                  ),
                 ],
               ),
               
@@ -490,6 +506,249 @@ class _TremorTestPageState extends State<TremorTestPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // 显示历史记录
+  void _showHistorySheet(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.5,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) => Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFFF0F9FF),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
+            children: [
+              // 拖拽指示条
+              Container(
+                margin: const EdgeInsets.only(top: 12, bottom: 8),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              // 标题
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF10B981)]),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(CupertinoIcons.clock, color: Colors.white, size: 22),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      l10n.testHistory,
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: _textPrimary),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+              // 历史记录列表
+              Expanded(
+                child: FutureBuilder<List<TremorRecord>>(
+                  future: _databaseService.getAllTremorRecords(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator(color: _primaryColor));
+                    }
+                    
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(CupertinoIcons.doc_text, size: 64, color: _primaryColor.withValues(alpha: 0.3)),
+                            const SizedBox(height: 16),
+                            Text(l10n.noTestRecords, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: _textSecondary)),
+                            const SizedBox(height: 8),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 40),
+                              child: Text(
+                                l10n.noTestRecordsHint,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 14, color: _textSecondary.withValues(alpha: 0.7)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    
+                    final records = snapshot.data!;
+                    return ListView.builder(
+                      controller: scrollController,
+                      padding: const EdgeInsets.all(16),
+                      itemCount: records.length,
+                      itemBuilder: (context, index) {
+                        final record = records[index];
+                        return _buildHistoryCard(context, record, l10n);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 构建历史记录卡片
+  Widget _buildHistoryCard(BuildContext context, TremorRecord record, AppLocalizations l10n) {
+    // 根据振幅判断严重程度
+    String severity;
+    Color severityColor;
+    if (record.averageAmplitude < 0.5) {
+      severity = l10n.severityNormal;
+      severityColor = const Color(0xFF10B981);
+    } else if (record.averageAmplitude < 1.0) {
+      severity = l10n.severityMild;
+      severityColor = const Color(0xFF22C55E);
+    } else if (record.averageAmplitude < 2.0) {
+      severity = l10n.severityModerate;
+      severityColor = const Color(0xFFF59E0B);
+    } else if (record.averageAmplitude < 3.0) {
+      severity = l10n.severityModerateSevere;
+      severityColor = const Color(0xFFF97316);
+    } else {
+      severity = l10n.severitySevere;
+      severityColor = const Color(0xFFEF4444);
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [BoxShadow(color: _primaryColor.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4))],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 日期和严重程度
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(CupertinoIcons.calendar, size: 16, color: _textSecondary),
+                    const SizedBox(width: 6),
+                    Text(
+                      _formatDate(record.timestamp),
+                      style: const TextStyle(fontSize: 14, color: _textSecondary, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: severityColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(severity, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: severityColor)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            // 数据行
+            Row(
+              children: [
+                Expanded(
+                  child: _buildHistoryMetric(l10n.frequency, '${record.averageFrequency.toStringAsFixed(2)} Hz', _primaryColor),
+                ),
+                Container(width: 1, height: 30, color: Colors.grey[200]),
+                Expanded(
+                  child: _buildHistoryMetric(l10n.avgAmplitude, record.averageAmplitude.toStringAsFixed(3), _secondaryColor),
+                ),
+                Container(width: 1, height: 30, color: Colors.grey[200]),
+                Expanded(
+                  child: _buildHistoryMetric(l10n.duration, '${record.duration}${l10n.seconds}', const Color(0xFF8B5CF6)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            // 删除按钮
+            GestureDetector(
+              onTap: () => _confirmDeleteRecord(context, record, l10n),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(CupertinoIcons.delete, size: 16, color: Colors.red[400]),
+                  const SizedBox(width: 4),
+                  Text(l10n.deleteRecord, style: TextStyle(fontSize: 12, color: Colors.red[400])),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHistoryMetric(String label, String value, Color color) {
+    return Column(
+      children: [
+        Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color)),
+        const SizedBox(height: 2),
+        Text(label, style: const TextStyle(fontSize: 11, color: _textSecondary)),
+      ],
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+  }
+
+  void _confirmDeleteRecord(BuildContext context, TremorRecord record, AppLocalizations l10n) {
+    showCupertinoDialog(
+      context: context,
+      builder: (dialogContext) => CupertinoAlertDialog(
+        title: Text(l10n.deleteRecord),
+        content: Text(l10n.deleteRecordConfirm),
+        actions: [
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () async {
+              Navigator.of(dialogContext).pop();
+              if (record.id != null) {
+                await _databaseService.deleteTremorRecord(record.id!);
+                if (mounted) {
+                  Navigator.of(context).pop(); // 关闭历史记录面板
+                  _showHistorySheet(context); // 重新打开以刷新列表
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.recordDeleted), backgroundColor: _secondaryColor),
+                  );
+                }
+              }
+            },
+            child: Text(l10n.confirm),
+          ),
+          CupertinoDialogAction(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.cancel),
+          ),
+        ],
       ),
     );
   }

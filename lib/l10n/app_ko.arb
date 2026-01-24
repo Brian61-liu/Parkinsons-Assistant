@@ -135,5 +135,15 @@
   "deleteForever": "영구 삭제",
   "continue_": "계속",
   "error": "오류",
-  "settings": "설정"
+  "settings": "설정",
+  "testHistory": "기록",
+  "noTestRecords": "테스트 기록이 없습니다",
+  "noTestRecordsHint": "떨림 테스트를 완료하면 결과가 여기에 표시됩니다",
+  "testDate": "테스트 날짜",
+  "deleteRecord": "기록 삭제",
+  "deleteRecordConfirm": "이 테스트 기록을 삭제하시겠습니까?",
+  "recordDeleted": "기록이 삭제되었습니다",
+  "duration": "시간",
+  "seconds": "초",
+  "tapToCancel": "탭하여 취소"
 }

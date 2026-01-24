@@ -135,5 +135,15 @@
   "deleteForever": "永久に削除",
   "continue_": "続行",
   "error": "エラー",
-  "settings": "設定"
+  "settings": "設定",
+  "testHistory": "履歴",
+  "noTestRecords": "テスト記録がありません",
+  "noTestRecordsHint": "振戦テストを完了すると、結果がここに表示されます",
+  "testDate": "テスト日",
+  "deleteRecord": "記録を削除",
+  "deleteRecordConfirm": "このテスト記録を削除しますか？",
+  "recordDeleted": "記録が削除されました",
+  "duration": "時間",
+  "seconds": "秒",
+  "tapToCancel": "タップでキャンセル"
 }

@@ -135,5 +135,15 @@
   "deleteForever": "Supprimer Définitivement",
   "continue_": "Continuer",
   "error": "Erreur",
-  "settings": "Paramètres"
+  "settings": "Paramètres",
+  "testHistory": "Historique",
+  "noTestRecords": "Aucun enregistrement de test",
+  "noTestRecordsHint": "Effectuez un test de tremblement pour voir vos résultats ici",
+  "testDate": "Date du Test",
+  "deleteRecord": "Supprimer l'Enregistrement",
+  "deleteRecordConfirm": "Êtes-vous sûr de vouloir supprimer cet enregistrement ?",
+  "recordDeleted": "Enregistrement supprimé",
+  "duration": "Durée",
+  "seconds": "s",
+  "tapToCancel": "Appuyez pour annuler"
 }

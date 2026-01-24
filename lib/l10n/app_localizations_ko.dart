@@ -330,4 +330,34 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settings => '설정';
+
+  @override
+  String get testHistory => '기록';
+
+  @override
+  String get noTestRecords => '테스트 기록이 없습니다';
+
+  @override
+  String get noTestRecordsHint => '떨림 테스트를 완료하면 결과가 여기에 표시됩니다';
+
+  @override
+  String get testDate => '테스트 날짜';
+
+  @override
+  String get deleteRecord => '기록 삭제';
+
+  @override
+  String get deleteRecordConfirm => '이 테스트 기록을 삭제하시겠습니까?';
+
+  @override
+  String get recordDeleted => '기록이 삭제되었습니다';
+
+  @override
+  String get duration => '시간';
+
+  @override
+  String get seconds => '초';
+
+  @override
+  String get tapToCancel => '탭하여 취소';
 }

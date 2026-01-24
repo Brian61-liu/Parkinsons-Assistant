@@ -328,6 +328,36 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settings => '设置';
+
+  @override
+  String get testHistory => '历史记录';
+
+  @override
+  String get noTestRecords => '暂无测试记录';
+
+  @override
+  String get noTestRecordsHint => '完成一次震颤测试后，您的结果将显示在这里';
+
+  @override
+  String get testDate => '测试日期';
+
+  @override
+  String get deleteRecord => '删除记录';
+
+  @override
+  String get deleteRecordConfirm => '确定要删除这条测试记录吗？';
+
+  @override
+  String get recordDeleted => '记录已删除';
+
+  @override
+  String get duration => '时长';
+
+  @override
+  String get seconds => '秒';
+
+  @override
+  String get tapToCancel => '点击取消';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -653,4 +683,34 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get settings => '設定';
+
+  @override
+  String get testHistory => '歷史記錄';
+
+  @override
+  String get noTestRecords => '暫無測試記錄';
+
+  @override
+  String get noTestRecordsHint => '完成一次顫抖測試後，您的結果將顯示在這裡';
+
+  @override
+  String get testDate => '測試日期';
+
+  @override
+  String get deleteRecord => '刪除記錄';
+
+  @override
+  String get deleteRecordConfirm => '確定要刪除這條測試記錄嗎？';
+
+  @override
+  String get recordDeleted => '記錄已刪除';
+
+  @override
+  String get duration => '時長';
+
+  @override
+  String get seconds => '秒';
+
+  @override
+  String get tapToCancel => '點擊取消';
 }

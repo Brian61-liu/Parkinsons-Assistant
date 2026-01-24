@@ -299,5 +299,15 @@
   "deleteForever": "Delete Forever",
   "continue_": "Continue",
   "error": "Error",
-  "settings": "Settings"
+  "settings": "Settings",
+  "testHistory": "History",
+  "noTestRecords": "No test records yet",
+  "noTestRecordsHint": "Complete a tremor test to see your results here",
+  "testDate": "Test Date",
+  "deleteRecord": "Delete Record",
+  "deleteRecordConfirm": "Are you sure you want to delete this test record?",
+  "recordDeleted": "Record deleted",
+  "duration": "Duration",
+  "seconds": "s",
+  "tapToCancel": "Tap to cancel"
 }

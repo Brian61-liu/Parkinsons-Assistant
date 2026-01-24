@@ -341,4 +341,36 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get settings => 'Configurações';
+
+  @override
+  String get testHistory => 'Histórico';
+
+  @override
+  String get noTestRecords => 'Nenhum registro de teste';
+
+  @override
+  String get noTestRecordsHint =>
+      'Complete um teste de tremor para ver seus resultados aqui';
+
+  @override
+  String get testDate => 'Data do Teste';
+
+  @override
+  String get deleteRecord => 'Excluir Registro';
+
+  @override
+  String get deleteRecordConfirm =>
+      'Tem certeza de que deseja excluir este registro de teste?';
+
+  @override
+  String get recordDeleted => 'Registro excluído';
+
+  @override
+  String get duration => 'Duração';
+
+  @override
+  String get seconds => 's';
+
+  @override
+  String get tapToCancel => 'Toque para cancelar';
 }

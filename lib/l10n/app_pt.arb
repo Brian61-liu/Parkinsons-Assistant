@@ -135,5 +135,15 @@
   "deleteForever": "Excluir Permanentemente",
   "continue_": "Continuar",
   "error": "Erro",
-  "settings": "Configurações"
+  "settings": "Configurações",
+  "testHistory": "Histórico",
+  "noTestRecords": "Nenhum registro de teste",
+  "noTestRecordsHint": "Complete um teste de tremor para ver seus resultados aqui",
+  "testDate": "Data do Teste",
+  "deleteRecord": "Excluir Registro",
+  "deleteRecordConfirm": "Tem certeza de que deseja excluir este registro de teste?",
+  "recordDeleted": "Registro excluído",
+  "duration": "Duração",
+  "seconds": "s",
+  "tapToCancel": "Toque para cancelar"
 }

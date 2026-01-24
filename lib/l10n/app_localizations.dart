@@ -722,6 +722,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get settings;
+
+  /// No description provided for @testHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get testHistory;
+
+  /// No description provided for @noTestRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'No test records yet'**
+  String get noTestRecords;
+
+  /// No description provided for @noTestRecordsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete a tremor test to see your results here'**
+  String get noTestRecordsHint;
+
+  /// No description provided for @testDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Date'**
+  String get testDate;
+
+  /// No description provided for @deleteRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Record'**
+  String get deleteRecord;
+
+  /// No description provided for @deleteRecordConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this test record?'**
+  String get deleteRecordConfirm;
+
+  /// No description provided for @recordDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Record deleted'**
+  String get recordDeleted;
+
+  /// No description provided for @duration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get duration;
+
+  /// No description provided for @seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'s'**
+  String get seconds;
+
+  /// No description provided for @tapToCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to cancel'**
+  String get tapToCancel;
 }
 
 class _AppLocalizationsDelegate

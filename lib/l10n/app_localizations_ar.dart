@@ -336,4 +336,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settings => 'الإعدادات';
+
+  @override
+  String get testHistory => 'السجل';
+
+  @override
+  String get noTestRecords => 'لا توجد سجلات اختبار';
+
+  @override
+  String get noTestRecordsHint => 'أكمل اختبار الرعشة لرؤية نتائجك هنا';
+
+  @override
+  String get testDate => 'تاريخ الاختبار';
+
+  @override
+  String get deleteRecord => 'حذف السجل';
+
+  @override
+  String get deleteRecordConfirm => 'هل أنت متأكد من حذف سجل الاختبار هذا؟';
+
+  @override
+  String get recordDeleted => 'تم حذف السجل';
+
+  @override
+  String get duration => 'المدة';
+
+  @override
+  String get seconds => 'ث';
+
+  @override
+  String get tapToCancel => 'انقر للإلغاء';
 }

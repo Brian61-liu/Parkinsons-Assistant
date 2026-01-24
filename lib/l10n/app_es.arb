@@ -135,5 +135,15 @@
   "deleteForever": "Eliminar Permanentemente",
   "continue_": "Continuar",
   "error": "Error",
-  "settings": "Configuración"
+  "settings": "Configuración",
+  "testHistory": "Historial",
+  "noTestRecords": "No hay registros de pruebas",
+  "noTestRecordsHint": "Complete una prueba de temblor para ver sus resultados aquí",
+  "testDate": "Fecha de Prueba",
+  "deleteRecord": "Eliminar Registro",
+  "deleteRecordConfirm": "¿Está seguro de eliminar este registro de prueba?",
+  "recordDeleted": "Registro eliminado",
+  "duration": "Duración",
+  "seconds": "s",
+  "tapToCancel": "Toque para cancelar"
 }

@@ -135,5 +135,15 @@
   "deleteForever": "永久刪除",
   "continue_": "繼續",
   "error": "錯誤",
-  "settings": "設定"
+  "settings": "設定",
+  "testHistory": "歷史記錄",
+  "noTestRecords": "暫無測試記錄",
+  "noTestRecordsHint": "完成一次顫抖測試後，您的結果將顯示在這裡",
+  "testDate": "測試日期",
+  "deleteRecord": "刪除記錄",
+  "deleteRecordConfirm": "確定要刪除這條測試記錄嗎？",
+  "recordDeleted": "記錄已刪除",
+  "duration": "時長",
+  "seconds": "秒",
+  "tapToCancel": "點擊取消"
 }

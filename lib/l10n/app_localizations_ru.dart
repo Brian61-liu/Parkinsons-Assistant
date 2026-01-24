@@ -340,4 +340,36 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get settings => 'Настройки';
+
+  @override
+  String get testHistory => 'История';
+
+  @override
+  String get noTestRecords => 'Нет записей тестов';
+
+  @override
+  String get noTestRecordsHint =>
+      'Завершите тест на тремор, чтобы увидеть результаты здесь';
+
+  @override
+  String get testDate => 'Дата теста';
+
+  @override
+  String get deleteRecord => 'Удалить запись';
+
+  @override
+  String get deleteRecordConfirm =>
+      'Вы уверены, что хотите удалить эту запись теста?';
+
+  @override
+  String get recordDeleted => 'Запись удалена';
+
+  @override
+  String get duration => 'Длительность';
+
+  @override
+  String get seconds => 'с';
+
+  @override
+  String get tapToCancel => 'Нажмите для отмены';
 }

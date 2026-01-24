@@ -135,5 +135,15 @@
   "deleteForever": "Удалить Навсегда",
   "continue_": "Продолжить",
   "error": "Ошибка",
-  "settings": "Настройки"
+  "settings": "Настройки",
+  "testHistory": "История",
+  "noTestRecords": "Нет записей тестов",
+  "noTestRecordsHint": "Завершите тест на тремор, чтобы увидеть результаты здесь",
+  "testDate": "Дата теста",
+  "deleteRecord": "Удалить запись",
+  "deleteRecordConfirm": "Вы уверены, что хотите удалить эту запись теста?",
+  "recordDeleted": "Запись удалена",
+  "duration": "Длительность",
+  "seconds": "с",
+  "tapToCancel": "Нажмите для отмены"
 }

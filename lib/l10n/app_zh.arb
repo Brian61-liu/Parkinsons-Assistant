@@ -135,5 +135,15 @@
   "deleteForever": "永久删除",
   "continue_": "继续",
   "error": "错误",
-  "settings": "设置"
+  "settings": "设置",
+  "testHistory": "历史记录",
+  "noTestRecords": "暂无测试记录",
+  "noTestRecordsHint": "完成一次震颤测试后，您的结果将显示在这里",
+  "testDate": "测试日期",
+  "deleteRecord": "删除记录",
+  "deleteRecordConfirm": "确定要删除这条测试记录吗？",
+  "recordDeleted": "记录已删除",
+  "duration": "时长",
+  "seconds": "秒",
+  "tapToCancel": "点击取消"
 }

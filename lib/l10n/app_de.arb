@@ -135,5 +135,15 @@
   "deleteForever": "Dauerhaft Löschen",
   "continue_": "Fortfahren",
   "error": "Fehler",
-  "settings": "Einstellungen"
+  "settings": "Einstellungen",
+  "testHistory": "Verlauf",
+  "noTestRecords": "Keine Testaufzeichnungen",
+  "noTestRecordsHint": "Führen Sie einen Zittertest durch, um Ihre Ergebnisse hier zu sehen",
+  "testDate": "Testdatum",
+  "deleteRecord": "Aufzeichnung Löschen",
+  "deleteRecordConfirm": "Möchten Sie diese Testaufzeichnung wirklich löschen?",
+  "recordDeleted": "Aufzeichnung gelöscht",
+  "duration": "Dauer",
+  "seconds": "s",
+  "tapToCancel": "Zum Abbrechen tippen"
 }

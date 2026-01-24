@@ -341,4 +341,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings => 'Settings';
+
+  @override
+  String get testHistory => 'History';
+
+  @override
+  String get noTestRecords => 'No test records yet';
+
+  @override
+  String get noTestRecordsHint =>
+      'Complete a tremor test to see your results here';
+
+  @override
+  String get testDate => 'Test Date';
+
+  @override
+  String get deleteRecord => 'Delete Record';
+
+  @override
+  String get deleteRecordConfirm =>
+      'Are you sure you want to delete this test record?';
+
+  @override
+  String get recordDeleted => 'Record deleted';
+
+  @override
+  String get duration => 'Duration';
+
+  @override
+  String get seconds => 's';
+
+  @override
+  String get tapToCancel => 'Tap to cancel';
 }

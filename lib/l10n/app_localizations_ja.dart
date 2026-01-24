@@ -330,4 +330,34 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settings => '設定';
+
+  @override
+  String get testHistory => '履歴';
+
+  @override
+  String get noTestRecords => 'テスト記録がありません';
+
+  @override
+  String get noTestRecordsHint => '振戦テストを完了すると、結果がここに表示されます';
+
+  @override
+  String get testDate => 'テスト日';
+
+  @override
+  String get deleteRecord => '記録を削除';
+
+  @override
+  String get deleteRecordConfirm => 'このテスト記録を削除しますか？';
+
+  @override
+  String get recordDeleted => '記録が削除されました';
+
+  @override
+  String get duration => '時間';
+
+  @override
+  String get seconds => '秒';
+
+  @override
+  String get tapToCancel => 'タップでキャンセル';
 }
