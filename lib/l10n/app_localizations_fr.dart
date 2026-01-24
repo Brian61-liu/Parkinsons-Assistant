@@ -198,148 +198,148 @@ class AppLocalizationsFr extends AppLocalizations {
   String get dataSynced => 'Données synchronisées avec succès';
 
   @override
-  String get privacyPolicy => 'Privacy Policy';
+  String get privacyPolicy => 'Politique de Confidentialité';
 
   @override
   String get privacyPolicyIntro => 'Introduction';
 
   @override
   String get privacyPolicyIntroText =>
-      'Kineo is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information in compliance with HIPAA and GDPR regulations.';
+      'Kineo s\'engage à protéger votre vie privée et vos données de santé. Cette politique explique comment nous collectons, utilisons, stockons et protégeons vos informations, conformément à HIPAA et GDPR.';
 
   @override
-  String get dataCollection => 'Data We Collect';
+  String get dataCollection => 'Données Collectées';
 
   @override
   String get dataCollectionText =>
-      'We collect: 1) Account information (email, name) for authentication; 2) Movement sensor data during tremor tests; 3) Test results including frequency, amplitude, and severity assessments. We follow the principle of data minimization and only collect what is necessary.';
+      'Nous collectons les données suivantes :\n\n• Compte : Email, nom (authentification)\n• Capteurs : Données de mouvement pendant les tests\n• Résultats : Fréquence, amplitude, sévérité\n\nNous suivons le principe de minimisation des données.';
 
   @override
-  String get dataUsage => 'How We Use Your Data';
+  String get dataUsage => 'Utilisation des Données';
 
   @override
   String get dataUsageText =>
-      'Your data is used solely to: 1) Provide tremor analysis and tracking; 2) Generate health reports for you and your healthcare providers; 3) Improve our algorithms (only with anonymized data and your consent).';
+      'Vos données sont utilisées uniquement pour :\n\n• Fournir l\'analyse et le suivi des tremblements\n• Générer des rapports de santé\n• Améliorer nos algorithmes (données anonymisées avec consentement)';
 
   @override
-  String get dataStorage => 'Data Storage & Security';
+  String get dataStorage => 'Stockage et Sécurité';
 
   @override
   String get dataStorageText =>
-      'Your data is stored securely on Google Firebase servers with end-to-end encryption. All data transmissions use TLS 1.3 encryption. We implement strict access controls and regular security audits.';
+      'Vos données sont stockées en sécurité sur Google Firebase.\n\n• Chiffrement de bout en bout\n• TLS 1.3 pour toutes les transmissions\n• Contrôles d\'accès stricts\n• Audits de sécurité réguliers';
 
   @override
-  String get dataSharing => 'Data Sharing';
+  String get dataSharing => 'Partage des Données';
 
   @override
   String get dataSharingText =>
-      'We NEVER sell your personal health data. Data is only shared: 1) With your explicit consent; 2) With healthcare providers you designate; 3) When required by law. Aggregated, anonymized data may be used for research.';
+      'Nous ne vendons JAMAIS vos données de santé.\n\nLes données sont partagées uniquement :\n• Avec votre consentement explicite\n• Avec les prestataires de soins désignés\n• Lorsque la loi l\'exige\n\nLes données anonymisées peuvent être utilisées pour la recherche.';
 
   @override
-  String get userRights => 'Your Rights (GDPR)';
+  String get userRights => 'Vos Droits (RGPD)';
 
   @override
   String get userRightsText =>
-      'You have the right to: 1) Access your data; 2) Export your data (data portability); 3) Delete your data (right to be forgotten); 4) Withdraw consent at any time; 5) Lodge a complaint with a supervisory authority.';
+      'Selon le RGPD, vous avez le droit de :\n\n• Accès : Consulter toutes vos données\n• Portabilité : Exporter vos données\n• Effacement : Supprimer vos données\n• Retrait : Retirer votre consentement\n• Réclamation : Porter plainte auprès des autorités';
 
   @override
-  String get dataSecurity => 'Security Measures';
+  String get dataSecurity => 'Mesures de Sécurité';
 
   @override
   String get dataSecurityText =>
-      'We implement: 1) AES-256 encryption at rest; 2) TLS 1.3 for data in transit; 3) Multi-factor authentication; 4) Regular penetration testing; 5) Comprehensive audit logging; 6) Employee security training.';
+      'Nous mettons en œuvre plusieurs couches de sécurité :\n\n• Chiffrement AES-256 au repos\n• TLS 1.3 en transit\n• Authentification multifacteur\n• Tests de pénétration réguliers\n• Journaux d\'audit complets\n• Formation sécurité des employés';
 
   @override
-  String get contactUs => 'Contact Us';
+  String get contactUs => 'Nous Contacter';
 
   @override
   String get contactUsText =>
-      'For privacy inquiries or to exercise your data rights, contact our Data Protection Officer at: privacy@kineo-app.com';
+      'Questions de confidentialité : privacy@kineo-app.com';
 
   @override
-  String get lastUpdated => 'Last Updated';
+  String get lastUpdated => 'Dernière mise à jour';
 
   @override
   String get version => 'Version';
 
   @override
-  String get dataManagement => 'Data Management';
+  String get dataManagement => 'Gestion des Données';
 
   @override
   String get gdprRights =>
-      'Under GDPR and HIPAA, you have the right to access, export, and delete your personal health data at any time.';
+      'Selon RGPD et HIPAA, vous pouvez accéder, exporter et supprimer vos données de santé à tout moment.';
 
   @override
-  String get exportData => 'Export My Data';
+  String get exportData => 'Exporter mes Données';
 
   @override
   String get exportDataDescription =>
-      'Download a complete copy of all your data in JSON format. This includes your profile information and all tremor test records.';
+      'Téléchargez une copie complète de toutes vos données (format JSON).';
 
   @override
-  String get export => 'Export';
+  String get export => 'Exporter';
 
   @override
-  String get exporting => 'Exporting...';
+  String get exporting => 'Exportation...';
 
   @override
-  String get exportSuccess => 'Export Successful';
+  String get exportSuccess => 'Export Réussi';
 
   @override
   String get exportSuccessMessage =>
-      'Your data has been copied to the clipboard. You can paste it into a text file to save.';
+      'Vos données ont été copiées dans le presse-papiers.';
 
   @override
-  String get deleteAllRecords => 'Delete All Test Records';
+  String get deleteAllRecords => 'Supprimer Tous les Enregistrements';
 
   @override
   String get deleteAllRecordsDescription =>
-      'Permanently delete all your tremor test records. This action cannot be undone.';
+      'Supprimez définitivement tous vos enregistrements de tests. Cette action est irréversible.';
 
   @override
-  String get deleteAllData => 'Delete All Data';
+  String get deleteAllData => 'Supprimer Toutes les Données';
 
   @override
   String get deleteAllDataConfirm =>
-      'Are you sure you want to delete all your test records? This action is irreversible.';
+      'Voulez-vous vraiment supprimer tous les enregistrements ? Cette action est irréversible.';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Supprimer';
 
   @override
-  String get deleteSuccess => 'Deletion Successful';
+  String get deleteSuccess => 'Suppression Réussie';
 
   @override
   String get deleteSuccessMessage =>
-      'All your test records have been permanently deleted.';
+      'Tous vos enregistrements ont été supprimés définitivement.';
 
   @override
-  String get deleteAccount => 'Delete Account';
+  String get deleteAccount => 'Supprimer le Compte';
 
   @override
   String get deleteAccountDescription =>
-      'Permanently delete your account and all associated data. This includes all test records and personal information.';
+      'Supprimez définitivement votre compte et toutes les données associées.';
 
   @override
   String get deleteAccountWarning =>
-      'This will permanently delete your account and ALL your data. This action CANNOT be undone.';
+      'Votre compte et toutes les données seront supprimés définitivement. Cette action est irréversible.';
 
   @override
   String get deleteAccountFinalWarning =>
-      'FINAL WARNING: Once deleted, your account and all data will be gone forever. Are you absolutely sure?';
+      'Dernier avertissement : Après suppression, votre compte et données seront perdus à jamais. Êtes-vous sûr ?';
 
   @override
-  String get finalWarning => 'Final Warning';
+  String get finalWarning => 'Dernier Avertissement';
 
   @override
-  String get deleteForever => 'Delete Forever';
+  String get deleteForever => 'Supprimer Définitivement';
 
   @override
-  String get continue_ => 'Continue';
+  String get continue_ => 'Continuer';
 
   @override
-  String get error => 'Error';
+  String get error => 'Erreur';
 
   @override
-  String get settings => 'Settings';
+  String get settings => 'Paramètres';
 }

@@ -44,22 +44,38 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
 
     try {
       final result = await _authService.signInWithGoogle().timeout(
-        const Duration(seconds: 20),
+        const Duration(seconds: 15),
         onTimeout: () {
-          throw Exception('登录超时，请检查网络连接');
+          throw Exception('登录超时，请重试');
         },
       );
       if (result != null && mounted) {
-        // 登录成功
+        // 登录成功，Firebase 会自动跳转
       } else if (mounted) {
+        // 用户取消了登录
         setState(() => _isLoading = false);
       }
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        _showErrorDialog(e.toString());
+        String errorMessage = e.toString();
+        // 简化错误信息
+        if (errorMessage.contains('timeout') || errorMessage.contains('超时')) {
+          errorMessage = '登录超时，请检查网络后重试';
+        } else if (errorMessage.contains('network') || errorMessage.contains('网络')) {
+          errorMessage = '网络连接失败，请检查网络';
+        } else if (errorMessage.contains('cancel') || errorMessage.contains('取消')) {
+          // 用户取消，不显示错误
+          return;
+        }
+        _showErrorDialog(errorMessage);
       }
     }
+  }
+  
+  // 取消登录
+  void _cancelSignIn() {
+    setState(() => _isLoading = false);
   }
 
   void _showErrorDialog(String message) {
@@ -278,15 +294,16 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
-                          onPressed: _isLoading ? null : _signInWithGoogle,
+                          onPressed: _isLoading ? _cancelSignIn : _signInWithGoogle,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: const Color(0xFF334155),
-                            disabledBackgroundColor: Colors.grey[100],
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                               side: BorderSide(
-                                color: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
+                                color: _isLoading 
+                                    ? Colors.orange.withValues(alpha: 0.5)
+                                    : const Color(0xFF0EA5E9).withValues(alpha: 0.3),
                                 width: 1.5,
                               ),
                             ),
@@ -298,8 +315,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     SizedBox(
-                                      width: 22,
-                                      height: 22,
+                                      width: 20,
+                                      height: 20,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2.5,
                                         valueColor: AlwaysStoppedAnimation<Color>(
@@ -307,13 +324,21 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(width: 14),
+                                    const SizedBox(width: 12),
                                     Text(
                                       l10n.signingIn,
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.grey[600],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      '(点击取消)',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.orange[700],
                                       ),
                                     ),
                                   ],

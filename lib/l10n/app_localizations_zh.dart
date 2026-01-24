@@ -207,42 +207,42 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get dataCollectionText =>
-      '我们收集：1) 用于身份验证的账户信息（邮箱、姓名）；2) 震颤测试期间的运动传感器数据；3) 测试结果，包括频率、振幅和严重程度评估。我们遵循数据最小化原则，只收集必要的数据。';
+      '我们收集以下数据：\n\n• 账户信息：邮箱、姓名（用于身份验证）\n• 传感器数据：震颤测试期间的运动数据\n• 测试结果：频率、振幅和严重程度评估\n\n我们遵循数据最小化原则，只收集必要的数据。';
 
   @override
   String get dataUsage => '数据使用方式';
 
   @override
   String get dataUsageText =>
-      '您的数据仅用于：1) 提供震颤分析和追踪；2) 为您和您的医疗保健提供者生成健康报告；3) 改进我们的算法（仅在您同意的情况下使用匿名数据）。';
+      '您的数据仅用于以下目的：\n\n• 提供震颤分析和健康追踪\n• 为您和医疗保健提供者生成健康报告\n• 改进算法（仅在您同意时使用匿名数据）';
 
   @override
   String get dataStorage => '数据存储与安全';
 
   @override
   String get dataStorageText =>
-      '您的数据安全存储在 Google Firebase 服务器上，采用端到端加密。所有数据传输使用 TLS 1.3 加密。我们实施严格的访问控制和定期安全审计。';
+      '您的数据安全存储在 Google Firebase 服务器上。\n\n• 采用端到端加密\n• 所有传输使用 TLS 1.3 加密\n• 严格的访问控制\n• 定期安全审计';
 
   @override
   String get dataSharing => '数据共享';
 
   @override
   String get dataSharingText =>
-      '我们绝不出售您的个人健康数据。数据仅在以下情况下共享：1) 经您明确同意；2) 与您指定的医疗保健提供者共享；3) 法律要求时。汇总的匿名数据可能用于研究。';
+      '我们绝不出售您的个人健康数据。\n\n数据仅在以下情况下共享：\n• 经您明确同意\n• 与您指定的医疗保健提供者共享\n• 法律要求时\n\n汇总的匿名数据可能用于研究。';
 
   @override
   String get userRights => '您的权利 (GDPR)';
 
   @override
   String get userRightsText =>
-      '您有权：1) 访问您的数据；2) 导出您的数据（数据可携带性）；3) 删除您的数据（被遗忘权）；4) 随时撤回同意；5) 向监管机构投诉。';
+      '根据 GDPR，您享有以下权利：\n\n• 访问权：查看您的所有数据\n• 可携带权：导出您的数据\n• 删除权：删除您的数据（被遗忘权）\n• 撤回权：随时撤回同意\n• 投诉权：向监管机构投诉';
 
   @override
   String get dataSecurity => '安全措施';
 
   @override
   String get dataSecurityText =>
-      '我们实施：1) AES-256 静态加密；2) TLS 1.3 传输加密；3) 多因素身份验证；4) 定期渗透测试；5) 全面的审计日志；6) 员工安全培训。';
+      '我们采取多层安全措施保护您的数据：\n\n• AES-256 静态数据加密\n• TLS 1.3 传输加密\n• 多因素身份验证\n• 定期渗透测试\n• 全面的审计日志\n• 员工安全培训';
 
   @override
   String get contactUs => '联系我们';
@@ -517,4 +517,140 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get dataSynced => '資料同步成功';
+
+  @override
+  String get privacyPolicy => '隱私政策';
+
+  @override
+  String get privacyPolicyIntro => '簡介';
+
+  @override
+  String get privacyPolicyIntroText =>
+      'Kineo 致力於保護您的隱私和個人健康資料的安全。本政策說明我們如何收集、使用、儲存和保護您的資訊，符合 HIPAA 和 GDPR 法規要求。';
+
+  @override
+  String get dataCollection => '我們收集的資料';
+
+  @override
+  String get dataCollectionText =>
+      '我們收集以下資料：\n\n• 帳戶資訊：電子郵件、姓名（用於身份驗證）\n• 感測器資料：顫抖測試期間的運動資料\n• 測試結果：頻率、振幅和嚴重程度評估\n\n我們遵循資料最小化原則，只收集必要的資料。';
+
+  @override
+  String get dataUsage => '資料使用方式';
+
+  @override
+  String get dataUsageText =>
+      '您的資料僅用於以下目的：\n\n• 提供顫抖分析和健康追蹤\n• 為您和醫療保健提供者生成健康報告\n• 改進演算法（僅在您同意時使用匿名資料）';
+
+  @override
+  String get dataStorage => '資料儲存與安全';
+
+  @override
+  String get dataStorageText =>
+      '您的資料安全儲存在 Google Firebase 伺服器上。\n\n• 採用端到端加密\n• 所有傳輸使用 TLS 1.3 加密\n• 嚴格的存取控制\n• 定期安全審計';
+
+  @override
+  String get dataSharing => '資料共享';
+
+  @override
+  String get dataSharingText =>
+      '我們絕不出售您的個人健康資料。\n\n資料僅在以下情況下共享：\n• 經您明確同意\n• 與您指定的醫療保健提供者共享\n• 法律要求時\n\n彙總的匿名資料可能用於研究。';
+
+  @override
+  String get userRights => '您的權利 (GDPR)';
+
+  @override
+  String get userRightsText =>
+      '根據 GDPR，您享有以下權利：\n\n• 存取權：查看您的所有資料\n• 可攜權：匯出您的資料\n• 刪除權：刪除您的資料（被遺忘權）\n• 撤回權：隨時撤回同意\n• 投訴權：向監管機構投訴';
+
+  @override
+  String get dataSecurity => '安全措施';
+
+  @override
+  String get dataSecurityText =>
+      '我們採取多層安全措施保護您的資料：\n\n• AES-256 靜態資料加密\n• TLS 1.3 傳輸加密\n• 多因素身份驗證\n• 定期滲透測試\n• 全面的審計日誌\n• 員工安全培訓';
+
+  @override
+  String get contactUs => '聯絡我們';
+
+  @override
+  String get contactUsText => '隱私諮詢請聯絡：privacy@kineo-app.com';
+
+  @override
+  String get lastUpdated => '最後更新';
+
+  @override
+  String get version => '版本';
+
+  @override
+  String get dataManagement => '資料管理';
+
+  @override
+  String get gdprRights => '根據 GDPR 和 HIPAA，您有權隨時存取、匯出和刪除您的個人健康資料。';
+
+  @override
+  String get exportData => '匯出我的資料';
+
+  @override
+  String get exportDataDescription => '下載您所有資料的完整副本（JSON 格式）。';
+
+  @override
+  String get export => '匯出';
+
+  @override
+  String get exporting => '正在匯出...';
+
+  @override
+  String get exportSuccess => '匯出成功';
+
+  @override
+  String get exportSuccessMessage => '您的資料已複製到剪貼簿。';
+
+  @override
+  String get deleteAllRecords => '刪除所有測試記錄';
+
+  @override
+  String get deleteAllRecordsDescription => '永久刪除您的所有顫抖測試記錄。此操作無法撤銷。';
+
+  @override
+  String get deleteAllData => '刪除所有資料';
+
+  @override
+  String get deleteAllDataConfirm => '確定要刪除所有測試記錄嗎？此操作不可逆。';
+
+  @override
+  String get delete => '刪除';
+
+  @override
+  String get deleteSuccess => '刪除成功';
+
+  @override
+  String get deleteSuccessMessage => '您的所有測試記錄已永久刪除。';
+
+  @override
+  String get deleteAccount => '刪除帳戶';
+
+  @override
+  String get deleteAccountDescription => '永久刪除您的帳戶及所有相關資料。';
+
+  @override
+  String get deleteAccountWarning => '這將永久刪除您的帳戶和所有資料。此操作無法撤銷。';
+
+  @override
+  String get deleteAccountFinalWarning => '最後警告：一旦刪除，您的帳戶和所有資料將永遠消失。您確定嗎？';
+
+  @override
+  String get finalWarning => '最後警告';
+
+  @override
+  String get deleteForever => '永久刪除';
+
+  @override
+  String get continue_ => '繼續';
+
+  @override
+  String get error => '錯誤';
+
+  @override
+  String get settings => '設定';
 }

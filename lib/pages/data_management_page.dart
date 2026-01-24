@@ -17,7 +17,11 @@ class DataManagementPage extends StatefulWidget {
 class _DataManagementPageState extends State<DataManagementPage> {
   final AuthService _authService = AuthService();
   bool _isExporting = false;
-  bool _isDeleting = false;
+  bool _isDeletingRecords = false;
+  bool _isDeletingAccount = false;
+
+  // 操作超时时间（秒）
+  static const int _operationTimeout = 30;
 
   Future<void> _exportData() async {
     final l10n = AppLocalizations.of(context)!;
@@ -25,42 +29,21 @@ class _DataManagementPageState extends State<DataManagementPage> {
     setState(() => _isExporting = true);
     
     try {
-      final data = await _authService.exportUserData();
+      final data = await _authService.exportUserData().timeout(
+        const Duration(seconds: _operationTimeout),
+        onTimeout: () => throw Exception('操作超时，请检查网络连接'),
+      );
       final jsonString = const JsonEncoder.withIndent('  ').convert(data);
       
       // 复制到剪贴板
       await Clipboard.setData(ClipboardData(text: jsonString));
       
       if (mounted) {
-        showCupertinoDialog(
-          context: context,
-          builder: (context) => CupertinoAlertDialog(
-            title: Text(l10n.exportSuccess),
-            content: Text(l10n.exportSuccessMessage),
-            actions: [
-              CupertinoDialogAction(
-                child: Text(l10n.ok),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-        );
+        _showSuccessDialog(l10n.exportSuccess, l10n.exportSuccessMessage);
       }
     } catch (e) {
       if (mounted) {
-        showCupertinoDialog(
-          context: context,
-          builder: (context) => CupertinoAlertDialog(
-            title: Text(l10n.error),
-            content: Text(e.toString()),
-            actions: [
-              CupertinoDialogAction(
-                child: Text(l10n.ok),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-        );
+        _showErrorDialog(l10n.error, e.toString());
       }
     } finally {
       if (mounted) {
@@ -93,45 +76,24 @@ class _DataManagementPageState extends State<DataManagementPage> {
 
     if (confirmed != true) return;
 
-    setState(() => _isDeleting = true);
+    setState(() => _isDeletingRecords = true);
 
     try {
-      await _authService.deleteAllTremorRecords();
+      await _authService.deleteAllTremorRecords().timeout(
+        const Duration(seconds: _operationTimeout),
+        onTimeout: () => throw Exception('操作超时，请检查网络连接'),
+      );
       
       if (mounted) {
-        showCupertinoDialog(
-          context: context,
-          builder: (context) => CupertinoAlertDialog(
-            title: Text(l10n.deleteSuccess),
-            content: Text(l10n.deleteSuccessMessage),
-            actions: [
-              CupertinoDialogAction(
-                child: Text(l10n.ok),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-        );
+        _showSuccessDialog(l10n.deleteSuccess, l10n.deleteSuccessMessage);
       }
     } catch (e) {
       if (mounted) {
-        showCupertinoDialog(
-          context: context,
-          builder: (context) => CupertinoAlertDialog(
-            title: Text(l10n.error),
-            content: Text(e.toString()),
-            actions: [
-              CupertinoDialogAction(
-                child: Text(l10n.ok),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-        );
+        _showErrorDialog(l10n.error, e.toString());
       }
     } finally {
       if (mounted) {
-        setState(() => _isDeleting = false);
+        setState(() => _isDeletingRecords = false);
       }
     }
   }
@@ -184,29 +146,75 @@ class _DataManagementPageState extends State<DataManagementPage> {
 
     if (finalConfirm != true) return;
 
-    setState(() => _isDeleting = true);
+    setState(() => _isDeletingAccount = true);
 
     try {
       await _authService.deleteAccount();
-      // 账户删除后会自动登出，页面会被替换
+      
+      // 删除成功，返回到根页面（让 main.dart 的 StreamBuilder 处理导航）
+      if (mounted) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      }
     } catch (e) {
       if (mounted) {
-        showCupertinoDialog(
-          context: context,
-          builder: (context) => CupertinoAlertDialog(
-            title: Text(l10n.error),
-            content: Text(e.toString()),
-            actions: [
-              CupertinoDialogAction(
-                child: Text(l10n.ok),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-        );
-        setState(() => _isDeleting = false);
+        _showErrorDialog(l10n.error, e.toString());
+        setState(() => _isDeletingAccount = false);
       }
     }
+  }
+
+  void _showSuccessDialog(String title, String message) {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(CupertinoIcons.checkmark_circle_fill, 
+                color: Colors.green, size: 24),
+            const SizedBox(width: 8),
+            Flexible(child: Text(title)),
+          ],
+        ),
+        content: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Text(message),
+        ),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('确定'),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showErrorDialog(String title, String message) {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(CupertinoIcons.exclamationmark_circle_fill, 
+                color: Colors.red, size: 24),
+            const SizedBox(width: 8),
+            Flexible(child: Text(title)),
+          ],
+        ),
+        content: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Text(message, style: const TextStyle(fontSize: 14)),
+        ),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('确定'),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -235,10 +243,10 @@ class _DataManagementPageState extends State<DataManagementPage> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-color: const Color(0xFF4facfe).withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: const Color(0xFF4facfe).withValues(alpha: 0.3),
+                  color: const Color(0xFF4facfe).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: const Color(0xFF4facfe).withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
@@ -285,8 +293,8 @@ color: const Color(0xFF4facfe).withValues(alpha: 0.1),
                 description: l10n.deleteAllRecordsDescription,
                 buttonText: l10n.delete,
                 isDestructive: true,
-                isLoading: _isDeleting,
-                onPressed: _isDeleting ? null : _deleteAllRecords,
+                isLoading: _isDeletingRecords,
+                onPressed: _isDeletingRecords ? null : _deleteAllRecords,
               ),
 
               const SizedBox(height: 16),
@@ -299,8 +307,8 @@ color: const Color(0xFF4facfe).withValues(alpha: 0.1),
                 description: l10n.deleteAccountDescription,
                 buttonText: l10n.deleteAccount,
                 isDestructive: true,
-                isLoading: _isDeleting,
-                onPressed: _isDeleting ? null : _deleteAccount,
+                isLoading: _isDeletingAccount,
+                onPressed: _isDeletingAccount ? null : _deleteAccount,
               ),
             ],
           ),

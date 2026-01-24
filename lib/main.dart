@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
 import 'pages/home_page.dart';
 import 'pages/login_page.dart';
@@ -9,20 +10,59 @@ import 'pages/login_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const KineoApp());
+
+  // 加载保存的语言设置
+  final savedLocale = await _loadSavedLocale();
+
+  runApp(KineoApp(initialLocale: savedLocale));
+}
+
+/// 加载保存的语言设置
+Future<Locale> _loadSavedLocale() async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final languageCode = prefs.getString('app_language_code');
+    final countryCode = prefs.getString('app_country_code');
+
+    if (languageCode != null) {
+      return Locale(languageCode, countryCode ?? '');
+    }
+  } catch (e) {
+    debugPrint('Failed to load saved locale: $e');
+  }
+
+  // 默认中文
+  return const Locale('zh', '');
 }
 
 class KineoApp extends StatefulWidget {
-  const KineoApp({super.key});
+  final Locale initialLocale;
+
+  const KineoApp({super.key, required this.initialLocale});
 
   @override
   State<KineoApp> createState() => _KineoAppState();
 }
 
 class _KineoAppState extends State<KineoApp> {
-  Locale _locale = const Locale('zh', ''); // 默认中文
+  late Locale _locale;
 
-  void changeLanguage(Locale locale) {
+  @override
+  void initState() {
+    super.initState();
+    _locale = widget.initialLocale;
+  }
+
+  Future<void> changeLanguage(Locale locale) async {
+    // 保存语言设置
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('app_language_code', locale.languageCode);
+      await prefs.setString('app_country_code', locale.countryCode ?? '');
+    } catch (e) {
+      debugPrint('Failed to save locale: $e');
+    }
+
     setState(() {
       _locale = locale;
     });

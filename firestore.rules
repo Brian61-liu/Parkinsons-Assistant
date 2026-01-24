@@ -20,11 +20,6 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
     
-    // 验证时间戳字段
-    function isValidTimestamp(field) {
-      return field is timestamp;
-    }
-    
     // 验证数值范围（用于频率、振幅等）
     function isValidNumber(value, min, max) {
       return value is number && value >= min && value <= max;
@@ -42,14 +37,12 @@ service cloud.firestore {
       // 只有用户本人可以读取自己的数据
       allow read: if isOwner(userId);
       
-      // 只有用户本人可以创建/更新自己的数据
-      allow create: if isOwner(userId) 
-        && request.resource.data.keys().hasAll(['uid', 'email', 'createdAt'])
-        && request.resource.data.uid == userId;
+      // 允许用户创建自己的文档
+      allow create: if isOwner(userId) && request.resource.data.uid == userId;
       
+      // 允许用户更新自己的文档（但不能修改 uid）
       allow update: if isOwner(userId)
-        // 禁止修改 uid 和 createdAt
-        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['uid', 'createdAt']));
+        && request.resource.data.uid == userId;
       
       // 允许用户删除自己的账户（GDPR 要求）
       allow delete: if isOwner(userId);
@@ -61,10 +54,10 @@ service cloud.firestore {
         // 只有用户本人可以读取
         allow read: if isOwner(userId);
         
-        // 只有用户本人可以创建，且必须包含必要字段
+        // 只有用户本人可以创建
         allow create: if isOwner(userId)
-          && request.resource.data.keys().hasAll(['frequency', 'amplitude', 'severity', 'timestamp', 'createdAt'])
-          && isValidNumber(request.resource.data.frequency, 0, 30)  // 帕金森震颤频率范围 3-12Hz
+          && request.resource.data.keys().hasAll(['frequency', 'amplitude', 'severity', 'timestamp'])
+          && isValidNumber(request.resource.data.frequency, 0, 30)
           && isValidNumber(request.resource.data.amplitude, 0, 100)
           && isValidString(request.resource.data.severity, 50);
         
@@ -72,6 +65,32 @@ service cloud.firestore {
         allow update: if false;
         
         // 允许删除（GDPR 数据删除权）
+        allow delete: if isOwner(userId);
+      }
+      
+      // ============================================
+      // 审计日志
+      // ============================================
+      match /audit_logs/{logId} {
+        // 用户可以读取自己的审计日志
+        allow read: if isOwner(userId);
+        
+        // 允许创建审计日志
+        allow create: if isOwner(userId);
+        
+        // 审计日志不可修改或删除（数据完整性）
+        // 但允许账户删除时一起删除
+        allow update: if false;
+        allow delete: if isOwner(userId);
+      }
+      
+      // ============================================
+      // 数据导出请求记录
+      // ============================================
+      match /data_export_requests/{requestId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId);
+        allow update: if false;
         allow delete: if isOwner(userId);
       }
       
@@ -87,11 +106,7 @@ service cloud.firestore {
       // ============================================
       match /consent_records/{consentId} {
         allow read: if isOwner(userId);
-        
-        // 只允许创建同意记录，不允许修改（审计需要）
-        allow create: if isOwner(userId)
-          && request.resource.data.keys().hasAll(['type', 'version', 'acceptedAt', 'ipHash']);
-        
+        allow create: if isOwner(userId);
         allow update, delete: if false;
       }
     }

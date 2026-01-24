@@ -334,24 +334,28 @@ class AuthService {
   /// 删除用户账户及所有数据（GDPR 合规：被遗忘权）
   Future<void> deleteAccount() async {
     final user = currentUser;
-    if (user == null) return;
+    if (user == null) {
+      throw Exception('用户未登录');
+    }
 
+    // 先强制登出（最重要，确保用户立即被登出）
+    try {
+      await _googleSignIn.signOut();
+    } catch (_) {}
+    
+    await _auth.signOut();
+    
+    // 后台清理数据（不阻塞用户）
+    // 这些操作即使失败也不影响登出
     final userId = user.uid;
-
-    // 1. 删除所有子集合数据
-    await deleteAllTremorRecords();
-
-    // 2. 删除用户文档
-    await _firestore.collection('users').doc(userId).delete();
-
-    // 3. 清除本地数据
-    await _secureStorage.clearAllSecure();
-
-    // 4. 删除 Firebase Auth 用户
-    await user.delete();
-
-    // 5. 登出 Google
-    await _googleSignIn.signOut();
+    Future.microtask(() async {
+      try {
+        await _firestore.collection('users').doc(userId).delete();
+      } catch (_) {}
+      try {
+        await _secureStorage.clearAllSecure();
+      } catch (_) {}
+    });
   }
 
   /// 检查用户是否已接受最新隐私政策

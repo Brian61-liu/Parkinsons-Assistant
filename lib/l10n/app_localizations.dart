@@ -492,7 +492,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataCollectionText.
   ///
   /// In en, this message translates to:
-  /// **'We collect: 1) Account information (email, name) for authentication; 2) Movement sensor data during tremor tests; 3) Test results including frequency, amplitude, and severity assessments. We follow the principle of data minimization and only collect what is necessary.'**
+  /// **'We collect the following data:\n\n• Account info: Email, name (for authentication)\n• Sensor data: Movement data during tremor tests\n• Test results: Frequency, amplitude, severity\n\nWe follow data minimization principles.'**
   String get dataCollectionText;
 
   /// No description provided for @dataUsage.
@@ -504,7 +504,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataUsageText.
   ///
   /// In en, this message translates to:
-  /// **'Your data is used solely to: 1) Provide tremor analysis and tracking; 2) Generate health reports for you and your healthcare providers; 3) Improve our algorithms (only with anonymized data and your consent).'**
+  /// **'Your data is used solely for:\n\n• Providing tremor analysis and tracking\n• Generating health reports for you and providers\n• Improving algorithms (anonymized, with consent)'**
   String get dataUsageText;
 
   /// No description provided for @dataStorage.
@@ -516,7 +516,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataStorageText.
   ///
   /// In en, this message translates to:
-  /// **'Your data is stored securely on Google Firebase servers with end-to-end encryption. All data transmissions use TLS 1.3 encryption. We implement strict access controls and regular security audits.'**
+  /// **'Your data is stored securely on Google Firebase.\n\n• End-to-end encryption\n• TLS 1.3 for all transmissions\n• Strict access controls\n• Regular security audits'**
   String get dataStorageText;
 
   /// No description provided for @dataSharing.
@@ -528,7 +528,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataSharingText.
   ///
   /// In en, this message translates to:
-  /// **'We NEVER sell your personal health data. Data is only shared: 1) With your explicit consent; 2) With healthcare providers you designate; 3) When required by law. Aggregated, anonymized data may be used for research.'**
+  /// **'We NEVER sell your personal health data.\n\nData is only shared:\n• With your explicit consent\n• With healthcare providers you designate\n• When required by law\n\nAnonymized data may be used for research.'**
   String get dataSharingText;
 
   /// No description provided for @userRights.
@@ -540,7 +540,7 @@ abstract class AppLocalizations {
   /// No description provided for @userRightsText.
   ///
   /// In en, this message translates to:
-  /// **'You have the right to: 1) Access your data; 2) Export your data (data portability); 3) Delete your data (right to be forgotten); 4) Withdraw consent at any time; 5) Lodge a complaint with a supervisory authority.'**
+  /// **'Under GDPR, you have the right to:\n\n• Access: View all your data\n• Portability: Export your data\n• Erasure: Delete your data\n• Withdraw: Revoke consent anytime\n• Complain: Lodge complaints with authorities'**
   String get userRightsText;
 
   /// No description provided for @dataSecurity.
@@ -552,7 +552,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataSecurityText.
   ///
   /// In en, this message translates to:
-  /// **'We implement: 1) AES-256 encryption at rest; 2) TLS 1.3 for data in transit; 3) Multi-factor authentication; 4) Regular penetration testing; 5) Comprehensive audit logging; 6) Employee security training.'**
+  /// **'We implement multiple security layers:\n\n• AES-256 encryption at rest\n• TLS 1.3 for data in transit\n• Multi-factor authentication\n• Regular penetration testing\n• Comprehensive audit logging\n• Employee security training'**
   String get dataSecurityText;
 
   /// No description provided for @contactUs.

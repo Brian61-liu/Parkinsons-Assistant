@@ -193,148 +193,141 @@ class AppLocalizationsJa extends AppLocalizations {
   String get dataSynced => 'データが正常に同期されました';
 
   @override
-  String get privacyPolicy => 'Privacy Policy';
+  String get privacyPolicy => 'プライバシーポリシー';
 
   @override
-  String get privacyPolicyIntro => 'Introduction';
+  String get privacyPolicyIntro => 'はじめに';
 
   @override
   String get privacyPolicyIntroText =>
-      'Kineo is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information in compliance with HIPAA and GDPR regulations.';
+      'Kineoはお客様のプライバシーと健康データの保護に努めています。本ポリシーでは、HIPAAおよびGDPRに準拠した情報の収集、使用、保存、保護について説明します。';
 
   @override
-  String get dataCollection => 'Data We Collect';
+  String get dataCollection => '収集するデータ';
 
   @override
   String get dataCollectionText =>
-      'We collect: 1) Account information (email, name) for authentication; 2) Movement sensor data during tremor tests; 3) Test results including frequency, amplitude, and severity assessments. We follow the principle of data minimization and only collect what is necessary.';
+      '以下のデータを収集します：\n\n• アカウント情報：メール、名前（認証用）\n• センサーデータ：振戦テスト中の動きデータ\n• テスト結果：周波数、振幅、重症度\n\nデータ最小化の原則に従います。';
 
   @override
-  String get dataUsage => 'How We Use Your Data';
+  String get dataUsage => 'データの使用目的';
 
   @override
   String get dataUsageText =>
-      'Your data is used solely to: 1) Provide tremor analysis and tracking; 2) Generate health reports for you and your healthcare providers; 3) Improve our algorithms (only with anonymized data and your consent).';
+      'お客様のデータは以下の目的でのみ使用されます：\n\n• 振戦分析と追跡の提供\n• 健康レポートの生成\n• アルゴリズムの改善（同意を得た匿名データのみ）';
 
   @override
-  String get dataStorage => 'Data Storage & Security';
+  String get dataStorage => 'データの保存とセキュリティ';
 
   @override
   String get dataStorageText =>
-      'Your data is stored securely on Google Firebase servers with end-to-end encryption. All data transmissions use TLS 1.3 encryption. We implement strict access controls and regular security audits.';
+      'お客様のデータはGoogle Firebaseに安全に保存されます。\n\n• エンドツーエンド暗号化\n• TLS 1.3によるすべての通信\n• 厳格なアクセス制御\n• 定期的なセキュリティ監査';
 
   @override
-  String get dataSharing => 'Data Sharing';
+  String get dataSharing => 'データの共有';
 
   @override
   String get dataSharingText =>
-      'We NEVER sell your personal health data. Data is only shared: 1) With your explicit consent; 2) With healthcare providers you designate; 3) When required by law. Aggregated, anonymized data may be used for research.';
+      'お客様の健康データを販売することは決してありません。\n\nデータは以下の場合のみ共有されます：\n• お客様の明示的な同意がある場合\n• 指定された医療提供者との共有\n• 法律で要求された場合\n\n匿名化されたデータは研究に使用される場合があります。';
 
   @override
-  String get userRights => 'Your Rights (GDPR)';
+  String get userRights => 'お客様の権利（GDPR）';
 
   @override
   String get userRightsText =>
-      'You have the right to: 1) Access your data; 2) Export your data (data portability); 3) Delete your data (right to be forgotten); 4) Withdraw consent at any time; 5) Lodge a complaint with a supervisory authority.';
+      'GDPRに基づき、以下の権利があります：\n\n• アクセス権：すべてのデータを閲覧\n• ポータビリティ：データをエクスポート\n• 削除権：データを削除\n• 撤回権：いつでも同意を撤回\n• 苦情申立権：監督機関への申立て';
 
   @override
-  String get dataSecurity => 'Security Measures';
+  String get dataSecurity => 'セキュリティ対策';
 
   @override
   String get dataSecurityText =>
-      'We implement: 1) AES-256 encryption at rest; 2) TLS 1.3 for data in transit; 3) Multi-factor authentication; 4) Regular penetration testing; 5) Comprehensive audit logging; 6) Employee security training.';
+      '多層的なセキュリティ対策を実施：\n\n• AES-256静的暗号化\n• TLS 1.3転送暗号化\n• 多要素認証\n• 定期的な侵入テスト\n• 包括的な監査ログ\n• 従業員セキュリティ研修';
 
   @override
-  String get contactUs => 'Contact Us';
+  String get contactUs => 'お問い合わせ';
 
   @override
-  String get contactUsText =>
-      'For privacy inquiries or to exercise your data rights, contact our Data Protection Officer at: privacy@kineo-app.com';
+  String get contactUsText => 'プライバシーに関するお問い合わせ：privacy@kineo-app.com';
 
   @override
-  String get lastUpdated => 'Last Updated';
+  String get lastUpdated => '最終更新';
 
   @override
-  String get version => 'Version';
+  String get version => 'バージョン';
 
   @override
-  String get dataManagement => 'Data Management';
+  String get dataManagement => 'データ管理';
 
   @override
   String get gdprRights =>
-      'Under GDPR and HIPAA, you have the right to access, export, and delete your personal health data at any time.';
+      'GDPRおよびHIPAAに基づき、お客様はいつでも個人健康データにアクセス、エクスポート、削除する権利があります。';
 
   @override
-  String get exportData => 'Export My Data';
+  String get exportData => 'データをエクスポート';
 
   @override
-  String get exportDataDescription =>
-      'Download a complete copy of all your data in JSON format. This includes your profile information and all tremor test records.';
+  String get exportDataDescription => 'すべてのデータの完全なコピーをダウンロードします（JSON形式）。';
 
   @override
-  String get export => 'Export';
+  String get export => 'エクスポート';
 
   @override
-  String get exporting => 'Exporting...';
+  String get exporting => 'エクスポート中...';
 
   @override
-  String get exportSuccess => 'Export Successful';
+  String get exportSuccess => 'エクスポート成功';
 
   @override
-  String get exportSuccessMessage =>
-      'Your data has been copied to the clipboard. You can paste it into a text file to save.';
+  String get exportSuccessMessage => 'データがクリップボードにコピーされました。';
 
   @override
-  String get deleteAllRecords => 'Delete All Test Records';
+  String get deleteAllRecords => 'すべてのテスト記録を削除';
 
   @override
   String get deleteAllRecordsDescription =>
-      'Permanently delete all your tremor test records. This action cannot be undone.';
+      'すべての振戦テスト記録を永久に削除します。この操作は取り消せません。';
 
   @override
-  String get deleteAllData => 'Delete All Data';
+  String get deleteAllData => 'すべてのデータを削除';
 
   @override
-  String get deleteAllDataConfirm =>
-      'Are you sure you want to delete all your test records? This action is irreversible.';
+  String get deleteAllDataConfirm => 'すべてのテスト記録を削除しますか？この操作は元に戻せません。';
 
   @override
-  String get delete => 'Delete';
+  String get delete => '削除';
 
   @override
-  String get deleteSuccess => 'Deletion Successful';
+  String get deleteSuccess => '削除成功';
 
   @override
-  String get deleteSuccessMessage =>
-      'All your test records have been permanently deleted.';
+  String get deleteSuccessMessage => 'すべてのテスト記録が永久に削除されました。';
 
   @override
-  String get deleteAccount => 'Delete Account';
+  String get deleteAccount => 'アカウントを削除';
 
   @override
-  String get deleteAccountDescription =>
-      'Permanently delete your account and all associated data. This includes all test records and personal information.';
+  String get deleteAccountDescription => 'アカウントとすべての関連データを永久に削除します。';
 
   @override
-  String get deleteAccountWarning =>
-      'This will permanently delete your account and ALL your data. This action CANNOT be undone.';
+  String get deleteAccountWarning => 'アカウントとすべてのデータが永久に削除されます。この操作は取り消せません。';
 
   @override
   String get deleteAccountFinalWarning =>
-      'FINAL WARNING: Once deleted, your account and all data will be gone forever. Are you absolutely sure?';
+      '最終警告：削除後、アカウントとデータは永久に失われます。本当によろしいですか？';
 
   @override
-  String get finalWarning => 'Final Warning';
+  String get finalWarning => '最終警告';
 
   @override
-  String get deleteForever => 'Delete Forever';
+  String get deleteForever => '永久に削除';
 
   @override
-  String get continue_ => 'Continue';
+  String get continue_ => '続行';
 
   @override
-  String get error => 'Error';
+  String get error => 'エラー';
 
   @override
-  String get settings => 'Settings';
+  String get settings => '設定';
 }
