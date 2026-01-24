@@ -44,9 +44,9 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
 
     try {
       final result = await _authService.signInWithGoogle().timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 60),
         onTimeout: () {
-          throw Exception('登录超时，请重试');
+          throw Exception('timeout');
         },
       );
       if (result != null && mounted) {
@@ -58,24 +58,24 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        String errorMessage = e.toString();
-        // 简化错误信息
-        if (errorMessage.contains('timeout') || errorMessage.contains('超时')) {
-          errorMessage = '登录超时，请检查网络后重试';
-        } else if (errorMessage.contains('network') || errorMessage.contains('网络')) {
-          errorMessage = '网络连接失败，请检查网络';
-        } else if (errorMessage.contains('cancel') || errorMessage.contains('取消')) {
-          // 用户取消，不显示错误
+        String errorMessage = e.toString().toLowerCase();
+        
+        // 用户取消登录，不显示错误
+        if (errorMessage.contains('cancel') || errorMessage.contains('取消') ||
+            errorMessage.contains('sign_in_canceled') || errorMessage.contains('aborted')) {
           return;
         }
-        _showErrorDialog(errorMessage);
+        
+        // 网络/超时问题
+        if (errorMessage.contains('timeout') || errorMessage.contains('network') ||
+            errorMessage.contains('connection') || errorMessage.contains('unreachable') ||
+            errorMessage.contains('failed host lookup')) {
+          _showErrorDialog('无法连接到 Google 服务\n\n请确保：\n• 网络连接正常\n• 可以访问 Google（可能需要 VPN）');
+        } else {
+          _showErrorDialog('登录失败，请重试');
+        }
       }
     }
-  }
-  
-  // 取消登录
-  void _cancelSignIn() {
-    setState(() => _isLoading = false);
   }
 
   void _showErrorDialog(String message) {
@@ -85,8 +85,12 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       builder: (ctx) => CupertinoAlertDialog(
         title: Text(l10n.loginError),
         content: Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Text(message, style: const TextStyle(fontSize: 14)),
+          padding: const EdgeInsets.only(top: 12),
+          child: Text(
+            message, 
+            style: const TextStyle(fontSize: 14, height: 1.5),
+            textAlign: TextAlign.left,
+          ),
         ),
         actions: [
           CupertinoDialogAction(
@@ -294,16 +298,14 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
-                          onPressed: _isLoading ? _cancelSignIn : _signInWithGoogle,
+                          onPressed: _isLoading ? null : _signInWithGoogle,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: const Color(0xFF334155),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                               side: BorderSide(
-                                color: _isLoading 
-                                    ? Colors.orange.withValues(alpha: 0.5)
-                                    : const Color(0xFF0EA5E9).withValues(alpha: 0.3),
+                                color: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
                                 width: 1.5,
                               ),
                             ),
@@ -331,14 +333,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.grey[600],
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      '(点击取消)',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.orange[700],
                                       ),
                                     ),
                                   ],

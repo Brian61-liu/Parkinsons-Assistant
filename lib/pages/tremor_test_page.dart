@@ -720,9 +720,13 @@ class _TremorTestPageState extends State<TremorTestPage> {
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 
-  void _confirmDeleteRecord(BuildContext context, TremorRecord record, AppLocalizations l10n) {
+  void _confirmDeleteRecord(BuildContext sheetContext, TremorRecord record, AppLocalizations l10n) {
+    final navigator = Navigator.of(sheetContext);
+    final scaffoldMessenger = ScaffoldMessenger.of(sheetContext);
+    final recordDeletedText = l10n.recordDeleted;
+    
     showCupertinoDialog(
-      context: context,
+      context: sheetContext,
       builder: (dialogContext) => CupertinoAlertDialog(
         title: Text(l10n.deleteRecord),
         content: Text(l10n.deleteRecordConfirm),
@@ -734,10 +738,10 @@ class _TremorTestPageState extends State<TremorTestPage> {
               if (record.id != null) {
                 await _databaseService.deleteTremorRecord(record.id!);
                 if (mounted) {
-                  Navigator.of(context).pop(); // 关闭历史记录面板
+                  navigator.pop(); // 关闭历史记录面板
                   _showHistorySheet(context); // 重新打开以刷新列表
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.recordDeleted), backgroundColor: _secondaryColor),
+                  scaffoldMessenger.showSnackBar(
+                    SnackBar(content: Text(recordDeletedText), backgroundColor: _secondaryColor),
                   );
                 }
               }

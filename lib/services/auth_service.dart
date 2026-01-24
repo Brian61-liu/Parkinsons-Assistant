@@ -21,36 +21,57 @@ class AuthService {
   /// Google 登录
   Future<UserCredential?> signInWithGoogle() async {
     try {
+      debugPrint('signInWithGoogle: 开始 Google 登录...');
+      
       // 触发 Google 登录流程
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       
       if (googleUser == null) {
-        // 用户取消了登录
+        debugPrint('signInWithGoogle: 用户取消了登录');
         return null;
       }
+      
+      debugPrint('signInWithGoogle: 获取 Google 认证信息...');
 
       // 获取认证信息
       final GoogleSignInAuthentication googleAuth = 
           await googleUser.authentication;
 
+      debugPrint('signInWithGoogle: 创建 Firebase 凭证...');
+      
       // 创建 Firebase 凭证
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
+      debugPrint('signInWithGoogle: 登录 Firebase...');
+      
       // 使用凭证登录 Firebase
       final userCredential = await _auth.signInWithCredential(credential);
+      
+      debugPrint('signInWithGoogle: Firebase 登录成功！');
 
-      // 保存/更新用户信息到 Firestore
+      // 后台保存用户信息（不阻塞登录流程）
       if (userCredential.user != null) {
-        await _saveUserToFirestore(userCredential.user!);
-        // 记录登录审计日志
-        await _logAuditEvent(
-          userCredential.user!.uid,
-          'LOGIN',
-          'User logged in via Google',
-        );
+        Future.microtask(() async {
+          try {
+            await _saveUserToFirestore(userCredential.user!).timeout(
+              const Duration(seconds: 10),
+              onTimeout: () => debugPrint('保存用户信息超时，跳过'),
+            );
+            await _logAuditEvent(
+              userCredential.user!.uid,
+              'LOGIN',
+              'User logged in via Google',
+            ).timeout(
+              const Duration(seconds: 5),
+              onTimeout: () => debugPrint('记录审计日志超时，跳过'),
+            );
+          } catch (e) {
+            debugPrint('后台保存用户信息失败: $e');
+          }
+        });
       }
 
       return userCredential;

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "57479493999-7knki5sju34u35qs771dqaomougkhgm9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kineo.app",
+            "certificate_hash": "369f1c6737656e1d22b4729492c6ec406e853fe0"
+          }
+        },
+        {
           "client_id": "57479493999-mq6n89ogs682p1k7esse2cvrrukl9fn7.apps.googleusercontent.com",
           "client_type": 3
         }
