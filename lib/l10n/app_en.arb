@@ -309,5 +309,25 @@
   "recordDeleted": "Record deleted",
   "duration": "Duration",
   "seconds": "s",
-  "tapToCancel": "Tap to cancel"
+  "tapToCancel": "Tap to cancel",
+  "changeAvatar": "Change Avatar",
+  "@changeAvatar": {
+    "description": "Change avatar dialog title"
+  },
+  "selectFromGallery": "Select from Gallery",
+  "@selectFromGallery": {
+    "description": "Select from gallery option"
+  },
+  "takePhoto": "Take Photo",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+  "avatarUpdated": "Avatar updated successfully",
+  "@avatarUpdated": {
+    "description": "Avatar update success message"
+  },
+  "avatarUpdateFailed": "Failed to update avatar",
+  "@avatarUpdateFailed": {
+    "description": "Avatar update failure message"
+  }
 }

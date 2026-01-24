@@ -360,4 +360,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tapToCancel => 'タップでキャンセル';
+
+  @override
+  String get changeAvatar => 'Change Avatar';
+
+  @override
+  String get selectFromGallery => 'Select from Gallery';
+
+  @override
+  String get takePhoto => 'Take Photo';
+
+  @override
+  String get avatarUpdated => 'Avatar updated successfully';
+
+  @override
+  String get avatarUpdateFailed => 'Failed to update avatar';
 }

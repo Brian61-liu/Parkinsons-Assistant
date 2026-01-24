@@ -1,11 +1,14 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 import '../l10n/app_localizations.dart';
 import '../pages/tremor_test_page.dart';
 import '../pages/data_management_page.dart';
 import '../pages/privacy_policy_page.dart';
 import '../services/auth_service.dart';
+import '../services/avatar_service.dart';
 
 // 主页面
 class HomePage extends StatefulWidget {
@@ -19,7 +22,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final AuthService _authService = AuthService();
+  final AvatarService _avatarService = AvatarService();
   bool _avatarLoadFailed = false;
+  bool _isUploadingAvatar = false;
 
   void _showLanguageDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -280,69 +285,151 @@ class _HomePageState extends State<HomePage> {
     final String displayName = user.displayName ?? 'User';
     final String initials = _getInitials(displayName);
     
-    if (photoURL == null || photoURL.isEmpty || _avatarLoadFailed) {
-      return _buildDefaultAvatar(initials);
-    }
+    Widget avatarWidget;
     
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF0EA5E9),
-            Color(0xFF10B981),
+    if (_isUploadingAvatar) {
+      // 上传中状态
+      avatarWidget = Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF0EA5E9),
+              Color(0xFF10B981),
+            ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF0EA5E9).withValues(alpha: 0.35),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
           ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF0EA5E9).withValues(alpha: 0.35),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(3),
-      child: ClipOval(
-        child: Image.network(
-          photoURL,
+        padding: const EdgeInsets.all(3),
+        child: Container(
           width: 94,
           height: 94,
-          fit: BoxFit.cover,
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return Container(
-              width: 94,
-              height: 94,
-              color: Colors.white,
-              child: Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                    Color(0xFF0EA5E9),
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white,
+          ),
+          child: const Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                Color(0xFF0EA5E9),
+              ),
+            ),
+          ),
+        ),
+      );
+    } else if (photoURL == null || photoURL.isEmpty || _avatarLoadFailed) {
+      avatarWidget = _buildDefaultAvatar(initials);
+    } else {
+      avatarWidget = Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF0EA5E9),
+              Color(0xFF10B981),
+            ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF0EA5E9).withValues(alpha: 0.35),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(3),
+        child: ClipOval(
+          child: Image.network(
+            photoURL,
+            width: 94,
+            height: 94,
+            fit: BoxFit.cover,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return Container(
+                width: 94,
+                height: 94,
+                color: Colors.white,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      Color(0xFF0EA5E9),
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-          errorBuilder: (context, error, stackTrace) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted && !_avatarLoadFailed) {
-                setState(() {
-                  _avatarLoadFailed = true;
-                });
-              }
-            });
-            return _buildDefaultAvatarContent(initials);
-          },
+              );
+            },
+            errorBuilder: (context, error, stackTrace) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted && !_avatarLoadFailed) {
+                  setState(() {
+                    _avatarLoadFailed = true;
+                  });
+                }
+              });
+              return _buildDefaultAvatarContent(initials);
+            },
+          ),
         ),
+      );
+    }
+    
+    // 添加点击功能和编辑图标
+    return GestureDetector(
+      onTap: _isUploadingAvatar ? null : () => _showChangeAvatarDialog(context),
+      child: Stack(
+        children: [
+          avatarWidget,
+          if (!_isUploadingAvatar)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0EA5E9),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 2,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  CupertinoIcons.camera_fill,
+                  color: Colors.white,
+                  size: 16,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -411,6 +498,95 @@ class _HomePageState extends State<HomePage> {
     return 'User';
   }
 
+  /// 显示更改头像选项菜单
+  void _showChangeAvatarDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    showCupertinoModalPopup(
+      context: context,
+      builder: (ctx) => CupertinoActionSheet(
+        title: Text(l10n.changeAvatar),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(ctx);
+              _pickAndUploadAvatar(context, ImageSource.gallery);
+            },
+            child: Text(l10n.selectFromGallery),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(ctx);
+              _pickAndUploadAvatar(context, ImageSource.camera);
+            },
+            child: Text(l10n.takePhoto),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          isDestructiveAction: true,
+          onPressed: () => Navigator.pop(ctx),
+          child: Text(l10n.cancel),
+        ),
+      ),
+    );
+  }
+
+  /// 选择并上传头像
+  Future<void> _pickAndUploadAvatar(BuildContext context, ImageSource source) async {
+    final l10n = AppLocalizations.of(context)!;
+    final user = FirebaseAuth.instance.currentUser;
+    
+    if (user == null) return;
+
+    try {
+      setState(() {
+        _isUploadingAvatar = true;
+      });
+
+      // 选择图片
+      final XFile? imageFile = await _avatarService.pickImage(source: source);
+      
+      if (imageFile == null) {
+        setState(() {
+          _isUploadingAvatar = false;
+        });
+        return;
+      }
+
+      // 上传头像
+      final File file = File(imageFile.path);
+      await _avatarService.uploadAvatar(file, user);
+
+      // 重置状态
+      setState(() {
+        _avatarLoadFailed = false;
+        _isUploadingAvatar = false;
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.avatarUpdated),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        _isUploadingAvatar = false;
+      });
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${l10n.avatarUpdateFailed}: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -434,27 +610,21 @@ class _HomePageState extends State<HomePage> {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFF0EA5E9),
-                                Color(0xFF10B981),
-                              ],
-                            ),
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
+                                color: const Color(0xFF0EA5E9).withValues(alpha: 0.25),
                                 blurRadius: 8,
                                 offset: const Offset(0, 3),
                               ),
                             ],
                           ),
-                          child: const Icon(
-                            CupertinoIcons.waveform_path,
-                            color: Colors.white,
-                            size: 22,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.asset(
+                              'assets/icon/app_icon.png',
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 12),

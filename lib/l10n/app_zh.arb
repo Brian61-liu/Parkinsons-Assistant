@@ -145,5 +145,10 @@
   "recordDeleted": "记录已删除",
   "duration": "时长",
   "seconds": "秒",
-  "tapToCancel": "点击取消"
+  "tapToCancel": "点击取消",
+  "changeAvatar": "更改头像",
+  "selectFromGallery": "从相册选择",
+  "takePhoto": "拍照",
+  "avatarUpdated": "头像更新成功",
+  "avatarUpdateFailed": "头像更新失败"
 }

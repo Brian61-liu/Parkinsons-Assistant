@@ -236,32 +236,35 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     children: [
                       SizedBox(height: size.height * 0.05),
                       
-                      // Logo
+                      // Logo - 融合设计
                       Container(
-                        width: 120,
-                        height: 120,
+                        width: 150,
+                        height: 150,
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              Color(0xFF0EA5E9),
-                              Color(0xFF10B981),
-                            ],
-                          ),
+                          borderRadius: BorderRadius.circular(36),
                           boxShadow: [
+                            // 柔和的外阴影
                             BoxShadow(
-                              color: const Color(0xFF0EA5E9).withValues(alpha: 0.35),
+                              color: const Color(0xFF0EA5E9).withValues(alpha: 0.15),
                               blurRadius: 30,
-                              offset: const Offset(0, 12),
+                              spreadRadius: 5,
+                              offset: const Offset(0, 10),
+                            ),
+                            // 内发光效果
+                            BoxShadow(
+                              color: Colors.white.withValues(alpha: 0.8),
+                              blurRadius: 20,
+                              spreadRadius: -5,
+                              offset: const Offset(0, -5),
                             ),
                           ],
                         ),
-                        child: const Icon(
-                          CupertinoIcons.waveform_path,
-                          size: 55,
-                          color: Colors.white,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(36),
+                          child: Image.asset(
+                            'assets/icon/app_icon.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       

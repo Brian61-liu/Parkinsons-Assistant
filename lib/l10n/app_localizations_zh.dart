@@ -358,6 +358,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tapToCancel => '点击取消';
+
+  @override
+  String get changeAvatar => '更改头像';
+
+  @override
+  String get selectFromGallery => '从相册选择';
+
+  @override
+  String get takePhoto => '拍照';
+
+  @override
+  String get avatarUpdated => '头像更新成功';
+
+  @override
+  String get avatarUpdateFailed => '头像更新失败';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

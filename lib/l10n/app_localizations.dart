@@ -782,6 +782,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to cancel'**
   String get tapToCancel;
+
+  /// Change avatar dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Change Avatar'**
+  String get changeAvatar;
+
+  /// Select from gallery option
+  ///
+  /// In en, this message translates to:
+  /// **'Select from Gallery'**
+  String get selectFromGallery;
+
+  /// Take photo option
+  ///
+  /// In en, this message translates to:
+  /// **'Take Photo'**
+  String get takePhoto;
+
+  /// Avatar update success message
+  ///
+  /// In en, this message translates to:
+  /// **'Avatar updated successfully'**
+  String get avatarUpdated;
+
+  /// Avatar update failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update avatar'**
+  String get avatarUpdateFailed;
 }
 
 class _AppLocalizationsDelegate
