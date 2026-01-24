@@ -240,7 +240,7 @@ abstract class AppLocalizations {
   /// Language selection dialog title
   ///
   /// In en, this message translates to:
-  /// **'Select Language'**
+  /// **'Language'**
   String get selectLanguage;
 
   /// English language option
@@ -404,6 +404,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign in with Google'**
   String get signInWithGoogle;
+
+  /// Google sign in button text
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in...'**
+  String get signingIn;
 
   /// Privacy notice on login page
   ///

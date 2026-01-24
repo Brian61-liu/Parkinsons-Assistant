@@ -77,7 +77,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get changeLanguage => '言語を変更';
 
   @override
-  String get selectLanguage => '言語を選択';
+  String get selectLanguage => '言語';
 
   @override
   String get english => 'English';
@@ -158,7 +158,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get appSubtitle => 'パーキンソン病の動作追跡と分析のためのパーソナルアシスタント';
 
   @override
-  String get signInWithGoogle => 'Googleでサインイン';
+  String get signInWithGoogle => 'Google でログイン';
+
+  @override
+  String get signingIn => 'ログイン中...';
 
   @override
   String get privacyNotice => 'サインインすることで、利用規約とプライバシーポリシーに同意したことになります';

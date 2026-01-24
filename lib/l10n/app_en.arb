@@ -100,7 +100,7 @@
   "@changeLanguage": {
     "description": "Change language button text"
   },
-  "selectLanguage": "Select Language",
+  "selectLanguage": "Language",
   "@selectLanguage": {
     "description": "Language selection dialog title"
   },
@@ -210,6 +210,10 @@
   },
   "signInWithGoogle": "Sign in with Google",
   "@signInWithGoogle": {
+    "description": "Google sign in button text"
+  },
+  "signingIn": "Signing in...",
+  "@signingIn": {
     "description": "Google sign in button text"
   },
   "privacyNotice": "By signing in, you agree to our Terms of Service and Privacy Policy",

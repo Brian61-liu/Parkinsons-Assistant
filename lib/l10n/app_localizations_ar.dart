@@ -78,7 +78,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get changeLanguage => 'تغيير اللغة';
 
   @override
-  String get selectLanguage => 'اختر اللغة';
+  String get selectLanguage => 'اللغة';
 
   @override
   String get english => 'English';
@@ -159,7 +159,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appSubtitle => 'مساعدك الشخصي لمرض باركنسون لتتبع وتحليل الحركة';
 
   @override
-  String get signInWithGoogle => 'تسجيل الدخول باستخدام Google';
+  String get signInWithGoogle => 'تسجيل الدخول بـ Google';
+
+  @override
+  String get signingIn => 'جارٍ تسجيل الدخول...';
 
   @override
   String get privacyNotice =>

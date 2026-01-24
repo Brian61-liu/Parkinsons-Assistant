@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../services/auth_service.dart';
 import '../l10n/app_localizations.dart';
 import 'privacy_policy_page.dart';
@@ -18,23 +19,17 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   bool _isLoading = false;
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1000),
     );
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
     );
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic));
-    
     _animationController.forward();
   }
 
@@ -48,17 +43,15 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     setState(() => _isLoading = true);
 
     try {
-      // 添加15秒超时
       final result = await _authService.signInWithGoogle().timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 20),
         onTimeout: () {
           throw Exception('登录超时，请检查网络连接');
         },
       );
       if (result != null && mounted) {
-        // 登录成功，页面会自动跳转（由 main.dart 中的 StreamBuilder 处理）
+        // 登录成功
       } else if (mounted) {
-        // 用户取消了登录
         setState(() => _isLoading = false);
       }
     } catch (e) {
@@ -73,54 +66,102 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     final l10n = AppLocalizations.of(context)!;
     showCupertinoDialog(
       context: context,
-      builder: (context) => CupertinoAlertDialog(
+      builder: (ctx) => CupertinoAlertDialog(
         title: Text(l10n.loginError),
-        content: Text(message),
+        content: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Text(message, style: const TextStyle(fontSize: 14)),
+        ),
         actions: [
           CupertinoDialogAction(
             child: Text(l10n.confirm),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(ctx),
           ),
         ],
       ),
     );
   }
 
-  void _showLanguageDialog() {
+  void _onLanguageButtonPressed() {
     final l10n = AppLocalizations.of(context)!;
     
     final languages = [
-      {'locale': const Locale('ar'), 'name': 'العربية (Arabic)'},
-      {'locale': const Locale('zh'), 'name': '中文简体 (Chinese Simplified)'},
-      {'locale': const Locale('zh', 'TW'), 'name': '中文繁體 (Chinese Traditional)'},
+      {'locale': const Locale('ar'), 'name': 'العربية'},
+      {'locale': const Locale('zh'), 'name': '中文简体'},
+      {'locale': const Locale('zh', 'TW'), 'name': '中文繁體'},
       {'locale': const Locale('en'), 'name': 'English'},
-      {'locale': const Locale('fr'), 'name': 'Français (French)'},
-      {'locale': const Locale('de'), 'name': 'Deutsch (German)'},
-      {'locale': const Locale('it'), 'name': 'Italiano (Italian)'},
-      {'locale': const Locale('ja'), 'name': '日本語 (Japanese)'},
-      {'locale': const Locale('ko'), 'name': '한국어 (Korean)'},
-      {'locale': const Locale('pt'), 'name': 'Português (Portuguese)'},
-      {'locale': const Locale('ru'), 'name': 'Русский (Russian)'},
-      {'locale': const Locale('es'), 'name': 'Español (Spanish)'},
+      {'locale': const Locale('fr'), 'name': 'Français'},
+      {'locale': const Locale('de'), 'name': 'Deutsch'},
+      {'locale': const Locale('it'), 'name': 'Italiano'},
+      {'locale': const Locale('ja'), 'name': '日本語'},
+      {'locale': const Locale('ko'), 'name': '한국어'},
+      {'locale': const Locale('pt'), 'name': 'Português'},
+      {'locale': const Locale('ru'), 'name': 'Русский'},
+      {'locale': const Locale('es'), 'name': 'Español'},
     ];
 
-    showCupertinoModalPopup(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => CupertinoActionSheet(
-        title: Text(l10n.selectLanguage),
-        actions: languages.map((lang) {
-          return CupertinoActionSheetAction(
-            onPressed: () {
-              widget.onLanguageChange(lang['locale'] as Locale);
-              Navigator.pop(context);
-            },
-            child: Text(lang['name'] as String),
-          );
-        }).toList(),
-        cancelButton: CupertinoActionSheetAction(
-          isDestructiveAction: true,
-          onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel),
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 16),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.selectLanguage,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF1E3A5F),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: languages.length,
+                itemBuilder: (context, index) {
+                  final lang = languages[index];
+                  return ListTile(
+                    title: Text(
+                      lang['name'] as String,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 17),
+                    ),
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      widget.onLanguageChange(lang['locale'] as Locale);
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(
+                l10n.cancel,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 17,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
         ),
       ),
     );
@@ -132,254 +173,207 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF1a1a2e),
-              Color(0xFF16213e),
-              Color(0xFF0f3460),
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Stack(
-            children: [
-              // 背景装饰圆
-              Positioned(
-                top: -100,
-                right: -100,
-                child: Container(
-                  width: 300,
-                  height: 300,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        const Color(0xFF4facfe).withOpacity(0.3),
-                        Colors.transparent,
-                      ],
+      backgroundColor: const Color(0xFFF0F9FF),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // 顶部语言按钮
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Material(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    elevation: 2,
+                    shadowColor: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
+                    child: InkWell(
+                      onTap: _onLanguageButtonPressed,
+                      borderRadius: BorderRadius.circular(12),
+                      child: const SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: Icon(
+                          CupertinoIcons.globe,
+                          color: Color(0xFF0EA5E9),
+                          size: 24,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-              Positioned(
-                bottom: -150,
-                left: -100,
-                child: Container(
-                  width: 400,
-                  height: 400,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        const Color(0xFF00f2fe).withOpacity(0.2),
-                        Colors.transparent,
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              
-              // 语言切换按钮
-              Positioned(
-                top: 16,
-                right: 16,
-                child: IconButton(
-                  icon: const Icon(
-                    CupertinoIcons.globe,
-                    color: Colors.white70,
-                    size: 28,
-                  ),
-                  onPressed: _showLanguageDialog,
-                ),
-              ),
-
-              // 主内容
-              FadeTransition(
+            ),
+            
+            // 主内容
+            Expanded(
+              child: FadeTransition(
                 opacity: _fadeAnimation,
-                child: SlideTransition(
-                  position: _slideAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Logo 区域
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFF4facfe),
-                                Color(0xFF00f2fe),
-                              ],
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF4facfe).withOpacity(0.4),
-                                blurRadius: 30,
-                                offset: const Offset(0, 10),
-                              ),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Column(
+                    children: [
+                      SizedBox(height: size.height * 0.05),
+                      
+                      // Logo
+                      Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xFF0EA5E9),
+                              Color(0xFF10B981),
                             ],
                           ),
-                          child: const Icon(
-                            CupertinoIcons.waveform_path,
-                            size: 60,
-                            color: Colors.white,
-                          ),
-                        ),
-                        
-                        const SizedBox(height: 32),
-                        
-                        // App 名称
-                        const Text(
-                          'Kineo',
-                          style: TextStyle(
-                            fontSize: 48,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            letterSpacing: 2,
-                          ),
-                        ),
-                        
-                        const SizedBox(height: 12),
-                        
-                        // 副标题
-                        Text(
-                          l10n.appSubtitle,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white.withOpacity(0.7),
-                            height: 1.5,
-                          ),
-                        ),
-                        
-                        SizedBox(height: size.height * 0.1),
-                        
-                        // Google 登录按钮
-                        SizedBox(
-                          width: double.infinity,
-                          height: 56,
-                          child: ElevatedButton(
-                            onPressed: _isLoading ? null : _signInWithGoogle,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black87,
-                              disabledBackgroundColor: Colors.white.withOpacity(0.8),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              elevation: 0,
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF0EA5E9).withValues(alpha: 0.35),
+                              blurRadius: 30,
+                              offset: const Offset(0, 12),
                             ),
-                            child: _isLoading
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation<Color>(
-                                            Color(0xFF4285F4),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Text(
-                                        '正在登录...',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      // Google "G" logo using text
-                                      Container(
-                                        width: 24,
-                                        height: 24,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            'G',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF4285F4),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Text(
-                                        l10n.signInWithGoogle,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                          ),
+                          ],
                         ),
-                        
-                        const SizedBox(height: 24),
-                        
-                        // 隐私政策提示（可点击）
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => const PrivacyPolicyPage(),
+                        child: const Icon(
+                          CupertinoIcons.waveform_path,
+                          size: 55,
+                          color: Colors.white,
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 28),
+                      
+                      // App 名称
+                      const Text(
+                        'Kineo',
+                        style: TextStyle(
+                          fontSize: 42,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1E3A5F),
+                          letterSpacing: 2,
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 12),
+                      
+                      // 副标题
+                      Text(
+                        l10n.appSubtitle,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Color(0xFF64748B),
+                          height: 1.5,
+                        ),
+                      ),
+                      
+                      SizedBox(height: size.height * 0.12),
+                      
+                      // Google 登录按钮
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : _signInWithGoogle,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: const Color(0xFF334155),
+                            disabledBackgroundColor: Colors.grey[100],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              side: BorderSide(
+                                color: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
+                                width: 1.5,
                               ),
-                            );
-                          },
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white.withOpacity(0.5),
-                              ),
-                              children: [
-                                TextSpan(text: l10n.privacyNotice.split('Privacy Policy')[0]),
-                                TextSpan(
-                                  text: l10n.privacyPolicy,
-                                  style: const TextStyle(
-                                    color: Color(0xFF4facfe),
-                                    decoration: TextDecoration.underline,
-                                  ),
+                            ),
+                            elevation: 2,
+                            shadowColor: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
+                          ),
+                          child: _isLoading
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: 22,
+                                      height: 22,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.grey[600]!,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 14),
+                                    Text(
+                                      l10n.signingIn,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    // Google 官方 G Logo (SVG)
+                                    SvgPicture.asset(
+                                      'assets/images/google_logo.svg',
+                                      width: 22,
+                                      height: 22,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Text(
+                                      l10n.signInWithGoogle,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 24),
+                      
+                      // 隐私政策
+                      TextButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => const PrivacyPolicyPage(),
                             ),
+                          );
+                        },
+                        icon: Icon(
+                          CupertinoIcons.lock_shield,
+                          size: 16,
+                          color: const Color(0xFF0EA5E9).withValues(alpha: 0.8),
+                        ),
+                        label: Text(
+                          l10n.privacyPolicy,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF0EA5E9),
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      
+                      const SizedBox(height: 40),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

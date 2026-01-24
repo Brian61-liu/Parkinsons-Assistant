@@ -79,7 +79,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get changeLanguage => 'Change Language';
 
   @override
-  String get selectLanguage => 'Select Language';
+  String get selectLanguage => 'Language';
 
   @override
   String get english => 'English';
@@ -162,6 +162,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signInWithGoogle => 'Sign in with Google';
+
+  @override
+  String get signingIn => 'Signing in...';
 
   @override
   String get privacyNotice =>

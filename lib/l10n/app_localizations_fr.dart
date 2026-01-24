@@ -80,7 +80,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get changeLanguage => 'Changer de Langue';
 
   @override
-  String get selectLanguage => 'Sélectionner la Langue';
+  String get selectLanguage => 'Langue';
 
   @override
   String get english => 'English';
@@ -162,7 +162,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Votre assistant Parkinson personnel pour le suivi et l\'analyse des mouvements';
 
   @override
-  String get signInWithGoogle => 'Se connecter avec Google';
+  String get signInWithGoogle => 'Connexion Google';
+
+  @override
+  String get signingIn => 'Connexion...';
 
   @override
   String get privacyNotice =>

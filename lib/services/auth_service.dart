@@ -133,16 +133,37 @@ class AuthService {
 
   /// 登出
   Future<void> signOut() async {
-    final userId = currentUser?.uid;
-    if (userId != null) {
-      await _logAuditEvent(userId, 'LOGOUT', 'User logged out');
+    try {
+      final userId = currentUser?.uid;
+      
+      // 先执行关键的登出操作
+      try {
+        await _googleSignIn.signOut();
+      } catch (e) {
+        debugPrint('Google 登出错误: $e');
+      }
+      
+      await _auth.signOut();
+      
+      // 非关键操作放在后面，不阻塞登出流程
+      if (userId != null) {
+        _logAuditEvent(userId, 'LOGOUT', 'User logged out').catchError((e) {
+          debugPrint('审计日志记录失败: $e');
+        });
+      }
+      
+      // 清除本地安全存储的数据
+      _secureStorage.clearAllSecure().catchError((e) {
+        debugPrint('清除本地存储失败: $e');
+      });
+    } catch (e) {
+      debugPrint('登出错误: $e');
+      // 即使出错也尝试强制登出
+      try {
+        await _auth.signOut();
+      } catch (_) {}
+      rethrow;
     }
-    
-    // 清除本地安全存储的数据
-    await _secureStorage.clearAllSecure();
-    
-    await _googleSignIn.signOut();
-    await _auth.signOut();
   }
 
   /// 获取用户数据

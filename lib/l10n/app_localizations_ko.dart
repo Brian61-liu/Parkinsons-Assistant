@@ -77,7 +77,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get changeLanguage => '언어 변경';
 
   @override
-  String get selectLanguage => '언어 선택';
+  String get selectLanguage => '언어';
 
   @override
   String get english => 'English';
@@ -159,6 +159,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get signInWithGoogle => 'Google로 로그인';
+
+  @override
+  String get signingIn => '로그인 중...';
 
   @override
   String get privacyNotice => '로그인하면 서비스 약관 및 개인정보 보호정책에 동의하게 됩니다';

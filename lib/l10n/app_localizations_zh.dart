@@ -77,7 +77,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get changeLanguage => '切换语言';
 
   @override
-  String get selectLanguage => '选择语言';
+  String get selectLanguage => '语言';
 
   @override
   String get english => 'English';
@@ -158,7 +158,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appSubtitle => '您的帕金森运动追踪与分析助手';
 
   @override
-  String get signInWithGoogle => '使用 Google 账号登录';
+  String get signInWithGoogle => '使用 Google 登录';
+
+  @override
+  String get signingIn => '正在登录...';
 
   @override
   String get privacyNotice => '登录即表示您同意我们的服务条款和隐私政策';
@@ -400,7 +403,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get changeLanguage => '切換語言';
 
   @override
-  String get selectLanguage => '選擇語言';
+  String get selectLanguage => '語言';
 
   @override
   String get english => 'English';
@@ -481,7 +484,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get appSubtitle => '您的帕金森運動追蹤與分析助手';
 
   @override
-  String get signInWithGoogle => '使用 Google 帳號登入';
+  String get signInWithGoogle => '使用 Google 登入';
+
+  @override
+  String get signingIn => '正在登入...';
 
   @override
   String get privacyNotice => '登入即表示您同意我們的服務條款和隱私政策';

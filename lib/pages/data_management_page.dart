@@ -80,13 +80,12 @@ class _DataManagementPageState extends State<DataManagementPage> {
         actions: [
           CupertinoDialogAction(
             isDestructiveAction: true,
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(l10n.cancel),
-          ),
-          CupertinoDialogAction(
-            isDestructiveAction: true,
             onPressed: () => Navigator.pop(context, true),
             child: Text(l10n.delete),
+          ),
+          CupertinoDialogAction(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
           ),
         ],
       ),
@@ -148,19 +147,20 @@ class _DataManagementPageState extends State<DataManagementPage> {
         content: Text(l10n.deleteAccountWarning),
         actions: [
           CupertinoDialogAction(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(l10n.cancel),
-          ),
-          CupertinoDialogAction(
             isDestructiveAction: true,
             onPressed: () => Navigator.pop(context, true),
             child: Text(l10n.continue_),
+          ),
+          CupertinoDialogAction(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
           ),
         ],
       ),
     );
 
     if (firstConfirm != true) return;
+    if (!mounted) return;
 
     // 第二次确认（更严格的警告）
     final finalConfirm = await showCupertinoDialog<bool>(
@@ -170,13 +170,13 @@ class _DataManagementPageState extends State<DataManagementPage> {
         content: Text(l10n.deleteAccountFinalWarning),
         actions: [
           CupertinoDialogAction(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(l10n.cancel),
-          ),
-          CupertinoDialogAction(
             isDestructiveAction: true,
             onPressed: () => Navigator.pop(context, true),
             child: Text(l10n.deleteForever),
+          ),
+          CupertinoDialogAction(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
           ),
         ],
       ),
@@ -235,10 +235,10 @@ class _DataManagementPageState extends State<DataManagementPage> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4facfe).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: const Color(0xFF4facfe).withOpacity(0.3),
+color: const Color(0xFF4facfe).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: const Color(0xFF4facfe).withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
@@ -322,10 +322,10 @@ class _DataManagementPageState extends State<DataManagementPage> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
         ),
       ),
       child: Column(
@@ -336,7 +336,7 @@ class _DataManagementPageState extends State<DataManagementPage> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: iconColor.withOpacity(0.2),
+                  color: iconColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(icon, color: iconColor, size: 24),
@@ -358,7 +358,7 @@ class _DataManagementPageState extends State<DataManagementPage> {
           Text(
             description,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 14,
               height: 1.5,
             ),
