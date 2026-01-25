@@ -2,6 +2,7 @@
   "@@locale": "zh_TW",
   "appTitle": "Kineo",
   "selectTraining": "請選擇您要進行的訓練",
+  "clickToStartTest": "點擊開始測試",
   "tremorTest": "手部顫抖測試",
   "tremorTestTitle": "手部顫抖測試",
   "tremorTestInstruction": "請將手機握在手中，保持手臂靜止30秒",
@@ -165,5 +166,35 @@
   "avatarUpdateFailed": "頭像更新失敗",
   "@avatarUpdateFailed": {
     "description": "Avatar update failure message"
-  }
+  },
+  "voiceTraining": "語音訓練",
+  "voiceTrainingMainInstruction": "請持續發長音 —— 啊 ——",
+  "voiceTrainingInstruction": "基於 LSVT LOUD 療法理念，請大聲說話。圓的大小會根據您的音量即時變化，達到 75-85 dB 時圓會變綠。",
+  "voiceTrainingReady": "準備開始",
+  "voiceTrainingTooQuiet": "再大聲一點！",
+  "voiceTrainingKeepGoing": "很好，再加把勁！",
+  "voiceTrainingExcellent": "太棒了！保持住！",
+  "voiceTrainingTarget": "目標：{target} dB",
+  "voiceTrainingTargetRange": "目標：{range} dB",
+  "@voiceTrainingTargetRange": {
+    "placeholders": {
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "@voiceTrainingTarget": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "startListening": "開始訓練",
+  "stopListening": "停止訓練",
+  "microphonePermissionRequired": "需要麥克風權限",
+  "microphonePermissionDenied": "麥克風權限被拒絕",
+  "microphonePermissionDeniedMessage": "麥克風權限已被永久拒絕。請在系統設定中手動開啟麥克風權限以使用語音訓練功能。",
+  "microphoneError": "麥克風錯誤",
+  "openSettings": "打開設定"
 }

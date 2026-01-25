@@ -2,6 +2,7 @@
   "@@locale": "de",
   "appTitle": "Kineo",
   "selectTraining": "Bitte wählen Sie das Training aus, das Sie durchführen möchten",
+  "clickToStartTest": "Klicken Sie, um den Test zu starten",
   "tremorTest": "Handzitter-Test",
   "tremorTestTitle": "Handzitter-Test",
   "tremorTestInstruction": "Bitte halten Sie das Telefon in der Hand und halten Sie den Arm 30 Sekunden lang still",
@@ -165,5 +166,35 @@
   "avatarUpdateFailed": "Avatar konnte nicht aktualisiert werden",
   "@avatarUpdateFailed": {
     "description": "Avatar update failure message"
-  }
+  },
+  "voiceTraining": "Stimmtraining",
+  "voiceTrainingMainInstruction": "Bitte halten Sie einen langen Ton — Ah —",
+  "voiceTrainingInstruction": "Basierend auf den Prinzipien der LSVT LOUD-Therapie, bitte laut sprechen. Die Größe des Kreises ändert sich in Echtzeit basierend auf Ihrer Lautstärke. Wenn er 75-85 dB erreicht, wird der Kreis grün.",
+  "voiceTrainingReady": "Bereit zum Starten",
+  "voiceTrainingTooQuiet": "Lauter sprechen!",
+  "voiceTrainingKeepGoing": "Gut, weiter so!",
+  "voiceTrainingExcellent": "Ausgezeichnet! Weiter so!",
+  "voiceTrainingTarget": "Ziel: {target} dB",
+  "voiceTrainingTargetRange": "Ziel: {range} dB",
+  "@voiceTrainingTargetRange": {
+    "placeholders": {
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "@voiceTrainingTarget": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "startListening": "Training Starten",
+  "stopListening": "Training Stoppen",
+  "microphonePermissionRequired": "Mikrofonberechtigung Erforderlich",
+  "microphonePermissionDenied": "Mikrofonberechtigung verweigert",
+  "microphonePermissionDeniedMessage": "Die Mikrofonberechtigung wurde dauerhaft verweigert. Bitte aktivieren Sie die Mikrofonberechtigung in den Systemeinstellungen, um das Stimmtraining zu verwenden.",
+  "microphoneError": "Mikrofonfehler",
+  "openSettings": "Einstellungen Öffnen"
 }

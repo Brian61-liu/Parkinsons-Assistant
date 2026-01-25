@@ -8,6 +8,10 @@
   "@selectTraining": {
     "description": "Instruction text on home page"
   },
+  "clickToStartTest": "Click to start test",
+  "@clickToStartTest": {
+    "description": "Button description text for training options"
+  },
   "tremorTest": "Hand Tremor Test",
   "@tremorTest": {
     "description": "Hand tremor test button title"
@@ -329,5 +333,79 @@
   "avatarUpdateFailed": "Failed to update avatar",
   "@avatarUpdateFailed": {
     "description": "Avatar update failure message"
+  },
+  "voiceTraining": "Voice Training",
+  "@voiceTraining": {
+    "description": "Voice training page title"
+  },
+  "voiceTrainingMainInstruction": "Please sustain a long sound — Ah —",
+  "@voiceTrainingMainInstruction": {
+    "description": "Main instruction headline for voice training"
+  },
+  "voiceTrainingInstruction": "Based on LSVT LOUD therapy principles, please speak loudly. The circle size will change in real-time based on your volume. When it reaches 75-85 dB, the circle will turn green.",
+  "@voiceTrainingInstruction": {
+    "description": "Voice training instruction text"
+  },
+  "voiceTrainingReady": "Ready to start",
+  "@voiceTrainingReady": {
+    "description": "Ready state text for voice training"
+  },
+  "voiceTrainingTooQuiet": "Speak louder!",
+  "@voiceTrainingTooQuiet": {
+    "description": "Feedback when volume is too low (< 65 dB)"
+  },
+  "voiceTrainingKeepGoing": "Good, keep pushing!",
+  "@voiceTrainingKeepGoing": {
+    "description": "Encouragement text when at normal level (65-75 dB)"
+  },
+  "voiceTrainingExcellent": "Excellent! Keep it up!",
+  "@voiceTrainingExcellent": {
+    "description": "Feedback when in target zone (75-85 dB)"
+  },
+  "voiceTrainingTarget": "Target: {target} dB",
+  "voiceTrainingTargetRange": "Target: {range} dB",
+  "@voiceTrainingTargetRange": {
+    "description": "Target range display",
+    "placeholders": {
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "@voiceTrainingTarget": {
+    "description": "Target decibel display",
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "startListening": "Start Training",
+  "@startListening": {
+    "description": "Start listening button text"
+  },
+  "stopListening": "Stop Training",
+  "@stopListening": {
+    "description": "Stop listening button text"
+  },
+  "microphonePermissionRequired": "Microphone Permission Required",
+  "@microphonePermissionRequired": {
+    "description": "Microphone permission dialog title"
+  },
+  "microphonePermissionDenied": "Microphone permission denied",
+  "@microphonePermissionDenied": {
+    "description": "Microphone permission denied message"
+  },
+  "microphonePermissionDeniedMessage": "Microphone permission has been permanently denied. Please enable microphone permission in system settings to use voice training.",
+  "@microphonePermissionDeniedMessage": {
+    "description": "Message when microphone permission is permanently denied"
+  },
+  "microphoneError": "Microphone error",
+  "@microphoneError": {
+    "description": "Microphone error message"
+  },
+  "openSettings": "Open Settings",
+  "@openSettings": {
+    "description": "Open settings button text"
   }
 }

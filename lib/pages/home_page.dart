@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import '../l10n/app_localizations.dart';
 import '../pages/tremor_test_page.dart';
+import '../pages/voice_training_page.dart';
 import '../pages/data_management_page.dart';
 import '../pages/privacy_policy_page.dart';
 import '../services/auth_service.dart';
@@ -712,6 +713,23 @@ class _HomePageState extends State<HomePage> {
               },
             ),
                     
+                    const SizedBox(height: 16),
+                    
+                    // 语音训练按钮
+                    _buildFeatureButton(
+                      icon: CupertinoIcons.mic_fill,
+                      title: l10n.voiceTraining,
+                      color: const Color(0xFF10B981),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => const VoiceTrainingPage(),
+                          ),
+                        );
+                      },
+                    ),
+                    
                     const SizedBox(height: 40),
                   ],
                 ),
@@ -771,7 +789,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '点击开始测试',
+                    AppLocalizations.of(context)!.clickToStartTest,
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey[500],

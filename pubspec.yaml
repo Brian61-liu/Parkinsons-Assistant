@@ -46,6 +46,7 @@ dependencies:
   # 传感器相关
   sensors_plus: ^4.0.0  # 加速度计、陀螺仪
   permission_handler: ^11.0.0  # 权限管理
+  noise_meter: ^5.0.0  # 麦克风音量检测（用于语音训练）
   
   # 图片选择
   image_picker: ^1.1.2  # 图片选择器（用于选择头像）

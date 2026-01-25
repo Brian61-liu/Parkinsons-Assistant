@@ -65,5 +65,8 @@
 		<!-- 相册权限（用于选择头像图片） -->
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>需要访问相册以选择头像图片</string>
+		<!-- 麦克风权限（用于语音训练） -->
+		<key>NSMicrophoneUsageDescription</key>
+		<string>需要访问麦克风以进行语音训练（基于 LSVT LOUD 疗法）</string>
 	</dict>
 </plist>

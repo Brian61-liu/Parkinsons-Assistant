@@ -16,6 +16,9 @@ class AppLocalizationsRu extends AppLocalizations {
       'Пожалуйста, выберите упражнение, которое хотите выполнить';
 
   @override
+  String get clickToStartTest => 'Нажмите, чтобы начать тест';
+
+  @override
   String get tremorTest => 'Тест на Тремор Рук';
 
   @override
@@ -387,4 +390,59 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get avatarUpdateFailed => 'Не удалось обновить аватар';
+
+  @override
+  String get voiceTraining => 'Голосовая Тренировка';
+
+  @override
+  String get voiceTrainingMainInstruction =>
+      'Пожалуйста, удерживайте длинный звук — Ах —';
+
+  @override
+  String get voiceTrainingInstruction =>
+      'Основываясь на принципах терапии LSVT LOUD, пожалуйста, говорите громко. Размер круга будет изменяться в реальном времени в зависимости от вашей громкости. Когда он достигнет 75-85 дБ, круг станет зелёным.';
+
+  @override
+  String get voiceTrainingReady => 'Готов к началу';
+
+  @override
+  String get voiceTrainingTooQuiet => 'Говорите громче!';
+
+  @override
+  String get voiceTrainingKeepGoing => 'Хорошо, продолжайте!';
+
+  @override
+  String get voiceTrainingExcellent => 'Отлично! Продолжайте!';
+
+  @override
+  String voiceTrainingTarget(String target) {
+    return 'Цель: $target дБ';
+  }
+
+  @override
+  String voiceTrainingTargetRange(String range) {
+    return 'Цель: $range дБ';
+  }
+
+  @override
+  String get startListening => 'Начать Тренировку';
+
+  @override
+  String get stopListening => 'Остановить Тренировку';
+
+  @override
+  String get microphonePermissionRequired => 'Требуется Разрешение Микрофона';
+
+  @override
+  String get microphonePermissionDenied => 'Разрешение микрофона отклонено';
+
+  @override
+  String get microphonePermissionDeniedMessage =>
+      'Разрешение микрофона было отклонено навсегда. Пожалуйста, включите разрешение микрофона в настройках системы, чтобы использовать голосовую тренировку.';
+
+  @override
+  String get microphoneError => 'Ошибка микрофона';
+
+  @override
+  String get openSettings => 'Открыть Настройки';
 }

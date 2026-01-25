@@ -15,6 +15,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get selectTraining => 'يرجى اختيار التدريب الذي تريد القيام به';
 
   @override
+  String get clickToStartTest => 'انقر لبدء الاختبار';
+
+  @override
   String get tremorTest => 'اختبار رعشة اليد';
 
   @override
@@ -381,4 +384,59 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get avatarUpdateFailed => 'فشل تحديث الصورة الشخصية';
+
+  @override
+  String get voiceTraining => 'تدريب الصوت';
+
+  @override
+  String get voiceTrainingMainInstruction =>
+      'يرجى الاستمرار في إصدار صوت طويل — آه —';
+
+  @override
+  String get voiceTrainingInstruction =>
+      'بناءً على مبادئ علاج LSVT LOUD، يرجى التحدث بصوت عالٍ. سيتغير حجم الدائرة في الوقت الفعلي بناءً على مستوى الصوت. عندما يصل إلى 75-85 ديسيبل، ستصبح الدائرة خضراء.';
+
+  @override
+  String get voiceTrainingReady => 'جاهز للبدء';
+
+  @override
+  String get voiceTrainingTooQuiet => 'تحدث بصوت أعلى!';
+
+  @override
+  String get voiceTrainingKeepGoing => 'جيد، استمر!';
+
+  @override
+  String get voiceTrainingExcellent => 'رائع! استمر!';
+
+  @override
+  String voiceTrainingTarget(String target) {
+    return 'الهدف: $target ديسيبل';
+  }
+
+  @override
+  String voiceTrainingTargetRange(String range) {
+    return 'الهدف: $range ديسيبل';
+  }
+
+  @override
+  String get startListening => 'بدء التدريب';
+
+  @override
+  String get stopListening => 'إيقاف التدريب';
+
+  @override
+  String get microphonePermissionRequired => 'إذن الميكروفون مطلوب';
+
+  @override
+  String get microphonePermissionDenied => 'تم رفض إذن الميكروفون';
+
+  @override
+  String get microphonePermissionDeniedMessage =>
+      'تم رفض إذن الميكروفون بشكل دائم. يرجى تمكين إذن الميكروفون في إعدادات النظام لاستخدام تدريب الصوت.';
+
+  @override
+  String get microphoneError => 'خطأ في الميكروفون';
+
+  @override
+  String get openSettings => 'فتح الإعدادات';
 }

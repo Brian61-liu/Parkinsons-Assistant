@@ -2,6 +2,7 @@
   "@@locale": "pt",
   "appTitle": "Kineo",
   "selectTraining": "Por favor, selecione o treinamento que deseja realizar",
+  "clickToStartTest": "Clique para iniciar o teste",
   "tremorTest": "Teste de Tremor de Mão",
   "tremorTestTitle": "Teste de Tremor de Mão",
   "tremorTestInstruction": "Por favor, segure o telefone na mão e mantenha o braço parado por 30 segundos",
@@ -165,5 +166,35 @@
   "avatarUpdateFailed": "Falha ao atualizar o avatar",
   "@avatarUpdateFailed": {
     "description": "Avatar update failure message"
-  }
+  },
+  "voiceTraining": "Treinamento de Voz",
+  "voiceTrainingMainInstruction": "Por favor, sustenha um som longo — Ah —",
+  "voiceTrainingInstruction": "Com base nos princípios da terapia LSVT LOUD, por favor fale alto. O tamanho do círculo mudará em tempo real com base no seu volume. Quando atingir 75-85 dB, o círculo ficará verde.",
+  "voiceTrainingReady": "Pronto para começar",
+  "voiceTrainingTooQuiet": "Fale mais alto!",
+  "voiceTrainingKeepGoing": "Bom, continue!",
+  "voiceTrainingExcellent": "Excelente! Continue!",
+  "voiceTrainingTarget": "Meta: {target} dB",
+  "voiceTrainingTargetRange": "Meta: {range} dB",
+  "@voiceTrainingTargetRange": {
+    "placeholders": {
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "@voiceTrainingTarget": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "startListening": "Iniciar Treinamento",
+  "stopListening": "Parar Treinamento",
+  "microphonePermissionRequired": "Permissão de Microfone Necessária",
+  "microphonePermissionDenied": "Permissão de microfone negada",
+  "microphonePermissionDeniedMessage": "A permissão do microfone foi negada permanentemente. Por favor, habilite a permissão do microfone nas configurações do sistema para usar o treinamento de voz.",
+  "microphoneError": "Erro do microfone",
+  "openSettings": "Abrir Configurações"
 }

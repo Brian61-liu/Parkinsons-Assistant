@@ -129,6 +129,12 @@ abstract class AppLocalizations {
   /// **'Please select the training you want to perform'**
   String get selectTraining;
 
+  /// Button description text for training options
+  ///
+  /// In en, this message translates to:
+  /// **'Click to start test'**
+  String get clickToStartTest;
+
   /// Hand tremor test button title
   ///
   /// In en, this message translates to:
@@ -812,6 +818,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to update avatar'**
   String get avatarUpdateFailed;
+
+  /// Voice training page title
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Training'**
+  String get voiceTraining;
+
+  /// Main instruction headline for voice training
+  ///
+  /// In en, this message translates to:
+  /// **'Please sustain a long sound — Ah —'**
+  String get voiceTrainingMainInstruction;
+
+  /// Voice training instruction text
+  ///
+  /// In en, this message translates to:
+  /// **'Based on LSVT LOUD therapy principles, please speak loudly. The circle size will change in real-time based on your volume. When it reaches 75-85 dB, the circle will turn green.'**
+  String get voiceTrainingInstruction;
+
+  /// Ready state text for voice training
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to start'**
+  String get voiceTrainingReady;
+
+  /// Feedback when volume is too low (< 65 dB)
+  ///
+  /// In en, this message translates to:
+  /// **'Speak louder!'**
+  String get voiceTrainingTooQuiet;
+
+  /// Encouragement text when at normal level (65-75 dB)
+  ///
+  /// In en, this message translates to:
+  /// **'Good, keep pushing!'**
+  String get voiceTrainingKeepGoing;
+
+  /// Feedback when in target zone (75-85 dB)
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent! Keep it up!'**
+  String get voiceTrainingExcellent;
+
+  /// Target decibel display
+  ///
+  /// In en, this message translates to:
+  /// **'Target: {target} dB'**
+  String voiceTrainingTarget(String target);
+
+  /// Target range display
+  ///
+  /// In en, this message translates to:
+  /// **'Target: {range} dB'**
+  String voiceTrainingTargetRange(String range);
+
+  /// Start listening button text
+  ///
+  /// In en, this message translates to:
+  /// **'Start Training'**
+  String get startListening;
+
+  /// Stop listening button text
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Training'**
+  String get stopListening;
+
+  /// Microphone permission dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone Permission Required'**
+  String get microphonePermissionRequired;
+
+  /// Microphone permission denied message
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone permission denied'**
+  String get microphonePermissionDenied;
+
+  /// Message when microphone permission is permanently denied
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone permission has been permanently denied. Please enable microphone permission in system settings to use voice training.'**
+  String get microphonePermissionDeniedMessage;
+
+  /// Microphone error message
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone error'**
+  String get microphoneError;
+
+  /// Open settings button text
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettings;
 }
 
 class _AppLocalizationsDelegate

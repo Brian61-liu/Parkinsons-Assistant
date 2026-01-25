@@ -10,6 +10,8 @@
     <!-- 存储权限（用于选择头像图片） -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <!-- 麦克风权限（用于语音训练） -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     
     <application
         android:label="Kineo"

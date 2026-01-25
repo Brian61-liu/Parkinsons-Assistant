@@ -2,6 +2,7 @@
   "@@locale": "zh",
   "appTitle": "Kineo",
   "selectTraining": "请选择您要进行的训练",
+  "clickToStartTest": "点击开始测试",
   "tremorTest": "手部震颤测试",
   "tremorTestTitle": "手部震颤测试",
   "tremorTestInstruction": "请将手机握在手中，保持手臂静止30秒",
@@ -150,5 +151,28 @@
   "selectFromGallery": "从相册选择",
   "takePhoto": "拍照",
   "avatarUpdated": "头像更新成功",
-  "avatarUpdateFailed": "头像更新失败"
+  "avatarUpdateFailed": "头像更新失败",
+  "voiceTraining": "语音训练",
+  "voiceTrainingMainInstruction": "请持续发长音 —— 啊 ——",
+  "voiceTrainingInstruction": "基于 LSVT LOUD 疗法理念，请大声说话。圆的大小会根据您的音量实时变化，达到 75-85 dB 时圆会变绿。",
+  "voiceTrainingReady": "准备开始",
+  "voiceTrainingTooQuiet": "再大声一点！",
+  "voiceTrainingKeepGoing": "很好，再加把劲！",
+  "voiceTrainingExcellent": "太棒了！保持住！",
+  "voiceTrainingTarget": "目标：{target} dB",
+  "voiceTrainingTargetRange": "目标：{range} dB",
+  "@voiceTrainingTarget": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "startListening": "开始训练",
+  "stopListening": "停止训练",
+  "microphonePermissionRequired": "需要麦克风权限",
+  "microphonePermissionDenied": "麦克风权限被拒绝",
+  "microphonePermissionDeniedMessage": "麦克风权限已被永久拒绝。请在系统设置中手动开启麦克风权限以使用语音训练功能。",
+  "microphoneError": "麦克风错误",
+  "openSettings": "打开设置"
 }

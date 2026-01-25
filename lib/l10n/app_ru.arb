@@ -2,6 +2,7 @@
   "@@locale": "ru",
   "appTitle": "Kineo",
   "selectTraining": "Пожалуйста, выберите упражнение, которое хотите выполнить",
+  "clickToStartTest": "Нажмите, чтобы начать тест",
   "tremorTest": "Тест на Тремор Рук",
   "tremorTestTitle": "Тест на Тремор Рук",
   "tremorTestInstruction": "Пожалуйста, держите телефон в руке и держите руку неподвижно в течение 30 секунд",
@@ -165,5 +166,35 @@
   "avatarUpdateFailed": "Не удалось обновить аватар",
   "@avatarUpdateFailed": {
     "description": "Avatar update failure message"
-  }
+  },
+  "voiceTraining": "Голосовая Тренировка",
+  "voiceTrainingMainInstruction": "Пожалуйста, удерживайте длинный звук — Ах —",
+  "voiceTrainingInstruction": "Основываясь на принципах терапии LSVT LOUD, пожалуйста, говорите громко. Размер круга будет изменяться в реальном времени в зависимости от вашей громкости. Когда он достигнет 75-85 дБ, круг станет зелёным.",
+  "voiceTrainingReady": "Готов к началу",
+  "voiceTrainingTooQuiet": "Говорите громче!",
+  "voiceTrainingKeepGoing": "Хорошо, продолжайте!",
+  "voiceTrainingExcellent": "Отлично! Продолжайте!",
+  "voiceTrainingTarget": "Цель: {target} дБ",
+  "voiceTrainingTargetRange": "Цель: {range} дБ",
+  "@voiceTrainingTargetRange": {
+    "placeholders": {
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "@voiceTrainingTarget": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "startListening": "Начать Тренировку",
+  "stopListening": "Остановить Тренировку",
+  "microphonePermissionRequired": "Требуется Разрешение Микрофона",
+  "microphonePermissionDenied": "Разрешение микрофона отклонено",
+  "microphonePermissionDeniedMessage": "Разрешение микрофона было отклонено навсегда. Пожалуйста, включите разрешение микрофона в настройках системы, чтобы использовать голосовую тренировку.",
+  "microphoneError": "Ошибка микрофона",
+  "openSettings": "Открыть Настройки"
 }

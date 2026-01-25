@@ -2,6 +2,7 @@
   "@@locale": "ko",
   "appTitle": "Kineo",
   "selectTraining": "수행하려는 훈련을 선택하세요",
+  "clickToStartTest": "테스트 시작을 클릭하세요",
   "tremorTest": "손 떨림 테스트",
   "tremorTestTitle": "손 떨림 테스트",
   "tremorTestInstruction": "휴대폰을 손에 들고 30초 동안 팔을 정지 상태로 유지하세요",
@@ -165,5 +166,35 @@
   "avatarUpdateFailed": "아바타 업데이트 실패",
   "@avatarUpdateFailed": {
     "description": "Avatar update failure message"
-  }
+  },
+  "voiceTraining": "음성 훈련",
+  "voiceTrainingMainInstruction": "긴 소리를 지속적으로 내주세요 —— 아 ——",
+  "voiceTrainingInstruction": "LSVT LOUD 치료 원칙에 따라 큰 소리로 말하세요. 원의 크기는 볼륨에 따라 실시간으로 변경됩니다. 75-85 dB에 도달하면 원이 녹색으로 변합니다.",
+  "voiceTrainingReady": "시작 준비 완료",
+  "voiceTrainingTooQuiet": "더 크게 말하세요!",
+  "voiceTrainingKeepGoing": "좋습니다, 계속하세요!",
+  "voiceTrainingExcellent": "훌륭합니다! 계속하세요!",
+  "voiceTrainingTarget": "목표: {target} dB",
+  "voiceTrainingTargetRange": "목표: {range} dB",
+  "@voiceTrainingTargetRange": {
+    "placeholders": {
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "@voiceTrainingTarget": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "startListening": "훈련 시작",
+  "stopListening": "훈련 중지",
+  "microphonePermissionRequired": "마이크 권한 필요",
+  "microphonePermissionDenied": "마이크 권한이 거부되었습니다",
+  "microphonePermissionDeniedMessage": "마이크 권한이 영구적으로 거부되었습니다. 음성 훈련을 사용하려면 시스템 설정에서 마이크 권한을 활성화하세요.",
+  "microphoneError": "마이크 오류",
+  "openSettings": "설정 열기"
 }

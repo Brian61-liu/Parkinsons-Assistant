@@ -16,6 +16,9 @@ class AppLocalizationsEs extends AppLocalizations {
       'Por favor, seleccione el entrenamiento que desea realizar';
 
   @override
+  String get clickToStartTest => 'Haga clic para comenzar la prueba';
+
+  @override
   String get tremorTest => 'Prueba de Temblor de Mano';
 
   @override
@@ -388,4 +391,59 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get avatarUpdateFailed => 'Error al actualizar el avatar';
+
+  @override
+  String get voiceTraining => 'Entrenamiento de Voz';
+
+  @override
+  String get voiceTrainingMainInstruction =>
+      'Por favor, sostenga un sonido largo — Ah —';
+
+  @override
+  String get voiceTrainingInstruction =>
+      'Basado en los principios de la terapia LSVT LOUD, por favor hable en voz alta. El tamaño del círculo cambiará en tiempo real según su volumen. Cuando alcance 75-85 dB, el círculo se volverá verde.';
+
+  @override
+  String get voiceTrainingReady => 'Listo para comenzar';
+
+  @override
+  String get voiceTrainingTooQuiet => '¡Hable más fuerte!';
+
+  @override
+  String get voiceTrainingKeepGoing => '¡Bien, siga esforzándose!';
+
+  @override
+  String get voiceTrainingExcellent => '¡Excelente! ¡Manténgalo!';
+
+  @override
+  String voiceTrainingTarget(String target) {
+    return 'Objetivo: $target dB';
+  }
+
+  @override
+  String voiceTrainingTargetRange(String range) {
+    return 'Objetivo: $range dB';
+  }
+
+  @override
+  String get startListening => 'Iniciar Entrenamiento';
+
+  @override
+  String get stopListening => 'Detener Entrenamiento';
+
+  @override
+  String get microphonePermissionRequired => 'Se Requiere Permiso de Micrófono';
+
+  @override
+  String get microphonePermissionDenied => 'Permiso de micrófono denegado';
+
+  @override
+  String get microphonePermissionDeniedMessage =>
+      'El permiso del micrófono ha sido denegado permanentemente. Por favor, habilite el permiso del micrófono en la configuración del sistema para usar el entrenamiento de voz.';
+
+  @override
+  String get microphoneError => 'Error del micrófono';
+
+  @override
+  String get openSettings => 'Abrir Configuración';
 }

@@ -16,6 +16,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Bitte wählen Sie das Training aus, das Sie durchführen möchten';
 
   @override
+  String get clickToStartTest => 'Klicken Sie, um den Test zu starten';
+
+  @override
   String get tremorTest => 'Handzitter-Test';
 
   @override
@@ -389,4 +392,60 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get avatarUpdateFailed => 'Avatar konnte nicht aktualisiert werden';
+
+  @override
+  String get voiceTraining => 'Stimmtraining';
+
+  @override
+  String get voiceTrainingMainInstruction =>
+      'Bitte halten Sie einen langen Ton — Ah —';
+
+  @override
+  String get voiceTrainingInstruction =>
+      'Basierend auf den Prinzipien der LSVT LOUD-Therapie, bitte laut sprechen. Die Größe des Kreises ändert sich in Echtzeit basierend auf Ihrer Lautstärke. Wenn er 75-85 dB erreicht, wird der Kreis grün.';
+
+  @override
+  String get voiceTrainingReady => 'Bereit zum Starten';
+
+  @override
+  String get voiceTrainingTooQuiet => 'Lauter sprechen!';
+
+  @override
+  String get voiceTrainingKeepGoing => 'Gut, weiter so!';
+
+  @override
+  String get voiceTrainingExcellent => 'Ausgezeichnet! Weiter so!';
+
+  @override
+  String voiceTrainingTarget(String target) {
+    return 'Ziel: $target dB';
+  }
+
+  @override
+  String voiceTrainingTargetRange(String range) {
+    return 'Ziel: $range dB';
+  }
+
+  @override
+  String get startListening => 'Training Starten';
+
+  @override
+  String get stopListening => 'Training Stoppen';
+
+  @override
+  String get microphonePermissionRequired =>
+      'Mikrofonberechtigung Erforderlich';
+
+  @override
+  String get microphonePermissionDenied => 'Mikrofonberechtigung verweigert';
+
+  @override
+  String get microphonePermissionDeniedMessage =>
+      'Die Mikrofonberechtigung wurde dauerhaft verweigert. Bitte aktivieren Sie die Mikrofonberechtigung in den Systemeinstellungen, um das Stimmtraining zu verwenden.';
+
+  @override
+  String get microphoneError => 'Mikrofonfehler';
+
+  @override
+  String get openSettings => 'Einstellungen Öffnen';
 }

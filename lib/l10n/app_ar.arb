@@ -2,6 +2,7 @@
   "@@locale": "ar",
   "appTitle": "Kineo",
   "selectTraining": "يرجى اختيار التدريب الذي تريد القيام به",
+  "clickToStartTest": "انقر لبدء الاختبار",
   "tremorTest": "اختبار رعشة اليد",
   "tremorTestTitle": "اختبار رعشة اليد",
   "tremorTestInstruction": "يرجى حمل الهاتف في يدك والحفاظ على الذراع ثابتة لمدة 30 ثانية",
@@ -165,5 +166,35 @@
   "avatarUpdateFailed": "فشل تحديث الصورة الشخصية",
   "@avatarUpdateFailed": {
     "description": "Avatar update failure message"
-  }
+  },
+  "voiceTraining": "تدريب الصوت",
+  "voiceTrainingMainInstruction": "يرجى الاستمرار في إصدار صوت طويل — آه —",
+  "voiceTrainingInstruction": "بناءً على مبادئ علاج LSVT LOUD، يرجى التحدث بصوت عالٍ. سيتغير حجم الدائرة في الوقت الفعلي بناءً على مستوى الصوت. عندما يصل إلى 75-85 ديسيبل، ستصبح الدائرة خضراء.",
+  "voiceTrainingReady": "جاهز للبدء",
+  "voiceTrainingTooQuiet": "تحدث بصوت أعلى!",
+  "voiceTrainingKeepGoing": "جيد، استمر!",
+  "voiceTrainingExcellent": "رائع! استمر!",
+  "voiceTrainingTarget": "الهدف: {target} ديسيبل",
+  "voiceTrainingTargetRange": "الهدف: {range} ديسيبل",
+  "@voiceTrainingTargetRange": {
+    "placeholders": {
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "@voiceTrainingTarget": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "startListening": "بدء التدريب",
+  "stopListening": "إيقاف التدريب",
+  "microphonePermissionRequired": "إذن الميكروفون مطلوب",
+  "microphonePermissionDenied": "تم رفض إذن الميكروفون",
+  "microphonePermissionDeniedMessage": "تم رفض إذن الميكروفون بشكل دائم. يرجى تمكين إذن الميكروفون في إعدادات النظام لاستخدام تدريب الصوت.",
+  "microphoneError": "خطأ في الميكروفون",
+  "openSettings": "فتح الإعدادات"
 }

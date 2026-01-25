@@ -15,6 +15,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get selectTraining => '请选择您要进行的训练';
 
   @override
+  String get clickToStartTest => '点击开始测试';
+
+  @override
   String get tremorTest => '手部震颤测试';
 
   @override
@@ -373,6 +376,60 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get avatarUpdateFailed => '头像更新失败';
+
+  @override
+  String get voiceTraining => '语音训练';
+
+  @override
+  String get voiceTrainingMainInstruction => '请持续发长音 —— 啊 ——';
+
+  @override
+  String get voiceTrainingInstruction =>
+      '基于 LSVT LOUD 疗法理念，请大声说话。圆的大小会根据您的音量实时变化，达到 75-85 dB 时圆会变绿。';
+
+  @override
+  String get voiceTrainingReady => '准备开始';
+
+  @override
+  String get voiceTrainingTooQuiet => '再大声一点！';
+
+  @override
+  String get voiceTrainingKeepGoing => '很好，再加把劲！';
+
+  @override
+  String get voiceTrainingExcellent => '太棒了！保持住！';
+
+  @override
+  String voiceTrainingTarget(String target) {
+    return '目标：$target dB';
+  }
+
+  @override
+  String voiceTrainingTargetRange(String range) {
+    return '目标：$range dB';
+  }
+
+  @override
+  String get startListening => '开始训练';
+
+  @override
+  String get stopListening => '停止训练';
+
+  @override
+  String get microphonePermissionRequired => '需要麦克风权限';
+
+  @override
+  String get microphonePermissionDenied => '麦克风权限被拒绝';
+
+  @override
+  String get microphonePermissionDeniedMessage =>
+      '麦克风权限已被永久拒绝。请在系统设置中手动开启麦克风权限以使用语音训练功能。';
+
+  @override
+  String get microphoneError => '麦克风错误';
+
+  @override
+  String get openSettings => '打开设置';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -384,6 +441,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get selectTraining => '請選擇您要進行的訓練';
+
+  @override
+  String get clickToStartTest => '點擊開始測試';
 
   @override
   String get tremorTest => '手部顫抖測試';
@@ -743,4 +803,58 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get avatarUpdateFailed => '頭像更新失敗';
+
+  @override
+  String get voiceTraining => '語音訓練';
+
+  @override
+  String get voiceTrainingMainInstruction => '請持續發長音 —— 啊 ——';
+
+  @override
+  String get voiceTrainingInstruction =>
+      '基於 LSVT LOUD 療法理念，請大聲說話。圓的大小會根據您的音量即時變化，達到 75-85 dB 時圓會變綠。';
+
+  @override
+  String get voiceTrainingReady => '準備開始';
+
+  @override
+  String get voiceTrainingTooQuiet => '再大聲一點！';
+
+  @override
+  String get voiceTrainingKeepGoing => '很好，再加把勁！';
+
+  @override
+  String get voiceTrainingExcellent => '太棒了！保持住！';
+
+  @override
+  String voiceTrainingTarget(String target) {
+    return '目標：$target dB';
+  }
+
+  @override
+  String voiceTrainingTargetRange(String range) {
+    return '目標：$range dB';
+  }
+
+  @override
+  String get startListening => '開始訓練';
+
+  @override
+  String get stopListening => '停止訓練';
+
+  @override
+  String get microphonePermissionRequired => '需要麥克風權限';
+
+  @override
+  String get microphonePermissionDenied => '麥克風權限被拒絕';
+
+  @override
+  String get microphonePermissionDeniedMessage =>
+      '麥克風權限已被永久拒絕。請在系統設定中手動開啟麥克風權限以使用語音訓練功能。';
+
+  @override
+  String get microphoneError => '麥克風錯誤';
+
+  @override
+  String get openSettings => '打開設定';
 }

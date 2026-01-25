@@ -15,6 +15,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get selectTraining => '実施したいトレーニングを選択してください';
 
   @override
+  String get clickToStartTest => 'クリックしてテストを開始';
+
+  @override
   String get tremorTest => '手の震えテスト';
 
   @override
@@ -375,4 +378,58 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get avatarUpdateFailed => 'アバターの更新に失敗しました';
+
+  @override
+  String get voiceTraining => '音声訓練';
+
+  @override
+  String get voiceTrainingMainInstruction => '長い音を続けて発音してください —— あ ——';
+
+  @override
+  String get voiceTrainingInstruction =>
+      'LSVT LOUD療法の原則に基づき、大きな声で話してください。円のサイズは音量に応じてリアルタイムで変化します。75-85 dBに達すると、円が緑色になります。';
+
+  @override
+  String get voiceTrainingReady => '準備完了';
+
+  @override
+  String get voiceTrainingTooQuiet => 'もっと大きな声で！';
+
+  @override
+  String get voiceTrainingKeepGoing => 'いいですね、続けてください！';
+
+  @override
+  String get voiceTrainingExcellent => '素晴らしい！その調子！';
+
+  @override
+  String voiceTrainingTarget(String target) {
+    return '目標: $target dB';
+  }
+
+  @override
+  String voiceTrainingTargetRange(String range) {
+    return '目標: $range dB';
+  }
+
+  @override
+  String get startListening => '訓練を開始';
+
+  @override
+  String get stopListening => '訓練を停止';
+
+  @override
+  String get microphonePermissionRequired => 'マイクの許可が必要です';
+
+  @override
+  String get microphonePermissionDenied => 'マイクの許可が拒否されました';
+
+  @override
+  String get microphonePermissionDeniedMessage =>
+      'マイクの許可が永続的に拒否されました。音声訓練を使用するには、システム設定でマイクの許可を有効にしてください。';
+
+  @override
+  String get microphoneError => 'マイクエラー';
+
+  @override
+  String get openSettings => '設定を開く';
 }

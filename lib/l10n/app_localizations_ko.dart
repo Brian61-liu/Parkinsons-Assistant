@@ -15,6 +15,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get selectTraining => '수행하려는 훈련을 선택하세요';
 
   @override
+  String get clickToStartTest => '테스트 시작을 클릭하세요';
+
+  @override
   String get tremorTest => '손 떨림 테스트';
 
   @override
@@ -375,4 +378,58 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get avatarUpdateFailed => '아바타 업데이트 실패';
+
+  @override
+  String get voiceTraining => '음성 훈련';
+
+  @override
+  String get voiceTrainingMainInstruction => '긴 소리를 지속적으로 내주세요 —— 아 ——';
+
+  @override
+  String get voiceTrainingInstruction =>
+      'LSVT LOUD 치료 원칙에 따라 큰 소리로 말하세요. 원의 크기는 볼륨에 따라 실시간으로 변경됩니다. 75-85 dB에 도달하면 원이 녹색으로 변합니다.';
+
+  @override
+  String get voiceTrainingReady => '시작 준비 완료';
+
+  @override
+  String get voiceTrainingTooQuiet => '더 크게 말하세요!';
+
+  @override
+  String get voiceTrainingKeepGoing => '좋습니다, 계속하세요!';
+
+  @override
+  String get voiceTrainingExcellent => '훌륭합니다! 계속하세요!';
+
+  @override
+  String voiceTrainingTarget(String target) {
+    return '목표: $target dB';
+  }
+
+  @override
+  String voiceTrainingTargetRange(String range) {
+    return '목표: $range dB';
+  }
+
+  @override
+  String get startListening => '훈련 시작';
+
+  @override
+  String get stopListening => '훈련 중지';
+
+  @override
+  String get microphonePermissionRequired => '마이크 권한 필요';
+
+  @override
+  String get microphonePermissionDenied => '마이크 권한이 거부되었습니다';
+
+  @override
+  String get microphonePermissionDeniedMessage =>
+      '마이크 권한이 영구적으로 거부되었습니다. 음성 훈련을 사용하려면 시스템 설정에서 마이크 권한을 활성화하세요.';
+
+  @override
+  String get microphoneError => '마이크 오류';
+
+  @override
+  String get openSettings => '설정 열기';
 }

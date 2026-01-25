@@ -16,6 +16,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Por favor, selecione o treinamento que deseja realizar';
 
   @override
+  String get clickToStartTest => 'Clique para iniciar o teste';
+
+  @override
   String get tremorTest => 'Teste de Tremor de Mão';
 
   @override
@@ -388,4 +391,60 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get avatarUpdateFailed => 'Falha ao atualizar o avatar';
+
+  @override
+  String get voiceTraining => 'Treinamento de Voz';
+
+  @override
+  String get voiceTrainingMainInstruction =>
+      'Por favor, sustenha um som longo — Ah —';
+
+  @override
+  String get voiceTrainingInstruction =>
+      'Com base nos princípios da terapia LSVT LOUD, por favor fale alto. O tamanho do círculo mudará em tempo real com base no seu volume. Quando atingir 75-85 dB, o círculo ficará verde.';
+
+  @override
+  String get voiceTrainingReady => 'Pronto para começar';
+
+  @override
+  String get voiceTrainingTooQuiet => 'Fale mais alto!';
+
+  @override
+  String get voiceTrainingKeepGoing => 'Bom, continue!';
+
+  @override
+  String get voiceTrainingExcellent => 'Excelente! Continue!';
+
+  @override
+  String voiceTrainingTarget(String target) {
+    return 'Meta: $target dB';
+  }
+
+  @override
+  String voiceTrainingTargetRange(String range) {
+    return 'Meta: $range dB';
+  }
+
+  @override
+  String get startListening => 'Iniciar Treinamento';
+
+  @override
+  String get stopListening => 'Parar Treinamento';
+
+  @override
+  String get microphonePermissionRequired =>
+      'Permissão de Microfone Necessária';
+
+  @override
+  String get microphonePermissionDenied => 'Permissão de microfone negada';
+
+  @override
+  String get microphonePermissionDeniedMessage =>
+      'A permissão do microfone foi negada permanentemente. Por favor, habilite a permissão do microfone nas configurações do sistema para usar o treinamento de voz.';
+
+  @override
+  String get microphoneError => 'Erro do microfone';
+
+  @override
+  String get openSettings => 'Abrir Configurações';
 }

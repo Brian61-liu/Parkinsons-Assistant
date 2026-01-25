@@ -15,6 +15,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectTraining => 'Please select the training you want to perform';
 
   @override
+  String get clickToStartTest => 'Click to start test';
+
+  @override
   String get tremorTest => 'Hand Tremor Test';
 
   @override
@@ -388,4 +391,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get avatarUpdateFailed => 'Failed to update avatar';
+
+  @override
+  String get voiceTraining => 'Voice Training';
+
+  @override
+  String get voiceTrainingMainInstruction =>
+      'Please sustain a long sound — Ah —';
+
+  @override
+  String get voiceTrainingInstruction =>
+      'Based on LSVT LOUD therapy principles, please speak loudly. The circle size will change in real-time based on your volume. When it reaches 75-85 dB, the circle will turn green.';
+
+  @override
+  String get voiceTrainingReady => 'Ready to start';
+
+  @override
+  String get voiceTrainingTooQuiet => 'Speak louder!';
+
+  @override
+  String get voiceTrainingKeepGoing => 'Good, keep pushing!';
+
+  @override
+  String get voiceTrainingExcellent => 'Excellent! Keep it up!';
+
+  @override
+  String voiceTrainingTarget(String target) {
+    return 'Target: $target dB';
+  }
+
+  @override
+  String voiceTrainingTargetRange(String range) {
+    return 'Target: $range dB';
+  }
+
+  @override
+  String get startListening => 'Start Training';
+
+  @override
+  String get stopListening => 'Stop Training';
+
+  @override
+  String get microphonePermissionRequired => 'Microphone Permission Required';
+
+  @override
+  String get microphonePermissionDenied => 'Microphone permission denied';
+
+  @override
+  String get microphonePermissionDeniedMessage =>
+      'Microphone permission has been permanently denied. Please enable microphone permission in system settings to use voice training.';
+
+  @override
+  String get microphoneError => 'Microphone error';
+
+  @override
+  String get openSettings => 'Open Settings';
 }
