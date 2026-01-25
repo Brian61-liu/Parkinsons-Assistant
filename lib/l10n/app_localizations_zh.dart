@@ -728,4 +728,19 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tapToCancel => '點擊取消';
+
+  @override
+  String get changeAvatar => '更改頭像';
+
+  @override
+  String get selectFromGallery => '從相冊選擇';
+
+  @override
+  String get takePhoto => '拍照';
+
+  @override
+  String get avatarUpdated => '頭像更新成功';
+
+  @override
+  String get avatarUpdateFailed => '頭像更新失敗';
 }

@@ -538,6 +538,9 @@ class _HomePageState extends State<HomePage> {
     
     if (user == null) return;
 
+    // 在 await 之前捕获 ScaffoldMessenger 引用
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
     try {
       setState(() {
         _isUploadingAvatar = true;
@@ -547,9 +550,11 @@ class _HomePageState extends State<HomePage> {
       final XFile? imageFile = await _avatarService.pickImage(source: source);
       
       if (imageFile == null) {
-        setState(() {
-          _isUploadingAvatar = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isUploadingAvatar = false;
+          });
+        }
         return;
       }
 
@@ -558,13 +563,13 @@ class _HomePageState extends State<HomePage> {
       await _avatarService.uploadAvatar(file, user);
 
       // 重置状态
-      setState(() {
-        _avatarLoadFailed = false;
-        _isUploadingAvatar = false;
-      });
-
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        setState(() {
+          _avatarLoadFailed = false;
+          _isUploadingAvatar = false;
+        });
+
+        scaffoldMessenger.showSnackBar(
           SnackBar(
             content: Text(l10n.avatarUpdated),
             backgroundColor: Colors.green,
@@ -572,12 +577,12 @@ class _HomePageState extends State<HomePage> {
         );
       }
     } catch (e) {
-      setState(() {
-        _isUploadingAvatar = false;
-      });
-      
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        setState(() {
+          _isUploadingAvatar = false;
+        });
+        
+        scaffoldMessenger.showSnackBar(
           SnackBar(
             content: Text('${l10n.avatarUpdateFailed}: $e'),
             backgroundColor: Colors.red,
@@ -629,9 +634,9 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(width: 12),
                         Text(
-                          l10n.appTitle,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+            l10n.appTitle,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
                             fontSize: 24,
                             color: Color(0xFF1E3A5F),
                           ),
@@ -655,10 +660,10 @@ class _HomePageState extends State<HomePage> {
                           CupertinoIcons.gear,
                           color: Color(0xFF0EA5E9),
                           size: 24,
-                        ),
-                      ),
-                    ),
-                  ),
+            ),
+          ),
+        ),
+      ),
                 ],
               ),
             ),
@@ -667,8 +672,8 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  children: [
+        child: Column(
+          children: [
                     const SizedBox(height: 40),
                     
                     // 用户头像
@@ -688,31 +693,31 @@ class _HomePageState extends State<HomePage> {
                     ],
                     
                     // 功能选择提示
-                    Text(
-                      l10n.selectTraining,
-                      style: const TextStyle(
+            Text(
+              l10n.selectTraining,
+              style: const TextStyle(
                         fontSize: 16,
                         color: Color(0xFF64748B),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+              ),
+              textAlign: TextAlign.center,
+            ),
                     
                     const SizedBox(height: 24),
                     
                     // 手部震颤测试按钮
                     _buildFeatureButton(
                       icon: CupertinoIcons.hand_raised,
-                      title: l10n.tremorTest,
+              title: l10n.tremorTest,
                       color: const Color(0xFF0EA5E9),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => const TremorTestPage(),
-                          ),
-                        );
-                      },
-                    ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const TremorTestPage(),
+                  ),
+                );
+              },
+            ),
                     
                     const SizedBox(height: 40),
                   ],

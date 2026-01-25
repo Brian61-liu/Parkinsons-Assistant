@@ -145,5 +145,25 @@
   "recordDeleted": "Registro eliminado",
   "duration": "Duración",
   "seconds": "s",
-  "tapToCancel": "Toque para cancelar"
+  "tapToCancel": "Toque para cancelar",
+  "changeAvatar": "Cambiar Avatar",
+  "@changeAvatar": {
+    "description": "Change avatar dialog title"
+  },
+  "selectFromGallery": "Seleccionar de la Galería",
+  "@selectFromGallery": {
+    "description": "Select from gallery option"
+  },
+  "takePhoto": "Tomar Foto",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+  "avatarUpdated": "Avatar actualizado exitosamente",
+  "@avatarUpdated": {
+    "description": "Avatar update success message"
+  },
+  "avatarUpdateFailed": "Error al actualizar el avatar",
+  "@avatarUpdateFailed": {
+    "description": "Avatar update failure message"
+  }
 }

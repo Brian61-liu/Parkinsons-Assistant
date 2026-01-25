@@ -145,5 +145,25 @@
   "recordDeleted": "기록이 삭제되었습니다",
   "duration": "시간",
   "seconds": "초",
-  "tapToCancel": "탭하여 취소"
+  "tapToCancel": "탭하여 취소",
+  "changeAvatar": "아바타 변경",
+  "@changeAvatar": {
+    "description": "Change avatar dialog title"
+  },
+  "selectFromGallery": "갤러리에서 선택",
+  "@selectFromGallery": {
+    "description": "Select from gallery option"
+  },
+  "takePhoto": "사진 촬영",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+  "avatarUpdated": "아바타가 성공적으로 업데이트되었습니다",
+  "@avatarUpdated": {
+    "description": "Avatar update success message"
+  },
+  "avatarUpdateFailed": "아바타 업데이트 실패",
+  "@avatarUpdateFailed": {
+    "description": "Avatar update failure message"
+  }
 }

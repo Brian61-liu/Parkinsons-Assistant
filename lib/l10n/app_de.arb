@@ -145,5 +145,25 @@
   "recordDeleted": "Aufzeichnung gelöscht",
   "duration": "Dauer",
   "seconds": "s",
-  "tapToCancel": "Zum Abbrechen tippen"
+  "tapToCancel": "Zum Abbrechen tippen",
+  "changeAvatar": "Avatar Ändern",
+  "@changeAvatar": {
+    "description": "Change avatar dialog title"
+  },
+  "selectFromGallery": "Aus Galerie Auswählen",
+  "@selectFromGallery": {
+    "description": "Select from gallery option"
+  },
+  "takePhoto": "Foto Aufnehmen",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+  "avatarUpdated": "Avatar erfolgreich aktualisiert",
+  "@avatarUpdated": {
+    "description": "Avatar update success message"
+  },
+  "avatarUpdateFailed": "Avatar konnte nicht aktualisiert werden",
+  "@avatarUpdateFailed": {
+    "description": "Avatar update failure message"
+  }
 }

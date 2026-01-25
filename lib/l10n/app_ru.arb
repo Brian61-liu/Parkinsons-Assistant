@@ -145,5 +145,25 @@
   "recordDeleted": "Запись удалена",
   "duration": "Длительность",
   "seconds": "с",
-  "tapToCancel": "Нажмите для отмены"
+  "tapToCancel": "Нажмите для отмены",
+  "changeAvatar": "Изменить Аватар",
+  "@changeAvatar": {
+    "description": "Change avatar dialog title"
+  },
+  "selectFromGallery": "Выбрать из Галереи",
+  "@selectFromGallery": {
+    "description": "Select from gallery option"
+  },
+  "takePhoto": "Сделать Фото",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+  "avatarUpdated": "Аватар успешно обновлён",
+  "@avatarUpdated": {
+    "description": "Avatar update success message"
+  },
+  "avatarUpdateFailed": "Не удалось обновить аватар",
+  "@avatarUpdateFailed": {
+    "description": "Avatar update failure message"
+  }
 }

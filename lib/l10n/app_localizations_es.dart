@@ -375,17 +375,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tapToCancel => 'Toque para cancelar';
 
   @override
-  String get changeAvatar => 'Change Avatar';
+  String get changeAvatar => 'Cambiar Avatar';
 
   @override
-  String get selectFromGallery => 'Select from Gallery';
+  String get selectFromGallery => 'Seleccionar de la Galería';
 
   @override
-  String get takePhoto => 'Take Photo';
+  String get takePhoto => 'Tomar Foto';
 
   @override
-  String get avatarUpdated => 'Avatar updated successfully';
+  String get avatarUpdated => 'Avatar actualizado exitosamente';
 
   @override
-  String get avatarUpdateFailed => 'Failed to update avatar';
+  String get avatarUpdateFailed => 'Error al actualizar el avatar';
 }

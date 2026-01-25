@@ -145,5 +145,25 @@
   "recordDeleted": "تم حذف السجل",
   "duration": "المدة",
   "seconds": "ث",
-  "tapToCancel": "انقر للإلغاء"
+  "tapToCancel": "انقر للإلغاء",
+  "changeAvatar": "تغيير الصورة الشخصية",
+  "@changeAvatar": {
+    "description": "Change avatar dialog title"
+  },
+  "selectFromGallery": "اختر من المعرض",
+  "@selectFromGallery": {
+    "description": "Select from gallery option"
+  },
+  "takePhoto": "التقاط صورة",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+  "avatarUpdated": "تم تحديث الصورة الشخصية بنجاح",
+  "@avatarUpdated": {
+    "description": "Avatar update success message"
+  },
+  "avatarUpdateFailed": "فشل تحديث الصورة الشخصية",
+  "@avatarUpdateFailed": {
+    "description": "Avatar update failure message"
+  }
 }

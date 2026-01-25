@@ -145,5 +145,25 @@
   "recordDeleted": "記録が削除されました",
   "duration": "時間",
   "seconds": "秒",
-  "tapToCancel": "タップでキャンセル"
+  "tapToCancel": "タップでキャンセル",
+  "changeAvatar": "アバターを変更",
+  "@changeAvatar": {
+    "description": "Change avatar dialog title"
+  },
+  "selectFromGallery": "ギャラリーから選択",
+  "@selectFromGallery": {
+    "description": "Select from gallery option"
+  },
+  "takePhoto": "写真を撮る",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+  "avatarUpdated": "アバターが正常に更新されました",
+  "@avatarUpdated": {
+    "description": "Avatar update success message"
+  },
+  "avatarUpdateFailed": "アバターの更新に失敗しました",
+  "@avatarUpdateFailed": {
+    "description": "Avatar update failure message"
+  }
 }

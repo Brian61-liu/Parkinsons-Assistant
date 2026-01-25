@@ -362,17 +362,17 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tapToCancel => '탭하여 취소';
 
   @override
-  String get changeAvatar => 'Change Avatar';
+  String get changeAvatar => '아바타 변경';
 
   @override
-  String get selectFromGallery => 'Select from Gallery';
+  String get selectFromGallery => '갤러리에서 선택';
 
   @override
-  String get takePhoto => 'Take Photo';
+  String get takePhoto => '사진 촬영';
 
   @override
-  String get avatarUpdated => 'Avatar updated successfully';
+  String get avatarUpdated => '아바타가 성공적으로 업데이트되었습니다';
 
   @override
-  String get avatarUpdateFailed => 'Failed to update avatar';
+  String get avatarUpdateFailed => '아바타 업데이트 실패';
 }

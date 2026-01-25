@@ -374,17 +374,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tapToCancel => 'Нажмите для отмены';
 
   @override
-  String get changeAvatar => 'Change Avatar';
+  String get changeAvatar => 'Изменить Аватар';
 
   @override
-  String get selectFromGallery => 'Select from Gallery';
+  String get selectFromGallery => 'Выбрать из Галереи';
 
   @override
-  String get takePhoto => 'Take Photo';
+  String get takePhoto => 'Сделать Фото';
 
   @override
-  String get avatarUpdated => 'Avatar updated successfully';
+  String get avatarUpdated => 'Аватар успешно обновлён';
 
   @override
-  String get avatarUpdateFailed => 'Failed to update avatar';
+  String get avatarUpdateFailed => 'Не удалось обновить аватар';
 }

@@ -145,5 +145,25 @@
   "recordDeleted": "記錄已刪除",
   "duration": "時長",
   "seconds": "秒",
-  "tapToCancel": "點擊取消"
+  "tapToCancel": "點擊取消",
+  "changeAvatar": "更改頭像",
+  "@changeAvatar": {
+    "description": "Change avatar dialog title"
+  },
+  "selectFromGallery": "從相冊選擇",
+  "@selectFromGallery": {
+    "description": "Select from gallery option"
+  },
+  "takePhoto": "拍照",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+  "avatarUpdated": "頭像更新成功",
+  "@avatarUpdated": {
+    "description": "Avatar update success message"
+  },
+  "avatarUpdateFailed": "頭像更新失敗",
+  "@avatarUpdateFailed": {
+    "description": "Avatar update failure message"
+  }
 }

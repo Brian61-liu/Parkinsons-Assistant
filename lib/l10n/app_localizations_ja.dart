@@ -362,17 +362,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tapToCancel => 'タップでキャンセル';
 
   @override
-  String get changeAvatar => 'Change Avatar';
+  String get changeAvatar => 'アバターを変更';
 
   @override
-  String get selectFromGallery => 'Select from Gallery';
+  String get selectFromGallery => 'ギャラリーから選択';
 
   @override
-  String get takePhoto => 'Take Photo';
+  String get takePhoto => '写真を撮る';
 
   @override
-  String get avatarUpdated => 'Avatar updated successfully';
+  String get avatarUpdated => 'アバターが正常に更新されました';
 
   @override
-  String get avatarUpdateFailed => 'Failed to update avatar';
+  String get avatarUpdateFailed => 'アバターの更新に失敗しました';
 }
