@@ -23,8 +23,27 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final AuthService _authService = AuthService();
   final AvatarService _avatarService = AvatarService();
-  bool _avatarLoadFailed = false;
   bool _isUploadingAvatar = false;
+  String? _localAvatarPath; // 本地头像路径
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLocalAvatar();
+  }
+
+  /// 加载本地头像路径
+  Future<void> _loadLocalAvatar() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final path = await _avatarService.getLocalAvatarPath(user.uid);
+      if (mounted) {
+        setState(() {
+          _localAvatarPath = path;
+        });
+      }
+    }
+  }
 
   void _showLanguageDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -281,7 +300,6 @@ class _HomePageState extends State<HomePage> {
 
   // 构建用户头像
   Widget _buildUserAvatar(User user) {
-    final String? photoURL = user.photoURL;
     final String displayName = user.displayName ?? 'User';
     final String initials = _getInitials(displayName);
     
@@ -328,9 +346,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       );
-    } else if (photoURL == null || photoURL.isEmpty || _avatarLoadFailed) {
-      avatarWidget = _buildDefaultAvatar(initials);
-    } else {
+    } else if (_localAvatarPath != null && File(_localAvatarPath!).existsSync()) {
+      // 使用本地头像
       avatarWidget = Container(
         width: 100,
         height: 100,
@@ -354,44 +371,20 @@ class _HomePageState extends State<HomePage> {
         ),
         padding: const EdgeInsets.all(3),
         child: ClipOval(
-          child: Image.network(
-            photoURL,
+          child: Image.file(
+            File(_localAvatarPath!),
             width: 94,
             height: 94,
             fit: BoxFit.cover,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Container(
-                width: 94,
-                height: 94,
-                color: Colors.white,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                        : null,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      Color(0xFF0EA5E9),
-                    ),
-                  ),
-                ),
-              );
-            },
             errorBuilder: (context, error, stackTrace) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (mounted && !_avatarLoadFailed) {
-                  setState(() {
-                    _avatarLoadFailed = true;
-                  });
-                }
-              });
               return _buildDefaultAvatarContent(initials);
             },
           ),
         ),
       );
+    } else {
+      // 使用默认头像（显示首字母）
+      avatarWidget = _buildDefaultAvatar(initials);
     }
     
     // 添加点击功能和编辑图标
@@ -531,7 +524,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// 选择并上传头像
+  /// 选择并保存头像到本地
   Future<void> _pickAndUploadAvatar(BuildContext context, ImageSource source) async {
     final l10n = AppLocalizations.of(context)!;
     final user = FirebaseAuth.instance.currentUser;
@@ -558,15 +551,15 @@ class _HomePageState extends State<HomePage> {
         return;
       }
 
-      // 上传头像
+      // 保存头像到本地
       final File file = File(imageFile.path);
-      await _avatarService.uploadAvatar(file, user);
+      final String localPath = await _avatarService.uploadAvatar(file, user);
 
-      // 重置状态
+      // 重置状态并更新本地路径
       if (mounted) {
         setState(() {
-          _avatarLoadFailed = false;
           _isUploadingAvatar = false;
+          _localAvatarPath = localPath;
         });
 
         scaffoldMessenger.showSnackBar(

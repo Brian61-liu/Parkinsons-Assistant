@@ -1,13 +1,14 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+import 'package:shared_preferences/shared_preferences.dart';
 
-/// 头像服务类，处理头像的选择和上传
+/// 头像服务类，处理头像的选择和本地存储
 class AvatarService {
   final ImagePicker _imagePicker = ImagePicker();
-  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   /// 选择图片（从相册或拍照）
   Future<XFile?> pickImage({ImageSource source = ImageSource.gallery}) async {
@@ -24,57 +25,91 @@ class AvatarService {
     }
   }
 
-  /// 上传头像到 Firebase Storage 并更新用户信息
+  /// 保存头像到本地存储
   Future<String> uploadAvatar(File imageFile, User user) async {
     try {
-      // 生成唯一的文件名
-      final String fileName = 'avatars/${user.uid}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      debugPrint('开始保存头像到本地，用户ID: ${user.uid}');
       
-      // 创建存储引用
-      final Reference ref = _storage.ref().child(fileName);
+      // 检查文件是否存在
+      if (!await imageFile.exists()) {
+        throw Exception('图片文件不存在: ${imageFile.path}');
+      }
+      debugPrint('图片文件存在，大小: ${await imageFile.length()} 字节');
       
-      // 上传文件
-      final UploadTask uploadTask = ref.putFile(
-        imageFile,
-        SettableMetadata(
-          contentType: 'image/jpeg',
-          cacheControl: 'public, max-age=31536000',
-        ),
-      );
-
-      // 等待上传完成
-      final TaskSnapshot snapshot = await uploadTask;
+      // 获取应用文档目录
+      final Directory appDocDir = await getApplicationDocumentsDirectory();
+      final String avatarsDir = path.join(appDocDir.path, 'avatars');
       
-      // 获取下载 URL
-      final String downloadUrl = await snapshot.ref.getDownloadURL();
+      // 创建 avatars 目录（如果不存在）
+      final Directory dir = Directory(avatarsDir);
+      if (!await dir.exists()) {
+        await dir.create(recursive: true);
+        debugPrint('创建头像目录: $avatarsDir');
+      }
       
-      // 更新用户的 photoURL
-      await user.updatePhotoURL(downloadUrl);
-      await user.reload();
+      // 删除旧头像（如果存在）
+      await _deleteOldAvatar(user.uid);
       
-      return downloadUrl;
-    } catch (e) {
-      throw Exception('上传头像失败: $e');
+      // 生成新的文件名
+      final String fileName = '${user.uid}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final String localPath = path.join(avatarsDir, fileName);
+      
+      // 复制文件到本地目录
+      debugPrint('复制头像文件到: $localPath');
+      final File savedFile = await imageFile.copy(localPath);
+      debugPrint('头像保存成功: ${savedFile.path}');
+      
+      // 保存头像路径到 SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('avatar_path_${user.uid}', localPath);
+      debugPrint('头像路径已保存到 SharedPreferences');
+      
+      return localPath;
+    } catch (e, stackTrace) {
+      debugPrint('保存头像失败: $e');
+      debugPrint('错误堆栈: $stackTrace');
+      throw Exception('保存头像失败: $e');
     }
   }
-
-  /// 删除旧的头像（可选，用于清理存储空间）
-  Future<void> deleteOldAvatar(String? photoURL) async {
-    if (photoURL == null || photoURL.isEmpty) return;
-    
+  
+  /// 获取本地头像路径
+  Future<String?> getLocalAvatarPath(String userId) async {
     try {
-      // 从 URL 中提取路径
-      final Uri uri = Uri.parse(photoURL);
-      final String path = uri.pathSegments.last;
+      final prefs = await SharedPreferences.getInstance();
+      final String? path = prefs.getString('avatar_path_$userId');
+      if (path != null) {
+        final File file = File(path);
+        if (await file.exists()) {
+          return path;
+        } else {
+          // 文件不存在，清除记录
+          await prefs.remove('avatar_path_$userId');
+        }
+      }
+      return null;
+    } catch (e) {
+      debugPrint('获取本地头像路径失败: $e');
+      return null;
+    }
+  }
+  
+  /// 删除旧头像
+  Future<void> _deleteOldAvatar(String userId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final String? oldPath = prefs.getString('avatar_path_$userId');
       
-      // 如果路径包含 'avatars/'，则尝试删除
-      if (photoURL.contains('avatars/')) {
-        final Reference ref = _storage.ref().child('avatars/$path');
-        await ref.delete();
+      if (oldPath != null) {
+        final File oldFile = File(oldPath);
+        if (await oldFile.exists()) {
+          await oldFile.delete();
+          debugPrint('已删除旧头像: $oldPath');
+        }
+        await prefs.remove('avatar_path_$userId');
       }
     } catch (e) {
-      // 忽略删除错误，因为可能文件不存在或已被删除
-      debugPrint('删除旧头像失败: $e');
+      debugPrint('删除旧头像失败（已忽略）: $e');
     }
   }
+
 }

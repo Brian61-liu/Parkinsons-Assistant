@@ -42,7 +42,6 @@ dependencies:
   firebase_auth: ^5.3.4
   google_sign_in: ^6.2.2
   cloud_firestore: ^5.6.0  # 云端数据存储
-  firebase_storage: ^12.3.4  # Firebase 存储（用于头像上传）
 
   # 传感器相关
   sensors_plus: ^4.0.0  # 加速度计、陀螺仪
