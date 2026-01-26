@@ -393,6 +393,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get voiceTrainingReady => '準備完了';
 
   @override
+  String get voiceTrainingCalibrating => '環境ノイズを校正中...';
+
+  @override
   String get voiceTrainingTooQuiet => 'もっと大きな声で！';
 
   @override

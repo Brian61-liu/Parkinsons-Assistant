@@ -171,6 +171,7 @@
   "voiceTrainingMainInstruction": "긴 소리를 지속적으로 내주세요 —— 아 ——",
   "voiceTrainingInstruction": "LSVT LOUD 치료 원칙에 따라 큰 소리로 말하세요. 원의 크기는 볼륨에 따라 실시간으로 변경됩니다. 75-85 dB에 도달하면 원이 녹색으로 변합니다.",
   "voiceTrainingReady": "시작 준비 완료",
+  "voiceTrainingCalibrating": "환경 소음 보정 중...",
   "voiceTrainingTooQuiet": "더 크게 말하세요!",
   "voiceTrainingKeepGoing": "좋습니다, 계속하세요!",
   "voiceTrainingExcellent": "훌륭합니다! 계속하세요!",

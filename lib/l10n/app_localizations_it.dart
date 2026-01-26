@@ -407,6 +407,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get voiceTrainingReady => 'Pronto per iniziare';
 
   @override
+  String get voiceTrainingCalibrating =>
+      'Calibrazione del rumore ambientale...';
+
+  @override
   String get voiceTrainingTooQuiet => 'Parla più forte!';
 
   @override

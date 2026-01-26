@@ -843,6 +843,12 @@ abstract class AppLocalizations {
   /// **'Ready to start'**
   String get voiceTrainingReady;
 
+  /// No description provided for @voiceTrainingCalibrating.
+  ///
+  /// In en, this message translates to:
+  /// **'Calibrating environmental noise...'**
+  String get voiceTrainingCalibrating;
+
   /// Feedback when volume is too low (< 65 dB)
   ///
   /// In en, this message translates to:

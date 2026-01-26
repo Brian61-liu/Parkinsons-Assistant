@@ -347,6 +347,7 @@
     "description": "Voice training instruction text"
   },
   "voiceTrainingReady": "Ready to start",
+  "voiceTrainingCalibrating": "Calibrating environmental noise...",
   "@voiceTrainingReady": {
     "description": "Ready state text for voice training"
   },

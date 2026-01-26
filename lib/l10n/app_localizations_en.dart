@@ -407,6 +407,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voiceTrainingReady => 'Ready to start';
 
   @override
+  String get voiceTrainingCalibrating => 'Calibrating environmental noise...';
+
+  @override
   String get voiceTrainingTooQuiet => 'Speak louder!';
 
   @override

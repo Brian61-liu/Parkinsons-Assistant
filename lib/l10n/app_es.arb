@@ -171,6 +171,7 @@
   "voiceTrainingMainInstruction": "Por favor, sostenga un sonido largo — Ah —",
   "voiceTrainingInstruction": "Basado en los principios de la terapia LSVT LOUD, por favor hable en voz alta. El tamaño del círculo cambiará en tiempo real según su volumen. Cuando alcance 75-85 dB, el círculo se volverá verde.",
   "voiceTrainingReady": "Listo para comenzar",
+  "voiceTrainingCalibrating": "Calibrando el ruido ambiental...",
   "voiceTrainingTooQuiet": "¡Hable más fuerte!",
   "voiceTrainingKeepGoing": "¡Bien, siga esforzándose!",
   "voiceTrainingExcellent": "¡Excelente! ¡Manténgalo!",

@@ -408,6 +408,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get voiceTrainingReady => 'Bereit zum Starten';
 
   @override
+  String get voiceTrainingCalibrating =>
+      'Umgebungsgeräusche werden kalibriert...';
+
+  @override
   String get voiceTrainingTooQuiet => 'Lauter sprechen!';
 
   @override

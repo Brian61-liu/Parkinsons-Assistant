@@ -171,6 +171,7 @@
   "voiceTrainingMainInstruction": "Bitte halten Sie einen langen Ton — Ah —",
   "voiceTrainingInstruction": "Basierend auf den Prinzipien der LSVT LOUD-Therapie, bitte laut sprechen. Die Größe des Kreises ändert sich in Echtzeit basierend auf Ihrer Lautstärke. Wenn er 75-85 dB erreicht, wird der Kreis grün.",
   "voiceTrainingReady": "Bereit zum Starten",
+  "voiceTrainingCalibrating": "Umgebungsgeräusche werden kalibriert...",
   "voiceTrainingTooQuiet": "Lauter sprechen!",
   "voiceTrainingKeepGoing": "Gut, weiter so!",
   "voiceTrainingExcellent": "Ausgezeichnet! Weiter so!",

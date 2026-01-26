@@ -393,6 +393,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get voiceTrainingReady => '시작 준비 완료';
 
   @override
+  String get voiceTrainingCalibrating => '환경 소음 보정 중...';
+
+  @override
   String get voiceTrainingTooQuiet => '더 크게 말하세요!';
 
   @override

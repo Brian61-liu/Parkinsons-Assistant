@@ -171,6 +171,7 @@
   "voiceTrainingMainInstruction": "請持續發長音 —— 啊 ——",
   "voiceTrainingInstruction": "基於 LSVT LOUD 療法理念，請大聲說話。圓的大小會根據您的音量即時變化，達到 75-85 dB 時圓會變綠。",
   "voiceTrainingReady": "準備開始",
+  "voiceTrainingCalibrating": "正在校準環境噪音...",
   "voiceTrainingTooQuiet": "再大聲一點！",
   "voiceTrainingKeepGoing": "很好，再加把勁！",
   "voiceTrainingExcellent": "太棒了！保持住！",

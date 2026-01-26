@@ -171,6 +171,7 @@
   "voiceTrainingMainInstruction": "يرجى الاستمرار في إصدار صوت طويل — آه —",
   "voiceTrainingInstruction": "بناءً على مبادئ علاج LSVT LOUD، يرجى التحدث بصوت عالٍ. سيتغير حجم الدائرة في الوقت الفعلي بناءً على مستوى الصوت. عندما يصل إلى 75-85 ديسيبل، ستصبح الدائرة خضراء.",
   "voiceTrainingReady": "جاهز للبدء",
+  "voiceTrainingCalibrating": "معايرة الضوضاء البيئية...",
   "voiceTrainingTooQuiet": "تحدث بصوت أعلى!",
   "voiceTrainingKeepGoing": "جيد، استمر!",
   "voiceTrainingExcellent": "رائع! استمر!",

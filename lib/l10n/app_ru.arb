@@ -171,6 +171,7 @@
   "voiceTrainingMainInstruction": "Пожалуйста, удерживайте длинный звук — Ах —",
   "voiceTrainingInstruction": "Основываясь на принципах терапии LSVT LOUD, пожалуйста, говорите громко. Размер круга будет изменяться в реальном времени в зависимости от вашей громкости. Когда он достигнет 75-85 дБ, круг станет зелёным.",
   "voiceTrainingReady": "Готов к началу",
+  "voiceTrainingCalibrating": "Калибровка фонового шума...",
   "voiceTrainingTooQuiet": "Говорите громче!",
   "voiceTrainingKeepGoing": "Хорошо, продолжайте!",
   "voiceTrainingExcellent": "Отлично! Продолжайте!",

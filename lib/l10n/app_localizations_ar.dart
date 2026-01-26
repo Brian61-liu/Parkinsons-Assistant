@@ -400,6 +400,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get voiceTrainingReady => 'جاهز للبدء';
 
   @override
+  String get voiceTrainingCalibrating => 'معايرة الضوضاء البيئية...';
+
+  @override
   String get voiceTrainingTooQuiet => 'تحدث بصوت أعلى!';
 
   @override

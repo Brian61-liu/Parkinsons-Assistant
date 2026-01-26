@@ -171,6 +171,7 @@
   "voiceTrainingMainInstruction": "長い音を続けて発音してください —— あ ——",
   "voiceTrainingInstruction": "LSVT LOUD療法の原則に基づき、大きな声で話してください。円のサイズは音量に応じてリアルタイムで変化します。75-85 dBに達すると、円が緑色になります。",
   "voiceTrainingReady": "準備完了",
+  "voiceTrainingCalibrating": "環境ノイズを校正中...",
   "voiceTrainingTooQuiet": "もっと大きな声で！",
   "voiceTrainingKeepGoing": "いいですね、続けてください！",
   "voiceTrainingExcellent": "素晴らしい！その調子！",

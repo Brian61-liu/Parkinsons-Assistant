@@ -706,8 +706,15 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  CupertinoPageRoute(
-                    builder: (context) => const TremorTestPage(),
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => const TremorTestPage(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 200),
                   ),
                 );
               },
@@ -723,8 +730,15 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          CupertinoPageRoute(
-                            builder: (context) => const VoiceTrainingPage(),
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => const VoiceTrainingPage(),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                            transitionDuration: const Duration(milliseconds: 200),
                           ),
                         );
                       },

@@ -406,6 +406,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get voiceTrainingReady => 'Готов к началу';
 
   @override
+  String get voiceTrainingCalibrating => 'Калибровка фонового шума...';
+
+  @override
   String get voiceTrainingTooQuiet => 'Говорите громче!';
 
   @override

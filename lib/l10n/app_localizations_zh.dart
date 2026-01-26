@@ -391,6 +391,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get voiceTrainingReady => '准备开始';
 
   @override
+  String get voiceTrainingCalibrating => '正在校准环境噪音...';
+
+  @override
   String get voiceTrainingTooQuiet => '再大声一点！';
 
   @override
@@ -816,6 +819,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get voiceTrainingReady => '準備開始';
+
+  @override
+  String get voiceTrainingCalibrating => '正在校準環境噪音...';
 
   @override
   String get voiceTrainingTooQuiet => '再大聲一點！';
