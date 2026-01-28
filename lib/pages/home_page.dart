@@ -14,8 +14,13 @@ import '../services/avatar_service.dart';
 // 主页面
 class HomePage extends StatefulWidget {
   final Function(Locale) onLanguageChange;
+  final Function(bool)? onGuestModeChanged;
 
-  const HomePage({super.key, required this.onLanguageChange});
+  const HomePage({
+    super.key,
+    required this.onLanguageChange,
+    this.onGuestModeChanged,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -133,14 +138,23 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _performLogout() async {
     try {
-      debugPrint('开始执行登出...');
-      await _authService.signOut();
-      debugPrint('登出成功');
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        // 已登录用户，执行登出
+        debugPrint('开始执行登出...');
+        await _authService.signOut();
+        debugPrint('登出成功');
+      } else {
+        // 游客模式，退出游客模式
+        debugPrint('退出游客模式...');
+        widget.onGuestModeChanged?.call(false);
+        debugPrint('已退出游客模式');
+      }
     } catch (e) {
-      debugPrint('登出失败: $e');
+      debugPrint('退出失败: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('退出登录失败: $e')),
+          SnackBar(content: Text('退出失败: $e')),
         );
       }
     }
@@ -148,12 +162,14 @@ class _HomePageState extends State<HomePage> {
 
   void _showLogoutDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final user = FirebaseAuth.instance.currentUser;
+    final isGuest = user == null;
     
     showCupertinoDialog(
       context: context,
       builder: (dialogContext) => CupertinoAlertDialog(
-        title: Text(l10n.logout),
-        content: Text(l10n.logoutConfirm),
+        title: Text(isGuest ? '退出游客模式' : l10n.logout),
+        content: Text(isGuest ? '确定要退出游客模式吗？退出后需要重新登录才能使用。' : l10n.logoutConfirm),
         actions: [
           CupertinoDialogAction(
             onPressed: () {
@@ -247,11 +263,11 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             const Divider(height: 1),
-            // 退出登录
+            // 退出登录/退出游客模式
             _buildSettingsItem(
               icon: CupertinoIcons.square_arrow_left,
               color: Colors.red,
-              title: l10n.logout,
+              title: FirebaseAuth.instance.currentUser == null ? '退出游客模式' : l10n.logout,
               onTap: () {
                 Navigator.pop(ctx);
                 _showLogoutDialog(context);

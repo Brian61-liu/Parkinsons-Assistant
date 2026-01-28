@@ -433,6 +433,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get openSettings => '打开设置';
+
+  @override
+  String get continueAsGuest => '游客登录';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -863,4 +866,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get openSettings => '打開設定';
+
+  @override
+  String get continueAsGuest => '遊客登入';
 }

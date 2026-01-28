@@ -197,5 +197,6 @@
   "microphonePermissionDenied": "Permiso de micrófono denegado",
   "microphonePermissionDeniedMessage": "El permiso del micrófono ha sido denegado permanentemente. Por favor, habilite el permiso del micrófono en la configuración del sistema para usar el entrenamiento de voz.",
   "microphoneError": "Error del micrófono",
-  "openSettings": "Abrir Configuración"
+  "openSettings": "Abrir Configuración",
+  "continueAsGuest": "Continuar como invitado"
 }

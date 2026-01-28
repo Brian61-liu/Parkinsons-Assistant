@@ -442,4 +442,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get openSettings => 'فتح الإعدادات';
+
+  @override
+  String get continueAsGuest => 'المتابعة كضيف';
 }

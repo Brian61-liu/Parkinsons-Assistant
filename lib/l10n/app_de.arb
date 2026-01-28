@@ -197,5 +197,6 @@
   "microphonePermissionDenied": "Mikrofonberechtigung verweigert",
   "microphonePermissionDeniedMessage": "Die Mikrofonberechtigung wurde dauerhaft verweigert. Bitte aktivieren Sie die Mikrofonberechtigung in den Systemeinstellungen, um das Stimmtraining zu verwenden.",
   "microphoneError": "Mikrofonfehler",
-  "openSettings": "Einstellungen Öffnen"
+  "openSettings": "Einstellungen Öffnen",
+  "continueAsGuest": "Als Gast fortfahren"
 }

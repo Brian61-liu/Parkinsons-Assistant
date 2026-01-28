@@ -197,5 +197,6 @@
   "microphonePermissionDenied": "麥克風權限被拒絕",
   "microphonePermissionDeniedMessage": "麥克風權限已被永久拒絕。請在系統設定中手動開啟麥克風權限以使用語音訓練功能。",
   "microphoneError": "麥克風錯誤",
-  "openSettings": "打開設定"
+  "openSettings": "打開設定",
+  "continueAsGuest": "遊客登入"
 }

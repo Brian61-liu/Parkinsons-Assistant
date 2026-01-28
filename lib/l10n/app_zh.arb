@@ -175,5 +175,9 @@
   "microphonePermissionDenied": "麦克风权限被拒绝",
   "microphonePermissionDeniedMessage": "麦克风权限已被永久拒绝。请在系统设置中手动开启麦克风权限以使用语音训练功能。",
   "microphoneError": "麦克风错误",
-  "openSettings": "打开设置"
+  "openSettings": "打开设置",
+  "continueAsGuest": "游客登录",
+  "@continueAsGuest": {
+    "description": "Guest login button text"
+  }
 }

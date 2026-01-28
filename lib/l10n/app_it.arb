@@ -197,5 +197,6 @@
   "microphonePermissionDenied": "Autorizzazione microfono negata",
   "microphonePermissionDeniedMessage": "L'autorizzazione del microfono è stata negata permanentemente. Si prega di abilitare l'autorizzazione del microfono nelle impostazioni di sistema per utilizzare l'allenamento vocale.",
   "microphoneError": "Errore microfono",
-  "openSettings": "Apri Impostazioni"
+  "openSettings": "Apri Impostazioni",
+  "continueAsGuest": "Continua come ospite"
 }

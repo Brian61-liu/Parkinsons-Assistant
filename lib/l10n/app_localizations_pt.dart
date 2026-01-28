@@ -450,4 +450,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get openSettings => 'Abrir Configurações';
+
+  @override
+  String get continueAsGuest => 'Continuar como convidado';
 }

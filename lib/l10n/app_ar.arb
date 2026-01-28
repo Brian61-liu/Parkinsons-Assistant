@@ -197,5 +197,6 @@
   "microphonePermissionDenied": "تم رفض إذن الميكروفون",
   "microphonePermissionDeniedMessage": "تم رفض إذن الميكروفون بشكل دائم. يرجى تمكين إذن الميكروفون في إعدادات النظام لاستخدام تدريب الصوت.",
   "microphoneError": "خطأ في الميكروفون",
-  "openSettings": "فتح الإعدادات"
+  "openSettings": "فتح الإعدادات",
+  "continueAsGuest": "المتابعة كضيف"
 }

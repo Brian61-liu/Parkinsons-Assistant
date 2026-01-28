@@ -7,8 +7,13 @@ import 'privacy_policy_page.dart';
 
 class LoginPage extends StatefulWidget {
   final Function(Locale) onLanguageChange;
+  final VoidCallback? onGuestLogin;
 
-  const LoginPage({super.key, required this.onLanguageChange});
+  const LoginPage({
+    super.key,
+    required this.onLanguageChange,
+    this.onGuestLogin,
+  });
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -363,6 +368,35 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                       ),
                       
                       const SizedBox(height: 24),
+                      
+                      // 游客登录按钮
+                      if (widget.onGuestLogin != null)
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: OutlinedButton(
+                            onPressed: widget.onGuestLogin,
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: const Color(0xFF64748B),
+                              side: BorderSide(
+                                color: const Color(0xFF64748B).withValues(alpha: 0.3),
+                                width: 1.5,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: Text(
+                              l10n.continueAsGuest,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      
+                      if (widget.onGuestLogin != null) const SizedBox(height: 16),
                       
                       // 隐私政策
                       TextButton.icon(

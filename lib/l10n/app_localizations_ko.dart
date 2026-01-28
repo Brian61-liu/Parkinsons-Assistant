@@ -435,4 +435,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get openSettings => '설정 열기';
+
+  @override
+  String get continueAsGuest => '게스트로 계속';
 }

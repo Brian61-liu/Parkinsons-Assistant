@@ -448,4 +448,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get openSettings => 'Открыть Настройки';
+
+  @override
+  String get continueAsGuest => 'Продолжить как гость';
 }

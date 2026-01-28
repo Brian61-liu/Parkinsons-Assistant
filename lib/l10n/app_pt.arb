@@ -197,5 +197,6 @@
   "microphonePermissionDenied": "Permissão de microfone negada",
   "microphonePermissionDeniedMessage": "A permissão do microfone foi negada permanentemente. Por favor, habilite a permissão do microfone nas configurações do sistema para usar o treinamento de voz.",
   "microphoneError": "Erro do microfone",
-  "openSettings": "Abrir Configurações"
+  "openSettings": "Abrir Configurações",
+  "continueAsGuest": "Continuar como convidado"
 }

@@ -451,4 +451,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get openSettings => 'Ouvrir les Paramètres';
+
+  @override
+  String get continueAsGuest => 'Continuer en tant qu\'invité';
 }

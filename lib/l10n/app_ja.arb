@@ -197,5 +197,6 @@
   "microphonePermissionDenied": "マイクの許可が拒否されました",
   "microphonePermissionDeniedMessage": "マイクの許可が永続的に拒否されました。音声訓練を使用するには、システム設定でマイクの許可を有効にしてください。",
   "microphoneError": "マイクエラー",
-  "openSettings": "設定を開く"
+  "openSettings": "設定を開く",
+  "continueAsGuest": "ゲストとして続ける"
 }

@@ -197,5 +197,6 @@
   "microphonePermissionDenied": "Autorisation du microphone refusée",
   "microphonePermissionDeniedMessage": "L'autorisation du microphone a été refusée de façon permanente. Veuillez activer l'autorisation du microphone dans les paramètres système pour utiliser l'entraînement vocal.",
   "microphoneError": "Erreur du microphone",
-  "openSettings": "Ouvrir les Paramètres"
+  "openSettings": "Ouvrir les Paramètres",
+  "continueAsGuest": "Continuer en tant qu'invité"
 }

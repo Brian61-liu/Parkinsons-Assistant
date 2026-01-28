@@ -116,25 +116,93 @@ class _KineoAppState extends State<KineoApp> {
           child: child!,
         );
       },
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          // 正在检查登录状态
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
+      home: _AuthStateChecker(onLanguageChange: changeLanguage),
+    );
+  }
+}
 
-          // 已登录 -> 显示主页
-          if (snapshot.hasData) {
-            return HomePage(onLanguageChange: changeLanguage);
-          }
+/// 认证状态检查器，支持游客模式
+class _AuthStateChecker extends StatefulWidget {
+  final Function(Locale) onLanguageChange;
 
-          // 未登录 -> 显示登录页
-          return LoginPage(onLanguageChange: changeLanguage);
-        },
-      ),
+  const _AuthStateChecker({required this.onLanguageChange});
+
+  @override
+  State<_AuthStateChecker> createState() => _AuthStateCheckerState();
+}
+
+class _AuthStateCheckerState extends State<_AuthStateChecker> {
+  bool _isGuestMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkGuestMode();
+  }
+
+  Future<void> _checkGuestMode() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final isGuest = prefs.getBool('is_guest_mode') ?? false;
+      if (mounted) {
+        setState(() {
+          _isGuestMode = isGuest;
+        });
+      }
+    } catch (e) {
+      debugPrint('Failed to check guest mode: $e');
+    }
+  }
+
+  void _setGuestMode(bool isGuest) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('is_guest_mode', isGuest);
+      if (mounted) {
+        setState(() {
+          _isGuestMode = isGuest;
+        });
+      }
+    } catch (e) {
+      debugPrint('Failed to set guest mode: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 如果是游客模式，直接显示主页
+    if (_isGuestMode) {
+      return HomePage(
+        onLanguageChange: widget.onLanguageChange,
+        onGuestModeChanged: _setGuestMode,
+      );
+    }
+
+    // 否则检查 Firebase 认证状态
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        // 正在检查登录状态
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        // 已登录 -> 显示主页
+        if (snapshot.hasData) {
+          return HomePage(
+            onLanguageChange: widget.onLanguageChange,
+            onGuestModeChanged: _setGuestMode,
+          );
+        }
+
+        // 未登录 -> 显示登录页
+        return LoginPage(
+          onLanguageChange: widget.onLanguageChange,
+          onGuestLogin: () => _setGuestMode(true),
+        );
+      },
     );
   }
 }
