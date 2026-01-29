@@ -436,6 +436,28 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get continueAsGuest => '游客登录';
+
+  @override
+  String get movementTraining => '肢体动作训练';
+
+  @override
+  String get movementTrainingInstruction => '请将双手举高，保持动作标准';
+
+  @override
+  String get armsRaised => '双手已举高';
+
+  @override
+  String get raiseArms => '请举高双手';
+
+  @override
+  String get successCount => '成功次数';
+
+  @override
+  String get cameraPermissionRequired => '需要摄像头权限';
+
+  @override
+  String get cameraPermissionDeniedMessage =>
+      '摄像头权限已被拒绝。请在系统设置中手动开启摄像头权限以使用肢体动作训练功能。';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

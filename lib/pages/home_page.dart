@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import '../l10n/app_localizations.dart';
 import '../pages/tremor_test_page.dart';
 import '../pages/voice_training_page.dart';
+import '../pages/movement_training_page.dart';
 import '../pages/data_management_page.dart';
 import '../pages/privacy_policy_page.dart';
 import '../services/auth_service.dart';
@@ -748,6 +749,30 @@ class _HomePageState extends State<HomePage> {
                           context,
                           PageRouteBuilder(
                             pageBuilder: (context, animation, secondaryAnimation) => const VoiceTrainingPage(),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                            transitionDuration: const Duration(milliseconds: 200),
+                          ),
+                        );
+                      },
+                    ),
+                    
+                    const SizedBox(height: 16),
+                    
+                    // 肢体动作训练按钮
+                    _buildFeatureButton(
+                      icon: CupertinoIcons.hand_raised_fill,
+                      title: l10n.movementTraining,
+                      color: const Color(0xFF8B5CF6),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => const MovementTrainingPage(),
                             transitionsBuilder: (context, animation, secondaryAnimation, child) {
                               return FadeTransition(
                                 opacity: animation,

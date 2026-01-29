@@ -438,4 +438,27 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get continueAsGuest => '게스트로 계속';
+
+  @override
+  String get movementTraining => 'Movement Training';
+
+  @override
+  String get movementTrainingInstruction =>
+      'Please raise both arms and maintain proper posture';
+
+  @override
+  String get armsRaised => 'Arms Raised';
+
+  @override
+  String get raiseArms => 'Please Raise Arms';
+
+  @override
+  String get successCount => 'Success Count';
+
+  @override
+  String get cameraPermissionRequired => 'Camera Permission Required';
+
+  @override
+  String get cameraPermissionDeniedMessage =>
+      'Camera permission has been denied. Please enable camera permission in system settings to use movement training.';
 }

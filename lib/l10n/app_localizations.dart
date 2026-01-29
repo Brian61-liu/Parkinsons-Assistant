@@ -926,6 +926,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue as Guest'**
   String get continueAsGuest;
+
+  /// Movement training button title
+  ///
+  /// In en, this message translates to:
+  /// **'Movement Training'**
+  String get movementTraining;
+
+  /// Instruction text for movement training
+  ///
+  /// In en, this message translates to:
+  /// **'Please raise both arms and maintain proper posture'**
+  String get movementTrainingInstruction;
+
+  /// Status when arms are raised
+  ///
+  /// In en, this message translates to:
+  /// **'Arms Raised'**
+  String get armsRaised;
+
+  /// Prompt to raise arms
+  ///
+  /// In en, this message translates to:
+  /// **'Please Raise Arms'**
+  String get raiseArms;
+
+  /// Success count label
+  ///
+  /// In en, this message translates to:
+  /// **'Success Count'**
+  String get successCount;
+
+  /// Camera permission required message
+  ///
+  /// In en, this message translates to:
+  /// **'Camera Permission Required'**
+  String get cameraPermissionRequired;
+
+  /// Camera permission denied message
+  ///
+  /// In en, this message translates to:
+  /// **'Camera permission has been denied. Please enable camera permission in system settings to use movement training.'**
+  String get cameraPermissionDeniedMessage;
 }
 
 class _AppLocalizationsDelegate

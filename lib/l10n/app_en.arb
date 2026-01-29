@@ -412,5 +412,33 @@
   "continueAsGuest": "Continue as Guest",
   "@continueAsGuest": {
     "description": "Guest login button text"
+  },
+  "movementTraining": "Movement Training",
+  "@movementTraining": {
+    "description": "Movement training button title"
+  },
+  "movementTrainingInstruction": "Please raise both arms and maintain proper posture",
+  "@movementTrainingInstruction": {
+    "description": "Instruction text for movement training"
+  },
+  "armsRaised": "Arms Raised",
+  "@armsRaised": {
+    "description": "Status when arms are raised"
+  },
+  "raiseArms": "Please Raise Arms",
+  "@raiseArms": {
+    "description": "Prompt to raise arms"
+  },
+  "successCount": "Success Count",
+  "@successCount": {
+    "description": "Success count label"
+  },
+  "cameraPermissionRequired": "Camera Permission Required",
+  "@cameraPermissionRequired": {
+    "description": "Camera permission required message"
+  },
+  "cameraPermissionDeniedMessage": "Camera permission has been denied. Please enable camera permission in system settings to use movement training.",
+  "@cameraPermissionDeniedMessage": {
+    "description": "Camera permission denied message"
   }
 }

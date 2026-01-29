@@ -179,5 +179,33 @@
   "continueAsGuest": "游客登录",
   "@continueAsGuest": {
     "description": "Guest login button text"
+  },
+  "movementTraining": "肢体动作训练",
+  "@movementTraining": {
+    "description": "Movement training button title"
+  },
+  "movementTrainingInstruction": "请将双手举高，保持动作标准",
+  "@movementTrainingInstruction": {
+    "description": "Instruction text for movement training"
+  },
+  "armsRaised": "双手已举高",
+  "@armsRaised": {
+    "description": "Status when arms are raised"
+  },
+  "raiseArms": "请举高双手",
+  "@raiseArms": {
+    "description": "Prompt to raise arms"
+  },
+  "successCount": "成功次数",
+  "@successCount": {
+    "description": "Success count label"
+  },
+  "cameraPermissionRequired": "需要摄像头权限",
+  "@cameraPermissionRequired": {
+    "description": "Camera permission required message"
+  },
+  "cameraPermissionDeniedMessage": "摄像头权限已被拒绝。请在系统设置中手动开启摄像头权限以使用肢体动作训练功能。",
+  "@cameraPermissionDeniedMessage": {
+    "description": "Camera permission denied message"
   }
 }
