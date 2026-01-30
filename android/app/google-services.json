@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:57479493999:android:4c70d1790771b9f5f4909a",
         "android_client_info": {
-          "package_name": "com.kineo.app"
+          "package_name": "com.brian.kineo"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "57479493999-7knki5sju34u35qs771dqaomougkhgm9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.kineo.app",
+            "package_name": "com.brian.kineo",
             "certificate_hash": "369f1c6737656e1d22b4729492c6ec406e853fe0"
           }
         },

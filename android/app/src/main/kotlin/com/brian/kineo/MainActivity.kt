@@ -1,4 +1,4 @@
-package com.kineo.app
+package com.brian.kineo
 
 import io.flutter.embedding.android.FlutterActivity
 
