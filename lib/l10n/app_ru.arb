@@ -230,5 +230,57 @@
   "cameraPermissionDeniedMessage": "Разрешение камеры было отклонено. Пожалуйста, включите разрешение камеры в настройках системы для использования тренировки движений.",
   "@cameraPermissionDeniedMessage": {
     "description": "Camera permission denied message"
+  },
+  "setGoal": "Установить Цель",
+  "@setGoal": {
+    "description": "Set goal dialog title"
+  },
+  "reps": "повторений",
+  "@reps": {
+    "description": "Repetitions unit"
+  },
+  "greatJob": "Отличная Работа!",
+  "@greatJob": {
+    "description": "Success message"
+  },
+  "goalCompleted": "Вы достигли своей цели!",
+  "@goalCompleted": {
+    "description": "Goal completed message"
+  },
+  "playAgain": "Играть Снова",
+  "@playAgain": {
+    "description": "Play again button text"
+  },
+  "trainingHistory": "История Тренировок",
+  "@trainingHistory": {
+    "description": "Training history page title"
+  },
+  "noTrainingRecords": "Нет Записей Тренировок",
+  "@noTrainingRecords": {
+    "description": "No training records message"
+  },
+  "noTrainingRecordsHint": "Ваши записи тренировок появятся здесь после завершения сессии",
+  "@noTrainingRecordsHint": {
+    "description": "No training records hint"
+  },
+  "trainingDetails": "Детали Тренировки",
+  "@trainingDetails": {
+    "description": "Training details dialog title"
+  },
+  "goalStatus": "Статус Цели",
+  "@goalStatus": {
+    "description": "Goal status label"
+  },
+  "goalReached": "Завершено",
+  "@goalReached": {
+    "description": "Goal reached status"
+  },
+  "goalNotReached": "Не Завершено",
+  "@goalNotReached": {
+    "description": "Goal not reached status"
+  },
+  "minutes": "мин",
+  "@minutes": {
+    "description": "Minutes unit"
   }
 }

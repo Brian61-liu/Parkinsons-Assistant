@@ -230,5 +230,57 @@
   "cameraPermissionDeniedMessage": "تم رفض إذن الكاميرا. يرجى تمكين إذن الكاميرا في إعدادات النظام لاستخدام تدريب الحركة.",
   "@cameraPermissionDeniedMessage": {
     "description": "Camera permission denied message"
+  },
+  "setGoal": "تعيين الهدف",
+  "@setGoal": {
+    "description": "Set goal dialog title"
+  },
+  "reps": "مرة",
+  "@reps": {
+    "description": "Repetitions unit"
+  },
+  "greatJob": "عمل رائع!",
+  "@greatJob": {
+    "description": "Success message"
+  },
+  "goalCompleted": "لقد أكملت هدفك!",
+  "@goalCompleted": {
+    "description": "Goal completed message"
+  },
+  "playAgain": "العب مرة أخرى",
+  "@playAgain": {
+    "description": "Play again button text"
+  },
+  "trainingHistory": "تاريخ التدريب",
+  "@trainingHistory": {
+    "description": "Training history page title"
+  },
+  "noTrainingRecords": "لا توجد سجلات تدريب",
+  "@noTrainingRecords": {
+    "description": "No training records message"
+  },
+  "noTrainingRecordsHint": "ستظهر سجلات التدريب الخاصة بك هنا بعد إكمال جلسة",
+  "@noTrainingRecordsHint": {
+    "description": "No training records hint"
+  },
+  "trainingDetails": "تفاصيل التدريب",
+  "@trainingDetails": {
+    "description": "Training details dialog title"
+  },
+  "goalStatus": "حالة الهدف",
+  "@goalStatus": {
+    "description": "Goal status label"
+  },
+  "goalReached": "مكتمل",
+  "@goalReached": {
+    "description": "Goal reached status"
+  },
+  "goalNotReached": "غير مكتمل",
+  "@goalNotReached": {
+    "description": "Goal not reached status"
+  },
+  "minutes": "دقيقة",
+  "@minutes": {
+    "description": "Minutes unit"
   }
 }

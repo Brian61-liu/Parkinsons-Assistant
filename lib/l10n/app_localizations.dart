@@ -974,6 +974,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Camera permission has been denied. Please enable camera permission in system settings to use movement training.'**
   String get cameraPermissionDeniedMessage;
+
+  /// Set goal dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Set Goal'**
+  String get setGoal;
+
+  /// Repetitions unit
+  ///
+  /// In en, this message translates to:
+  /// **'reps'**
+  String get reps;
+
+  /// Success message
+  ///
+  /// In en, this message translates to:
+  /// **'Great Job!'**
+  String get greatJob;
+
+  /// Goal completed message
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve completed your goal!'**
+  String get goalCompleted;
+
+  /// Play again button text
+  ///
+  /// In en, this message translates to:
+  /// **'Play Again'**
+  String get playAgain;
+
+  /// Training history page title
+  ///
+  /// In en, this message translates to:
+  /// **'Training History'**
+  String get trainingHistory;
+
+  /// No training records message
+  ///
+  /// In en, this message translates to:
+  /// **'No Training Records'**
+  String get noTrainingRecords;
+
+  /// No training records hint
+  ///
+  /// In en, this message translates to:
+  /// **'Your training records will appear here after completing a session'**
+  String get noTrainingRecordsHint;
+
+  /// Training details dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Training Details'**
+  String get trainingDetails;
+
+  /// Goal status label
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Status'**
+  String get goalStatus;
+
+  /// Goal reached status
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get goalReached;
+
+  /// Goal not reached status
+  ///
+  /// In en, this message translates to:
+  /// **'Not Completed'**
+  String get goalNotReached;
+
+  /// Minutes unit
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get minutes;
 }
 
 class _AppLocalizationsDelegate

@@ -230,5 +230,57 @@
   "cameraPermissionDeniedMessage": "カメラの許可が拒否されました。動作訓練を使用するには、システム設定でカメラの許可を有効にしてください。",
   "@cameraPermissionDeniedMessage": {
     "description": "Camera permission denied message"
+  },
+  "setGoal": "目標を設定",
+  "@setGoal": {
+    "description": "Set goal dialog title"
+  },
+  "reps": "回",
+  "@reps": {
+    "description": "Repetitions unit"
+  },
+  "greatJob": "素晴らしい！",
+  "@greatJob": {
+    "description": "Success message"
+  },
+  "goalCompleted": "目標を達成しました！",
+  "@goalCompleted": {
+    "description": "Goal completed message"
+  },
+  "playAgain": "もう一度",
+  "@playAgain": {
+    "description": "Play again button text"
+  },
+  "trainingHistory": "訓練履歴",
+  "@trainingHistory": {
+    "description": "Training history page title"
+  },
+  "noTrainingRecords": "訓練記録がありません",
+  "@noTrainingRecords": {
+    "description": "No training records message"
+  },
+  "noTrainingRecordsHint": "セッションを完了すると、訓練記録がここに表示されます",
+  "@noTrainingRecordsHint": {
+    "description": "No training records hint"
+  },
+  "trainingDetails": "訓練詳細",
+  "@trainingDetails": {
+    "description": "Training details dialog title"
+  },
+  "goalStatus": "目標状態",
+  "@goalStatus": {
+    "description": "Goal status label"
+  },
+  "goalReached": "完了",
+  "@goalReached": {
+    "description": "Goal reached status"
+  },
+  "goalNotReached": "未完了",
+  "@goalNotReached": {
+    "description": "Goal not reached status"
+  },
+  "minutes": "分",
+  "@minutes": {
+    "description": "Minutes unit"
   }
 }

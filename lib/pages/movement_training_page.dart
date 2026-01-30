@@ -7,6 +7,9 @@ import 'package:camera/camera.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../l10n/app_localizations.dart';
+import '../services/database_service.dart';
+import '../models/movement_training_record.dart';
+import 'movement_training_history_page.dart';
 
 class MovementTrainingPage extends StatefulWidget {
   const MovementTrainingPage({super.key});
@@ -23,13 +26,15 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   bool _isInitialized = false;
   Pose? _currentPose;
   Size? _imageSize;
+  bool _isFrontCamera = false; // 是否使用前置摄像头
   
   // 双手举高检测相关
   bool _isArmsRaised = false;
   int _successCount = 0;
-  Timer? _detectionTimer;
+  int _targetCount = 10; // 目标次数
+  bool _isGoalReached = false; // 是否达到目标
   
-  // 动作状态：0=初始/放下, 1=举高, 2=完成（需要检测到放下才算完成）
+  // 动作状态：0=初始/放下, 1=举高
   int _actionState = 0;
   
   // 防抖机制：需要连续检测到相同状态才确认
@@ -40,12 +45,35 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   // 状态锁定：防止快速重复计数
   DateTime? _lastActionTime;
   static const Duration _actionCooldown = Duration(milliseconds: 1500); // 1.5秒冷却时间
+  
+  // 计时功能
+  Timer? _trainingTimer;
+  int _trainingDuration = 0; // 训练时长（秒）
+  DateTime? _trainingStartTime;
+  
+  // 数据库服务
+  final DatabaseService _databaseService = DatabaseService();
 
   @override
   void initState() {
     super.initState();
     _initializeCamera();
     _initializePoseDetector();
+    _startTrainingTimer();
+  }
+  
+  // 启动训练计时器
+  void _startTrainingTimer() {
+    _trainingStartTime = DateTime.now();
+    _trainingTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted && !_isGoalReached) {
+        setState(() {
+          _trainingDuration = DateTime.now().difference(_trainingStartTime!).inSeconds;
+        });
+      } else {
+        timer.cancel();
+      }
+    });
   }
 
   Future<void> _initializeCamera() async {
@@ -103,6 +131,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         setState(() {
           _hasPermission = true;
           _isInitialized = true;
+          _isFrontCamera = frontCamera?.lensDirection == CameraLensDirection.front;
         });
         _startImageStream();
       }
@@ -127,9 +156,14 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     if (_cameraController == null || !_cameraController!.value.isInitialized) {
       return;
     }
+    
+    // 如果已达到目标，不启动流
+    if (_isGoalReached) {
+      return;
+    }
 
     _cameraController!.startImageStream((CameraImage image) {
-      if (_isDetecting) return;
+      if (_isDetecting || _isGoalReached) return;
       _isDetecting = true;
 
       _processImage(image);
@@ -188,6 +222,13 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         bytesPerRow: image.planes[0].bytesPerRow,
       ),
     );
+  }
+
+  // 格式化时长显示
+  String _formatDuration(int seconds) {
+    final minutes = seconds ~/ 60;
+    final secs = seconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
   }
 
   String _getActionStatusText(AppLocalizations l10n) {
@@ -320,21 +361,246 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
       }
     } else if (!_isArmsRaised && wasRaised && confirmedLowered) {
       // 从举高状态变为放下状态（已确认）
-      if (_actionState == 1 && canPerformAction) {
+      if (_actionState == 1 && canPerformAction && !_isGoalReached) {
         // 完成一个完整的动作：举起 -> 放下
         setState(() {
           _successCount++;
           _actionState = 0; // 重置为初始状态，准备下一次动作
           _lastActionTime = now; // 记录动作时间
+          
+          // 检查是否达到目标
+          if (_successCount >= _targetCount) {
+            _isGoalReached = true;
+            // 停止检测
+            _cameraController?.stopImageStream();
+          }
         });
         
         // 重置确认计数
         _raiseConfirmCount = 0;
         _lowerConfirmCount = 0;
         
-        // 震动反馈
-        HapticFeedback.mediumImpact();
+        // 检查是否达到目标
+        if (_successCount >= _targetCount) {
+          // 停止计时器
+          _trainingTimer?.cancel();
+          
+          // 保存训练记录
+          _saveTrainingRecord();
+          
+          // 达到目标，显示成功对话框
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (mounted) {
+              _showSuccessDialog(context);
+            }
+          });
+          // 强烈的成功反馈
+          HapticFeedback.heavyImpact();
+        } else {
+          // 普通震动反馈
+          HapticFeedback.mediumImpact();
+        }
       }
+    }
+  }
+
+  void _showGoalSettingDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(l10n.setGoal),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 16),
+            _buildGoalOption(context, 5, l10n),
+            const SizedBox(height: 12),
+            _buildGoalOption(context, 10, l10n),
+            const SizedBox(height: 12),
+            _buildGoalOption(context, 20, l10n),
+            const SizedBox(height: 16),
+          ],
+        ),
+        actions: [
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancel),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGoalOption(BuildContext context, int count, AppLocalizations l10n) {
+    final isSelected = _targetCount == count;
+    
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: () {
+        setState(() {
+          _targetCount = count;
+          // 如果当前计数超过新目标，重置
+          if (_successCount >= _targetCount) {
+            _isGoalReached = true;
+            _cameraController?.stopImageStream();
+          } else {
+            _isGoalReached = false;
+            // 如果之前停止了，重新启动
+            if (_cameraController != null && 
+                _cameraController!.value.isInitialized &&
+                !_cameraController!.value.isStreamingImages) {
+              _startImageStream();
+            }
+          }
+        });
+        Navigator.pop(context);
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: isSelected 
+              ? Colors.blue.withValues(alpha: 0.2)
+              : Colors.grey.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? Colors.blue : Colors.transparent,
+            width: 2,
+          ),
+        ),
+        child: Text(
+          '$count ${l10n.reps}',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            color: isSelected ? Colors.blue : Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        // 使用对话框的 context 获取本地化
+        final l10n = AppLocalizations.of(dialogContext)!;
+        
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.9),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: Colors.green,
+                width: 2,
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  CupertinoIcons.check_mark_circled_solid,
+                  color: Colors.green,
+                  size: 80,
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  l10n.greatJob,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.goalCompleted,
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 18,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                // 显示训练统计信息
+                Text(
+                  '${l10n.successCount}: $_successCount / $_targetCount | ${l10n.duration}: ${_formatDuration(_trainingDuration)}',
+                  style: TextStyle(
+                    color: Colors.white60,
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                CupertinoButton.filled(
+                  onPressed: () {
+                    Navigator.pop(dialogContext);
+                    _resetTraining();
+                  },
+                  child: Text(l10n.playAgain),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showTrainingHistory(BuildContext context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => const MovementTrainingHistoryPage(),
+      ),
+    );
+  }
+
+  // 保存训练记录
+  Future<void> _saveTrainingRecord() async {
+    try {
+      final record = MovementTrainingRecord(
+        timestamp: _trainingStartTime ?? DateTime.now(),
+        duration: _trainingDuration,
+        successCount: _successCount,
+        targetCount: _targetCount,
+        goalReached: _isGoalReached,
+      );
+      await _databaseService.insertMovementTrainingRecord(record);
+    } catch (e) {
+      debugPrint('保存训练记录失败: $e');
+    }
+  }
+
+  void _resetTraining() {
+    setState(() {
+      _successCount = 0;
+      _isGoalReached = false;
+      _actionState = 0;
+      _raiseConfirmCount = 0;
+      _lowerConfirmCount = 0;
+      _lastActionTime = null;
+      _trainingDuration = 0;
+      _trainingStartTime = DateTime.now();
+    });
+    
+    // 重新启动计时器
+    _startTrainingTimer();
+    
+    // 重新启动图像流
+    if (_cameraController != null && 
+        _cameraController!.value.isInitialized &&
+        !_cameraController!.value.isStreamingImages) {
+      _startImageStream();
     }
   }
 
@@ -364,7 +630,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
 
   @override
   void dispose() {
-    _detectionTimer?.cancel();
+    _trainingTimer?.cancel();
     _cameraController?.stopImageStream();
     _cameraController?.dispose();
     _poseDetector?.close();
@@ -397,6 +663,28 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
           ),
         ),
         centerTitle: true,
+        actions: [
+          CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: () => _showTrainingHistory(context),
+            child: const Icon(
+              CupertinoIcons.clock,
+              color: Colors.white,
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 8),
+          CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: _isGoalReached ? null : () => _showGoalSettingDialog(context),
+            child: Icon(
+              CupertinoIcons.flag_fill,
+              color: _isGoalReached ? Colors.grey : Colors.white,
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: _hasPermission && _isInitialized
           ? _buildCameraView(l10n)
@@ -469,6 +757,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                 pose: _currentPose!,
                 imageSize: _imageSize!,
                 isArmsRaised: _isArmsRaised,
+                isFrontCamera: _isFrontCamera,
               ),
             ),
           ),
@@ -497,6 +786,16 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                // 显示训练时长
+                Text(
+                  _formatDuration(_trainingDuration),
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -584,13 +883,33 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                         size: 24,
                       ),
                       const SizedBox(width: 12),
-                      Text(
-                        '${l10n.successCount}: $_successCount',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      // 进度指示器和计数器
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            width: 60,
+                            height: 60,
+                            child: CircularProgressIndicator(
+                              value: _targetCount > 0 
+                                  ? (_successCount / _targetCount).clamp(0.0, 1.0)
+                                  : 0.0,
+                              strokeWidth: 4,
+                              backgroundColor: Colors.white.withValues(alpha: 0.3),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                _isGoalReached ? Colors.green : Colors.white,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '$_successCount / $_targetCount',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -609,11 +928,13 @@ class PosePainter extends CustomPainter {
   final Pose pose;
   final Size imageSize;
   final bool isArmsRaised;
+  final bool isFrontCamera; // 是否使用前置摄像头（需要镜像翻转）
 
   PosePainter({
     required this.pose,
     required this.imageSize,
     required this.isArmsRaised,
+    required this.isFrontCamera,
   });
 
   @override
@@ -621,34 +942,23 @@ class PosePainter extends CustomPainter {
     // 计算缩放比例
     final scaleX = size.width / imageSize.width;
     final scaleY = size.height / imageSize.height;
+    
+    // 如果是前置摄像头，需要水平翻转坐标（镜像效果）
+    // 翻转函数：flippedX = imageSize.width - originalX
+    double flipX(double x) {
+      return isFrontCamera ? imageSize.width - x : x;
+    }
 
-    // 定义骨骼连接关系
+    // 只定义与训练相关的骨骼连接关系（手臂部分）
     final connections = [
-      // 头部
-      [PoseLandmarkType.nose, PoseLandmarkType.leftEyeInner],
-      [PoseLandmarkType.nose, PoseLandmarkType.rightEyeInner],
-      [PoseLandmarkType.leftEyeInner, PoseLandmarkType.leftEye],
-      [PoseLandmarkType.leftEye, PoseLandmarkType.leftEyeOuter],
-      [PoseLandmarkType.rightEyeInner, PoseLandmarkType.rightEye],
-      [PoseLandmarkType.rightEye, PoseLandmarkType.rightEyeOuter],
-      [PoseLandmarkType.leftEyeInner, PoseLandmarkType.leftEar],
-      [PoseLandmarkType.rightEyeInner, PoseLandmarkType.rightEar],
-      
-      // 躯干
+      // 肩膀之间的连线（作为身体中心参考）
       [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
+      // 左手臂
       [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow],
       [PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist],
+      // 右手臂
       [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
       [PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist],
-      [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip],
-      [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip],
-      [PoseLandmarkType.leftHip, PoseLandmarkType.rightHip],
-      
-      // 腿部
-      [PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee],
-      [PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle],
-      [PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee],
-      [PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle],
     ];
 
     // 绘制骨骼连线（白色）
@@ -662,30 +972,55 @@ class PosePainter extends CustomPainter {
       final endPoint = pose.landmarks[connection[1]];
       
       if (startPoint != null && endPoint != null) {
+        // 应用镜像翻转（如果是前置摄像头）
+        final startX = flipX(startPoint.x) * scaleX;
+        final startY = startPoint.y * scaleY;
+        final endX = flipX(endPoint.x) * scaleX;
+        final endY = endPoint.y * scaleY;
+        
         canvas.drawLine(
-          Offset(startPoint.x * scaleX, startPoint.y * scaleY),
-          Offset(endPoint.x * scaleX, endPoint.y * scaleY),
+          Offset(startX, startY),
+          Offset(endX, endY),
           linePaint,
         );
       }
     }
 
-    // 绘制关键点（黄色小圆点）
+    // 只绘制与训练相关的关键点（黄色小圆点）
     final pointPaint = Paint()
       ..color = Colors.yellow
       ..style = PaintingStyle.fill;
 
-    for (final landmark in pose.landmarks.values) {
-      canvas.drawCircle(
-        Offset(landmark.x * scaleX, landmark.y * scaleY),
-        5.0, // 圆点半径
-        pointPaint,
-      );
+    // 定义需要显示的关键点（只显示手臂相关）
+    final relevantLandmarks = [
+      PoseLandmarkType.leftShoulder,
+      PoseLandmarkType.rightShoulder,
+      PoseLandmarkType.leftElbow,
+      PoseLandmarkType.rightElbow,
+      PoseLandmarkType.leftWrist,
+      PoseLandmarkType.rightWrist,
+    ];
+
+    for (final landmarkType in relevantLandmarks) {
+      final landmark = pose.landmarks[landmarkType];
+      if (landmark != null) {
+        // 应用镜像翻转（如果是前置摄像头）
+        final x = flipX(landmark.x) * scaleX;
+        final y = landmark.y * scaleY;
+        
+        canvas.drawCircle(
+          Offset(x, y),
+          5.0, // 圆点半径
+          pointPaint,
+        );
+      }
     }
   }
 
   @override
   bool shouldRepaint(PosePainter oldDelegate) {
-    return oldDelegate.pose != pose || oldDelegate.isArmsRaised != isArmsRaised;
+    return oldDelegate.pose != pose || 
+           oldDelegate.isArmsRaised != isArmsRaised ||
+           oldDelegate.isFrontCamera != isFrontCamera;
   }
 }

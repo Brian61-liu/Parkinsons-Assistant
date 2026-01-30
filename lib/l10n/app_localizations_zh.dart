@@ -461,6 +461,45 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get cameraPermissionDeniedMessage =>
       '摄像头权限已被拒绝。请在系统设置中手动开启摄像头权限以使用肢体动作训练功能。';
+
+  @override
+  String get setGoal => '设置目标';
+
+  @override
+  String get reps => '次';
+
+  @override
+  String get greatJob => '太棒了！';
+
+  @override
+  String get goalCompleted => '您已完成目标！';
+
+  @override
+  String get playAgain => '再来一次';
+
+  @override
+  String get trainingHistory => '训练历史';
+
+  @override
+  String get noTrainingRecords => '暂无训练记录';
+
+  @override
+  String get noTrainingRecordsHint => '完成一次训练后，您的记录将显示在这里';
+
+  @override
+  String get trainingDetails => '训练详情';
+
+  @override
+  String get goalStatus => '目标状态';
+
+  @override
+  String get goalReached => '已完成';
+
+  @override
+  String get goalNotReached => '未完成';
+
+  @override
+  String get minutes => '分';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -919,4 +958,43 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String get cameraPermissionDeniedMessage =>
       '攝像頭權限已被拒絕。請在系統設置中手動開啟攝像頭權限以使用肢體動作訓練功能。';
+
+  @override
+  String get setGoal => '設置目標';
+
+  @override
+  String get reps => '次';
+
+  @override
+  String get greatJob => '太棒了！';
+
+  @override
+  String get goalCompleted => '您已完成目標！';
+
+  @override
+  String get playAgain => '再來一次';
+
+  @override
+  String get trainingHistory => '訓練歷史';
+
+  @override
+  String get noTrainingRecords => '暫無訓練記錄';
+
+  @override
+  String get noTrainingRecordsHint => '完成一次訓練後，您的記錄將顯示在這裡';
+
+  @override
+  String get trainingDetails => '訓練詳情';
+
+  @override
+  String get goalStatus => '目標狀態';
+
+  @override
+  String get goalReached => '已完成';
+
+  @override
+  String get goalNotReached => '未完成';
+
+  @override
+  String get minutes => '分';
 }

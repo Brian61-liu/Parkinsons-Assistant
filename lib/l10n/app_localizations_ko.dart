@@ -463,4 +463,43 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get cameraPermissionDeniedMessage =>
       '카메라 권한이 거부되었습니다. 동작 훈련을 사용하려면 시스템 설정에서 카메라 권한을 활성화하세요.';
+
+  @override
+  String get setGoal => '목표 설정';
+
+  @override
+  String get reps => '회';
+
+  @override
+  String get greatJob => '훌륭합니다!';
+
+  @override
+  String get goalCompleted => '목표를 달성했습니다!';
+
+  @override
+  String get playAgain => '다시 하기';
+
+  @override
+  String get trainingHistory => '훈련 기록';
+
+  @override
+  String get noTrainingRecords => '훈련 기록 없음';
+
+  @override
+  String get noTrainingRecordsHint => '세션을 완료한 후 훈련 기록이 여기에 표시됩니다';
+
+  @override
+  String get trainingDetails => '훈련 세부 정보';
+
+  @override
+  String get goalStatus => '목표 상태';
+
+  @override
+  String get goalReached => '완료';
+
+  @override
+  String get goalNotReached => '미완료';
+
+  @override
+  String get minutes => '분';
 }

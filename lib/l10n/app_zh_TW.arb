@@ -230,5 +230,57 @@
   "cameraPermissionDeniedMessage": "攝像頭權限已被拒絕。請在系統設置中手動開啟攝像頭權限以使用肢體動作訓練功能。",
   "@cameraPermissionDeniedMessage": {
     "description": "Camera permission denied message"
+  },
+  "setGoal": "設置目標",
+  "@setGoal": {
+    "description": "Set goal dialog title"
+  },
+  "reps": "次",
+  "@reps": {
+    "description": "Repetitions unit"
+  },
+  "greatJob": "太棒了！",
+  "@greatJob": {
+    "description": "Success message"
+  },
+  "goalCompleted": "您已完成目標！",
+  "@goalCompleted": {
+    "description": "Goal completed message"
+  },
+  "playAgain": "再來一次",
+  "@playAgain": {
+    "description": "Play again button text"
+  },
+  "trainingHistory": "訓練歷史",
+  "@trainingHistory": {
+    "description": "Training history page title"
+  },
+  "noTrainingRecords": "暫無訓練記錄",
+  "@noTrainingRecords": {
+    "description": "No training records message"
+  },
+  "noTrainingRecordsHint": "完成一次訓練後，您的記錄將顯示在這裡",
+  "@noTrainingRecordsHint": {
+    "description": "No training records hint"
+  },
+  "trainingDetails": "訓練詳情",
+  "@trainingDetails": {
+    "description": "Training details dialog title"
+  },
+  "goalStatus": "目標狀態",
+  "@goalStatus": {
+    "description": "Goal status label"
+  },
+  "goalReached": "已完成",
+  "@goalReached": {
+    "description": "Goal reached status"
+  },
+  "goalNotReached": "未完成",
+  "@goalNotReached": {
+    "description": "Goal not reached status"
+  },
+  "minutes": "分",
+  "@minutes": {
+    "description": "Minutes unit"
   }
 }

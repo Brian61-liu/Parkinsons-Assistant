@@ -463,4 +463,43 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get cameraPermissionDeniedMessage =>
       'カメラの許可が拒否されました。動作訓練を使用するには、システム設定でカメラの許可を有効にしてください。';
+
+  @override
+  String get setGoal => '目標を設定';
+
+  @override
+  String get reps => '回';
+
+  @override
+  String get greatJob => '素晴らしい！';
+
+  @override
+  String get goalCompleted => '目標を達成しました！';
+
+  @override
+  String get playAgain => 'もう一度';
+
+  @override
+  String get trainingHistory => '訓練履歴';
+
+  @override
+  String get noTrainingRecords => '訓練記録がありません';
+
+  @override
+  String get noTrainingRecordsHint => 'セッションを完了すると、訓練記録がここに表示されます';
+
+  @override
+  String get trainingDetails => '訓練詳細';
+
+  @override
+  String get goalStatus => '目標状態';
+
+  @override
+  String get goalReached => '完了';
+
+  @override
+  String get goalNotReached => '未完了';
+
+  @override
+  String get minutes => '分';
 }

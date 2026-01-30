@@ -230,5 +230,57 @@
   "cameraPermissionDeniedMessage": "L'autorizzazione della fotocamera è stata negata. Si prega di abilitare l'autorizzazione della fotocamera nelle impostazioni di sistema per utilizzare l'allenamento di movimento.",
   "@cameraPermissionDeniedMessage": {
     "description": "Camera permission denied message"
+  },
+  "setGoal": "Imposta Obiettivo",
+  "@setGoal": {
+    "description": "Set goal dialog title"
+  },
+  "reps": "ripetizioni",
+  "@reps": {
+    "description": "Repetitions unit"
+  },
+  "greatJob": "Ottimo Lavoro!",
+  "@greatJob": {
+    "description": "Success message"
+  },
+  "goalCompleted": "Hai completato il tuo obiettivo!",
+  "@goalCompleted": {
+    "description": "Goal completed message"
+  },
+  "playAgain": "Rigioca",
+  "@playAgain": {
+    "description": "Play again button text"
+  },
+  "trainingHistory": "Cronologia Allenamento",
+  "@trainingHistory": {
+    "description": "Training history page title"
+  },
+  "noTrainingRecords": "Nessun Registro di Allenamento",
+  "@noTrainingRecords": {
+    "description": "No training records message"
+  },
+  "noTrainingRecordsHint": "I tuoi registri di allenamento appariranno qui dopo aver completato una sessione",
+  "@noTrainingRecordsHint": {
+    "description": "No training records hint"
+  },
+  "trainingDetails": "Dettagli Allenamento",
+  "@trainingDetails": {
+    "description": "Training details dialog title"
+  },
+  "goalStatus": "Stato Obiettivo",
+  "@goalStatus": {
+    "description": "Goal status label"
+  },
+  "goalReached": "Completato",
+  "@goalReached": {
+    "description": "Goal reached status"
+  },
+  "goalNotReached": "Non Completato",
+  "@goalNotReached": {
+    "description": "Goal not reached status"
+  },
+  "minutes": "min",
+  "@minutes": {
+    "description": "Minutes unit"
   }
 }

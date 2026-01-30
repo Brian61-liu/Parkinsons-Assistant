@@ -477,4 +477,44 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get cameraPermissionDeniedMessage =>
       'Разрешение камеры было отклонено. Пожалуйста, включите разрешение камеры в настройках системы для использования тренировки движений.';
+
+  @override
+  String get setGoal => 'Установить Цель';
+
+  @override
+  String get reps => 'повторений';
+
+  @override
+  String get greatJob => 'Отличная Работа!';
+
+  @override
+  String get goalCompleted => 'Вы достигли своей цели!';
+
+  @override
+  String get playAgain => 'Играть Снова';
+
+  @override
+  String get trainingHistory => 'История Тренировок';
+
+  @override
+  String get noTrainingRecords => 'Нет Записей Тренировок';
+
+  @override
+  String get noTrainingRecordsHint =>
+      'Ваши записи тренировок появятся здесь после завершения сессии';
+
+  @override
+  String get trainingDetails => 'Детали Тренировки';
+
+  @override
+  String get goalStatus => 'Статус Цели';
+
+  @override
+  String get goalReached => 'Завершено';
+
+  @override
+  String get goalNotReached => 'Не Завершено';
+
+  @override
+  String get minutes => 'мин';
 }

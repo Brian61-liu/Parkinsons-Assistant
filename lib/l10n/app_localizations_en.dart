@@ -478,4 +478,44 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get cameraPermissionDeniedMessage =>
       'Camera permission has been denied. Please enable camera permission in system settings to use movement training.';
+
+  @override
+  String get setGoal => 'Set Goal';
+
+  @override
+  String get reps => 'reps';
+
+  @override
+  String get greatJob => 'Great Job!';
+
+  @override
+  String get goalCompleted => 'You\'ve completed your goal!';
+
+  @override
+  String get playAgain => 'Play Again';
+
+  @override
+  String get trainingHistory => 'Training History';
+
+  @override
+  String get noTrainingRecords => 'No Training Records';
+
+  @override
+  String get noTrainingRecordsHint =>
+      'Your training records will appear here after completing a session';
+
+  @override
+  String get trainingDetails => 'Training Details';
+
+  @override
+  String get goalStatus => 'Goal Status';
+
+  @override
+  String get goalReached => 'Completed';
+
+  @override
+  String get goalNotReached => 'Not Completed';
+
+  @override
+  String get minutes => 'min';
 }

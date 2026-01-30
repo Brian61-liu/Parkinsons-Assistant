@@ -211,5 +211,57 @@
   "cameraPermissionDeniedMessage": "摄像头权限已被拒绝。请在系统设置中手动开启摄像头权限以使用肢体动作训练功能。",
   "@cameraPermissionDeniedMessage": {
     "description": "Camera permission denied message"
+  },
+  "setGoal": "设置目标",
+  "@setGoal": {
+    "description": "Set goal dialog title"
+  },
+  "reps": "次",
+  "@reps": {
+    "description": "Repetitions unit"
+  },
+  "greatJob": "太棒了！",
+  "@greatJob": {
+    "description": "Success message"
+  },
+  "goalCompleted": "您已完成目标！",
+  "@goalCompleted": {
+    "description": "Goal completed message"
+  },
+  "playAgain": "再来一次",
+  "@playAgain": {
+    "description": "Play again button text"
+  },
+  "trainingHistory": "训练历史",
+  "@trainingHistory": {
+    "description": "Training history page title"
+  },
+  "noTrainingRecords": "暂无训练记录",
+  "@noTrainingRecords": {
+    "description": "No training records message"
+  },
+  "noTrainingRecordsHint": "完成一次训练后，您的记录将显示在这里",
+  "@noTrainingRecordsHint": {
+    "description": "No training records hint"
+  },
+  "trainingDetails": "训练详情",
+  "@trainingDetails": {
+    "description": "Training details dialog title"
+  },
+  "goalStatus": "目标状态",
+  "@goalStatus": {
+    "description": "Goal status label"
+  },
+  "goalReached": "已完成",
+  "@goalReached": {
+    "description": "Goal reached status"
+  },
+  "goalNotReached": "未完成",
+  "@goalNotReached": {
+    "description": "Goal not reached status"
+  },
+  "minutes": "分",
+  "@minutes": {
+    "description": "Minutes unit"
   }
 }

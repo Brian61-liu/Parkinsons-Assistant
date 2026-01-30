@@ -230,5 +230,57 @@
   "cameraPermissionDeniedMessage": "카메라 권한이 거부되었습니다. 동작 훈련을 사용하려면 시스템 설정에서 카메라 권한을 활성화하세요.",
   "@cameraPermissionDeniedMessage": {
     "description": "Camera permission denied message"
+  },
+  "setGoal": "목표 설정",
+  "@setGoal": {
+    "description": "Set goal dialog title"
+  },
+  "reps": "회",
+  "@reps": {
+    "description": "Repetitions unit"
+  },
+  "greatJob": "훌륭합니다!",
+  "@greatJob": {
+    "description": "Success message"
+  },
+  "goalCompleted": "목표를 달성했습니다!",
+  "@goalCompleted": {
+    "description": "Goal completed message"
+  },
+  "playAgain": "다시 하기",
+  "@playAgain": {
+    "description": "Play again button text"
+  },
+  "trainingHistory": "훈련 기록",
+  "@trainingHistory": {
+    "description": "Training history page title"
+  },
+  "noTrainingRecords": "훈련 기록 없음",
+  "@noTrainingRecords": {
+    "description": "No training records message"
+  },
+  "noTrainingRecordsHint": "세션을 완료한 후 훈련 기록이 여기에 표시됩니다",
+  "@noTrainingRecordsHint": {
+    "description": "No training records hint"
+  },
+  "trainingDetails": "훈련 세부 정보",
+  "@trainingDetails": {
+    "description": "Training details dialog title"
+  },
+  "goalStatus": "목표 상태",
+  "@goalStatus": {
+    "description": "Goal status label"
+  },
+  "goalReached": "완료",
+  "@goalReached": {
+    "description": "Goal reached status"
+  },
+  "goalNotReached": "미완료",
+  "@goalNotReached": {
+    "description": "Goal not reached status"
+  },
+  "minutes": "분",
+  "@minutes": {
+    "description": "Minutes unit"
   }
 }

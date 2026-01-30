@@ -471,4 +471,44 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get cameraPermissionDeniedMessage =>
       'تم رفض إذن الكاميرا. يرجى تمكين إذن الكاميرا في إعدادات النظام لاستخدام تدريب الحركة.';
+
+  @override
+  String get setGoal => 'تعيين الهدف';
+
+  @override
+  String get reps => 'مرة';
+
+  @override
+  String get greatJob => 'عمل رائع!';
+
+  @override
+  String get goalCompleted => 'لقد أكملت هدفك!';
+
+  @override
+  String get playAgain => 'العب مرة أخرى';
+
+  @override
+  String get trainingHistory => 'تاريخ التدريب';
+
+  @override
+  String get noTrainingRecords => 'لا توجد سجلات تدريب';
+
+  @override
+  String get noTrainingRecordsHint =>
+      'ستظهر سجلات التدريب الخاصة بك هنا بعد إكمال جلسة';
+
+  @override
+  String get trainingDetails => 'تفاصيل التدريب';
+
+  @override
+  String get goalStatus => 'حالة الهدف';
+
+  @override
+  String get goalReached => 'مكتمل';
+
+  @override
+  String get goalNotReached => 'غير مكتمل';
+
+  @override
+  String get minutes => 'دقيقة';
 }

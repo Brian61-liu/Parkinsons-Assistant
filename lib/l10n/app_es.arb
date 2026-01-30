@@ -230,5 +230,57 @@
   "cameraPermissionDeniedMessage": "El permiso de cámara ha sido denegado. Por favor habilite el permiso de cámara en la configuración del sistema para usar el entrenamiento de movimiento.",
   "@cameraPermissionDeniedMessage": {
     "description": "Camera permission denied message"
+  },
+  "setGoal": "Establecer Objetivo",
+  "@setGoal": {
+    "description": "Set goal dialog title"
+  },
+  "reps": "repeticiones",
+  "@reps": {
+    "description": "Repetitions unit"
+  },
+  "greatJob": "¡Excelente!",
+  "@greatJob": {
+    "description": "Success message"
+  },
+  "goalCompleted": "¡Has completado tu objetivo!",
+  "@goalCompleted": {
+    "description": "Goal completed message"
+  },
+  "playAgain": "Jugar de Nuevo",
+  "@playAgain": {
+    "description": "Play again button text"
+  },
+  "trainingHistory": "Historial de Entrenamiento",
+  "@trainingHistory": {
+    "description": "Training history page title"
+  },
+  "noTrainingRecords": "Sin Registros de Entrenamiento",
+  "@noTrainingRecords": {
+    "description": "No training records message"
+  },
+  "noTrainingRecordsHint": "Sus registros de entrenamiento aparecerán aquí después de completar una sesión",
+  "@noTrainingRecordsHint": {
+    "description": "No training records hint"
+  },
+  "trainingDetails": "Detalles del Entrenamiento",
+  "@trainingDetails": {
+    "description": "Training details dialog title"
+  },
+  "goalStatus": "Estado del Objetivo",
+  "@goalStatus": {
+    "description": "Goal status label"
+  },
+  "goalReached": "Completado",
+  "@goalReached": {
+    "description": "Goal reached status"
+  },
+  "goalNotReached": "No Completado",
+  "@goalNotReached": {
+    "description": "Goal not reached status"
+  },
+  "minutes": "min",
+  "@minutes": {
+    "description": "Minutes unit"
   }
 }
