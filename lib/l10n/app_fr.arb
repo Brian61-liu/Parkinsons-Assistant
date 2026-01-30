@@ -198,5 +198,37 @@
   "microphonePermissionDeniedMessage": "L'autorisation du microphone a été refusée de façon permanente. Veuillez activer l'autorisation du microphone dans les paramètres système pour utiliser l'entraînement vocal.",
   "microphoneError": "Erreur du microphone",
   "openSettings": "Ouvrir les Paramètres",
-  "continueAsGuest": "Continuer en tant qu'invité"
+  "continueAsGuest": "Continuer en tant qu'invité",
+  "movementTraining": "Entraînement de Mouvement",
+  "@movementTraining": {
+    "description": "Movement training button title"
+  },
+  "movementTrainingInstruction": "Veuillez lever les deux bras et maintenir une posture correcte",
+  "@movementTrainingInstruction": {
+    "description": "Instruction text for movement training"
+  },
+  "armsRaised": "Bras Levés",
+  "@armsRaised": {
+    "description": "Status when arms are raised"
+  },
+  "raiseArms": "Veuillez Lever les Bras",
+  "@raiseArms": {
+    "description": "Prompt to raise arms"
+  },
+  "lowerArms": "Excellent ! Maintenant Baissez les Bras",
+  "@lowerArms": {
+    "description": "Prompt to lower arms after raising"
+  },
+  "successCount": "Nombre de Succès",
+  "@successCount": {
+    "description": "Success count label"
+  },
+  "cameraPermissionRequired": "Autorisation de Caméra Requise",
+  "@cameraPermissionRequired": {
+    "description": "Camera permission required message"
+  },
+  "cameraPermissionDeniedMessage": "L'autorisation de la caméra a été refusée. Veuillez activer l'autorisation de la caméra dans les paramètres du système pour utiliser l'entraînement de mouvement.",
+  "@cameraPermissionDeniedMessage": {
+    "description": "Camera permission denied message"
+  }
 }

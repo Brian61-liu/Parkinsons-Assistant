@@ -198,5 +198,37 @@
   "microphonePermissionDeniedMessage": "L'autorizzazione del microfono è stata negata permanentemente. Si prega di abilitare l'autorizzazione del microfono nelle impostazioni di sistema per utilizzare l'allenamento vocale.",
   "microphoneError": "Errore microfono",
   "openSettings": "Apri Impostazioni",
-  "continueAsGuest": "Continua come ospite"
+  "continueAsGuest": "Continua come ospite",
+  "movementTraining": "Allenamento di Movimento",
+  "@movementTraining": {
+    "description": "Movement training button title"
+  },
+  "movementTrainingInstruction": "Si prega di alzare entrambe le braccia e mantenere la postura corretta",
+  "@movementTrainingInstruction": {
+    "description": "Instruction text for movement training"
+  },
+  "armsRaised": "Braccia Alzate",
+  "@armsRaised": {
+    "description": "Status when arms are raised"
+  },
+  "raiseArms": "Si Prega di Alzare le Braccia",
+  "@raiseArms": {
+    "description": "Prompt to raise arms"
+  },
+  "lowerArms": "Ottimo! Ora Abbassate le Braccia",
+  "@lowerArms": {
+    "description": "Prompt to lower arms after raising"
+  },
+  "successCount": "Conteggio Successi",
+  "@successCount": {
+    "description": "Success count label"
+  },
+  "cameraPermissionRequired": "Autorizzazione Fotocamera Richiesta",
+  "@cameraPermissionRequired": {
+    "description": "Camera permission required message"
+  },
+  "cameraPermissionDeniedMessage": "L'autorizzazione della fotocamera è stata negata. Si prega di abilitare l'autorizzazione della fotocamera nelle impostazioni di sistema per utilizzare l'allenamento di movimento.",
+  "@cameraPermissionDeniedMessage": {
+    "description": "Camera permission denied message"
+  }
 }

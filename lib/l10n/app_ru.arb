@@ -198,5 +198,37 @@
   "microphonePermissionDeniedMessage": "Разрешение микрофона было отклонено навсегда. Пожалуйста, включите разрешение микрофона в настройках системы, чтобы использовать голосовую тренировку.",
   "microphoneError": "Ошибка микрофона",
   "openSettings": "Открыть Настройки",
-  "continueAsGuest": "Продолжить как гость"
+  "continueAsGuest": "Продолжить как гость",
+  "movementTraining": "Тренировка Движений",
+  "@movementTraining": {
+    "description": "Movement training button title"
+  },
+  "movementTrainingInstruction": "Пожалуйста, поднимите обе руки и сохраните правильную осанку",
+  "@movementTrainingInstruction": {
+    "description": "Instruction text for movement training"
+  },
+  "armsRaised": "Руки Подняты",
+  "@armsRaised": {
+    "description": "Status when arms are raised"
+  },
+  "raiseArms": "Пожалуйста, Поднимите Руки",
+  "@raiseArms": {
+    "description": "Prompt to raise arms"
+  },
+  "lowerArms": "Отлично! Теперь Опустите Руки",
+  "@lowerArms": {
+    "description": "Prompt to lower arms after raising"
+  },
+  "successCount": "Количество Успехов",
+  "@successCount": {
+    "description": "Success count label"
+  },
+  "cameraPermissionRequired": "Требуется Разрешение Камеры",
+  "@cameraPermissionRequired": {
+    "description": "Camera permission required message"
+  },
+  "cameraPermissionDeniedMessage": "Разрешение камеры было отклонено. Пожалуйста, включите разрешение камеры в настройках системы для использования тренировки движений.",
+  "@cameraPermissionDeniedMessage": {
+    "description": "Camera permission denied message"
+  }
 }

@@ -440,25 +440,27 @@ class AppLocalizationsKo extends AppLocalizations {
   String get continueAsGuest => '게스트로 계속';
 
   @override
-  String get movementTraining => 'Movement Training';
+  String get movementTraining => '동작 훈련';
 
   @override
-  String get movementTrainingInstruction =>
-      'Please raise both arms and maintain proper posture';
+  String get movementTrainingInstruction => '양팔을 들어 올리고 올바른 자세를 유지하세요';
 
   @override
-  String get armsRaised => 'Arms Raised';
+  String get armsRaised => '팔이 올라갔습니다';
 
   @override
-  String get raiseArms => 'Please Raise Arms';
+  String get raiseArms => '팔을 들어 올려주세요';
 
   @override
-  String get successCount => 'Success Count';
+  String get lowerArms => '훌륭합니다! 이제 팔을 내려주세요';
 
   @override
-  String get cameraPermissionRequired => 'Camera Permission Required';
+  String get successCount => '성공 횟수';
+
+  @override
+  String get cameraPermissionRequired => '카메라 권한이 필요합니다';
 
   @override
   String get cameraPermissionDeniedMessage =>
-      'Camera permission has been denied. Please enable camera permission in system settings to use movement training.';
+      '카메라 권한이 거부되었습니다. 동작 훈련을 사용하려면 시스템 설정에서 카메라 권한을 활성화하세요.';
 }

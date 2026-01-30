@@ -450,6 +450,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get raiseArms => '请举高双手';
 
   @override
+  String get lowerArms => '很好！请放下双手';
+
+  @override
   String get successCount => '成功次数';
 
   @override
@@ -891,4 +894,29 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get continueAsGuest => '遊客登入';
+
+  @override
+  String get movementTraining => '肢體動作訓練';
+
+  @override
+  String get movementTrainingInstruction => '請將雙手舉高，保持動作標準';
+
+  @override
+  String get armsRaised => '雙手已舉高';
+
+  @override
+  String get raiseArms => '請舉高雙手';
+
+  @override
+  String get lowerArms => '很好！請放下雙手';
+
+  @override
+  String get successCount => '成功次數';
+
+  @override
+  String get cameraPermissionRequired => '需要攝像頭權限';
+
+  @override
+  String get cameraPermissionDeniedMessage =>
+      '攝像頭權限已被拒絕。請在系統設置中手動開啟攝像頭權限以使用肢體動作訓練功能。';
 }

@@ -467,6 +467,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get raiseArms => 'Please Raise Arms';
 
   @override
+  String get lowerArms => 'Great! Now Lower Your Arms';
+
+  @override
   String get successCount => 'Success Count';
 
   @override

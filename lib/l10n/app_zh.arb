@@ -196,6 +196,10 @@
   "@raiseArms": {
     "description": "Prompt to raise arms"
   },
+  "lowerArms": "很好！请放下双手",
+  "@lowerArms": {
+    "description": "Prompt to lower arms after raising"
+  },
   "successCount": "成功次数",
   "@successCount": {
     "description": "Success count label"

@@ -951,6 +951,12 @@ abstract class AppLocalizations {
   /// **'Please Raise Arms'**
   String get raiseArms;
 
+  /// Prompt to lower arms after raising
+  ///
+  /// In en, this message translates to:
+  /// **'Great! Now Lower Your Arms'**
+  String get lowerArms;
+
   /// Success count label
   ///
   /// In en, this message translates to:

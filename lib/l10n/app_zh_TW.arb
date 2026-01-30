@@ -198,5 +198,37 @@
   "microphonePermissionDeniedMessage": "麥克風權限已被永久拒絕。請在系統設定中手動開啟麥克風權限以使用語音訓練功能。",
   "microphoneError": "麥克風錯誤",
   "openSettings": "打開設定",
-  "continueAsGuest": "遊客登入"
+  "continueAsGuest": "遊客登入",
+  "movementTraining": "肢體動作訓練",
+  "@movementTraining": {
+    "description": "Movement training button title"
+  },
+  "movementTrainingInstruction": "請將雙手舉高，保持動作標準",
+  "@movementTrainingInstruction": {
+    "description": "Instruction text for movement training"
+  },
+  "armsRaised": "雙手已舉高",
+  "@armsRaised": {
+    "description": "Status when arms are raised"
+  },
+  "raiseArms": "請舉高雙手",
+  "@raiseArms": {
+    "description": "Prompt to raise arms"
+  },
+  "lowerArms": "很好！請放下雙手",
+  "@lowerArms": {
+    "description": "Prompt to lower arms after raising"
+  },
+  "successCount": "成功次數",
+  "@successCount": {
+    "description": "Success count label"
+  },
+  "cameraPermissionRequired": "需要攝像頭權限",
+  "@cameraPermissionRequired": {
+    "description": "Camera permission required message"
+  },
+  "cameraPermissionDeniedMessage": "攝像頭權限已被拒絕。請在系統設置中手動開啟攝像頭權限以使用肢體動作訓練功能。",
+  "@cameraPermissionDeniedMessage": {
+    "description": "Camera permission denied message"
+  }
 }

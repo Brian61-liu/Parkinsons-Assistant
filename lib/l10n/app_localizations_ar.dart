@@ -447,25 +447,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get continueAsGuest => 'المتابعة كضيف';
 
   @override
-  String get movementTraining => 'Movement Training';
+  String get movementTraining => 'تدريب الحركة';
 
   @override
   String get movementTrainingInstruction =>
-      'Please raise both arms and maintain proper posture';
+      'يرجى رفع الذراعين والاحتفاظ بالوضعية الصحيحة';
 
   @override
-  String get armsRaised => 'Arms Raised';
+  String get armsRaised => 'الذراعان مرفوعان';
 
   @override
-  String get raiseArms => 'Please Raise Arms';
+  String get raiseArms => 'يرجى رفع الذراعين';
 
   @override
-  String get successCount => 'Success Count';
+  String get lowerArms => 'ممتاز! يرجى خفض الذراعين';
 
   @override
-  String get cameraPermissionRequired => 'Camera Permission Required';
+  String get successCount => 'عدد النجاحات';
+
+  @override
+  String get cameraPermissionRequired => 'إذن الكاميرا مطلوب';
 
   @override
   String get cameraPermissionDeniedMessage =>
-      'Camera permission has been denied. Please enable camera permission in system settings to use movement training.';
+      'تم رفض إذن الكاميرا. يرجى تمكين إذن الكاميرا في إعدادات النظام لاستخدام تدريب الحركة.';
 }

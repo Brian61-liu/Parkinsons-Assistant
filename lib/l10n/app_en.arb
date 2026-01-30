@@ -429,6 +429,10 @@
   "@raiseArms": {
     "description": "Prompt to raise arms"
   },
+  "lowerArms": "Great! Now Lower Your Arms",
+  "@lowerArms": {
+    "description": "Prompt to lower arms after raising"
+  },
   "successCount": "Success Count",
   "@successCount": {
     "description": "Success count label"

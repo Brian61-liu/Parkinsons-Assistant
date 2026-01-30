@@ -453,25 +453,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String get continueAsGuest => 'Продолжить как гость';
 
   @override
-  String get movementTraining => 'Movement Training';
+  String get movementTraining => 'Тренировка Движений';
 
   @override
   String get movementTrainingInstruction =>
-      'Please raise both arms and maintain proper posture';
+      'Пожалуйста, поднимите обе руки и сохраните правильную осанку';
 
   @override
-  String get armsRaised => 'Arms Raised';
+  String get armsRaised => 'Руки Подняты';
 
   @override
-  String get raiseArms => 'Please Raise Arms';
+  String get raiseArms => 'Пожалуйста, Поднимите Руки';
 
   @override
-  String get successCount => 'Success Count';
+  String get lowerArms => 'Отлично! Теперь Опустите Руки';
 
   @override
-  String get cameraPermissionRequired => 'Camera Permission Required';
+  String get successCount => 'Количество Успехов';
+
+  @override
+  String get cameraPermissionRequired => 'Требуется Разрешение Камеры';
 
   @override
   String get cameraPermissionDeniedMessage =>
-      'Camera permission has been denied. Please enable camera permission in system settings to use movement training.';
+      'Разрешение камеры было отклонено. Пожалуйста, включите разрешение камеры в настройках системы для использования тренировки движений.';
 }

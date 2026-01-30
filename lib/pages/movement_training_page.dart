@@ -28,6 +28,18 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   bool _isArmsRaised = false;
   int _successCount = 0;
   Timer? _detectionTimer;
+  
+  // 动作状态：0=初始/放下, 1=举高, 2=完成（需要检测到放下才算完成）
+  int _actionState = 0;
+  
+  // 防抖机制：需要连续检测到相同状态才确认
+  int _raiseConfirmCount = 0; // 举高确认计数
+  int _lowerConfirmCount = 0; // 放下确认计数
+  static const int _confirmThreshold = 3; // 需要连续3次检测到相同状态才确认
+  
+  // 状态锁定：防止快速重复计数
+  DateTime? _lastActionTime;
+  static const Duration _actionCooldown = Duration(milliseconds: 1500); // 1.5秒冷却时间
 
   @override
   void initState() {
@@ -178,9 +190,24 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     );
   }
 
+  String _getActionStatusText(AppLocalizations l10n) {
+    if (_actionState == 1) {
+      // 已经举高，提示放下
+      return l10n.lowerArms;
+    } else if (_isArmsRaised) {
+      return l10n.armsRaised;
+    } else {
+      return l10n.raiseArms;
+    }
+  }
+
   void _checkArmsRaised() {
     if (_currentPose == null) {
       _isArmsRaised = false;
+      // 如果检测不到姿态，重置状态
+      if (_actionState == 1) {
+        _actionState = 0;
+      }
       return;
     }
 
@@ -200,32 +227,114 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         leftElbow == null ||
         rightElbow == null) {
       _isArmsRaised = false;
+      // 如果检测不到关键点，重置状态
+      if (_actionState == 1) {
+        _actionState = 0;
+      }
       return;
     }
 
     // 计算肩膀中心点
     final shoulderCenterY = (leftShoulder.y + rightShoulder.y) / 2;
-
-    // 检查双手是否举高（手腕高于肩膀中心，且肘部高于肩膀）
-    final leftArmRaised = leftWrist.y < shoulderCenterY && 
-                         leftElbow.y < shoulderCenterY &&
-                         leftWrist.y < leftElbow.y; // 手腕高于肘部
     
-    final rightArmRaised = rightWrist.y < shoulderCenterY && 
+    // 计算手腕到肩膀的距离（用于判断是否真正举高）
+    final leftWristToShoulder = (leftWrist.y - shoulderCenterY).abs();
+    final rightWristToShoulder = (rightWrist.y - shoulderCenterY).abs();
+    
+    // 更严格的判断条件：
+    // 1. 手腕必须明显高于肩膀中心（至少20像素，避免边界抖动）
+    // 2. 肘部也要高于肩膀
+    // 3. 手腕必须高于肘部（确保手臂是伸直的）
+    // 4. 手腕到肩膀的距离要足够大（确保动作幅度足够）
+    final minRaiseDistance = 20.0; // 最小举起距离（像素）
+    
+    final leftArmRaised = leftWrist.y < (shoulderCenterY - minRaiseDistance) && 
+                         leftElbow.y < shoulderCenterY &&
+                         leftWrist.y < leftElbow.y &&
+                         leftWristToShoulder > minRaiseDistance;
+    
+    final rightArmRaised = rightWrist.y < (shoulderCenterY - minRaiseDistance) && 
                           rightElbow.y < shoulderCenterY &&
-                          rightWrist.y < rightElbow.y; // 手腕高于肘部
+                          rightWrist.y < rightElbow.y &&
+                          rightWristToShoulder > minRaiseDistance;
+    
+    // 放下状态的判断：手腕回到肩膀中心附近或以下
+    final leftArmLowered = leftWrist.y >= (shoulderCenterY - 10) || 
+                          leftElbow.y >= shoulderCenterY;
+    
+    final rightArmLowered = rightWrist.y >= (shoulderCenterY - 10) || 
+                           rightElbow.y >= shoulderCenterY;
 
     final wasRaised = _isArmsRaised;
-    _isArmsRaised = leftArmRaised && rightArmRaised;
-
-    // 如果从非举高状态变为举高状态，增加成功计数
-    if (_isArmsRaised && !wasRaised) {
-      setState(() {
-        _successCount++;
-      });
-      
-      // 震动反馈
-      HapticFeedback.mediumImpact();
+    // 只有双手都满足条件才算举高/放下
+    final currentRaised = leftArmRaised && rightArmRaised;
+    final currentLowered = leftArmLowered && rightArmLowered;
+    
+    // 防抖机制：需要连续多次检测到相同状态才确认
+    if (currentRaised) {
+      _raiseConfirmCount++;
+      _lowerConfirmCount = 0; // 重置放下计数
+    } else if (currentLowered) {
+      _lowerConfirmCount++;
+      _raiseConfirmCount = 0; // 重置举高计数
+    } else {
+      // 中间状态（部分举起或部分放下），不增加计数，但也不重置
+      // 这样可以避免在过渡状态时误判
+    }
+    
+    // 只有连续检测到阈值次数的状态才更新
+    bool confirmedRaised = false;
+    bool confirmedLowered = false;
+    
+    if (_raiseConfirmCount >= _confirmThreshold) {
+      confirmedRaised = true;
+      _raiseConfirmCount = _confirmThreshold; // 防止溢出
+    }
+    
+    if (_lowerConfirmCount >= _confirmThreshold) {
+      confirmedLowered = true;
+      _lowerConfirmCount = _confirmThreshold; // 防止溢出
+    }
+    
+    // 更新状态（只有确认后才更新）
+    if (confirmedRaised && !_isArmsRaised) {
+      _isArmsRaised = true;
+    } else if (confirmedLowered && _isArmsRaised) {
+      _isArmsRaised = false;
+    }
+    
+    // 状态机：检测完整的举起-放下动作
+    // _actionState: 0=初始/放下, 1=举高
+    
+    // 检查冷却时间，防止快速重复计数
+    final now = DateTime.now();
+    final canPerformAction = _lastActionTime == null || 
+                            now.difference(_lastActionTime!) >= _actionCooldown;
+    
+    if (_isArmsRaised && !wasRaised && confirmedRaised) {
+      // 从放下状态变为举高状态（已确认）
+      if (_actionState == 0) {
+        setState(() {
+          _actionState = 1; // 进入举高状态
+        });
+      }
+    } else if (!_isArmsRaised && wasRaised && confirmedLowered) {
+      // 从举高状态变为放下状态（已确认）
+      if (_actionState == 1 && canPerformAction) {
+        // 完成一个完整的动作：举起 -> 放下
+        setState(() {
+          _successCount++;
+          _actionState = 0; // 重置为初始状态，准备下一次动作
+          _lastActionTime = now; // 记录动作时间
+        });
+        
+        // 重置确认计数
+        _raiseConfirmCount = 0;
+        _lowerConfirmCount = 0;
+        
+        // 震动反馈
+        HapticFeedback.mediumImpact();
+      }
     }
   }
 
@@ -417,9 +526,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            _isArmsRaised
-                                ? l10n.armsRaised
-                                : l10n.raiseArms,
+                            _getActionStatusText(l10n),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 14,

@@ -198,5 +198,37 @@
   "microphonePermissionDeniedMessage": "A permissão do microfone foi negada permanentemente. Por favor, habilite a permissão do microfone nas configurações do sistema para usar o treinamento de voz.",
   "microphoneError": "Erro do microfone",
   "openSettings": "Abrir Configurações",
-  "continueAsGuest": "Continuar como convidado"
+  "continueAsGuest": "Continuar como convidado",
+  "movementTraining": "Treino de Movimento",
+  "@movementTraining": {
+    "description": "Movement training button title"
+  },
+  "movementTrainingInstruction": "Por favor, levante ambos os braços e mantenha a postura correta",
+  "@movementTrainingInstruction": {
+    "description": "Instruction text for movement training"
+  },
+  "armsRaised": "Braços Levantados",
+  "@armsRaised": {
+    "description": "Status when arms are raised"
+  },
+  "raiseArms": "Por Favor Levante os Braços",
+  "@raiseArms": {
+    "description": "Prompt to raise arms"
+  },
+  "lowerArms": "Ótimo! Agora Abaixe os Braços",
+  "@lowerArms": {
+    "description": "Prompt to lower arms after raising"
+  },
+  "successCount": "Contagem de Sucessos",
+  "@successCount": {
+    "description": "Success count label"
+  },
+  "cameraPermissionRequired": "Permissão de Câmera Necessária",
+  "@cameraPermissionRequired": {
+    "description": "Camera permission required message"
+  },
+  "cameraPermissionDeniedMessage": "A permissão da câmera foi negada. Por favor, habilite a permissão da câmera nas configurações do sistema para usar o treino de movimento.",
+  "@cameraPermissionDeniedMessage": {
+    "description": "Camera permission denied message"
+  }
 }

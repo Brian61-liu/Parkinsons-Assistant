@@ -198,5 +198,37 @@
   "microphonePermissionDeniedMessage": "Die Mikrofonberechtigung wurde dauerhaft verweigert. Bitte aktivieren Sie die Mikrofonberechtigung in den Systemeinstellungen, um das Stimmtraining zu verwenden.",
   "microphoneError": "Mikrofonfehler",
   "openSettings": "Einstellungen Öffnen",
-  "continueAsGuest": "Als Gast fortfahren"
+  "continueAsGuest": "Als Gast fortfahren",
+  "movementTraining": "Bewegungstraining",
+  "@movementTraining": {
+    "description": "Movement training button title"
+  },
+  "movementTrainingInstruction": "Bitte heben Sie beide Arme und halten Sie die richtige Haltung",
+  "@movementTrainingInstruction": {
+    "description": "Instruction text for movement training"
+  },
+  "armsRaised": "Arme Gehoben",
+  "@armsRaised": {
+    "description": "Status when arms are raised"
+  },
+  "raiseArms": "Bitte Arme Heben",
+  "@raiseArms": {
+    "description": "Prompt to raise arms"
+  },
+  "lowerArms": "Großartig! Bitte Arme Senken",
+  "@lowerArms": {
+    "description": "Prompt to lower arms after raising"
+  },
+  "successCount": "Erfolgsanzahl",
+  "@successCount": {
+    "description": "Success count label"
+  },
+  "cameraPermissionRequired": "Kamera-Berechtigung Erforderlich",
+  "@cameraPermissionRequired": {
+    "description": "Camera permission required message"
+  },
+  "cameraPermissionDeniedMessage": "Kamera-Berechtigung wurde verweigert. Bitte aktivieren Sie die Kamera-Berechtigung in den Systemeinstellungen, um Bewegungstraining zu verwenden.",
+  "@cameraPermissionDeniedMessage": {
+    "description": "Camera permission denied message"
+  }
 }

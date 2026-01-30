@@ -198,5 +198,37 @@
   "microphonePermissionDeniedMessage": "マイクの許可が永続的に拒否されました。音声訓練を使用するには、システム設定でマイクの許可を有効にしてください。",
   "microphoneError": "マイクエラー",
   "openSettings": "設定を開く",
-  "continueAsGuest": "ゲストとして続ける"
+  "continueAsGuest": "ゲストとして続ける",
+  "movementTraining": "動作訓練",
+  "@movementTraining": {
+    "description": "Movement training button title"
+  },
+  "movementTrainingInstruction": "両腕を上げて、正しい姿勢を保ってください",
+  "@movementTrainingInstruction": {
+    "description": "Instruction text for movement training"
+  },
+  "armsRaised": "腕が上がっています",
+  "@armsRaised": {
+    "description": "Status when arms are raised"
+  },
+  "raiseArms": "腕を上げてください",
+  "@raiseArms": {
+    "description": "Prompt to raise arms"
+  },
+  "lowerArms": "素晴らしい！腕を下げてください",
+  "@lowerArms": {
+    "description": "Prompt to lower arms after raising"
+  },
+  "successCount": "成功回数",
+  "@successCount": {
+    "description": "Success count label"
+  },
+  "cameraPermissionRequired": "カメラの許可が必要です",
+  "@cameraPermissionRequired": {
+    "description": "Camera permission required message"
+  },
+  "cameraPermissionDeniedMessage": "カメラの許可が拒否されました。動作訓練を使用するには、システム設定でカメラの許可を有効にしてください。",
+  "@cameraPermissionDeniedMessage": {
+    "description": "Camera permission denied message"
+  }
 }

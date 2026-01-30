@@ -456,25 +456,28 @@ class AppLocalizationsFr extends AppLocalizations {
   String get continueAsGuest => 'Continuer en tant qu\'invité';
 
   @override
-  String get movementTraining => 'Movement Training';
+  String get movementTraining => 'Entraînement de Mouvement';
 
   @override
   String get movementTrainingInstruction =>
-      'Please raise both arms and maintain proper posture';
+      'Veuillez lever les deux bras et maintenir une posture correcte';
 
   @override
-  String get armsRaised => 'Arms Raised';
+  String get armsRaised => 'Bras Levés';
 
   @override
-  String get raiseArms => 'Please Raise Arms';
+  String get raiseArms => 'Veuillez Lever les Bras';
 
   @override
-  String get successCount => 'Success Count';
+  String get lowerArms => 'Excellent ! Maintenant Baissez les Bras';
 
   @override
-  String get cameraPermissionRequired => 'Camera Permission Required';
+  String get successCount => 'Nombre de Succès';
+
+  @override
+  String get cameraPermissionRequired => 'Autorisation de Caméra Requise';
 
   @override
   String get cameraPermissionDeniedMessage =>
-      'Camera permission has been denied. Please enable camera permission in system settings to use movement training.';
+      'L\'autorisation de la caméra a été refusée. Veuillez activer l\'autorisation de la caméra dans les paramètres du système pour utiliser l\'entraînement de mouvement.';
 }

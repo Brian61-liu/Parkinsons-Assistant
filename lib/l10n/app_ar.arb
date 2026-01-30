@@ -198,5 +198,37 @@
   "microphonePermissionDeniedMessage": "تم رفض إذن الميكروفون بشكل دائم. يرجى تمكين إذن الميكروفون في إعدادات النظام لاستخدام تدريب الصوت.",
   "microphoneError": "خطأ في الميكروفون",
   "openSettings": "فتح الإعدادات",
-  "continueAsGuest": "المتابعة كضيف"
+  "continueAsGuest": "المتابعة كضيف",
+  "movementTraining": "تدريب الحركة",
+  "@movementTraining": {
+    "description": "Movement training button title"
+  },
+  "movementTrainingInstruction": "يرجى رفع الذراعين والاحتفاظ بالوضعية الصحيحة",
+  "@movementTrainingInstruction": {
+    "description": "Instruction text for movement training"
+  },
+  "armsRaised": "الذراعان مرفوعان",
+  "@armsRaised": {
+    "description": "Status when arms are raised"
+  },
+  "raiseArms": "يرجى رفع الذراعين",
+  "@raiseArms": {
+    "description": "Prompt to raise arms"
+  },
+  "lowerArms": "ممتاز! يرجى خفض الذراعين",
+  "@lowerArms": {
+    "description": "Prompt to lower arms after raising"
+  },
+  "successCount": "عدد النجاحات",
+  "@successCount": {
+    "description": "Success count label"
+  },
+  "cameraPermissionRequired": "إذن الكاميرا مطلوب",
+  "@cameraPermissionRequired": {
+    "description": "Camera permission required message"
+  },
+  "cameraPermissionDeniedMessage": "تم رفض إذن الكاميرا. يرجى تمكين إذن الكاميرا في إعدادات النظام لاستخدام تدريب الحركة.",
+  "@cameraPermissionDeniedMessage": {
+    "description": "Camera permission denied message"
+  }
 }
