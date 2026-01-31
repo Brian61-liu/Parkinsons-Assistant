@@ -496,5 +496,57 @@
   "minutes": "min",
   "@minutes": {
     "description": "Minutes unit"
+  },
+  "selectTrainingType": "Select Training Type",
+  "@selectTrainingType": {
+    "description": "Select training type dialog title"
+  },
+  "armsRaisedTraining": "Arms Raised",
+  "@armsRaisedTraining": {
+    "description": "Arms raised training type"
+  },
+  "fistClenchTraining": "Fist Clench",
+  "@fistClenchTraining": {
+    "description": "Fist clench training type"
+  },
+  "legLiftTraining": "Leg Lift",
+  "@legLiftTraining": {
+    "description": "Leg lift training type"
+  },
+  "fistClenchInstruction": "Please clench your fists, then open them to complete one action",
+  "@fistClenchInstruction": {
+    "description": "Fist clench instruction"
+  },
+  "legLiftInstruction": "Please lift one leg, then lower it to complete one action",
+  "@legLiftInstruction": {
+    "description": "Leg lift instruction"
+  },
+  "openFists": "Please open your hands",
+  "@openFists": {
+    "description": "Prompt to open fists"
+  },
+  "lowerLegs": "Please lower your legs",
+  "@lowerLegs": {
+    "description": "Prompt to lower legs"
+  },
+  "fistsClenched": "Fists Clenched",
+  "@fistsClenched": {
+    "description": "Status when fists are clenched"
+  },
+  "legsRaised": "Legs Raised",
+  "@legsRaised": {
+    "description": "Status when legs are raised"
+  },
+  "clenchFists": "Please Clench Your Fists",
+  "@clenchFists": {
+    "description": "Prompt to clench fists"
+  },
+  "raiseLegs": "Please Raise Your Legs",
+  "@raiseLegs": {
+    "description": "Prompt to raise legs"
+  },
+  "trainingType": "Training Type",
+  "@trainingType": {
+    "description": "Training type label"
   }
 }

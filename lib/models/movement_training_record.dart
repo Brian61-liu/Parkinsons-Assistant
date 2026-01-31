@@ -1,3 +1,10 @@
+// 训练类型枚举
+enum TrainingType {
+  armsRaised,    // 举手运动
+  fistClench,    // 握拳运动
+  legLift,       // 原地抬腿运动
+}
+
 // 肢体动作训练记录模型
 class MovementTrainingRecord {
   final int? id;
@@ -6,6 +13,7 @@ class MovementTrainingRecord {
   final int successCount; // 成功次数
   final int targetCount; // 目标次数
   final bool goalReached; // 是否达到目标
+  final TrainingType trainingType; // 训练类型
 
   MovementTrainingRecord({
     this.id,
@@ -14,6 +22,7 @@ class MovementTrainingRecord {
     required this.successCount,
     required this.targetCount,
     required this.goalReached,
+    this.trainingType = TrainingType.armsRaised, // 默认为举手运动
   });
 
   // 转换为Map（用于数据库存储）
@@ -25,6 +34,7 @@ class MovementTrainingRecord {
       'successCount': successCount,
       'targetCount': targetCount,
       'goalReached': goalReached ? 1 : 0,
+      'trainingType': trainingType.index, // 存储枚举索引
     };
   }
 
@@ -37,6 +47,9 @@ class MovementTrainingRecord {
       successCount: map['successCount'] as int,
       targetCount: map['targetCount'] as int,
       goalReached: (map['goalReached'] as int) == 1,
+      trainingType: map['trainingType'] != null
+          ? TrainingType.values[map['trainingType'] as int]
+          : TrainingType.armsRaised, // 兼容旧数据
     );
   }
 }

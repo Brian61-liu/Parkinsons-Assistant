@@ -11,6 +11,7 @@ import '../pages/data_management_page.dart';
 import '../pages/privacy_policy_page.dart';
 import '../services/auth_service.dart';
 import '../services/avatar_service.dart';
+import '../services/database_service.dart';
 
 // 主页面
 class HomePage extends StatefulWidget {
@@ -30,13 +31,77 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final AuthService _authService = AuthService();
   final AvatarService _avatarService = AvatarService();
+  final DatabaseService _databaseService = DatabaseService();
   bool _isUploadingAvatar = false;
   String? _localAvatarPath; // 本地头像路径
+  bool _isSyncing = false; // 是否正在同步
 
   @override
   void initState() {
     super.initState();
     _loadLocalAvatar();
+    _syncDataOnLogin();
+  }
+
+  /// 登录时自动同步数据（仅登录用户，游客模式不同步）
+  Future<void> _syncDataOnLogin() async {
+    final user = FirebaseAuth.instance.currentUser;
+    // 游客模式通过 SharedPreferences 的 is_guest_mode 标识，此时 currentUser 为 null
+    // 只有真正登录的用户才会同步数据
+    if (user != null) {
+      // 延迟一下，确保页面已加载
+      Future.delayed(const Duration(seconds: 1), () async {
+        await _syncData(showMessage: false);
+      });
+    }
+  }
+
+  /// 同步数据（双向同步）
+  Future<void> _syncData({bool showMessage = true}) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      if (showMessage && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('请先登录以使用云端同步功能')),
+        );
+      }
+      return;
+    }
+
+    if (_isSyncing) return;
+
+    setState(() {
+      _isSyncing = true;
+    });
+
+    try {
+      // 双向同步：先拉取云端数据，再推送本地数据
+      await _databaseService.syncFromCloud();
+      
+      if (showMessage && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('数据同步完成'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (showMessage && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('同步失败: $e'),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSyncing = false;
+        });
+      }
+    }
   }
 
   /// 加载本地头像路径
@@ -233,6 +298,19 @@ class _HomePageState extends State<HomePage> {
                 _showLanguageDialog(context);
               },
             ),
+            // 数据同步（仅登录用户）
+            if (FirebaseAuth.instance.currentUser != null)
+              _buildSettingsItem(
+                icon: CupertinoIcons.cloud_upload,
+                color: const Color(0xFF8B5CF6),
+                title: _isSyncing ? '同步中...' : '同步数据',
+                onTap: () {
+                  if (!_isSyncing) {
+                    Navigator.pop(ctx);
+                    _syncData();
+                  }
+                },
+              ),
             // 数据管理
             _buildSettingsItem(
               icon: CupertinoIcons.shield_lefthalf_fill,

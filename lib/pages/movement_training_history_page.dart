@@ -99,6 +99,17 @@ class _MovementTrainingHistoryPageState extends State<MovementTrainingHistoryPag
     return '$secs${l10n.seconds}';
   }
 
+  String _getTrainingTypeName(TrainingType type, AppLocalizations l10n) {
+    switch (type) {
+      case TrainingType.armsRaised:
+        return l10n.armsRaisedTraining;
+      case TrainingType.fistClench:
+        return l10n.fistClenchTraining;
+      case TrainingType.legLift:
+        return l10n.legLiftTraining;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -241,6 +252,15 @@ class _MovementTrainingHistoryPageState extends State<MovementTrainingHistoryPag
                       Row(
                         children: [
                           Text(
+                            _getTrainingTypeName(record.trainingType, l10n),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF8B5CF6),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
                             '${l10n.successCount}: ${record.successCount}/${record.targetCount}',
                             style: const TextStyle(
                               fontSize: 14,
@@ -291,6 +311,8 @@ class _MovementTrainingHistoryPageState extends State<MovementTrainingHistoryPag
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('${l10n.testDate}: $dateStr'),
+            const SizedBox(height: 8),
+            Text('${l10n.trainingType}: ${_getTrainingTypeName(record.trainingType, l10n)}'),
             const SizedBox(height: 8),
             Text('${l10n.successCount}: ${record.successCount}/${record.targetCount}'),
             const SizedBox(height: 8),

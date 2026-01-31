@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.brian.kineo"
+    namespace = "com.kineo.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -22,7 +22,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.brian.kineo"
+        applicationId = "com.kineo.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion // Firebase 需要最低 API 23
@@ -42,4 +42,8 @@ android {
 
 flutter {
     source = "../.."
+}
+dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:34.8.0"))
+    implementation("com.google.firebase:firebase-analytics")
 }

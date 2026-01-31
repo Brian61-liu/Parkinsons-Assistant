@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "57479493999",
-    "project_id": "kineo-4c039",
-    "storage_bucket": "kineo-4c039.firebasestorage.app"
+    "project_number": "398410948138",
+    "project_id": "kineo-85403",
+    "storage_bucket": "kineo-85403.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:57479493999:android:4c70d1790771b9f5f4909a",
+        "mobilesdk_app_id": "1:398410948138:android:7be6820d07a30717c56d53",
         "android_client_info": {
-          "package_name": "com.brian.kineo"
+          "package_name": "com.kineo.app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "57479493999-7knki5sju34u35qs771dqaomougkhgm9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.brian.kineo",
-            "certificate_hash": "369f1c6737656e1d22b4729492c6ec406e853fe0"
-          }
-        },
-        {
-          "client_id": "57479493999-mq6n89ogs682p1k7esse2cvrrukl9fn7.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBM6IAN1GWddGo4F9skur3s0Vq_gR-2tF0"
+          "current_key": "AIzaSyAPZjLuK1wjvozaH3tf9QytK4mRAnStqzM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "57479493999-mq6n89ogs682p1k7esse2cvrrukl9fn7.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

@@ -517,4 +517,45 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get minutes => 'мин';
+
+  @override
+  String get selectTrainingType => 'Select Training Type';
+
+  @override
+  String get armsRaisedTraining => 'Arms Raised';
+
+  @override
+  String get fistClenchTraining => 'Fist Clench';
+
+  @override
+  String get legLiftTraining => 'Leg Lift';
+
+  @override
+  String get fistClenchInstruction =>
+      'Please clench your fists, then open them to complete one action';
+
+  @override
+  String get legLiftInstruction =>
+      'Please lift one leg, then lower it to complete one action';
+
+  @override
+  String get openFists => 'Please open your hands';
+
+  @override
+  String get lowerLegs => 'Please lower your legs';
+
+  @override
+  String get fistsClenched => 'Fists Clenched';
+
+  @override
+  String get legsRaised => 'Legs Raised';
+
+  @override
+  String get clenchFists => 'Please Clench Your Fists';
+
+  @override
+  String get raiseLegs => 'Please Raise Your Legs';
+
+  @override
+  String get trainingType => 'Training Type';
 }

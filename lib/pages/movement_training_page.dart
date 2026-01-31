@@ -28,8 +28,11 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   Size? _imageSize;
   bool _isFrontCamera = false; // 是否使用前置摄像头
   
-  // 双手举高检测相关
-  bool _isArmsRaised = false;
+  // 训练类型
+  TrainingType _currentTrainingType = TrainingType.armsRaised; // 当前训练类型
+  
+  // 动作检测相关（通用）
+  bool _isActionPerformed = false; // 是否完成动作（根据训练类型不同而不同）
   int _successCount = 0;
   int _targetCount = 10; // 目标次数
   bool _isGoalReached = false; // 是否达到目标
@@ -57,9 +60,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   @override
   void initState() {
     super.initState();
-    _initializeCamera();
-    _initializePoseDetector();
-    _startTrainingTimer();
+    _showTrainingTypeSelection();
   }
   
   // 启动训练计时器
@@ -189,10 +190,10 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         _imageSize = Size(image.width.toDouble(), image.height.toDouble());
         if (poses.isNotEmpty) {
           _currentPose = poses.first;
-          _checkArmsRaised();
+          _checkAction();
         } else {
           _currentPose = null;
-          _isArmsRaised = false;
+          _isActionPerformed = false;
         }
         _isDetecting = false;
       });
@@ -224,6 +225,97 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     );
   }
 
+  // 显示训练类型选择对话框
+  void _showTrainingTypeSelection() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        showCupertinoDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => _buildTrainingTypeSelectionDialog(context),
+        );
+      }
+    });
+  }
+
+  Widget _buildTrainingTypeSelectionDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    return CupertinoAlertDialog(
+      title: Text(l10n.selectTrainingType),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 16),
+          _buildTrainingTypeOption(context, TrainingType.armsRaised, l10n),
+          const SizedBox(height: 12),
+          _buildTrainingTypeOption(context, TrainingType.fistClench, l10n),
+          const SizedBox(height: 12),
+          _buildTrainingTypeOption(context, TrainingType.legLift, l10n),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTrainingTypeOption(BuildContext context, TrainingType type, AppLocalizations l10n) {
+    String title;
+    IconData icon;
+    Color color;
+    
+    switch (type) {
+      case TrainingType.armsRaised:
+        title = l10n.armsRaisedTraining;
+        icon = CupertinoIcons.hand_raised_fill;
+        color = const Color(0xFF8B5CF6);
+      case TrainingType.fistClench:
+        title = l10n.fistClenchTraining;
+        icon = CupertinoIcons.hand_raised_fill;
+        color = const Color(0xFF10B981);
+      case TrainingType.legLift:
+        title = l10n.legLiftTraining;
+        icon = CupertinoIcons.arrow_up_circle_fill;
+        color = const Color(0xFF0EA5E9);
+    }
+    
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: () {
+        setState(() {
+          _currentTrainingType = type;
+        });
+        Navigator.pop(context);
+        _initializeCamera();
+        _initializePoseDetector();
+        _startTrainingTimer();
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: color, size: 28),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   // 格式化时长显示
   String _formatDuration(int seconds) {
     final minutes = seconds ~/ 60;
@@ -231,20 +323,70 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
   }
 
-  String _getActionStatusText(AppLocalizations l10n) {
-    if (_actionState == 1) {
-      // 已经举高，提示放下
-      return l10n.lowerArms;
-    } else if (_isArmsRaised) {
-      return l10n.armsRaised;
-    } else {
-      return l10n.raiseArms;
+  String _getTrainingInstruction(AppLocalizations l10n) {
+    switch (_currentTrainingType) {
+      case TrainingType.armsRaised:
+        return l10n.movementTrainingInstruction;
+      case TrainingType.fistClench:
+        return l10n.fistClenchInstruction;
+      case TrainingType.legLift:
+        return l10n.legLiftInstruction;
     }
   }
 
+  String _getActionStatusText(AppLocalizations l10n) {
+    if (_actionState == 1) {
+      // 已经完成动作，提示恢复
+      switch (_currentTrainingType) {
+        case TrainingType.armsRaised:
+          return l10n.lowerArms;
+        case TrainingType.fistClench:
+          return l10n.openFists;
+        case TrainingType.legLift:
+          return l10n.lowerLegs;
+      }
+    } else if (_isActionPerformed) {
+      // 动作已完成
+      switch (_currentTrainingType) {
+        case TrainingType.armsRaised:
+          return l10n.armsRaised;
+        case TrainingType.fistClench:
+          return l10n.fistsClenched;
+        case TrainingType.legLift:
+          return l10n.legsRaised;
+      }
+    } else {
+      // 提示开始动作
+      switch (_currentTrainingType) {
+        case TrainingType.armsRaised:
+          return l10n.raiseArms;
+        case TrainingType.fistClench:
+          return l10n.clenchFists;
+        case TrainingType.legLift:
+          return l10n.raiseLegs;
+      }
+    }
+  }
+
+  // 通用动作检测方法（根据训练类型调用不同的检测逻辑）
+  void _checkAction() {
+    switch (_currentTrainingType) {
+      case TrainingType.armsRaised:
+        _checkArmsRaised();
+        break;
+      case TrainingType.fistClench:
+        _checkFistClench();
+        break;
+      case TrainingType.legLift:
+        _checkLegLift();
+        break;
+    }
+  }
+
+  // 举手运动检测
   void _checkArmsRaised() {
     if (_currentPose == null) {
-      _isArmsRaised = false;
+      _isActionPerformed = false;
       // 如果检测不到姿态，重置状态
       if (_actionState == 1) {
         _actionState = 0;
@@ -267,7 +409,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         rightWrist == null ||
         leftElbow == null ||
         rightElbow == null) {
-      _isArmsRaised = false;
+      _isActionPerformed = false;
       // 如果检测不到关键点，重置状态
       if (_actionState == 1) {
         _actionState = 0;
@@ -306,7 +448,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     final rightArmLowered = rightWrist.y >= (shoulderCenterY - 10) || 
                            rightElbow.y >= shoulderCenterY;
 
-    final wasRaised = _isArmsRaised;
+    final wasRaised = _isActionPerformed;
     // 只有双手都满足条件才算举高/放下
     final currentRaised = leftArmRaised && rightArmRaised;
     final currentLowered = leftArmLowered && rightArmLowered;
@@ -338,10 +480,10 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     }
     
     // 更新状态（只有确认后才更新）
-    if (confirmedRaised && !_isArmsRaised) {
-      _isArmsRaised = true;
-    } else if (confirmedLowered && _isArmsRaised) {
-      _isArmsRaised = false;
+    if (confirmedRaised && !_isActionPerformed) {
+      _isActionPerformed = true;
+    } else if (confirmedLowered && _isActionPerformed) {
+      _isActionPerformed = false;
     }
     
     // 状态机：检测完整的举起-放下动作
@@ -352,14 +494,14 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     final canPerformAction = _lastActionTime == null || 
                             now.difference(_lastActionTime!) >= _actionCooldown;
     
-    if (_isArmsRaised && !wasRaised && confirmedRaised) {
+    if (_isActionPerformed && !wasRaised && confirmedRaised) {
       // 从放下状态变为举高状态（已确认）
       if (_actionState == 0) {
         setState(() {
           _actionState = 1; // 进入举高状态
         });
       }
-    } else if (!_isArmsRaised && wasRaised && confirmedLowered) {
+    } else if (!_isActionPerformed && wasRaised && confirmedLowered) {
       // 从举高状态变为放下状态（已确认）
       if (_actionState == 1 && canPerformAction && !_isGoalReached) {
         // 完成一个完整的动作：举起 -> 放下
@@ -398,6 +540,298 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
           HapticFeedback.heavyImpact();
         } else {
           // 普通震动反馈
+          HapticFeedback.mediumImpact();
+        }
+      }
+    }
+  }
+
+  // 握拳运动检测（通过手腕和肘部的相对位置变化检测）
+  void _checkFistClench() {
+    if (_currentPose == null) {
+      _isActionPerformed = false;
+      if (_actionState == 1) {
+        _actionState = 0;
+      }
+      return;
+    }
+
+    // 获取关键点：手腕、肘部、肩膀
+    final leftWrist = _currentPose!.landmarks[PoseLandmarkType.leftWrist];
+    final rightWrist = _currentPose!.landmarks[PoseLandmarkType.rightWrist];
+    final leftElbow = _currentPose!.landmarks[PoseLandmarkType.leftElbow];
+    final rightElbow = _currentPose!.landmarks[PoseLandmarkType.rightElbow];
+    final leftShoulder = _currentPose!.landmarks[PoseLandmarkType.leftShoulder];
+    final rightShoulder = _currentPose!.landmarks[PoseLandmarkType.rightShoulder];
+
+    // 检查关键点是否存在
+    if (leftWrist == null || rightWrist == null ||
+        leftElbow == null || rightElbow == null ||
+        leftShoulder == null || rightShoulder == null) {
+      _isActionPerformed = false;
+      if (_actionState == 1) {
+        _actionState = 0;
+      }
+      return;
+    }
+
+    // 计算手臂弯曲角度（通过手腕、肘部、肩膀的相对位置）
+    // 握拳时，手臂会自然弯曲，手腕会靠近身体中心
+    final shoulderCenterX = (leftShoulder.x + rightShoulder.x) / 2;
+    final shoulderCenterY = (leftShoulder.y + rightShoulder.y) / 2;
+    
+    // 握拳检测：使用更简单的方法
+    // 握拳时，手臂会自然弯曲，手腕会靠近身体中心线
+    // 计算手腕到身体中心线的水平距离（归一化）
+    final imageWidth = _imageSize?.width ?? 1.0;
+    final imageHeight = _imageSize?.height ?? 1.0;
+    
+    // 计算手腕到身体中心线的水平距离（归一化到0-1）
+    final leftWristToCenterX = (leftWrist.x - shoulderCenterX).abs() / imageWidth;
+    final rightWristToCenterX = (rightWrist.x - shoulderCenterX).abs() / imageWidth;
+    
+    // 计算手腕到肩膀的垂直距离（归一化）
+    final leftWristToShoulderY = (leftWrist.y - shoulderCenterY) / imageHeight;
+    final rightWristToShoulderY = (rightWrist.y - shoulderCenterY) / imageHeight;
+    
+    // 握拳判断：
+    // 1. 手腕在肩膀下方（y值更大，因为坐标系y向下）
+    // 2. 手腕靠近身体中心（水平距离小，表示手臂弯曲靠近身体）
+    // 3. 手腕到肩膀的垂直距离在合理范围内（手臂自然下垂或稍微弯曲）
+    final maxHorizontalDistance = 0.25; // 手腕到中心线的最大水平距离（25%图像宽度）
+    final minVerticalDistance = 0.05; // 手腕到肩膀的最小垂直距离（5%图像高度）
+    final maxVerticalDistance = 0.4; // 手腕到肩膀的最大垂直距离（40%图像高度）
+    
+    final leftFistClenched = leftWrist.y > shoulderCenterY && // 手腕在肩膀下方
+                            leftWristToCenterX < maxHorizontalDistance && // 手腕靠近身体中心
+                            leftWristToShoulderY > minVerticalDistance && // 手腕在肩膀下方一定距离
+                            leftWristToShoulderY < maxVerticalDistance; // 但不要太远
+    
+    final rightFistClenched = rightWrist.y > shoulderCenterY &&
+                             rightWristToCenterX < maxHorizontalDistance &&
+                             rightWristToShoulderY > minVerticalDistance &&
+                             rightWristToShoulderY < maxVerticalDistance;
+
+    // 张开判断：手臂伸展，手腕远离身体中心，或者手腕在肩膀上方
+    final openHorizontalDistance = 0.3; // 张开时手腕到中心线的最小水平距离
+    final leftFistOpen = leftWristToCenterX > openHorizontalDistance || // 手腕远离中心
+                        leftWrist.y <= shoulderCenterY || // 或者手腕在肩膀上
+                        leftWristToShoulderY > maxVerticalDistance; // 或者手腕太远
+    final rightFistOpen = rightWristToCenterX > openHorizontalDistance ||
+                         rightWrist.y <= shoulderCenterY ||
+                         rightWristToShoulderY > maxVerticalDistance;
+
+    final wasClenched = _isActionPerformed;
+    // 允许单手握拳即可（更宽松的条件）
+    final currentClenched = leftFistClenched || rightFistClenched;
+    final currentOpen = leftFistOpen && rightFistOpen;
+
+    // 防抖机制
+    if (currentClenched) {
+      _raiseConfirmCount++;
+      _lowerConfirmCount = 0;
+    } else if (currentOpen) {
+      _lowerConfirmCount++;
+      _raiseConfirmCount = 0;
+    }
+
+    bool confirmedClenched = false;
+    bool confirmedOpen = false;
+
+    if (_raiseConfirmCount >= _confirmThreshold) {
+      confirmedClenched = true;
+      _raiseConfirmCount = _confirmThreshold;
+    }
+
+    if (_lowerConfirmCount >= _confirmThreshold) {
+      confirmedOpen = true;
+      _lowerConfirmCount = _confirmThreshold;
+    }
+
+    // 更新状态
+    if (confirmedClenched && !_isActionPerformed) {
+      _isActionPerformed = true;
+    } else if (confirmedOpen && _isActionPerformed) {
+      _isActionPerformed = false;
+    }
+
+    // 状态机处理
+    final now = DateTime.now();
+    final canPerformAction = _lastActionTime == null || 
+                            now.difference(_lastActionTime!) >= _actionCooldown;
+
+    if (_isActionPerformed && !wasClenched && confirmedClenched) {
+      if (_actionState == 0) {
+        setState(() {
+          _actionState = 1;
+        });
+      }
+    } else if (!_isActionPerformed && wasClenched && confirmedOpen) {
+      if (_actionState == 1 && canPerformAction && !_isGoalReached) {
+        setState(() {
+          _successCount++;
+          _actionState = 0;
+          _lastActionTime = now;
+          
+          if (_successCount >= _targetCount) {
+            _isGoalReached = true;
+            _cameraController?.stopImageStream();
+          }
+        });
+        
+        _raiseConfirmCount = 0;
+        _lowerConfirmCount = 0;
+        
+        if (_successCount >= _targetCount) {
+          _trainingTimer?.cancel();
+          _saveTrainingRecord();
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (mounted) {
+              _showSuccessDialog(context);
+            }
+          });
+          HapticFeedback.heavyImpact();
+        } else {
+          HapticFeedback.mediumImpact();
+        }
+      }
+    }
+  }
+
+  // 原地抬腿运动检测
+  void _checkLegLift() {
+    if (_currentPose == null) {
+      _isActionPerformed = false;
+      if (_actionState == 1) {
+        _actionState = 0;
+      }
+      return;
+    }
+
+    // 获取关键点：髋部、膝盖、脚踝
+    final leftHip = _currentPose!.landmarks[PoseLandmarkType.leftHip];
+    final rightHip = _currentPose!.landmarks[PoseLandmarkType.rightHip];
+    final leftKnee = _currentPose!.landmarks[PoseLandmarkType.leftKnee];
+    final rightKnee = _currentPose!.landmarks[PoseLandmarkType.rightKnee];
+    final leftAnkle = _currentPose!.landmarks[PoseLandmarkType.leftAnkle];
+    final rightAnkle = _currentPose!.landmarks[PoseLandmarkType.rightAnkle];
+
+    // 检查关键点是否存在
+    if (leftHip == null || rightHip == null ||
+        leftKnee == null || rightKnee == null ||
+        leftAnkle == null || rightAnkle == null) {
+      _isActionPerformed = false;
+      if (_actionState == 1) {
+        _actionState = 0;
+      }
+      return;
+    }
+
+    // 计算髋部中心点
+    final hipCenterY = (leftHip.y + rightHip.y) / 2;
+    
+    // 计算图像尺寸用于归一化
+    final imageHeight = _imageSize?.height ?? 1.0;
+    
+    // 抬腿判断：使用相对高度而不是绝对像素
+    // 脚踝应该明显高于髋部，且膝盖也应该高于髋部
+    // 使用腿部长度的一定比例作为阈值（更适应不同身高和距离）
+    final minLiftRatio = 0.15; // 最小抬起比例（相对于图像高度）
+    final minLiftDistance = imageHeight * minLiftRatio;
+    
+    // 计算脚踝到髋部的垂直距离
+    final leftAnkleToHipY = (hipCenterY - leftAnkle.y) * imageHeight;
+    final rightAnkleToHipY = (hipCenterY - rightAnkle.y) * imageHeight;
+    
+    // 抬腿：脚踝明显高于髋部，且膝盖也高于髋部，且脚踝高于膝盖
+    final leftLegRaised = leftAnkleToHipY > minLiftDistance &&
+                         leftKnee.y < hipCenterY &&
+                         leftAnkle.y < leftKnee.y;
+    
+    final rightLegRaised = rightAnkleToHipY > minLiftDistance &&
+                          rightKnee.y < hipCenterY &&
+                          rightAnkle.y < rightKnee.y;
+
+    // 放下判断：脚踝回到髋部附近或以下，或者膝盖回到髋部附近或以下
+    final lowerThreshold = imageHeight * 0.05; // 5%的图像高度作为容差
+    final leftLegLowered = leftAnkleToHipY <= lowerThreshold ||
+                          leftKnee.y >= (hipCenterY - lowerThreshold / imageHeight);
+    
+    final rightLegLowered = rightAnkleToHipY <= lowerThreshold ||
+                           rightKnee.y >= (hipCenterY - lowerThreshold / imageHeight);
+
+    // 交替抬腿：一次抬一条腿（左腿或右腿）
+    final wasRaised = _isActionPerformed;
+    final currentRaised = leftLegRaised || rightLegRaised;
+    // 只要有一条腿放下就算放下（更宽松的条件）
+    final currentLowered = leftLegLowered || rightLegLowered;
+
+    // 防抖机制
+    if (currentRaised) {
+      _raiseConfirmCount++;
+      _lowerConfirmCount = 0;
+    } else if (currentLowered) {
+      _lowerConfirmCount++;
+      _raiseConfirmCount = 0;
+    }
+
+    bool confirmedRaised = false;
+    bool confirmedLowered = false;
+
+    if (_raiseConfirmCount >= _confirmThreshold) {
+      confirmedRaised = true;
+      _raiseConfirmCount = _confirmThreshold;
+    }
+
+    if (_lowerConfirmCount >= _confirmThreshold) {
+      confirmedLowered = true;
+      _lowerConfirmCount = _confirmThreshold;
+    }
+
+    // 更新状态
+    if (confirmedRaised && !_isActionPerformed) {
+      _isActionPerformed = true;
+    } else if (confirmedLowered && _isActionPerformed) {
+      _isActionPerformed = false;
+    }
+
+    // 状态机处理
+    final now = DateTime.now();
+    final canPerformAction = _lastActionTime == null || 
+                            now.difference(_lastActionTime!) >= _actionCooldown;
+
+    if (_isActionPerformed && !wasRaised && confirmedRaised) {
+      if (_actionState == 0) {
+        setState(() {
+          _actionState = 1;
+        });
+      }
+    } else if (!_isActionPerformed && wasRaised && confirmedLowered) {
+      if (_actionState == 1 && canPerformAction && !_isGoalReached) {
+        setState(() {
+          _successCount++;
+          _actionState = 0;
+          _lastActionTime = now;
+          
+          if (_successCount >= _targetCount) {
+            _isGoalReached = true;
+            _cameraController?.stopImageStream();
+          }
+        });
+        
+        _raiseConfirmCount = 0;
+        _lowerConfirmCount = 0;
+        
+        if (_successCount >= _targetCount) {
+          _trainingTimer?.cancel();
+          _saveTrainingRecord();
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (mounted) {
+              _showSuccessDialog(context);
+            }
+          });
+          HapticFeedback.heavyImpact();
+        } else {
           HapticFeedback.mediumImpact();
         }
       }
@@ -574,6 +1008,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         successCount: _successCount,
         targetCount: _targetCount,
         goalReached: _isGoalReached,
+        trainingType: _currentTrainingType,
       );
       await _databaseService.insertMovementTrainingRecord(record);
     } catch (e) {
@@ -756,8 +1191,9 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
               painter: PosePainter(
                 pose: _currentPose!,
                 imageSize: _imageSize!,
-                isArmsRaised: _isArmsRaised,
+                isActionPerformed: _isActionPerformed,
                 isFrontCamera: _isFrontCamera,
+                trainingType: _currentTrainingType,
               ),
             ),
           ),
@@ -781,7 +1217,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
             child: Column(
               children: [
                 Text(
-                  l10n.movementTrainingInstruction,
+                  _getTrainingInstruction(l10n),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -809,7 +1245,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: _isArmsRaised
+                        color: _isActionPerformed
                             ? Colors.green.withValues(alpha: 0.8)
                             : Colors.orange.withValues(alpha: 0.8),
                         borderRadius: BorderRadius.circular(20),
@@ -817,7 +1253,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                       child: Row(
                         children: [
                           Icon(
-                            _isArmsRaised
+                            _isActionPerformed
                                 ? CupertinoIcons.check_mark_circled_solid
                                 : CupertinoIcons.exclamationmark_circle,
                             color: Colors.white,
@@ -927,14 +1363,16 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
 class PosePainter extends CustomPainter {
   final Pose pose;
   final Size imageSize;
-  final bool isArmsRaised;
+  final bool isActionPerformed;
   final bool isFrontCamera; // 是否使用前置摄像头（需要镜像翻转）
+  final TrainingType trainingType; // 训练类型
 
   PosePainter({
     required this.pose,
     required this.imageSize,
-    required this.isArmsRaised,
+    required this.isActionPerformed,
     required this.isFrontCamera,
+    required this.trainingType,
   });
 
   @override
@@ -949,17 +1387,66 @@ class PosePainter extends CustomPainter {
       return isFrontCamera ? imageSize.width - x : x;
     }
 
-    // 只定义与训练相关的骨骼连接关系（手臂部分）
-    final connections = [
-      // 肩膀之间的连线（作为身体中心参考）
-      [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
-      // 左手臂
-      [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow],
-      [PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist],
-      // 右手臂
-      [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
-      [PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist],
-    ];
+    // 根据训练类型定义不同的骨骼连接关系
+    List<List<PoseLandmarkType>> connections = [];
+    List<PoseLandmarkType> relevantLandmarks = [];
+    
+    switch (trainingType) {
+      case TrainingType.armsRaised:
+        // 举手运动：显示手臂
+        connections = [
+          [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
+          [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow],
+          [PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist],
+          [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
+          [PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist],
+        ];
+        relevantLandmarks = [
+          PoseLandmarkType.leftShoulder,
+          PoseLandmarkType.rightShoulder,
+          PoseLandmarkType.leftElbow,
+          PoseLandmarkType.rightElbow,
+          PoseLandmarkType.leftWrist,
+          PoseLandmarkType.rightWrist,
+        ];
+        break;
+      case TrainingType.fistClench:
+        // 握拳运动：显示手臂和手部辅助线条（模拟手指位置）
+        connections = [
+          // 手臂骨骼
+          [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow],
+          [PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist],
+          [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
+          [PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist],
+        ];
+        relevantLandmarks = [
+          PoseLandmarkType.leftWrist,
+          PoseLandmarkType.rightWrist,
+          PoseLandmarkType.leftElbow,
+          PoseLandmarkType.rightElbow,
+          PoseLandmarkType.leftShoulder,
+          PoseLandmarkType.rightShoulder,
+        ];
+        break;
+      case TrainingType.legLift:
+        // 抬腿运动：显示腿部
+        connections = [
+          [PoseLandmarkType.leftHip, PoseLandmarkType.rightHip],
+          [PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee],
+          [PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle],
+          [PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee],
+          [PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle],
+        ];
+        relevantLandmarks = [
+          PoseLandmarkType.leftHip,
+          PoseLandmarkType.rightHip,
+          PoseLandmarkType.leftKnee,
+          PoseLandmarkType.rightKnee,
+          PoseLandmarkType.leftAnkle,
+          PoseLandmarkType.rightAnkle,
+        ];
+        break;
+    }
 
     // 绘制骨骼连线（白色）
     final linePaint = Paint()
@@ -991,16 +1478,6 @@ class PosePainter extends CustomPainter {
       ..color = Colors.yellow
       ..style = PaintingStyle.fill;
 
-    // 定义需要显示的关键点（只显示手臂相关）
-    final relevantLandmarks = [
-      PoseLandmarkType.leftShoulder,
-      PoseLandmarkType.rightShoulder,
-      PoseLandmarkType.leftElbow,
-      PoseLandmarkType.rightElbow,
-      PoseLandmarkType.leftWrist,
-      PoseLandmarkType.rightWrist,
-    ];
-
     for (final landmarkType in relevantLandmarks) {
       final landmark = pose.landmarks[landmarkType];
       if (landmark != null) {
@@ -1015,12 +1492,145 @@ class PosePainter extends CustomPainter {
         );
       }
     }
+
+    // 为握拳运动添加手部辅助线条（模拟手指）
+    if (trainingType == TrainingType.fistClench) {
+      _drawHandFingers(canvas, pose, imageSize, size, flipX, scaleX, scaleY);
+    }
+  }
+
+  // 绘制手部辅助线条（模拟手指位置，用于握拳检测）
+  void _drawHandFingers(Canvas canvas, Pose pose, Size imageSize, Size screenSize, 
+      double Function(double) flipX, double scaleX, double scaleY) {
+    final leftWrist = pose.landmarks[PoseLandmarkType.leftWrist];
+    final rightWrist = pose.landmarks[PoseLandmarkType.rightWrist];
+    final leftElbow = pose.landmarks[PoseLandmarkType.leftElbow];
+    final rightElbow = pose.landmarks[PoseLandmarkType.rightElbow];
+
+    // 手指线条绘制（从手腕延伸出去，模拟手指）
+    final fingerPaint = Paint()
+      ..color = Colors.cyan.withValues(alpha: 0.6)
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke;
+
+    // 绘制左手手指（5根手指）
+    if (leftWrist != null && leftElbow != null) {
+      final wristX = flipX(leftWrist.x) * scaleX;
+      final wristY = leftWrist.y * scaleY;
+      
+      // 计算手指方向（垂直于前臂方向）
+      final elbowX = flipX(leftElbow.x) * scaleX;
+      final elbowY = leftElbow.y * scaleY;
+      final forearmDx = wristX - elbowX;
+      final forearmDy = wristY - elbowY;
+      final forearmLengthSq = forearmDx * forearmDx + forearmDy * forearmDy;
+      
+      if (forearmLengthSq > 100) { // 最小长度阈值
+        final forearmLength = forearmLengthSq;
+        // 归一化前臂方向
+        final normalizedDx = forearmDx / forearmLength;
+        final normalizedDy = forearmDy / forearmLength;
+        
+        // 垂直于前臂的方向（用于手指延伸）
+        final perpDx = -normalizedDy;
+        final perpDy = normalizedDx;
+        
+        // 手指基础长度（基于前臂长度的平方，转换为屏幕像素）
+        final fingerBaseLength = forearmLength * 0.08; // 手指基础长度
+        
+        // 绘制5根手指（从拇指到小指）
+        for (int i = 0; i < 5; i++) {
+          // 手指位置（从手腕向外延伸，稍微分散）
+          final fingerOffset = (i - 2) * fingerBaseLength * 0.2; // 手指间距
+          final fingerStartX = wristX + perpDx * fingerOffset;
+          final fingerStartY = wristY + perpDy * fingerOffset;
+          
+          // 手指延伸方向（稍微向前倾斜）
+          final fingerAngle = (i - 2) * 0.08; // 每根手指稍微倾斜
+          final fingerLength = fingerBaseLength * (1.0 + i * 0.1); // 手指长度递增
+          final fingerEndX = fingerStartX + perpDx * fingerLength * (1 - fingerAngle.abs()) + 
+                            normalizedDx * fingerLength * 0.2;
+          final fingerEndY = fingerStartY + perpDy * fingerLength * (1 - fingerAngle.abs()) + 
+                            normalizedDy * fingerLength * 0.2;
+          
+          canvas.drawLine(
+            Offset(fingerStartX, fingerStartY),
+            Offset(fingerEndX, fingerEndY),
+            fingerPaint,
+          );
+          
+          // 在手指末端绘制小圆点
+          canvas.drawCircle(
+            Offset(fingerEndX, fingerEndY),
+            3.0,
+            Paint()..color = Colors.cyan.withValues(alpha: 0.8)..style = PaintingStyle.fill,
+          );
+        }
+      }
+    }
+
+    // 绘制右手手指（5根手指）
+    if (rightWrist != null && rightElbow != null) {
+      final wristX = flipX(rightWrist.x) * scaleX;
+      final wristY = rightWrist.y * scaleY;
+      
+      // 计算手指方向（垂直于前臂方向）
+      final elbowX = flipX(rightElbow.x) * scaleX;
+      final elbowY = rightElbow.y * scaleY;
+      final forearmDx = wristX - elbowX;
+      final forearmDy = wristY - elbowY;
+      final forearmLengthSq = forearmDx * forearmDx + forearmDy * forearmDy;
+      
+      if (forearmLengthSq > 100) { // 最小长度阈值
+        final forearmLength = forearmLengthSq;
+        // 归一化前臂方向（使用平方根进行归一化）
+        final normalizedDx = forearmDx / forearmLength;
+        final normalizedDy = forearmDy / forearmLength;
+        
+        // 垂直于前臂的方向（用于手指延伸，右手方向相反）
+        final perpDx = normalizedDy;
+        final perpDy = -normalizedDx;
+        
+        // 手指基础长度（基于前臂长度的平方，转换为屏幕像素）
+        final fingerBaseLength = forearmLength * 0.08; // 手指基础长度
+        
+        // 绘制5根手指（从拇指到小指）
+        for (int i = 0; i < 5; i++) {
+          // 手指位置（从手腕向外延伸，稍微分散）
+          final fingerOffset = (i - 2) * fingerBaseLength * 0.2; // 手指间距
+          final fingerStartX = wristX + perpDx * fingerOffset;
+          final fingerStartY = wristY + perpDy * fingerOffset;
+          
+          // 手指延伸方向（稍微向前倾斜）
+          final fingerAngle = (i - 2) * 0.08; // 每根手指稍微倾斜
+          final fingerLength = fingerBaseLength * (1.0 + i * 0.1); // 手指长度递增
+          final fingerEndX = fingerStartX + perpDx * fingerLength * (1 - fingerAngle.abs()) + 
+                            normalizedDx * fingerLength * 0.2;
+          final fingerEndY = fingerStartY + perpDy * fingerLength * (1 - fingerAngle.abs()) + 
+                            normalizedDy * fingerLength * 0.2;
+          
+          canvas.drawLine(
+            Offset(fingerStartX, fingerStartY),
+            Offset(fingerEndX, fingerEndY),
+            fingerPaint,
+          );
+          
+          // 在手指末端绘制小圆点
+          canvas.drawCircle(
+            Offset(fingerEndX, fingerEndY),
+            3.0,
+            Paint()..color = Colors.cyan.withValues(alpha: 0.8)..style = PaintingStyle.fill,
+          );
+        }
+      }
+    }
   }
 
   @override
   bool shouldRepaint(PosePainter oldDelegate) {
     return oldDelegate.pose != pose || 
-           oldDelegate.isArmsRaised != isArmsRaised ||
-           oldDelegate.isFrontCamera != isFrontCamera;
+           oldDelegate.isActionPerformed != isActionPerformed ||
+           oldDelegate.isFrontCamera != isFrontCamera ||
+           oldDelegate.trainingType != trainingType;
   }
 }
