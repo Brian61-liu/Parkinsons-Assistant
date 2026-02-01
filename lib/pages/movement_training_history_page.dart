@@ -103,8 +103,6 @@ class _MovementTrainingHistoryPageState extends State<MovementTrainingHistoryPag
     switch (type) {
       case TrainingType.armsRaised:
         return l10n.armsRaisedTraining;
-      case TrainingType.fistClench:
-        return l10n.fistClenchTraining;
       case TrainingType.legLift:
         return l10n.legLiftTraining;
     }

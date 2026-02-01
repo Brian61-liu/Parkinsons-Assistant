@@ -1065,23 +1065,11 @@ abstract class AppLocalizations {
   /// **'Arms Raised'**
   String get armsRaisedTraining;
 
-  /// Fist clench training type
-  ///
-  /// In en, this message translates to:
-  /// **'Fist Clench'**
-  String get fistClenchTraining;
-
   /// Leg lift training type
   ///
   /// In en, this message translates to:
   /// **'Leg Lift'**
   String get legLiftTraining;
-
-  /// Fist clench instruction
-  ///
-  /// In en, this message translates to:
-  /// **'Please clench your fists, then open them to complete one action'**
-  String get fistClenchInstruction;
 
   /// Leg lift instruction
   ///
@@ -1089,35 +1077,17 @@ abstract class AppLocalizations {
   /// **'Please lift one leg, then lower it to complete one action'**
   String get legLiftInstruction;
 
-  /// Prompt to open fists
-  ///
-  /// In en, this message translates to:
-  /// **'Please open your hands'**
-  String get openFists;
-
   /// Prompt to lower legs
   ///
   /// In en, this message translates to:
   /// **'Please lower your legs'**
   String get lowerLegs;
 
-  /// Status when fists are clenched
-  ///
-  /// In en, this message translates to:
-  /// **'Fists Clenched'**
-  String get fistsClenched;
-
   /// Status when legs are raised
   ///
   /// In en, this message translates to:
   /// **'Legs Raised'**
   String get legsRaised;
-
-  /// Prompt to clench fists
-  ///
-  /// In en, this message translates to:
-  /// **'Please Clench Your Fists'**
-  String get clenchFists;
 
   /// Prompt to raise legs
   ///

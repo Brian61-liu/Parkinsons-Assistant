@@ -282,5 +282,37 @@
   "minutes": "分",
   "@minutes": {
     "description": "Minutes unit"
+  },
+  "selectTrainingType": "訓練タイプを選択",
+  "@selectTrainingType": {
+    "description": "Select training type dialog title"
+  },
+  "armsRaisedTraining": "腕上げ",
+  "@armsRaisedTraining": {
+    "description": "Arms raised training type"
+  },
+  "legLiftTraining": "脚上げ",
+  "@legLiftTraining": {
+    "description": "Leg lift training type"
+  },
+  "legLiftInstruction": "片足を上げ、その後下げて1回の動作を完了してください",
+  "@legLiftInstruction": {
+    "description": "Leg lift instruction"
+  },
+  "lowerLegs": "脚を下げてください",
+  "@lowerLegs": {
+    "description": "Prompt to lower legs"
+  },
+  "legsRaised": "脚が上がっています",
+  "@legsRaised": {
+    "description": "Status when legs are raised"
+  },
+  "raiseLegs": "脚を上げてください",
+  "@raiseLegs": {
+    "description": "Prompt to raise legs"
+  },
+  "trainingType": "訓練タイプ",
+  "@trainingType": {
+    "description": "Training type label"
   }
 }

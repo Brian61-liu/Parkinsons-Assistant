@@ -523,43 +523,27 @@ class AppLocalizationsDe extends AppLocalizations {
   String get minutes => 'Min';
 
   @override
-  String get selectTrainingType => 'Select Training Type';
+  String get selectTrainingType => 'Trainingsart Auswählen';
 
   @override
-  String get armsRaisedTraining => 'Arms Raised';
+  String get armsRaisedTraining => 'Arme Heben';
 
   @override
-  String get fistClenchTraining => 'Fist Clench';
-
-  @override
-  String get legLiftTraining => 'Leg Lift';
-
-  @override
-  String get fistClenchInstruction =>
-      'Please clench your fists, then open them to complete one action';
+  String get legLiftTraining => 'Bein Heben';
 
   @override
   String get legLiftInstruction =>
-      'Please lift one leg, then lower it to complete one action';
+      'Bitte heben Sie ein Bein, dann senken Sie es, um eine Bewegung abzuschließen';
 
   @override
-  String get openFists => 'Please open your hands';
+  String get lowerLegs => 'Bitte senken Sie Ihre Beine';
 
   @override
-  String get lowerLegs => 'Please lower your legs';
+  String get legsRaised => 'Beine Gehoben';
 
   @override
-  String get fistsClenched => 'Fists Clenched';
+  String get raiseLegs => 'Bitte Heben Sie Ihre Beine';
 
   @override
-  String get legsRaised => 'Legs Raised';
-
-  @override
-  String get clenchFists => 'Please Clench Your Fists';
-
-  @override
-  String get raiseLegs => 'Please Raise Your Legs';
-
-  @override
-  String get trainingType => 'Training Type';
+  String get trainingType => 'Trainingsart';
 }

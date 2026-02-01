@@ -504,43 +504,26 @@ class AppLocalizationsKo extends AppLocalizations {
   String get minutes => '분';
 
   @override
-  String get selectTrainingType => 'Select Training Type';
+  String get selectTrainingType => '훈련 유형 선택';
 
   @override
-  String get armsRaisedTraining => 'Arms Raised';
+  String get armsRaisedTraining => '팔 올리기';
 
   @override
-  String get fistClenchTraining => 'Fist Clench';
+  String get legLiftTraining => '다리 올리기';
 
   @override
-  String get legLiftTraining => 'Leg Lift';
+  String get legLiftInstruction => '한 다리를 올렸다가 내려서 한 동작을 완료하세요';
 
   @override
-  String get fistClenchInstruction =>
-      'Please clench your fists, then open them to complete one action';
+  String get lowerLegs => '다리를 내려주세요';
 
   @override
-  String get legLiftInstruction =>
-      'Please lift one leg, then lower it to complete one action';
+  String get legsRaised => '다리가 올라갔습니다';
 
   @override
-  String get openFists => 'Please open your hands';
+  String get raiseLegs => '다리를 올려주세요';
 
   @override
-  String get lowerLegs => 'Please lower your legs';
-
-  @override
-  String get fistsClenched => 'Fists Clenched';
-
-  @override
-  String get legsRaised => 'Legs Raised';
-
-  @override
-  String get clenchFists => 'Please Clench Your Fists';
-
-  @override
-  String get raiseLegs => 'Please Raise Your Legs';
-
-  @override
-  String get trainingType => 'Training Type';
+  String get trainingType => '훈련 유형';
 }

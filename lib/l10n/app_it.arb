@@ -282,5 +282,37 @@
   "minutes": "min",
   "@minutes": {
     "description": "Minutes unit"
+  },
+  "selectTrainingType": "Seleziona Tipo di Allenamento",
+  "@selectTrainingType": {
+    "description": "Select training type dialog title"
+  },
+  "armsRaisedTraining": "Braccia Alzate",
+  "@armsRaisedTraining": {
+    "description": "Arms raised training type"
+  },
+  "legLiftTraining": "Sollevamento Gambe",
+  "@legLiftTraining": {
+    "description": "Leg lift training type"
+  },
+  "legLiftInstruction": "Si prega di sollevare una gamba, poi abbassarla per completare un'azione",
+  "@legLiftInstruction": {
+    "description": "Leg lift instruction"
+  },
+  "lowerLegs": "Si prega di abbassare le gambe",
+  "@lowerLegs": {
+    "description": "Prompt to lower legs"
+  },
+  "legsRaised": "Gambe Sollevate",
+  "@legsRaised": {
+    "description": "Status when legs are raised"
+  },
+  "raiseLegs": "Si Prega di Sollevare le Gambe",
+  "@raiseLegs": {
+    "description": "Prompt to raise legs"
+  },
+  "trainingType": "Tipo di Allenamento",
+  "@trainingType": {
+    "description": "Training type label"
   }
 }

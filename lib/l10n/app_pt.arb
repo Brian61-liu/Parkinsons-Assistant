@@ -282,5 +282,37 @@
   "minutes": "min",
   "@minutes": {
     "description": "Minutes unit"
+  },
+  "selectTrainingType": "Selecionar Tipo de Treino",
+  "@selectTrainingType": {
+    "description": "Select training type dialog title"
+  },
+  "armsRaisedTraining": "Braços Levantados",
+  "@armsRaisedTraining": {
+    "description": "Arms raised training type"
+  },
+  "legLiftTraining": "Elevação de Pernas",
+  "@legLiftTraining": {
+    "description": "Leg lift training type"
+  },
+  "legLiftInstruction": "Por favor, levante uma perna, depois abaixe-a para completar uma ação",
+  "@legLiftInstruction": {
+    "description": "Leg lift instruction"
+  },
+  "lowerLegs": "Por favor, abaixe as pernas",
+  "@lowerLegs": {
+    "description": "Prompt to lower legs"
+  },
+  "legsRaised": "Pernas Levantadas",
+  "@legsRaised": {
+    "description": "Status when legs are raised"
+  },
+  "raiseLegs": "Por Favor Levante as Pernas",
+  "@raiseLegs": {
+    "description": "Prompt to raise legs"
+  },
+  "trainingType": "Tipo de Treino",
+  "@trainingType": {
+    "description": "Training type label"
   }
 }

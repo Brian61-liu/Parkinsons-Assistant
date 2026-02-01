@@ -282,5 +282,37 @@
   "minutes": "мин",
   "@minutes": {
     "description": "Minutes unit"
+  },
+  "selectTrainingType": "Выбрать Тип Тренировки",
+  "@selectTrainingType": {
+    "description": "Select training type dialog title"
+  },
+  "armsRaisedTraining": "Поднятие Рук",
+  "@armsRaisedTraining": {
+    "description": "Arms raised training type"
+  },
+  "legLiftTraining": "Поднятие Ног",
+  "@legLiftTraining": {
+    "description": "Leg lift training type"
+  },
+  "legLiftInstruction": "Пожалуйста, поднимите одну ногу, затем опустите её, чтобы завершить одно действие",
+  "@legLiftInstruction": {
+    "description": "Leg lift instruction"
+  },
+  "lowerLegs": "Пожалуйста, опустите ноги",
+  "@lowerLegs": {
+    "description": "Prompt to lower legs"
+  },
+  "legsRaised": "Ноги Подняты",
+  "@legsRaised": {
+    "description": "Status when legs are raised"
+  },
+  "raiseLegs": "Пожалуйста, Поднимите Ноги",
+  "@raiseLegs": {
+    "description": "Prompt to raise legs"
+  },
+  "trainingType": "Тип Тренировки",
+  "@trainingType": {
+    "description": "Training type label"
   }
 }

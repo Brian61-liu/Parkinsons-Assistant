@@ -282,5 +282,37 @@
   "minutes": "分",
   "@minutes": {
     "description": "Minutes unit"
+  },
+  "selectTrainingType": "選擇訓練類型",
+  "@selectTrainingType": {
+    "description": "Select training type dialog title"
+  },
+  "armsRaisedTraining": "舉手運動",
+  "@armsRaisedTraining": {
+    "description": "Arms raised training type"
+  },
+  "legLiftTraining": "原地抬腿運動",
+  "@legLiftTraining": {
+    "description": "Leg lift training type"
+  },
+  "legLiftInstruction": "請抬起一條腿，然後放下，完成一次動作",
+  "@legLiftInstruction": {
+    "description": "Leg lift instruction"
+  },
+  "lowerLegs": "請放下腿部",
+  "@lowerLegs": {
+    "description": "Prompt to lower legs"
+  },
+  "legsRaised": "腿部已抬起",
+  "@legsRaised": {
+    "description": "Status when legs are raised"
+  },
+  "raiseLegs": "請抬起腿部",
+  "@raiseLegs": {
+    "description": "Prompt to raise legs"
+  },
+  "trainingType": "訓練類型",
+  "@trainingType": {
+    "description": "Training type label"
   }
 }

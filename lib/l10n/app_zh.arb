@@ -272,41 +272,21 @@
   "@armsRaisedTraining": {
     "description": "Arms raised training type"
   },
-  "fistClenchTraining": "握拳运动",
-  "@fistClenchTraining": {
-    "description": "Fist clench training type"
-  },
   "legLiftTraining": "原地抬腿运动",
   "@legLiftTraining": {
     "description": "Leg lift training type"
-  },
-  "fistClenchInstruction": "请握紧双拳，然后张开，完成一次动作",
-  "@fistClenchInstruction": {
-    "description": "Fist clench instruction"
   },
   "legLiftInstruction": "请抬起一条腿，然后放下，完成一次动作",
   "@legLiftInstruction": {
     "description": "Leg lift instruction"
   },
-  "openFists": "请张开双手",
-  "@openFists": {
-    "description": "Prompt to open fists"
-  },
   "lowerLegs": "请放下腿部",
   "@lowerLegs": {
     "description": "Prompt to lower legs"
   },
-  "fistsClenched": "双手已握拳",
-  "@fistsClenched": {
-    "description": "Status when fists are clenched"
-  },
   "legsRaised": "腿部已抬起",
   "@legsRaised": {
     "description": "Status when legs are raised"
-  },
-  "clenchFists": "请握紧双拳",
-  "@clenchFists": {
-    "description": "Prompt to clench fists"
   },
   "raiseLegs": "请抬起腿部",
   "@raiseLegs": {

@@ -282,5 +282,37 @@
   "minutes": "دقيقة",
   "@minutes": {
     "description": "Minutes unit"
+  },
+  "selectTrainingType": "اختر نوع التدريب",
+  "@selectTrainingType": {
+    "description": "Select training type dialog title"
+  },
+  "armsRaisedTraining": "رفع الذراعين",
+  "@armsRaisedTraining": {
+    "description": "Arms raised training type"
+  },
+  "legLiftTraining": "رفع الساق",
+  "@legLiftTraining": {
+    "description": "Leg lift training type"
+  },
+  "legLiftInstruction": "يرجى رفع ساق واحدة، ثم خفضها لإكمال حركة واحدة",
+  "@legLiftInstruction": {
+    "description": "Leg lift instruction"
+  },
+  "lowerLegs": "يرجى خفض ساقيك",
+  "@lowerLegs": {
+    "description": "Prompt to lower legs"
+  },
+  "legsRaised": "الساقان مرفوعتان",
+  "@legsRaised": {
+    "description": "Status when legs are raised"
+  },
+  "raiseLegs": "يرجى رفع ساقيك",
+  "@raiseLegs": {
+    "description": "Prompt to raise legs"
+  },
+  "trainingType": "نوع التدريب",
+  "@trainingType": {
+    "description": "Training type label"
   }
 }

@@ -1,7 +1,6 @@
 // 训练类型枚举
 enum TrainingType {
   armsRaised,    // 举手运动
-  fistClench,    // 握拳运动
   legLift,       // 原地抬腿运动
 }
 

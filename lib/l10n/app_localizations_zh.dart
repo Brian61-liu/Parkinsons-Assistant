@@ -508,31 +508,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get armsRaisedTraining => '举手运动';
 
   @override
-  String get fistClenchTraining => '握拳运动';
-
-  @override
   String get legLiftTraining => '原地抬腿运动';
-
-  @override
-  String get fistClenchInstruction => '请握紧双拳，然后张开，完成一次动作';
 
   @override
   String get legLiftInstruction => '请抬起一条腿，然后放下，完成一次动作';
 
   @override
-  String get openFists => '请张开双手';
-
-  @override
   String get lowerLegs => '请放下腿部';
 
   @override
-  String get fistsClenched => '双手已握拳';
-
-  @override
   String get legsRaised => '腿部已抬起';
-
-  @override
-  String get clenchFists => '请握紧双拳';
 
   @override
   String get raiseLegs => '请抬起腿部';
@@ -1036,4 +1021,28 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get minutes => '分';
+
+  @override
+  String get selectTrainingType => '選擇訓練類型';
+
+  @override
+  String get armsRaisedTraining => '舉手運動';
+
+  @override
+  String get legLiftTraining => '原地抬腿運動';
+
+  @override
+  String get legLiftInstruction => '請抬起一條腿，然後放下，完成一次動作';
+
+  @override
+  String get lowerLegs => '請放下腿部';
+
+  @override
+  String get legsRaised => '腿部已抬起';
+
+  @override
+  String get raiseLegs => '請抬起腿部';
+
+  @override
+  String get trainingType => '訓練類型';
 }

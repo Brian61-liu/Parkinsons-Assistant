@@ -282,5 +282,37 @@
   "minutes": "분",
   "@minutes": {
     "description": "Minutes unit"
+  },
+  "selectTrainingType": "훈련 유형 선택",
+  "@selectTrainingType": {
+    "description": "Select training type dialog title"
+  },
+  "armsRaisedTraining": "팔 올리기",
+  "@armsRaisedTraining": {
+    "description": "Arms raised training type"
+  },
+  "legLiftTraining": "다리 올리기",
+  "@legLiftTraining": {
+    "description": "Leg lift training type"
+  },
+  "legLiftInstruction": "한 다리를 올렸다가 내려서 한 동작을 완료하세요",
+  "@legLiftInstruction": {
+    "description": "Leg lift instruction"
+  },
+  "lowerLegs": "다리를 내려주세요",
+  "@lowerLegs": {
+    "description": "Prompt to lower legs"
+  },
+  "legsRaised": "다리가 올라갔습니다",
+  "@legsRaised": {
+    "description": "Status when legs are raised"
+  },
+  "raiseLegs": "다리를 올려주세요",
+  "@raiseLegs": {
+    "description": "Prompt to raise legs"
+  },
+  "trainingType": "훈련 유형",
+  "@trainingType": {
+    "description": "Training type label"
   }
 }
