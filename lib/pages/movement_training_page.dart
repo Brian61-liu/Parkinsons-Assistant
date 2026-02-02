@@ -246,6 +246,180 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     });
   }
 
+  // 显示训练演示页面
+  void _showTrainingDemo(BuildContext context, TrainingType type) {
+    final l10n = AppLocalizations.of(context)!;
+    showCupertinoDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => _buildTrainingDemoDialog(context, l10n, type),
+    );
+  }
+
+  // 构建训练演示对话框
+  Widget _buildTrainingDemoDialog(BuildContext context, AppLocalizations l10n, TrainingType type) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
+    // 根据训练类型设置不同的属性
+    String title;
+    IconData icon;
+    Color color;
+    String gifPath;
+    String instruction;
+    
+    switch (type) {
+      case TrainingType.armsRaised:
+        title = l10n.armsRaisedTraining;
+        icon = CupertinoIcons.hand_raised_fill;
+        color = const Color(0xFF8B5CF6);
+        gifPath = 'assets/images/举手运动.gif';
+        instruction = l10n.movementTrainingInstruction;
+        break;
+      case TrainingType.legLift:
+        title = l10n.legLiftTraining;
+        icon = CupertinoIcons.arrow_up_circle_fill;
+        color = const Color(0xFF0EA5E9);
+        gifPath = 'assets/images/原地抬腿运动.gif';
+        instruction = l10n.legLiftInstruction;
+        break;
+    }
+    
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+      child: Container(
+        constraints: BoxConstraints(
+          maxHeight: screenHeight * 0.8,
+          maxWidth: screenWidth * 0.9,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 标题栏
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    icon,
+                    color: color,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1E3A5F),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // 内容区域
+            Flexible(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // GIF 演示
+                    Container(
+                      constraints: BoxConstraints(
+                        maxHeight: screenHeight * 0.4,
+                        maxWidth: double.infinity,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.asset(
+                          gifPath,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    // 说明文字
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF0F9FF),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        instruction,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Color(0xFF1E3A5F),
+                          height: 1.5,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // 确定按钮
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                child: CupertinoButton.filled(
+                  borderRadius: BorderRadius.circular(12),
+                  color: color,
+                  onPressed: () {
+                    Navigator.pop(context);
+                    // 如果是抬腿运动，初始化历史记录
+                    if (type == TrainingType.legLift) {
+                      _initLegLiftHistory();
+                    }
+                    // 初始化并开始训练
+                    _initializeCamera();
+                    _initializePoseDetector();
+                    _startTrainingTimer();
+                  },
+                  child: Text(
+                    l10n.confirm,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildTrainingTypeSelectionDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
@@ -287,13 +461,8 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
           _currentTrainingType = type;
         });
         Navigator.pop(context);
-        // 如果是抬腿运动，初始化历史记录
-        if (type == TrainingType.legLift) {
-          _initLegLiftHistory();
-        }
-        _initializeCamera();
-        _initializePoseDetector();
-        _startTrainingTimer();
+        // 显示演示页面（两种训练类型都有演示）
+        _showTrainingDemo(context, type);
       },
       child: Container(
         padding: const EdgeInsets.all(16),
