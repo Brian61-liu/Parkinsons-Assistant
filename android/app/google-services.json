@@ -1,26 +1,44 @@
 {
   "project_info": {
-    "project_number": "398410948138",
-    "project_id": "kineo-85403",
-    "storage_bucket": "kineo-85403.firebasestorage.app"
+    "project_number": "1007627456579",
+    "project_id": "amplio-bc2e8",
+    "storage_bucket": "amplio-bc2e8.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:398410948138:android:7be6820d07a30717c56d53",
+        "mobilesdk_app_id": "1:1007627456579:android:0ea985f13c92cdcc0b04f6",
         "android_client_info": {
-          "package_name": "com.kineo.app"
+          "package_name": "com.amplio.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1007627456579-4dvkrs8lv4a3pumtqk7340oh6etai94g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.amplio.app",
+            "certificate_hash": "030ac508331616ddc44e078ba2c38290029aac9d"
+          }
+        },
+        {
+          "client_id": "1007627456579-flg8t4uc6qm4j4k2vs662v8nujcp6k95.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyAPZjLuK1wjvozaH3tf9QytK4mRAnStqzM"
+          "current_key": "AIzaSyDKDN4Ca0gBnt7VkWfWrZjjr_SYuydG20s"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007627456579-flg8t4uc6qm4j4k2vs662v8nujcp6k95.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

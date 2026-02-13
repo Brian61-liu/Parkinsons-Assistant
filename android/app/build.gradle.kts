@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.kineo.app"
+    namespace = "com.amplio.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -22,7 +22,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.kineo.app"
+        applicationId = "com.amplio.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion // Firebase 需要最低 API 23

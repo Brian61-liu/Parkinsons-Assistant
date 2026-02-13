@@ -1,4 +1,4 @@
-package com.kineo.app
+package com.amplio.app
 
 import io.flutter.embedding.android.FlutterActivity
 
