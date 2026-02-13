@@ -1,6 +1,6 @@
 {
   "@@locale": "ja",
-  "appTitle": "Kineo",
+  "appTitle": "Amplio",
   "selectTraining": "実施したいトレーニングを選択してください",
   "clickToStartTest": "クリックしてテストを開始",
   "tremorTest": "手の震えテスト",
@@ -96,7 +96,7 @@
   "dataSynced": "データが正常に同期されました",
   "privacyPolicy": "プライバシーポリシー",
   "privacyPolicyIntro": "はじめに",
-  "privacyPolicyIntroText": "Kineoはお客様のプライバシーと健康データの保護に努めています。本ポリシーでは、HIPAAおよびGDPRに準拠した情報の収集、使用、保存、保護について説明します。",
+  "privacyPolicyIntroText": "Amplioはお客様のプライバシーと健康データの保護に努めています。本ポリシーでは、HIPAAおよびGDPRに準拠した情報の収集、使用、保存、保護について説明します。",
   "dataCollection": "収集するデータ",
   "dataCollectionText": "以下のデータを収集します：\n\n• アカウント情報：メール、名前（認証用）\n• センサーデータ：振戦テスト中の動きデータ\n• テスト結果：周波数、振幅、重症度\n\nデータ最小化の原則に従います。",
   "dataUsage": "データの使用目的",

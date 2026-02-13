@@ -1,6 +1,6 @@
 {
   "@@locale": "fr",
-  "appTitle": "Kineo",
+  "appTitle": "Amplio",
   "selectTraining": "Veuillez sélectionner l'entraînement que vous souhaitez effectuer",
   "clickToStartTest": "Cliquez pour commencer le test",
   "tremorTest": "Test de Tremblement de Main",
@@ -96,7 +96,7 @@
   "dataSynced": "Données synchronisées avec succès",
   "privacyPolicy": "Politique de Confidentialité",
   "privacyPolicyIntro": "Introduction",
-  "privacyPolicyIntroText": "Kineo s'engage à protéger votre vie privée et vos données de santé. Cette politique explique comment nous collectons, utilisons, stockons et protégeons vos informations, conformément à HIPAA et GDPR.",
+  "privacyPolicyIntroText": "Amplio s'engage à protéger votre vie privée et vos données de santé. Cette politique explique comment nous collectons, utilisons, stockons et protégeons vos informations, conformément à HIPAA et GDPR.",
   "dataCollection": "Données Collectées",
   "dataCollectionText": "Nous collectons les données suivantes :\n\n• Compte : Email, nom (authentification)\n• Capteurs : Données de mouvement pendant les tests\n• Résultats : Fréquence, amplitude, sévérité\n\nNous suivons le principe de minimisation des données.",
   "dataUsage": "Utilisation des Données",

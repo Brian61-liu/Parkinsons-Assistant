@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'Kineo';
+  String get appTitle => 'Amplio';
 
   @override
   String get selectTraining => '请选择您要进行的训练';
@@ -203,7 +203,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get privacyPolicyIntroText =>
-      'Kineo 致力于保护您的隐私和个人健康数据的安全。本政策说明我们如何收集、使用、存储和保护您的信息，符合 HIPAA 和 GDPR 法规要求。';
+      'Amplio 致力于保护您的隐私和个人健康数据的安全。本政策说明我们如何收集、使用、存储和保护您的信息，符合 HIPAA 和 GDPR 法规要求。';
 
   @override
   String get dataCollection => '我们收集的数据';
@@ -531,7 +531,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   AppLocalizationsZhTw() : super('zh_TW');
 
   @override
-  String get appTitle => 'Kineo';
+  String get appTitle => 'Amplio';
 
   @override
   String get selectTraining => '請選擇您要進行的訓練';
@@ -725,7 +725,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get privacyPolicyIntroText =>
-      'Kineo 致力於保護您的隱私和個人健康資料的安全。本政策說明我們如何收集、使用、儲存和保護您的資訊，符合 HIPAA 和 GDPR 法規要求。';
+      'Amplio 致力於保護您的隱私和個人健康資料的安全。本政策說明我們如何收集、使用、儲存和保護您的資訊，符合 HIPAA 和 GDPR 法規要求。';
 
   @override
   String get dataCollection => '我們收集的資料';

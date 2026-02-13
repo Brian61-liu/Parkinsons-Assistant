@@ -93,13 +93,22 @@ dev_dependencies:
   # 启动画面生成器
   flutter_native_splash: ^2.4.4
 
-# 启动画面配置
+# 启动画面配置：白底 + 居中 logo（建议使用带柔和边缘的 splash 图）
 flutter_native_splash:
-  color: "#F0F9FF"
-  color_dark: "#1a1a2e"
+  color: "#FFFFFF"
+  color_dark: "#FFFFFF"
+  image: "assets/icon/app_icon.png"
+  image_dark: "assets/icon/app_icon.png"
+  fullscreen: true
+  android_gravity: center
+  ios_content_mode: center
   android_12:
-    color: "#F0F9FF"
-    color_dark: "#1a1a2e"
+    color: "#FFFFFF"
+    color_dark: "#FFFFFF"
+    image: "assets/icon/app_icon.png"
+    image_dark: "assets/icon/app_icon.png"
+    icon_background_color: "#FFFFFF"
+    icon_background_color_dark: "#FFFFFF"
 
 # 应用图标配置
 flutter_launcher_icons:

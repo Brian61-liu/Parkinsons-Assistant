@@ -1,6 +1,6 @@
 {
   "@@locale": "de",
-  "appTitle": "Kineo",
+  "appTitle": "Amplio",
   "selectTraining": "Bitte wählen Sie das Training aus, das Sie durchführen möchten",
   "clickToStartTest": "Klicken Sie, um den Test zu starten",
   "tremorTest": "Handzitter-Test",
@@ -96,7 +96,7 @@
   "dataSynced": "Daten erfolgreich synchronisiert",
   "privacyPolicy": "Datenschutzrichtlinie",
   "privacyPolicyIntro": "Einführung",
-  "privacyPolicyIntroText": "Kineo verpflichtet sich, Ihre Privatsphäre und Gesundheitsdaten zu schützen. Diese Richtlinie erklärt, wie wir Ihre Daten gemäß HIPAA und DSGVO erfassen, verwenden, speichern und schützen.",
+  "privacyPolicyIntroText": "Amplio verpflichtet sich, Ihre Privatsphäre und Gesundheitsdaten zu schützen. Diese Richtlinie erklärt, wie wir Ihre Daten gemäß HIPAA und DSGVO erfassen, verwenden, speichern und schützen.",
   "dataCollection": "Erfasste Daten",
   "dataCollectionText": "Wir erfassen folgende Daten:\n\n• Kontodaten: E-Mail, Name (Authentifizierung)\n• Sensordaten: Bewegungsdaten während Tests\n• Testergebnisse: Frequenz, Amplitude, Schweregrad\n\nWir folgen dem Prinzip der Datenminimierung.",
   "dataUsage": "Datenverwendung",

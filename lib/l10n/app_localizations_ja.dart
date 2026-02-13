@@ -9,7 +9,7 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get appTitle => 'Kineo';
+  String get appTitle => 'Amplio';
 
   @override
   String get selectTraining => '実施したいトレーニングを選択してください';
@@ -203,7 +203,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get privacyPolicyIntroText =>
-      'Kineoはお客様のプライバシーと健康データの保護に努めています。本ポリシーでは、HIPAAおよびGDPRに準拠した情報の収集、使用、保存、保護について説明します。';
+      'Amplioはお客様のプライバシーと健康データの保護に努めています。本ポリシーでは、HIPAAおよびGDPRに準拠した情報の収集、使用、保存、保護について説明します。';
 
   @override
   String get dataCollection => '収集するデータ';

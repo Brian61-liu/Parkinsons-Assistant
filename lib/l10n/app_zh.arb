@@ -1,6 +1,6 @@
 {
   "@@locale": "zh",
-  "appTitle": "Kineo",
+  "appTitle": "Amplio",
   "selectTraining": "请选择您要进行的训练",
   "clickToStartTest": "点击开始测试",
   "tremorTest": "手部震颤测试",
@@ -96,7 +96,7 @@
   "dataSynced": "数据同步成功",
   "privacyPolicy": "隐私政策",
   "privacyPolicyIntro": "简介",
-  "privacyPolicyIntroText": "Kineo 致力于保护您的隐私和个人健康数据的安全。本政策说明我们如何收集、使用、存储和保护您的信息，符合 HIPAA 和 GDPR 法规要求。",
+  "privacyPolicyIntroText": "Amplio 致力于保护您的隐私和个人健康数据的安全。本政策说明我们如何收集、使用、存储和保护您的信息，符合 HIPAA 和 GDPR 法规要求。",
   "dataCollection": "我们收集的数据",
   "dataCollectionText": "我们收集以下数据：\n\n• 账户信息：邮箱、姓名（用于身份验证）\n• 传感器数据：震颤测试期间的运动数据\n• 测试结果：频率、振幅和严重程度评估\n\n我们遵循数据最小化原则，只收集必要的数据。",
   "dataUsage": "数据使用方式",

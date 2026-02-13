@@ -5,7 +5,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>Kineo</string>
+		<string>Amplio</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundleName</key>
-		<string>Kineo</string>
+		<string>Amplio</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
@@ -58,7 +58,7 @@
 			</dict>
 		</array>
 		<key>UIStatusBarHidden</key>
-		<false/>
+		<true/>
 		<!-- 相机权限（用于头像拍照） -->
 		<key>NSCameraUsageDescription</key>
 		<string>需要访问相机以拍摄头像照片</string>
@@ -68,5 +68,7 @@
 		<!-- 麦克风权限（用于语音训练） -->
 		<key>NSMicrophoneUsageDescription</key>
 		<string>需要访问麦克风以进行语音训练（基于 LSVT LOUD 疗法）</string>
+		<key>UIViewControllerBasedStatusBarAppearance</key>
+		<false/>
 	</dict>
 </plist>

@@ -277,7 +277,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                       
                       // App 名称
                       const Text(
-                        'Kineo',
+                        'Amplio',
                         style: TextStyle(
                           fontSize: 42,
                           fontWeight: FontWeight.bold,

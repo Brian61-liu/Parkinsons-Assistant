@@ -120,7 +120,7 @@ abstract class AppLocalizations {
   /// Application title
   ///
   /// In en, this message translates to:
-  /// **'Kineo'**
+  /// **'Amplio'**
   String get appTitle;
 
   /// Instruction text on home page
@@ -486,7 +486,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyIntroText.
   ///
   /// In en, this message translates to:
-  /// **'Kineo is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information in compliance with HIPAA and GDPR regulations.'**
+  /// **'Amplio is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information in compliance with HIPAA and GDPR regulations.'**
   String get privacyPolicyIntroText;
 
   /// No description provided for @dataCollection.

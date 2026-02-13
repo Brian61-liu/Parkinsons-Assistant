@@ -1,6 +1,6 @@
 {
   "@@locale": "pt",
-  "appTitle": "Kineo",
+  "appTitle": "Amplio",
   "selectTraining": "Por favor, selecione o treinamento que deseja realizar",
   "clickToStartTest": "Clique para iniciar o teste",
   "tremorTest": "Teste de Tremor de Mão",
@@ -96,7 +96,7 @@
   "dataSynced": "Dados sincronizados com sucesso",
   "privacyPolicy": "Política de Privacidade",
   "privacyPolicyIntro": "Introdução",
-  "privacyPolicyIntroText": "A Kineo está comprometida em proteger sua privacidade e dados de saúde. Esta política explica como coletamos, usamos, armazenamos e protegemos suas informações, em conformidade com HIPAA e LGPD.",
+  "privacyPolicyIntroText": "A Amplio está comprometida em proteger sua privacidade e dados de saúde. Esta política explica como coletamos, usamos, armazenamos e protegemos suas informações, em conformidade com HIPAA e LGPD.",
   "dataCollection": "Dados que Coletamos",
   "dataCollectionText": "Coletamos os seguintes dados:\n\n• Conta: Email, nome (autenticação)\n• Sensores: Dados de movimento durante testes\n• Resultados: Frequência, amplitude, severidade\n\nSeguimos o princípio de minimização de dados.",
   "dataUsage": "Uso dos Dados",

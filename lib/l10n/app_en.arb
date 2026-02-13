@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Kineo",
+  "appTitle": "Amplio",
   "@appTitle": {
     "description": "Application title"
   },
@@ -263,7 +263,7 @@
   },
   "privacyPolicy": "Privacy Policy",
   "privacyPolicyIntro": "Introduction",
-  "privacyPolicyIntroText": "Kineo is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information in compliance with HIPAA and GDPR regulations.",
+  "privacyPolicyIntroText": "Amplio is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information in compliance with HIPAA and GDPR regulations.",
   "dataCollection": "Data We Collect",
   "dataCollectionText": "We collect the following data:\n\n• Account info: Email, name (for authentication)\n• Sensor data: Movement data during tremor tests\n• Test results: Frequency, amplitude, severity\n\nWe follow data minimization principles.",
   "dataUsage": "How We Use Your Data",

@@ -14,7 +14,7 @@ void main() async {
   // 加载保存的语言设置
   final savedLocale = await _loadSavedLocale();
 
-  runApp(KineoApp(initialLocale: savedLocale));
+  runApp(AmplioApp(initialLocale: savedLocale));
 }
 
 /// 加载保存的语言设置
@@ -35,16 +35,16 @@ Future<Locale> _loadSavedLocale() async {
   return const Locale('zh', '');
 }
 
-class KineoApp extends StatefulWidget {
+class AmplioApp extends StatefulWidget {
   final Locale initialLocale;
 
-  const KineoApp({super.key, required this.initialLocale});
+  const AmplioApp({super.key, required this.initialLocale});
 
   @override
-  State<KineoApp> createState() => _KineoAppState();
+  State<AmplioApp> createState() => _AmplioAppState();
 }
 
-class _KineoAppState extends State<KineoApp> {
+class _AmplioAppState extends State<AmplioApp> {
   late Locale _locale;
 
   @override
@@ -71,7 +71,7 @@ class _KineoAppState extends State<KineoApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Kineo',
+      title: 'Amplio',
       debugShowCheckedModeBanner: false,
       locale: _locale,
       localizationsDelegates: const [

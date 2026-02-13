@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// Kineo - 帕金森辅助应用 Firestore 安全规则
+// Amplio - 帕金森辅助应用 Firestore 安全规则
 // 遵循 HIPAA/GDPR 医疗数据安全标准
 
 service cloud.firestore {
