@@ -12,6 +12,7 @@ import '../pages/privacy_policy_page.dart';
 import '../services/auth_service.dart';
 import '../services/avatar_service.dart';
 import '../services/database_service.dart';
+import '../utils/gentle_page_route.dart';
 
 // 主页面
 class HomePage extends StatefulWidget {
@@ -318,12 +319,7 @@ class _HomePageState extends State<HomePage> {
               title: l10n.dataManagement,
               onTap: () {
                 Navigator.pop(ctx);
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const DataManagementPage(),
-                  ),
-                );
+                pushGentle(context, const DataManagementPage());
               },
             ),
             // 隐私政策
@@ -333,12 +329,7 @@ class _HomePageState extends State<HomePage> {
               title: l10n.privacyPolicy,
               onTap: () {
                 Navigator.pop(ctx);
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const PrivacyPolicyPage(),
-                  ),
-                );
+                pushGentle(context, const PrivacyPolicyPage());
               },
             ),
             const Divider(height: 1),
@@ -799,19 +790,7 @@ class _HomePageState extends State<HomePage> {
               title: l10n.tremorTest,
                       color: const Color(0xFF0EA5E9),
               onTap: () {
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => const TremorTestPage(),
-                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      );
-                    },
-                    transitionDuration: const Duration(milliseconds: 200),
-                  ),
-                );
+                pushGentle(context, const TremorTestPage());
               },
             ),
                     
@@ -823,19 +802,7 @@ class _HomePageState extends State<HomePage> {
                       title: l10n.voiceTraining,
                       color: const Color(0xFF10B981),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) => const VoiceTrainingPage(),
-                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: child,
-                              );
-                            },
-                            transitionDuration: const Duration(milliseconds: 200),
-                          ),
-                        );
+                        pushGentle(context, const VoiceTrainingPage());
                       },
                     ),
                     
@@ -847,19 +814,7 @@ class _HomePageState extends State<HomePage> {
                       title: l10n.movementTraining,
                       color: const Color(0xFF8B5CF6),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) => const MovementTrainingPage(),
-                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: child,
-                              );
-                            },
-                            transitionDuration: const Duration(milliseconds: 200),
-                          ),
-                        );
+                        pushGentle(context, const MovementTrainingPage());
                       },
                     ),
                     

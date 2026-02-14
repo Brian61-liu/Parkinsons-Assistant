@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'utils/gentle_page_route.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -97,6 +98,12 @@ class _AmplioAppState extends State<AmplioApp> {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: GentlePageTransitionsBuilder(),
+            TargetPlatform.iOS: GentlePageTransitionsBuilder(),
+          },
+        ),
         textTheme: const TextTheme(
           displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),

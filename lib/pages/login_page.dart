@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../services/auth_service.dart';
 import '../l10n/app_localizations.dart';
+import '../utils/gentle_page_route.dart';
 import 'privacy_policy_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -401,12 +402,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                       // 隐私政策
                       TextButton.icon(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => const PrivacyPolicyPage(),
-                            ),
-                          );
+                          pushGentle(context, const PrivacyPolicyPage());
                         },
                         icon: Icon(
                           CupertinoIcons.lock_shield,

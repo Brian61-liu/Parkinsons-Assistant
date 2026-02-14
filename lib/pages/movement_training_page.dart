@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../l10n/app_localizations.dart';
 import '../services/database_service.dart';
 import '../models/movement_training_record.dart';
+import '../utils/gentle_page_route.dart';
 import 'movement_training_history_page.dart';
 
 class MovementTrainingPage extends StatefulWidget {
@@ -1108,12 +1109,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   }
 
   void _showTrainingHistory(BuildContext context) {
-    Navigator.push(
-      context,
-      CupertinoPageRoute(
-        builder: (context) => const MovementTrainingHistoryPage(),
-      ),
-    );
+    pushGentle(context, const MovementTrainingHistoryPage());
   }
 
   // 保存训练记录
