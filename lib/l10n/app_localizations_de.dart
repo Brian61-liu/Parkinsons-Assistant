@@ -19,6 +19,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get clickToStartTest => 'Klicken Sie, um den Test zu starten';
 
   @override
+  String get clickToStartTraining => 'Klicken Sie, um das Training zu starten';
+
+  @override
   String get tremorTest => 'Handzitter-Test';
 
   @override
@@ -50,6 +53,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get stopTest => 'Test Stoppen';
+
+  @override
+  String get tremorTestCancelledNoSave =>
+      'Test abgebrochen, Aufzeichnung nicht gespeichert';
 
   @override
   String get testCompleted => 'Test Abgeschlossen';
@@ -123,6 +130,15 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get realtimeWaveform => 'Echtzeit-Welle';
+
+  @override
+  String get waveformAxisTime => 'Zeit';
+
+  @override
+  String get waveformAxisAmplitude => 'Amplitude';
+
+  @override
+  String get waveformHint => 'Höhere Welle = stärkeres Händezittern';
 
   @override
   String get tremorSeverity => 'Schweregrad';

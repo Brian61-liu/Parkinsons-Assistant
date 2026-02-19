@@ -18,6 +18,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clickToStartTest => 'انقر لبدء الاختبار';
 
   @override
+  String get clickToStartTraining => 'انقر لبدء التدريب';
+
+  @override
   String get tremorTest => 'اختبار رعشة اليد';
 
   @override
@@ -49,6 +52,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get stopTest => 'إيقاف الاختبار';
+
+  @override
+  String get tremorTestCancelledNoSave => 'تم إلغاء الاختبار، لم يتم حفظ السجل';
 
   @override
   String get testCompleted => 'اكتمل الاختبار';
@@ -121,6 +127,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get realtimeWaveform => 'الموجة';
+
+  @override
+  String get waveformAxisTime => 'الوقت';
+
+  @override
+  String get waveformAxisAmplitude => 'السعة';
+
+  @override
+  String get waveformHint => 'كلما ارتفعت الموجة زاد وضوح رعشة اليد';
 
   @override
   String get tremorSeverity => 'الشدة';

@@ -62,9 +62,9 @@ class _HomePageState extends State<HomePage> {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       if (showMessage && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('请先登录以使用云端同步功能')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('请先登录以使用云端同步功能')));
       }
       return;
     }
@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
     try {
       // 双向同步：先拉取云端数据，再推送本地数据
       await _databaseService.syncFromCloud();
-      
+
       if (showMessage && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
 
   void _showLanguageDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     final languages = [
       {'code': 'ar', 'country': '', 'name': l10n.arabic},
       {'code': 'zh', 'country': '', 'name': l10n.chinese},
@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
       {'code': 'ru', 'country': '', 'name': l10n.russian},
       {'code': 'es', 'country': '', 'name': l10n.spanish},
     ];
-    
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -179,10 +179,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onTap: () {
                       Navigator.pop(ctx);
-                      widget.onLanguageChange(Locale(
-                        lang['code'] as String,
-                        lang['country'] as String,
-                      ));
+                      widget.onLanguageChange(
+                        Locale(
+                          lang['code'] as String,
+                          lang['country'] as String,
+                        ),
+                      );
                     },
                   );
                 },
@@ -220,9 +222,9 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       debugPrint('退出失败: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('退出失败: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('退出失败: $e')));
       }
     }
   }
@@ -231,12 +233,14 @@ class _HomePageState extends State<HomePage> {
     final l10n = AppLocalizations.of(context)!;
     final user = FirebaseAuth.instance.currentUser;
     final isGuest = user == null;
-    
+
     showCupertinoDialog(
       context: context,
       builder: (dialogContext) => CupertinoAlertDialog(
         title: Text(isGuest ? '退出游客模式' : l10n.logout),
-        content: Text(isGuest ? '确定要退出游客模式吗？退出后需要重新登录才能使用。' : l10n.logoutConfirm),
+        content: Text(
+          isGuest ? '确定要退出游客模式吗？退出后需要重新登录才能使用。' : l10n.logoutConfirm,
+        ),
         actions: [
           CupertinoDialogAction(
             onPressed: () {
@@ -259,7 +263,7 @@ class _HomePageState extends State<HomePage> {
 
   void _showSettingsMenu(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -337,7 +341,9 @@ class _HomePageState extends State<HomePage> {
             _buildSettingsItem(
               icon: CupertinoIcons.square_arrow_left,
               color: Colors.red,
-              title: FirebaseAuth.instance.currentUser == null ? '退出游客模式' : l10n.logout,
+              title: FirebaseAuth.instance.currentUser == null
+                  ? '退出游客模式'
+                  : l10n.logout,
               onTap: () {
                 Navigator.pop(ctx);
                 _showLogoutDialog(context);
@@ -389,9 +395,9 @@ class _HomePageState extends State<HomePage> {
   Widget _buildUserAvatar(User user) {
     final String displayName = user.displayName ?? 'User';
     final String initials = _getInitials(displayName);
-    
+
     Widget avatarWidget;
-    
+
     if (_isUploadingAvatar) {
       // 上传中状态
       avatarWidget = Container(
@@ -402,10 +408,7 @@ class _HomePageState extends State<HomePage> {
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF0EA5E9),
-              Color(0xFF10B981),
-            ],
+            colors: [Color(0xFF0EA5E9), Color(0xFF10B981)],
           ),
           boxShadow: [
             BoxShadow(
@@ -426,14 +429,13 @@ class _HomePageState extends State<HomePage> {
           child: const Center(
             child: CircularProgressIndicator(
               strokeWidth: 3,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                Color(0xFF0EA5E9),
-              ),
+              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0EA5E9)),
             ),
           ),
         ),
       );
-    } else if (_localAvatarPath != null && File(_localAvatarPath!).existsSync()) {
+    } else if (_localAvatarPath != null &&
+        File(_localAvatarPath!).existsSync()) {
       // 使用本地头像
       avatarWidget = Container(
         width: 100,
@@ -443,10 +445,7 @@ class _HomePageState extends State<HomePage> {
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF0EA5E9),
-              Color(0xFF10B981),
-            ],
+            colors: [Color(0xFF0EA5E9), Color(0xFF10B981)],
           ),
           boxShadow: [
             BoxShadow(
@@ -473,7 +472,7 @@ class _HomePageState extends State<HomePage> {
       // 使用默认头像（显示首字母）
       avatarWidget = _buildDefaultAvatar(initials);
     }
-    
+
     // 添加点击功能和编辑图标
     return GestureDetector(
       onTap: _isUploadingAvatar ? null : () => _showChangeAvatarDialog(context),
@@ -490,10 +489,7 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   color: const Color(0xFF0EA5E9),
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 2,
-                  ),
+                  border: Border.all(color: Colors.white, width: 2),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.2),
@@ -523,10 +519,7 @@ class _HomePageState extends State<HomePage> {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF0EA5E9),
-            Color(0xFF10B981),
-          ],
+          colors: [Color(0xFF0EA5E9), Color(0xFF10B981)],
         ),
         boxShadow: [
           BoxShadow(
@@ -581,7 +574,7 @@ class _HomePageState extends State<HomePage> {
   /// 显示更改头像选项菜单
   void _showChangeAvatarDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     showCupertinoModalPopup(
       context: context,
       builder: (ctx) => CupertinoActionSheet(
@@ -612,10 +605,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   /// 选择并保存头像到本地
-  Future<void> _pickAndUploadAvatar(BuildContext context, ImageSource source) async {
+  Future<void> _pickAndUploadAvatar(
+    BuildContext context,
+    ImageSource source,
+  ) async {
     final l10n = AppLocalizations.of(context)!;
     final user = FirebaseAuth.instance.currentUser;
-    
+
     if (user == null) return;
 
     // 在 await 之前捕获 ScaffoldMessenger 引用
@@ -628,7 +624,7 @@ class _HomePageState extends State<HomePage> {
 
       // 选择图片
       final XFile? imageFile = await _avatarService.pickImage(source: source);
-      
+
       if (imageFile == null) {
         if (mounted) {
           setState(() {
@@ -661,7 +657,7 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           _isUploadingAvatar = false;
         });
-        
+
         scaffoldMessenger.showSnackBar(
           SnackBar(
             content: Text('${l10n.avatarUpdateFailed}: $e'),
@@ -676,7 +672,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final user = FirebaseAuth.instance.currentUser;
-    
+
     return Scaffold(
       backgroundColor: const Color(0xFFF0F9FF),
       body: SafeArea(
@@ -698,7 +694,9 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFF0EA5E9).withValues(alpha: 0.25),
+                                color: const Color(
+                                  0xFF0EA5E9,
+                                ).withValues(alpha: 0.25),
                                 blurRadius: 8,
                                 offset: const Offset(0, 3),
                               ),
@@ -714,9 +712,9 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(width: 12),
                         Text(
-            l10n.appTitle,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
+                          l10n.appTitle,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
                             fontSize: 24,
                             color: Color(0xFF1E3A5F),
                           ),
@@ -740,22 +738,22 @@ class _HomePageState extends State<HomePage> {
                           CupertinoIcons.gear,
                           color: Color(0xFF0EA5E9),
                           size: 24,
-            ),
-          ),
-        ),
-      ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-            
+
             // 主内容区域
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          children: [
+                child: Column(
+                  children: [
                     const SizedBox(height: 40),
-                    
+
                     // 用户头像
                     if (user != null) ...[
                       _buildUserAvatar(user),
@@ -771,53 +769,56 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 40),
                     ],
-                    
+
                     // 功能选择提示
-            Text(
-              l10n.selectTraining,
-              style: const TextStyle(
+                    Text(
+                      l10n.selectTraining,
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Color(0xFF64748B),
-              ),
-              textAlign: TextAlign.center,
-            ),
-                    
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+
                     const SizedBox(height: 24),
-                    
-                    // 手部震颤测试按钮
+
+                    // 手部震颤测试按钮（副标题：点击开始测试）
                     _buildFeatureButton(
                       icon: CupertinoIcons.hand_raised,
-              title: l10n.tremorTest,
+                      title: l10n.tremorTest,
+                      subtitle: l10n.clickToStartTest,
                       color: const Color(0xFF0EA5E9),
-              onTap: () {
-                pushGentle(context, const TremorTestPage());
-              },
-            ),
-                    
+                      onTap: () {
+                        pushGentle(context, const TremorTestPage());
+                      },
+                    ),
+
                     const SizedBox(height: 16),
-                    
-                    // 语音训练按钮
+
+                    // 语音训练按钮（副标题：点击开始训练）
                     _buildFeatureButton(
                       icon: CupertinoIcons.mic_fill,
                       title: l10n.voiceTraining,
+                      subtitle: l10n.clickToStartTraining,
                       color: const Color(0xFF10B981),
                       onTap: () {
                         pushGentle(context, const VoiceTrainingPage());
                       },
                     ),
-                    
+
                     const SizedBox(height: 16),
-                    
-                    // 肢体动作训练按钮
+
+                    // 肢体动作训练按钮（副标题：点击开始训练）
                     _buildFeatureButton(
                       icon: CupertinoIcons.hand_raised_fill,
                       title: l10n.movementTraining,
+                      subtitle: l10n.clickToStartTraining,
                       color: const Color(0xFF8B5CF6),
                       onTap: () {
                         pushGentle(context, const MovementTrainingPage());
                       },
                     ),
-                    
+
                     const SizedBox(height: 40),
                   ],
                 ),
@@ -832,6 +833,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildFeatureButton({
     required IconData icon,
     required String title,
+    required String subtitle,
     required Color color,
     required VoidCallback onTap,
   }) {
@@ -877,11 +879,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    AppLocalizations.of(context)!.clickToStartTest,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[500],
-                    ),
+                    subtitle,
+                    style: TextStyle(fontSize: 14, color: Colors.grey[500]),
                   ),
                 ],
               ),

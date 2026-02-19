@@ -135,6 +135,12 @@ abstract class AppLocalizations {
   /// **'Click to start test'**
   String get clickToStartTest;
 
+  /// No description provided for @clickToStartTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Click to start training'**
+  String get clickToStartTraining;
+
   /// Hand tremor test button title
   ///
   /// In en, this message translates to:
@@ -194,6 +200,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stop Test'**
   String get stopTest;
+
+  /// No description provided for @tremorTestCancelledNoSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Test cancelled, record not saved'**
+  String get tremorTestCancelledNoSave;
 
   /// Test completed dialog title
   ///
@@ -326,6 +338,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Real-time Waveform'**
   String get realtimeWaveform;
+
+  /// No description provided for @waveformAxisTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get waveformAxisTime;
+
+  /// No description provided for @waveformAxisAmplitude.
+  ///
+  /// In en, this message translates to:
+  /// **'Amplitude'**
+  String get waveformAxisAmplitude;
+
+  /// No description provided for @waveformHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher wave = more noticeable hand tremor'**
+  String get waveformHint;
 
   /// Tremor severity label
   ///

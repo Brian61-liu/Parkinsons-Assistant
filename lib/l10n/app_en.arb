@@ -9,6 +9,7 @@
     "description": "Instruction text on home page"
   },
   "clickToStartTest": "Click to start test",
+  "clickToStartTraining": "Click to start training",
   "@clickToStartTest": {
     "description": "Button description text for training options"
   },
@@ -54,6 +55,7 @@
     "description": "Start test button text"
   },
   "stopTest": "Stop Test",
+  "tremorTestCancelledNoSave": "Test cancelled, record not saved",
   "@stopTest": {
     "description": "Stop test button text"
   },
@@ -160,6 +162,9 @@
   "@realtimeWaveform": {
     "description": "Chart title"
   },
+  "waveformAxisTime": "Time",
+  "waveformAxisAmplitude": "Amplitude",
+  "waveformHint": "Higher wave = more noticeable hand tremor",
   "tremorSeverity": "Tremor Severity",
   "@tremorSeverity": {
     "description": "Tremor severity label"

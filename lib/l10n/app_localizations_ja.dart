@@ -18,6 +18,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get clickToStartTest => 'クリックしてテストを開始';
 
   @override
+  String get clickToStartTraining => 'クリックして訓練を開始';
+
+  @override
   String get tremorTest => '手の震えテスト';
 
   @override
@@ -48,6 +51,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get stopTest => 'テスト停止';
+
+  @override
+  String get tremorTestCancelledNoSave => 'テストを中止しました。記録は保存されません';
 
   @override
   String get testCompleted => 'テスト完了';
@@ -120,6 +126,15 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get realtimeWaveform => 'リアルタイム波形';
+
+  @override
+  String get waveformAxisTime => '時間';
+
+  @override
+  String get waveformAxisAmplitude => '振幅';
+
+  @override
+  String get waveformHint => '波が高いほど手の震えが目立ちます';
 
   @override
   String get tremorSeverity => '重症度';

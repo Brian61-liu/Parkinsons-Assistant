@@ -19,6 +19,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clickToStartTest => 'Нажмите, чтобы начать тест';
 
   @override
+  String get clickToStartTraining => 'Нажмите, чтобы начать тренировку';
+
+  @override
   String get tremorTest => 'Тест на Тремор Рук';
 
   @override
@@ -50,6 +53,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get stopTest => 'Остановить Тест';
+
+  @override
+  String get tremorTestCancelledNoSave => 'Тест отменён, запись не сохранена';
 
   @override
   String get testCompleted => 'Тест Завершен';
@@ -123,6 +129,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get realtimeWaveform => 'Волна';
+
+  @override
+  String get waveformAxisTime => 'Время';
+
+  @override
+  String get waveformAxisAmplitude => 'Амплитуда';
+
+  @override
+  String get waveformHint => 'Чем выше волна — тем заметнее дрожание руки';
 
   @override
   String get tremorSeverity => 'Тяжесть';

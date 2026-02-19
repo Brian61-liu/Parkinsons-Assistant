@@ -18,6 +18,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get clickToStartTest => '点击开始测试';
 
   @override
+  String get clickToStartTraining => '点击开始训练';
+
+  @override
   String get tremorTest => '手部震颤测试';
 
   @override
@@ -48,6 +51,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get stopTest => '停止测试';
+
+  @override
+  String get tremorTestCancelledNoSave => '已取消测试，未保存记录';
 
   @override
   String get testCompleted => '测试完成';
@@ -120,6 +126,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get realtimeWaveform => '实时波形';
+
+  @override
+  String get waveformAxisTime => '时间';
+
+  @override
+  String get waveformAxisAmplitude => '振幅';
+
+  @override
+  String get waveformHint => '波形越高，手部抖动越明显';
 
   @override
   String get tremorSeverity => '震颤程度';
@@ -540,6 +555,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get clickToStartTest => '點擊開始測試';
 
   @override
+  String get clickToStartTraining => '點擊開始訓練';
+
+  @override
   String get tremorTest => '手部顫抖測試';
 
   @override
@@ -570,6 +588,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get stopTest => '停止測試';
+
+  @override
+  String get tremorTestCancelledNoSave => '已取消測試，未儲存記錄';
 
   @override
   String get testCompleted => '測試完成';
@@ -642,6 +663,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get realtimeWaveform => '即時波形';
+
+  @override
+  String get waveformAxisTime => '時間';
+
+  @override
+  String get waveformAxisAmplitude => '振幅';
+
+  @override
+  String get waveformHint => '波形越高，手部抖動越明顯';
 
   @override
   String get tremorSeverity => '顫抖程度';

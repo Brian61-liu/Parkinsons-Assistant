@@ -18,6 +18,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get clickToStartTest => '테스트 시작을 클릭하세요';
 
   @override
+  String get clickToStartTraining => '훈련 시작을 클릭하세요';
+
+  @override
   String get tremorTest => '손 떨림 테스트';
 
   @override
@@ -48,6 +51,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get stopTest => '테스트 중지';
+
+  @override
+  String get tremorTestCancelledNoSave => '테스트가 취소되었으며 기록되지 않았습니다';
 
   @override
   String get testCompleted => '테스트 완료';
@@ -120,6 +126,15 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get realtimeWaveform => '실시간 파형';
+
+  @override
+  String get waveformAxisTime => '시간';
+
+  @override
+  String get waveformAxisAmplitude => '진폭';
+
+  @override
+  String get waveformHint => '파형이 높을수록 손 떨림이 더 뚜렷합니다';
 
   @override
   String get tremorSeverity => '중증도';

@@ -89,8 +89,22 @@ class _TremorTestPageState extends State<TremorTestPage> {
   }
 
   Future<void> _stopTest() async {
+    // 仅当测试跑满 30 秒（_remainingTime 由定时器减到 0）才保存；用户提前点击「停止测试」则不保存
+    final completedFullDuration = (_remainingTime <= 0);
+
     _timer?.cancel();
     _sensorService.stopRecording();
+
+    if (!completedFullDuration) {
+      if (mounted) {
+        setState(() => _isRecording = false);
+        final l10n = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.tremorTestCancelledNoSave)),
+        );
+      }
+      return;
+    }
 
     final analysis = _sensorService.getDetailedAnalysis();
 
@@ -271,6 +285,52 @@ class _TremorTestPageState extends State<TremorTestPage> {
     return _chartData.reduce((a, b) => a > b ? a : b) + 0.5;
   }
 
+  /// 为患者理解的坐标轴标题：左=振幅，下=时间
+  FlTitlesData _buildWaveformTitlesData(AppLocalizations l10n) {
+    final minY = _getMinY();
+    final maxY = _getMaxY();
+    final range = (maxY - minY).clamp(0.5, double.infinity);
+    final leftInterval = (range / 4).clamp(0.5, 10.0);
+    final len = _chartData.length;
+    final bottomInterval = len <= 10 ? 2.0 : (len / 4).clamp(5.0, 25.0);
+
+    return FlTitlesData(
+      show: true,
+      leftTitles: AxisTitles(
+        sideTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 36,
+          interval: leftInterval,
+          getTitlesWidget: (value, meta) => SideTitleWidget(
+            axisSide: meta.axisSide,
+            space: 4,
+            child: Text(
+              value.toStringAsFixed(1),
+              style: const TextStyle(fontSize: 11, color: _textSecondary, fontWeight: FontWeight.w500),
+            ),
+          ),
+        ),
+      ),
+      rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      bottomTitles: AxisTitles(
+        sideTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 24,
+          interval: bottomInterval,
+          getTitlesWidget: (value, meta) => SideTitleWidget(
+            axisSide: meta.axisSide,
+            space: 4,
+            child: Text(
+              value.toInt().toString(),
+              style: const TextStyle(fontSize: 11, color: _textSecondary, fontWeight: FontWeight.w500),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -449,7 +509,7 @@ class _TremorTestPageState extends State<TremorTestPage> {
                                     getDrawingHorizontalLine: (value) => FlLine(color: const Color(0xFFE2E8F0), strokeWidth: 1),
                                     getDrawingVerticalLine: (value) => FlLine(color: const Color(0xFFE2E8F0), strokeWidth: 1),
                                   ),
-                                  titlesData: const FlTitlesData(show: false),
+                                  titlesData: _buildWaveformTitlesData(l10n),
                                   borderData: FlBorderData(show: false),
                                   minY: _getMinY(),
                                   maxY: _getMaxY(),
@@ -474,6 +534,26 @@ class _TremorTestPageState extends State<TremorTestPage> {
                                 ),
                               ),
                       ),
+                      // 帮助患者理解：波形与手部震颤的关系说明
+                      if (_chartData.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: Row(
+                            children: [
+                              Icon(CupertinoIcons.info_circle, size: 14, color: _primaryColor.withValues(alpha: 0.8)),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Text(
+                                  l10n.waveformHint,
+                                  style: TextStyle(fontSize: 12, color: _textSecondary.withValues(alpha: 0.95), height: 1.35),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
                     ],
                   ),
                 ),

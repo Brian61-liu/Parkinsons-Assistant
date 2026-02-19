@@ -19,6 +19,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get clickToStartTest => 'Haga clic para comenzar la prueba';
 
   @override
+  String get clickToStartTraining => 'Haga clic para comenzar el entrenamiento';
+
+  @override
   String get tremorTest => 'Prueba de Temblor de Mano';
 
   @override
@@ -50,6 +53,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get stopTest => 'Detener Prueba';
+
+  @override
+  String get tremorTestCancelledNoSave =>
+      'Prueba cancelada, registro no guardado';
 
   @override
   String get testCompleted => 'Prueba Completada';
@@ -123,6 +130,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get realtimeWaveform => 'Forma de Onda';
+
+  @override
+  String get waveformAxisTime => 'Tiempo';
+
+  @override
+  String get waveformAxisAmplitude => 'Amplitud';
+
+  @override
+  String get waveformHint => 'Onda más alta = temblor más notable';
 
   @override
   String get tremorSeverity => 'Severidad';
