@@ -171,11 +171,10 @@ class _AuthStateCheckerState extends State<_AuthStateChecker> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final isGuest = prefs.getBool('is_guest_mode') ?? false;
-      if (mounted) {
-        setState(() {
-          _isGuestMode = isGuest;
-        });
-      }
+      if (!mounted) return;
+      setState(() {
+        _isGuestMode = isGuest;
+      });
     } catch (e) {
       debugPrint('Failed to check guest mode: $e');
     }
@@ -185,11 +184,10 @@ class _AuthStateCheckerState extends State<_AuthStateChecker> {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('is_guest_mode', isGuest);
-      if (mounted) {
-        setState(() {
-          _isGuestMode = isGuest;
-        });
-      }
+      if (!mounted) return;
+      setState(() {
+        _isGuestMode = isGuest;
+      });
     } catch (e) {
       debugPrint('Failed to set guest mode: $e');
     }
