@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -37,18 +38,15 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   int _successCount = 0;
   int _targetCount = 10; // 目标次数
   bool _isGoalReached = false; // 是否达到目标
+  MotionDetectionResult _latestMotionResult = const MotionDetectionResult(
+    phase: MotionFsmPhase.idle,
+    activeSide: null,
+    repCompleted: false,
+  );
+  MotionSensitivity _sensitivity = MotionSensitivity.rehab;
   
   // 动作状态：0=初始/放下, 1=举高
   int _actionState = 0;
-  
-  // 防抖机制：需要连续检测到相同状态才确认
-  int _raiseConfirmCount = 0; // 举高确认计数
-  int _lowerConfirmCount = 0; // 放下确认计数
-  static const int _confirmThreshold = 3; // 需要连续3次检测到相同状态才确认
-  
-  // 状态锁定：防止快速重复计数
-  DateTime? _lastActionTime;
-  static const Duration _actionCooldown = Duration(milliseconds: 1500); // 1.5秒冷却时间
   
   // 计时功能
   Timer? _trainingTimer;
@@ -57,18 +55,16 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   
   // 数据库服务
   final DatabaseService _databaseService = DatabaseService();
-  
-  // 抬腿运动历史记录（用于检测相对变化，适应帕金森患者轻微动作）
-  List<double>? _leftAnkleToHipHistory;
-  List<double>? _rightAnkleToHipHistory;
-  static const int _legLiftHistorySize = 5; // 保留最近5帧的历史
-  
-  // 抬腿状态跟踪：0=无腿抬起，1=左腿抬起，2=右腿抬起
-  int _currentLiftedLeg = 0;
+
+  // 新动作检测引擎：可配置参数 + EMA + 角度特征 + FSM
+  late MotionDetectionConfig _motionConfig;
+  late ArmRaiseDetector _armDetector;
+  late LegLiftDetector _legDetector;
 
   @override
   void initState() {
     super.initState();
+    _applySensitivityPreset(_sensitivity);
     _showTrainingTypeSelection();
   }
   
@@ -280,7 +276,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
       case TrainingType.legLift:
         title = l10n.legLiftTraining;
         icon = CupertinoIcons.arrow_up_circle_fill;
-        color = const Color(0xFF0EA5E9);
+        color = const Color(0xFF8B5CF6);
         gifPath = 'assets/images/原地抬腿运动.gif';
         instruction = l10n.legLiftInstruction;
         break;
@@ -452,7 +448,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
       case TrainingType.legLift:
         title = l10n.legLiftTraining;
         icon = CupertinoIcons.arrow_up_circle_fill;
-        color = const Color(0xFF0EA5E9);
+        color = const Color(0xFF8B5CF6);
     }
     
     return CupertinoButton(
@@ -461,6 +457,10 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         setState(() {
           _currentTrainingType = type;
         });
+        _actionState = 0;
+        _isActionPerformed = false;
+        _initArmDetectionState();
+        _initLegLiftHistory();
         Navigator.pop(context);
         // 显示演示页面（两种训练类型都有演示）
         _showTrainingDemo(context, type);
@@ -550,409 +550,102 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
 
   // 举手运动检测
   void _checkArmsRaised() {
-    if (_currentPose == null) {
+    final pose = _currentPose;
+    if (pose == null) {
       _isActionPerformed = false;
-      // 如果检测不到姿态，重置状态
-      if (_actionState == 1) {
-        _actionState = 0;
-      }
+      _actionState = 0;
       return;
     }
 
-    // 获取关键点
-    final leftShoulder = _currentPose!.landmarks[PoseLandmarkType.leftShoulder];
-    final rightShoulder = _currentPose!.landmarks[PoseLandmarkType.rightShoulder];
-    final leftWrist = _currentPose!.landmarks[PoseLandmarkType.leftWrist];
-    final rightWrist = _currentPose!.landmarks[PoseLandmarkType.rightWrist];
-    final leftElbow = _currentPose!.landmarks[PoseLandmarkType.leftElbow];
-    final rightElbow = _currentPose!.landmarks[PoseLandmarkType.rightElbow];
-
-    // 检查关键点是否存在
-    if (leftShoulder == null ||
-        rightShoulder == null ||
-        leftWrist == null ||
-        rightWrist == null ||
-        leftElbow == null ||
-        rightElbow == null) {
-      _isActionPerformed = false;
-      // 如果检测不到关键点，重置状态
-      if (_actionState == 1) {
-        _actionState = 0;
-      }
-      return;
-    }
-
-    // 计算肩膀中心点
-    final shoulderCenterY = (leftShoulder.y + rightShoulder.y) / 2;
-    
-    // 计算手腕到肩膀的距离（用于判断是否真正举高）
-    final leftWristToShoulder = (leftWrist.y - shoulderCenterY).abs();
-    final rightWristToShoulder = (rightWrist.y - shoulderCenterY).abs();
-    
-    // 更严格的判断条件：
-    // 1. 手腕必须明显高于肩膀中心（至少20像素，避免边界抖动）
-    // 2. 肘部也要高于肩膀
-    // 3. 手腕必须高于肘部（确保手臂是伸直的）
-    // 4. 手腕到肩膀的距离要足够大（确保动作幅度足够）
-    final minRaiseDistance = 20.0; // 最小举起距离（像素）
-    
-    final leftArmRaised = leftWrist.y < (shoulderCenterY - minRaiseDistance) && 
-                         leftElbow.y < shoulderCenterY &&
-                         leftWrist.y < leftElbow.y &&
-                         leftWristToShoulder > minRaiseDistance;
-    
-    final rightArmRaised = rightWrist.y < (shoulderCenterY - minRaiseDistance) && 
-                          rightElbow.y < shoulderCenterY &&
-                          rightWrist.y < rightElbow.y &&
-                          rightWristToShoulder > minRaiseDistance;
-    
-    // 放下状态的判断：手腕回到肩膀中心附近或以下
-    final leftArmLowered = leftWrist.y >= (shoulderCenterY - 10) || 
-                          leftElbow.y >= shoulderCenterY;
-    
-    final rightArmLowered = rightWrist.y >= (shoulderCenterY - 10) || 
-                           rightElbow.y >= shoulderCenterY;
-
-    final wasRaised = _isActionPerformed;
-    // 只有双手都满足条件才算举高/放下
-    final currentRaised = leftArmRaised && rightArmRaised;
-    final currentLowered = leftArmLowered && rightArmLowered;
-    
-    // 防抖机制：需要连续多次检测到相同状态才确认
-    if (currentRaised) {
-      _raiseConfirmCount++;
-      _lowerConfirmCount = 0; // 重置放下计数
-    } else if (currentLowered) {
-      _lowerConfirmCount++;
-      _raiseConfirmCount = 0; // 重置举高计数
-    } else {
-      // 中间状态（部分举起或部分放下），不增加计数，但也不重置
-      // 这样可以避免在过渡状态时误判
-    }
-    
-    // 只有连续检测到阈值次数的状态才更新
-    bool confirmedRaised = false;
-    bool confirmedLowered = false;
-    
-    if (_raiseConfirmCount >= _confirmThreshold) {
-      confirmedRaised = true;
-      _raiseConfirmCount = _confirmThreshold; // 防止溢出
-    }
-    
-    if (_lowerConfirmCount >= _confirmThreshold) {
-      confirmedLowered = true;
-      _lowerConfirmCount = _confirmThreshold; // 防止溢出
-    }
-    
-    // 更新状态（只有确认后才更新）
-    if (confirmedRaised && !_isActionPerformed) {
-      _isActionPerformed = true;
-    } else if (confirmedLowered && _isActionPerformed) {
-      _isActionPerformed = false;
-    }
-    
-    // 状态机：检测完整的举起-放下动作
-    // _actionState: 0=初始/放下, 1=举高
-    
-    // 检查冷却时间，防止快速重复计数
-    final now = DateTime.now();
-    final canPerformAction = _lastActionTime == null || 
-                            now.difference(_lastActionTime!) >= _actionCooldown;
-    
-    if (_isActionPerformed && !wasRaised && confirmedRaised) {
-      // 从放下状态变为举高状态（已确认）
-      if (_actionState == 0) {
-        setState(() {
-          _actionState = 1; // 进入举高状态
-        });
-      }
-    } else if (!_isActionPerformed && wasRaised && confirmedLowered) {
-      // 从举高状态变为放下状态（已确认）
-      if (_actionState == 1 && canPerformAction && !_isGoalReached) {
-        // 完成一个完整的动作：举起 -> 放下
-        setState(() {
-          _successCount++;
-          _actionState = 0; // 重置为初始状态，准备下一次动作
-          _lastActionTime = now; // 记录动作时间
-          
-          // 检查是否达到目标
-          if (_successCount >= _targetCount) {
-            _isGoalReached = true;
-            // 停止检测
-            _cameraController?.stopImageStream();
-          }
-        });
-        
-        // 重置确认计数
-        _raiseConfirmCount = 0;
-        _lowerConfirmCount = 0;
-        
-        // 检查是否达到目标
-        if (_successCount >= _targetCount) {
-          // 停止计时器
-          _trainingTimer?.cancel();
-          
-          // 保存训练记录
-          _saveTrainingRecord();
-          
-          // 达到目标，显示成功对话框
-          Future.delayed(const Duration(milliseconds: 300), () {
-            if (mounted) {
-              _showSuccessDialog(context);
-            }
-          });
-          // 强烈的成功反馈
-          HapticFeedback.heavyImpact();
-        } else {
-          // 普通震动反馈
-          HapticFeedback.mediumImpact();
-        }
-      }
-    }
+    final result = _armDetector.update(pose, DateTime.now());
+    _applyMotionResult(result);
   }
 
   // 初始化历史记录
 
   // 初始化抬腿运动历史记录
   void _initLegLiftHistory() {
-    _leftAnkleToHipHistory = [];
-    _rightAnkleToHipHistory = [];
-    _currentLiftedLeg = 0; // 重置抬腿状态
-  }
-  
-  // 更新抬腿运动历史记录
-  void _updateLegLiftHistory(double? leftValue, double? rightValue) {
-    if (leftValue != null) {
-      _leftAnkleToHipHistory ??= [];
-      _leftAnkleToHipHistory!.add(leftValue);
-      if (_leftAnkleToHipHistory!.length > _legLiftHistorySize) {
-        _leftAnkleToHipHistory!.removeAt(0);
-      }
-    }
-    if (rightValue != null) {
-      _rightAnkleToHipHistory ??= [];
-      _rightAnkleToHipHistory!.add(rightValue);
-      if (_rightAnkleToHipHistory!.length > _legLiftHistorySize) {
-        _rightAnkleToHipHistory!.removeAt(0);
-      }
-    }
-  }
-  
-  // 计算平均值（用于基准线）
-  double _getLegLiftAverage(List<double> history) {
-    if (history.isEmpty) return 0.0;
-    return history.reduce((a, b) => a + b) / history.length;
+    _legDetector.reset();
   }
 
-  // 原地抬腿运动检测（优化版：适应帕金森患者轻微动作，但防止误检测）
-  // 使用相对变化检测，需要足够的稳定期和历史数据才能开始检测
+  void _initArmDetectionState() {
+    _armDetector.reset();
+  }
+
+  // 原地抬腿运动检测（FSM）
   void _checkLegLift() {
-    if (_currentPose == null) {
+    final pose = _currentPose;
+    if (pose == null) {
       _isActionPerformed = false;
-      if (_actionState == 1) {
-        _actionState = 0;
-      }
+      _actionState = 0;
       return;
     }
 
-    // 获取关键点：髋部、膝盖、脚踝
-    final leftHip = _currentPose!.landmarks[PoseLandmarkType.leftHip];
-    final rightHip = _currentPose!.landmarks[PoseLandmarkType.rightHip];
-    final leftKnee = _currentPose!.landmarks[PoseLandmarkType.leftKnee];
-    final rightKnee = _currentPose!.landmarks[PoseLandmarkType.rightKnee];
-    final leftAnkle = _currentPose!.landmarks[PoseLandmarkType.leftAnkle];
-    final rightAnkle = _currentPose!.landmarks[PoseLandmarkType.rightAnkle];
+    final result = _legDetector.update(pose, DateTime.now());
+    _applyMotionResult(result);
+  }
 
-    // 检查关键点是否存在（至少需要一条腿的关键点）
-    if ((leftHip == null || leftKnee == null || leftAnkle == null) &&
-        (rightHip == null || rightKnee == null || rightAnkle == null)) {
-      _isActionPerformed = false;
-      if (_actionState == 1) {
-        _actionState = 0;
-      }
-      return;
-    }
+  void _applyMotionResult(MotionDetectionResult result) {
+    _latestMotionResult = result;
+    _isActionPerformed = result.inActionCycle;
+    _actionState = result.inActionCycle ? 1 : 0;
 
-    // 计算髋部中心点（如果只有一条腿，使用该腿的髋部）
-    final hipCenterY = (leftHip != null && rightHip != null)
-        ? (leftHip.y + rightHip.y) / 2
-        : (leftHip?.y ?? rightHip!.y);
-    
-    // 计算脚踝到髋部的垂直距离（归一化，相对于图像高度，0-1之间）
-    // 正值表示脚踝在髋部上方，负值表示在下方
-    double? leftAnkleToHipY;
-    double? rightAnkleToHipY;
-    
-    if (leftAnkle != null && leftHip != null) {
-      leftAnkleToHipY = (hipCenterY - leftAnkle.y); // 归一化值（0-1之间）
-    }
-    
-    if (rightAnkle != null && rightHip != null) {
-      rightAnkleToHipY = (hipCenterY - rightAnkle.y); // 归一化值（0-1之间）
-    }
-    
-    // 更新历史记录
-    _updateLegLiftHistory(leftAnkleToHipY, rightAnkleToHipY);
-    
-    // 需要至少3帧历史数据才能开始检测，避免初始阶段的误检测（降低要求以更快开始检测）
-    final minHistoryFrames = 3;
-    final hasEnoughHistory = (_leftAnkleToHipHistory != null && 
-                              _leftAnkleToHipHistory!.length >= minHistoryFrames) ||
-                             (_rightAnkleToHipHistory != null && 
-                              _rightAnkleToHipHistory!.length >= minHistoryFrames);
-    
-    // 如果历史数据不足，不进行检测，避免误判
-    if (!hasEnoughHistory) {
-      return;
-    }
-    
-    bool leftLegRaised = false;
-    bool rightLegRaised = false;
-    bool leftLegLowered = false;
-    bool rightLegLowered = false;
-    
-    // 检测左腿（使用相对变化检测，降低阈值以适应帕金森患者）
-    if (leftAnkleToHipY != null && 
-        _leftAnkleToHipHistory != null && 
-        _leftAnkleToHipHistory!.length >= minHistoryFrames) {
-      final avgHeight = _getLegLiftAverage(_leftAnkleToHipHistory!);
-      final change = leftAnkleToHipY - avgHeight;
-      
-      // 抬腿：降低阈值以适应轻微动作，但仍需防止误检测
-      // 满足任一条件即可：1) 相对变化超过5%图像高度 或 2) 绝对高度超过7%图像高度
-      leftLegRaised = change > 0.05 || // 向上移动5%图像高度（适应轻微动作）
-                      leftAnkleToHipY > 0.07; // 或绝对高度超过7%图像高度
-      
-      // 放下：回到基准位置附近（更宽松的条件）
-      leftLegLowered = change < -0.03 || // 向下移动3%图像高度
-                      (leftAnkleToHipY < avgHeight + 0.03); // 或回到平均值附近（3%容差）
-    }
-    
-    // 检测右腿（使用相对变化检测，降低阈值以适应帕金森患者）
-    if (rightAnkleToHipY != null && 
-        _rightAnkleToHipHistory != null && 
-        _rightAnkleToHipHistory!.length >= minHistoryFrames) {
-      final avgHeight = _getLegLiftAverage(_rightAnkleToHipHistory!);
-      final change = rightAnkleToHipY - avgHeight;
-      
-      // 抬腿：降低阈值以适应轻微动作
-      rightLegRaised = change > 0.05 || // 向上移动5%图像高度（适应轻微动作）
-                       rightAnkleToHipY > 0.07; // 或绝对高度超过7%图像高度
-      
-      // 放下：回到基准位置附近（更宽松的条件）
-      rightLegLowered = change < -0.03 || // 向下移动3%图像高度
-                       (rightAnkleToHipY < avgHeight + 0.03); // 或回到平均值附近（3%容差）
-    }
+    if (!result.repCompleted || _isGoalReached) return;
 
-    // 两条腿轮流抬起：一次只能抬一条腿，完成一次动作需要：抬起 -> 放下
-    // _currentLiftedLeg: 0=无腿抬起，1=左腿抬起，2=右腿抬起
-    
-    bool shouldDetectRaise = false;
-    bool shouldDetectLower = false;
-    int detectedLeg = 0; // 0=无，1=左腿，2=右腿
-    
-    if (_currentLiftedLeg == 0) {
-      // 当前没有腿抬起，检测任意一条腿抬起
-      if (leftLegRaised) {
-        shouldDetectRaise = true;
-        detectedLeg = 1; // 左腿
-      } else if (rightLegRaised) {
-        shouldDetectRaise = true;
-        detectedLeg = 2; // 右腿
-      }
-    } else if (_currentLiftedLeg == 1) {
-      // 当前左腿抬起，只检测左腿放下
-      if (leftLegLowered) {
-        shouldDetectLower = true;
-        detectedLeg = 1; // 左腿
-      }
-    } else if (_currentLiftedLeg == 2) {
-      // 当前右腿抬起，只检测右腿放下
-      if (rightLegLowered) {
-        shouldDetectLower = true;
-        detectedLeg = 2; // 右腿
-      }
-    }
-
-    // 防抖机制（平衡灵敏度和准确性）
-    final legLiftConfirmThreshold = 2; // 需要连续2次确认（平衡灵敏度和防误检测）
-    
-    if (shouldDetectRaise) {
-      _raiseConfirmCount++;
-      _lowerConfirmCount = 0;
-    } else if (shouldDetectLower) {
-      _lowerConfirmCount++;
-      _raiseConfirmCount = 0;
-    } else {
-      // 如果既不是抬腿也不是放下，重置计数（防止累积误判）
-      _raiseConfirmCount = 0;
-      _lowerConfirmCount = 0;
-    }
-
-    bool confirmedRaised = false;
-    bool confirmedLowered = false;
-
-    if (_raiseConfirmCount >= legLiftConfirmThreshold) {
-      confirmedRaised = true;
-      _raiseConfirmCount = legLiftConfirmThreshold;
-    }
-
-    if (_lowerConfirmCount >= legLiftConfirmThreshold) {
-      confirmedLowered = true;
-      _lowerConfirmCount = legLiftConfirmThreshold;
-    }
-
-    // 状态机处理：完成一次动作（抬起 -> 放下）后计数
-    final now = DateTime.now();
-    final legLiftCooldown = const Duration(milliseconds: 1500); // 抬腿运动冷却时间1.5秒
-    final canPerformAction = _lastActionTime == null || 
-                            now.difference(_lastActionTime!) >= legLiftCooldown;
-    
-    // 更新抬腿状态
-    if (confirmedRaised && _currentLiftedLeg == 0) {
-      // 确认抬起，记录是哪条腿
-      setState(() {
-        _currentLiftedLeg = detectedLeg;
-        _actionState = 1; // 进入抬起状态
-      });
-    } else if (confirmedLowered && _currentLiftedLeg != 0) {
-      // 确认放下，完成一次动作
-      // 先检查是否可以计数（有冷却时间限制）
-      if (canPerformAction && !_isGoalReached) {
-        setState(() {
-          _successCount++;
-          _currentLiftedLeg = 0; // 重置状态，准备下一次抬腿
-          _actionState = 0; // 回到初始状态
-          _lastActionTime = now;
-          
-          if (_successCount >= _targetCount) {
-            _isGoalReached = true;
-            _cameraController?.stopImageStream();
-          }
-        });
-        
-        _raiseConfirmCount = 0;
-        _lowerConfirmCount = 0;
-        
-        if (_successCount >= _targetCount) {
-          _trainingTimer?.cancel();
-          _saveTrainingRecord();
-          Future.delayed(const Duration(milliseconds: 300), () {
-            if (mounted) {
-              _showSuccessDialog(context);
-            }
-          });
-          HapticFeedback.heavyImpact();
-        } else {
-          HapticFeedback.mediumImpact();
+    _successCount++;
+    if (_successCount >= _targetCount) {
+      _isGoalReached = true;
+      _cameraController?.stopImageStream();
+      _trainingTimer?.cancel();
+      _saveTrainingRecord();
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) {
+          _showSuccessDialog(context);
         }
-      } else {
-        // 冷却时间未到，只重置状态，不计数
-        setState(() {
-          _currentLiftedLeg = 0;
-          _actionState = 0;
-        });
-      }
+      });
+      HapticFeedback.heavyImpact();
+      return;
+    }
+
+    HapticFeedback.mediumImpact();
+  }
+
+  void _applySensitivityPreset(MotionSensitivity mode) {
+    _motionConfig = mode == MotionSensitivity.rehab
+        ? MotionDetectionConfig.rehabPreset()
+        : MotionDetectionConfig.standardPreset();
+    _armDetector = ArmRaiseDetector(_motionConfig.arm);
+    _legDetector = LegLiftDetector(_motionConfig.leg);
+    _latestMotionResult = const MotionDetectionResult(
+      phase: MotionFsmPhase.idle,
+      activeSide: null,
+      repCompleted: false,
+    );
+  }
+
+  String _phaseLabel(MotionFsmPhase phase) {
+    switch (phase) {
+      case MotionFsmPhase.idle:
+        return 'Idle';
+      case MotionFsmPhase.raising:
+        return 'Raising';
+      case MotionFsmPhase.reached:
+        return 'Reached';
+      case MotionFsmPhase.lowering:
+        return 'Lowering';
+      case MotionFsmPhase.cooldown:
+        return 'Cooldown';
+    }
+  }
+
+  String _sideLabel(MotionSide? side) {
+    switch (side) {
+      case MotionSide.left:
+        return 'L';
+      case MotionSide.right:
+        return 'R';
+      case null:
+        return '-';
     }
   }
 
@@ -1134,12 +827,13 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
       _successCount = 0;
       _isGoalReached = false;
       _actionState = 0;
-      _raiseConfirmCount = 0;
-      _lowerConfirmCount = 0;
-      _lastActionTime = null;
       _trainingDuration = 0;
       _trainingStartTime = DateTime.now();
+      _isActionPerformed = false;
     });
+
+    _initArmDetectionState();
+    _initLegLiftHistory();
     
     // 重新启动计时器
     _startTrainingTimer();
@@ -1386,6 +1080,46 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 10),
+                CupertinoSlidingSegmentedControl<MotionSensitivity>(
+                  groupValue: _sensitivity,
+                  backgroundColor: Colors.white.withValues(alpha: 0.18),
+                  thumbColor: Colors.white.withValues(alpha: 0.32),
+                  children: const {
+                    MotionSensitivity.rehab: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      child: Text(
+                        '康复增强',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    MotionSensitivity.standard: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      child: Text(
+                        '标准',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  },
+                  onValueChanged: (value) {
+                    if (_isGoalReached) return;
+                    if (value == null || value == _sensitivity) return;
+                    setState(() {
+                      _sensitivity = value;
+                      _applySensitivityPreset(value);
+                      _isActionPerformed = false;
+                      _actionState = 0;
+                    });
+                  },
+                ),
               ],
             ),
           ),
@@ -1463,6 +1197,19 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 10),
+                Text(
+                  'FSM: ${_phaseLabel(_latestMotionResult.phase)}  '
+                  'Side: ${_sideLabel(_latestMotionResult.activeSide)}  '
+                  'Score: ${(_latestMotionResult.normScore ?? 0).toStringAsFixed(2)}  '
+                  'Δ: ${(_latestMotionResult.deltaDeg ?? 0).toStringAsFixed(1)}°',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.85),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
           ),
@@ -1470,6 +1217,837 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
       ],
     );
   }
+}
+
+enum MotionFsmPhase { idle, raising, reached, lowering, cooldown }
+
+enum MotionSide { left, right }
+
+enum MotionSensitivity { rehab, standard }
+
+class MotionDetectionResult {
+  final MotionFsmPhase phase;
+  final MotionSide? activeSide;
+  final bool repCompleted;
+  final double? normScore;
+  final double? deltaDeg;
+
+  const MotionDetectionResult({
+    required this.phase,
+    required this.activeSide,
+    required this.repCompleted,
+    this.normScore,
+    this.deltaDeg,
+  });
+
+  bool get inActionCycle =>
+      phase == MotionFsmPhase.raising ||
+      phase == MotionFsmPhase.reached ||
+      phase == MotionFsmPhase.lowering;
+}
+
+class MotionDetectionConfig {
+  final ArmDetectionConfig arm;
+  final LegDetectionConfig leg;
+
+  const MotionDetectionConfig({
+    required this.arm,
+    required this.leg,
+  });
+
+  factory MotionDetectionConfig.rehabPreset() {
+    const fsm = FsmConfig(
+      raiseConfirmFrames: 2,
+      reachedHoldFrames: 2,
+      lowerConfirmFrames: 2,
+      raisingTimeout: Duration(milliseconds: 1800),
+      lostTrackingGrace: Duration(milliseconds: 550),
+      cooldown: Duration(milliseconds: 650),
+    );
+
+    return const MotionDetectionConfig(
+      arm: ArmDetectionConfig(
+        emaAlpha: 0.28,
+        baselineAlpha: 0.08,
+        baselineUpdateGateDeg: 8.0,
+        minRangeDeg: 26.0,
+        enterNorm: 0.18,
+        reachedNorm: 0.30,
+        loweringNorm: 0.16,
+        exitNorm: 0.10,
+        enterDeltaDeg: 5.0,
+        reachedDeltaDeg: 8.0,
+        loweringDeltaDeg: 5.0,
+        exitDeltaDeg: 3.0,
+        minElbowExtensionDeg: 95.0,
+        fsm: fsm,
+      ),
+      leg: LegDetectionConfig(
+        emaAlpha: 0.26,
+        baselineAlpha: 0.08,
+        baselineUpdateGateDeg: 6.0,
+        minRangeDeg: 18.0,
+        enterNorm: 0.18,
+        reachedNorm: 0.30,
+        loweringNorm: 0.16,
+        exitNorm: 0.10,
+        enterDeltaDeg: 3.0,
+        reachedDeltaDeg: 5.0,
+        loweringDeltaDeg: 3.0,
+        exitDeltaDeg: 1.8,
+        minKneeExtensionDeg: 40.0,
+        fsm: fsm,
+      ),
+    );
+  }
+
+  factory MotionDetectionConfig.standardPreset() {
+    const fsm = FsmConfig(
+      raiseConfirmFrames: 3,
+      reachedHoldFrames: 3,
+      lowerConfirmFrames: 3,
+      raisingTimeout: Duration(milliseconds: 1500),
+      lostTrackingGrace: Duration(milliseconds: 450),
+      cooldown: Duration(milliseconds: 750),
+    );
+
+    return const MotionDetectionConfig(
+      arm: ArmDetectionConfig(
+        emaAlpha: 0.22,
+        baselineAlpha: 0.06,
+        baselineUpdateGateDeg: 6.0,
+        minRangeDeg: 32.0,
+        enterNorm: 0.22,
+        reachedNorm: 0.36,
+        loweringNorm: 0.18,
+        exitNorm: 0.12,
+        enterDeltaDeg: 7.0,
+        reachedDeltaDeg: 11.0,
+        loweringDeltaDeg: 7.0,
+        exitDeltaDeg: 4.0,
+        minElbowExtensionDeg: 105.0,
+        fsm: fsm,
+      ),
+      leg: LegDetectionConfig(
+        emaAlpha: 0.22,
+        baselineAlpha: 0.06,
+        baselineUpdateGateDeg: 5.0,
+        minRangeDeg: 24.0,
+        enterNorm: 0.22,
+        reachedNorm: 0.36,
+        loweringNorm: 0.18,
+        exitNorm: 0.12,
+        enterDeltaDeg: 4.0,
+        reachedDeltaDeg: 7.0,
+        loweringDeltaDeg: 4.0,
+        exitDeltaDeg: 2.2,
+        minKneeExtensionDeg: 55.0,
+        fsm: fsm,
+      ),
+    );
+  }
+}
+
+class FsmConfig {
+  final int raiseConfirmFrames;
+  final int reachedHoldFrames;
+  final int lowerConfirmFrames;
+  final Duration raisingTimeout;
+  final Duration lostTrackingGrace;
+  final Duration cooldown;
+
+  const FsmConfig({
+    required this.raiseConfirmFrames,
+    required this.reachedHoldFrames,
+    required this.lowerConfirmFrames,
+    required this.raisingTimeout,
+    required this.lostTrackingGrace,
+    required this.cooldown,
+  });
+}
+
+class ArmDetectionConfig {
+  final double emaAlpha;
+  final double baselineAlpha;
+  final double baselineUpdateGateDeg;
+  final double minRangeDeg;
+  final double enterNorm;
+  final double reachedNorm;
+  final double loweringNorm;
+  final double exitNorm;
+  final double enterDeltaDeg;
+  final double reachedDeltaDeg;
+  final double loweringDeltaDeg;
+  final double exitDeltaDeg;
+  final double minElbowExtensionDeg;
+  final FsmConfig fsm;
+
+  const ArmDetectionConfig({
+    required this.emaAlpha,
+    required this.baselineAlpha,
+    required this.baselineUpdateGateDeg,
+    required this.minRangeDeg,
+    required this.enterNorm,
+    required this.reachedNorm,
+    required this.loweringNorm,
+    required this.exitNorm,
+    required this.enterDeltaDeg,
+    required this.reachedDeltaDeg,
+    required this.loweringDeltaDeg,
+    required this.exitDeltaDeg,
+    required this.minElbowExtensionDeg,
+    required this.fsm,
+  });
+}
+
+class LegDetectionConfig {
+  final double emaAlpha;
+  final double baselineAlpha;
+  final double baselineUpdateGateDeg;
+  final double minRangeDeg;
+  final double enterNorm;
+  final double reachedNorm;
+  final double loweringNorm;
+  final double exitNorm;
+  final double enterDeltaDeg;
+  final double reachedDeltaDeg;
+  final double loweringDeltaDeg;
+  final double exitDeltaDeg;
+  final double minKneeExtensionDeg;
+  final FsmConfig fsm;
+
+  const LegDetectionConfig({
+    required this.emaAlpha,
+    required this.baselineAlpha,
+    required this.baselineUpdateGateDeg,
+    required this.minRangeDeg,
+    required this.enterNorm,
+    required this.reachedNorm,
+    required this.loweringNorm,
+    required this.exitNorm,
+    required this.enterDeltaDeg,
+    required this.reachedDeltaDeg,
+    required this.loweringDeltaDeg,
+    required this.exitDeltaDeg,
+    required this.minKneeExtensionDeg,
+    required this.fsm,
+  });
+}
+
+class _SideTracker {
+  double? baselineDeg;
+  double rangeDeg;
+
+  _SideTracker(this.rangeDeg);
+}
+
+class _EmaLandmarkFilter {
+  final double alpha;
+  final Map<PoseLandmarkType, Offset> _cache = {};
+
+  _EmaLandmarkFilter(this.alpha);
+
+  Offset? smooth(PoseLandmarkType type, PoseLandmark? landmark) {
+    if (landmark == null) return null;
+    final raw = Offset(landmark.x, landmark.y);
+    final prev = _cache[type];
+    if (prev == null) {
+      _cache[type] = raw;
+      return raw;
+    }
+    final next = Offset(
+      prev.dx * (1 - alpha) + raw.dx * alpha,
+      prev.dy * (1 - alpha) + raw.dy * alpha,
+    );
+    _cache[type] = next;
+    return next;
+  }
+
+  void reset() => _cache.clear();
+}
+
+class _MotionMeasurement {
+  final bool quality;
+  final double normScore;
+  final double deltaDeg;
+  final bool reachedGate;
+
+  const _MotionMeasurement({
+    required this.quality,
+    required this.normScore,
+    required this.deltaDeg,
+    required this.reachedGate,
+  });
+}
+
+class ArmRaiseDetector {
+  final ArmDetectionConfig config;
+  final _EmaLandmarkFilter _ema;
+  final Map<MotionSide, _SideTracker> _trackers;
+
+  MotionFsmPhase _phase = MotionFsmPhase.idle;
+  MotionSide? _activeSide;
+  MotionSide? _candidateSide;
+  int _candidateFrames = 0;
+  int _reachedFrames = 0;
+  int _lowerFrames = 0;
+  DateTime? _raisingStartedAt;
+  DateTime? _lostTrackingStartedAt;
+  DateTime? _cooldownUntil;
+
+  ArmRaiseDetector(this.config)
+      : _ema = _EmaLandmarkFilter(config.emaAlpha),
+        _trackers = {
+          MotionSide.left: _SideTracker(config.minRangeDeg),
+          MotionSide.right: _SideTracker(config.minRangeDeg),
+        };
+
+  void reset() {
+    _phase = MotionFsmPhase.idle;
+    _activeSide = null;
+    _candidateSide = null;
+    _candidateFrames = 0;
+    _reachedFrames = 0;
+    _lowerFrames = 0;
+    _raisingStartedAt = null;
+    _lostTrackingStartedAt = null;
+    _cooldownUntil = null;
+    for (final tracker in _trackers.values) {
+      tracker.baselineDeg = null;
+      tracker.rangeDeg = config.minRangeDeg;
+    }
+    _ema.reset();
+  }
+
+  MotionDetectionResult update(Pose pose, DateTime now) {
+    if (_phase == MotionFsmPhase.cooldown) {
+      if (_cooldownUntil != null && now.isBefore(_cooldownUntil!)) {
+        return MotionDetectionResult(
+          phase: _phase,
+          activeSide: _activeSide,
+          repCompleted: false,
+          normScore: null,
+          deltaDeg: null,
+        );
+      }
+      _enterIdle();
+    }
+
+    final left = _measureSide(
+      pose: pose,
+      side: MotionSide.left,
+      now: now,
+    );
+    final right = _measureSide(
+      pose: pose,
+      side: MotionSide.right,
+      now: now,
+    );
+    final measurements = {
+      MotionSide.left: left,
+      MotionSide.right: right,
+    };
+
+    bool repCompleted = false;
+
+    switch (_phase) {
+      case MotionFsmPhase.idle:
+        final candidate = _pickBestEnteringSide(measurements);
+        if (candidate != null) {
+          if (_candidateSide == candidate) {
+            _candidateFrames++;
+          } else {
+            _candidateSide = candidate;
+            _candidateFrames = 1;
+          }
+          if (_candidateFrames >= config.fsm.raiseConfirmFrames) {
+            _phase = MotionFsmPhase.raising;
+            _activeSide = candidate;
+            _raisingStartedAt = now;
+            _reachedFrames = 0;
+            _lowerFrames = 0;
+            _lostTrackingStartedAt = null;
+          }
+        } else {
+          _candidateSide = null;
+          _candidateFrames = 0;
+        }
+        break;
+
+      case MotionFsmPhase.raising:
+        final m = measurements[_activeSide]!;
+        if (!_handleTrackingLoss(m.quality, now)) {
+          break;
+        }
+        if (_isReached(m)) {
+          _reachedFrames++;
+          if (_reachedFrames >= config.fsm.reachedHoldFrames) {
+            _phase = MotionFsmPhase.reached;
+            _lowerFrames = 0;
+          }
+        } else {
+          _reachedFrames = 0;
+        }
+        if (_raisingStartedAt != null && now.difference(_raisingStartedAt!) > config.fsm.raisingTimeout) {
+          _enterIdle();
+        }
+        break;
+
+      case MotionFsmPhase.reached:
+        final m = measurements[_activeSide]!;
+        if (!_handleTrackingLoss(m.quality, now)) {
+          break;
+        }
+        if (_isLowering(m)) {
+          _lowerFrames++;
+          if (_lowerFrames >= config.fsm.lowerConfirmFrames) {
+            _phase = MotionFsmPhase.lowering;
+          }
+        } else {
+          _lowerFrames = 0;
+        }
+        break;
+
+      case MotionFsmPhase.lowering:
+        final m = measurements[_activeSide]!;
+        if (!_handleTrackingLoss(m.quality, now)) {
+          break;
+        }
+        if (_isExited(m)) {
+          repCompleted = true;
+          _phase = MotionFsmPhase.cooldown;
+          _cooldownUntil = now.add(config.fsm.cooldown);
+          _candidateFrames = 0;
+          _candidateSide = null;
+        } else if (_isReached(m)) {
+          // 回弹抖动：回到 reached 继续等待放下
+          _phase = MotionFsmPhase.reached;
+          _lowerFrames = 0;
+        }
+        break;
+
+      case MotionFsmPhase.cooldown:
+        break;
+    }
+
+    final activeMeasurement =
+        _activeSide == null ? null : measurements[_activeSide!];
+
+    return MotionDetectionResult(
+      phase: _phase,
+      activeSide: _activeSide,
+      repCompleted: repCompleted,
+      normScore: activeMeasurement?.normScore,
+      deltaDeg: activeMeasurement?.deltaDeg,
+    );
+  }
+
+  MotionSide? _pickBestEnteringSide(Map<MotionSide, _MotionMeasurement> measurements) {
+    MotionSide? best;
+    double bestScore = -1;
+    for (final entry in measurements.entries) {
+      final m = entry.value;
+      if (!_isEntering(m)) continue;
+      if (m.normScore > bestScore) {
+        bestScore = m.normScore;
+        best = entry.key;
+      }
+    }
+    return best;
+  }
+
+  bool _isEntering(_MotionMeasurement m) =>
+      m.quality &&
+      m.normScore >= config.enterNorm &&
+      m.deltaDeg >= config.enterDeltaDeg;
+
+  bool _isReached(_MotionMeasurement m) =>
+      m.quality &&
+      m.reachedGate &&
+      m.normScore >= config.reachedNorm &&
+      m.deltaDeg >= config.reachedDeltaDeg;
+
+  bool _isLowering(_MotionMeasurement m) =>
+      m.quality &&
+      (m.normScore <= config.loweringNorm || m.deltaDeg <= config.loweringDeltaDeg);
+
+  bool _isExited(_MotionMeasurement m) =>
+      m.quality &&
+      (m.normScore <= config.exitNorm || m.deltaDeg <= config.exitDeltaDeg);
+
+  bool _handleTrackingLoss(bool quality, DateTime now) {
+    if (quality) {
+      _lostTrackingStartedAt = null;
+      return true;
+    }
+    _lostTrackingStartedAt ??= now;
+    if (now.difference(_lostTrackingStartedAt!) > config.fsm.lostTrackingGrace) {
+      _enterIdle();
+      return false;
+    }
+    return true;
+  }
+
+  void _enterIdle() {
+    _phase = MotionFsmPhase.idle;
+    _activeSide = null;
+    _candidateSide = null;
+    _candidateFrames = 0;
+    _reachedFrames = 0;
+    _lowerFrames = 0;
+    _raisingStartedAt = null;
+    _lostTrackingStartedAt = null;
+  }
+
+  _MotionMeasurement _measureSide({
+    required Pose pose,
+    required MotionSide side,
+    required DateTime now,
+  }) {
+    final shoulderType =
+        side == MotionSide.left ? PoseLandmarkType.leftShoulder : PoseLandmarkType.rightShoulder;
+    final hipType = side == MotionSide.left ? PoseLandmarkType.leftHip : PoseLandmarkType.rightHip;
+    final elbowType = side == MotionSide.left ? PoseLandmarkType.leftElbow : PoseLandmarkType.rightElbow;
+    final wristType = side == MotionSide.left ? PoseLandmarkType.leftWrist : PoseLandmarkType.rightWrist;
+
+    final shoulder = _ema.smooth(shoulderType, pose.landmarks[shoulderType]);
+    final hip = _ema.smooth(hipType, pose.landmarks[hipType]);
+    final elbow = _ema.smooth(elbowType, pose.landmarks[elbowType]);
+    final wrist = _ema.smooth(wristType, pose.landmarks[wristType]);
+
+    if (shoulder == null || hip == null) {
+      return const _MotionMeasurement(quality: false, normScore: 0, deltaDeg: 0, reachedGate: false);
+    }
+    final armEnd = elbow ?? wrist;
+    if (armEnd == null) {
+      return const _MotionMeasurement(quality: false, normScore: 0, deltaDeg: 0, reachedGate: false);
+    }
+
+    final shoulderAngle = _angleBetweenVectors(hip - shoulder, armEnd - shoulder);
+    if (!shoulderAngle.isFinite) {
+      return const _MotionMeasurement(quality: false, normScore: 0, deltaDeg: 0, reachedGate: false);
+    }
+
+    final tracker = _trackers[side]!;
+    tracker.baselineDeg ??= shoulderAngle;
+    var delta = shoulderAngle - tracker.baselineDeg!;
+    if (delta < 0) delta = 0;
+
+    if ((_phase == MotionFsmPhase.idle || _phase == MotionFsmPhase.cooldown) &&
+        delta < config.baselineUpdateGateDeg) {
+      tracker.baselineDeg =
+          _emaScalar(tracker.baselineDeg!, shoulderAngle, config.baselineAlpha);
+      delta = shoulderAngle - tracker.baselineDeg!;
+      if (delta < 0) delta = 0;
+    }
+
+    tracker.rangeDeg = math.max(config.minRangeDeg, math.max(tracker.rangeDeg * 0.995, delta));
+    final norm = (delta / tracker.rangeDeg).clamp(0.0, 2.0);
+
+    double elbowAngle = 180;
+    if (elbow != null && wrist != null) {
+      elbowAngle = _angleAt(shoulder, elbow, wrist);
+    }
+
+    return _MotionMeasurement(
+      quality: true,
+      normScore: norm,
+      deltaDeg: delta,
+      reachedGate: elbowAngle >= config.minElbowExtensionDeg,
+    );
+  }
+}
+
+class LegLiftDetector {
+  final LegDetectionConfig config;
+  final _EmaLandmarkFilter _ema;
+  final Map<MotionSide, _SideTracker> _trackers;
+
+  MotionFsmPhase _phase = MotionFsmPhase.idle;
+  MotionSide? _activeSide;
+  MotionSide? _candidateSide;
+  int _candidateFrames = 0;
+  int _reachedFrames = 0;
+  int _lowerFrames = 0;
+  DateTime? _raisingStartedAt;
+  DateTime? _lostTrackingStartedAt;
+  DateTime? _cooldownUntil;
+
+  LegLiftDetector(this.config)
+      : _ema = _EmaLandmarkFilter(config.emaAlpha),
+        _trackers = {
+          MotionSide.left: _SideTracker(config.minRangeDeg),
+          MotionSide.right: _SideTracker(config.minRangeDeg),
+        };
+
+  void reset() {
+    _phase = MotionFsmPhase.idle;
+    _activeSide = null;
+    _candidateSide = null;
+    _candidateFrames = 0;
+    _reachedFrames = 0;
+    _lowerFrames = 0;
+    _raisingStartedAt = null;
+    _lostTrackingStartedAt = null;
+    _cooldownUntil = null;
+    for (final tracker in _trackers.values) {
+      tracker.baselineDeg = null;
+      tracker.rangeDeg = config.minRangeDeg;
+    }
+    _ema.reset();
+  }
+
+  MotionDetectionResult update(Pose pose, DateTime now) {
+    if (_phase == MotionFsmPhase.cooldown) {
+      if (_cooldownUntil != null && now.isBefore(_cooldownUntil!)) {
+        return MotionDetectionResult(
+          phase: _phase,
+          activeSide: _activeSide,
+          repCompleted: false,
+          normScore: null,
+          deltaDeg: null,
+        );
+      }
+      _enterIdle();
+    }
+
+    final left = _measureSide(pose: pose, side: MotionSide.left);
+    final right = _measureSide(pose: pose, side: MotionSide.right);
+    final measurements = {
+      MotionSide.left: left,
+      MotionSide.right: right,
+    };
+
+    bool repCompleted = false;
+
+    switch (_phase) {
+      case MotionFsmPhase.idle:
+        final candidate = _pickBestEnteringSide(measurements);
+        if (candidate != null) {
+          if (_candidateSide == candidate) {
+            _candidateFrames++;
+          } else {
+            _candidateSide = candidate;
+            _candidateFrames = 1;
+          }
+          if (_candidateFrames >= config.fsm.raiseConfirmFrames) {
+            _phase = MotionFsmPhase.raising;
+            _activeSide = candidate;
+            _raisingStartedAt = now;
+            _reachedFrames = 0;
+            _lowerFrames = 0;
+            _lostTrackingStartedAt = null;
+          }
+        } else {
+          _candidateSide = null;
+          _candidateFrames = 0;
+        }
+        break;
+
+      case MotionFsmPhase.raising:
+        final m = measurements[_activeSide]!;
+        if (!_handleTrackingLoss(m.quality, now)) {
+          break;
+        }
+        if (_isReached(m)) {
+          _reachedFrames++;
+          if (_reachedFrames >= config.fsm.reachedHoldFrames) {
+            _phase = MotionFsmPhase.reached;
+            _lowerFrames = 0;
+          }
+        } else {
+          _reachedFrames = 0;
+        }
+        if (_raisingStartedAt != null && now.difference(_raisingStartedAt!) > config.fsm.raisingTimeout) {
+          _enterIdle();
+        }
+        break;
+
+      case MotionFsmPhase.reached:
+        final m = measurements[_activeSide]!;
+        if (!_handleTrackingLoss(m.quality, now)) {
+          break;
+        }
+        if (_isLowering(m)) {
+          _lowerFrames++;
+          if (_lowerFrames >= config.fsm.lowerConfirmFrames) {
+            _phase = MotionFsmPhase.lowering;
+          }
+        } else {
+          _lowerFrames = 0;
+        }
+        break;
+
+      case MotionFsmPhase.lowering:
+        final m = measurements[_activeSide]!;
+        if (!_handleTrackingLoss(m.quality, now)) {
+          break;
+        }
+        if (_isExited(m)) {
+          repCompleted = true;
+          _phase = MotionFsmPhase.cooldown;
+          _cooldownUntil = now.add(config.fsm.cooldown);
+          _candidateFrames = 0;
+          _candidateSide = null;
+        } else if (_isReached(m)) {
+          _phase = MotionFsmPhase.reached;
+          _lowerFrames = 0;
+        }
+        break;
+
+      case MotionFsmPhase.cooldown:
+        break;
+    }
+
+    final activeMeasurement =
+        _activeSide == null ? null : measurements[_activeSide!];
+
+    return MotionDetectionResult(
+      phase: _phase,
+      activeSide: _activeSide,
+      repCompleted: repCompleted,
+      normScore: activeMeasurement?.normScore,
+      deltaDeg: activeMeasurement?.deltaDeg,
+    );
+  }
+
+  MotionSide? _pickBestEnteringSide(Map<MotionSide, _MotionMeasurement> measurements) {
+    MotionSide? best;
+    double bestScore = -1;
+    for (final entry in measurements.entries) {
+      final m = entry.value;
+      if (!_isEntering(m)) continue;
+      if (m.normScore > bestScore) {
+        bestScore = m.normScore;
+        best = entry.key;
+      }
+    }
+    return best;
+  }
+
+  bool _isEntering(_MotionMeasurement m) =>
+      m.quality &&
+      m.normScore >= config.enterNorm &&
+      m.deltaDeg >= config.enterDeltaDeg;
+
+  bool _isReached(_MotionMeasurement m) =>
+      m.quality &&
+      m.reachedGate &&
+      m.normScore >= config.reachedNorm &&
+      m.deltaDeg >= config.reachedDeltaDeg;
+
+  bool _isLowering(_MotionMeasurement m) =>
+      m.quality &&
+      (m.normScore <= config.loweringNorm || m.deltaDeg <= config.loweringDeltaDeg);
+
+  bool _isExited(_MotionMeasurement m) =>
+      m.quality &&
+      (m.normScore <= config.exitNorm || m.deltaDeg <= config.exitDeltaDeg);
+
+  bool _handleTrackingLoss(bool quality, DateTime now) {
+    if (quality) {
+      _lostTrackingStartedAt = null;
+      return true;
+    }
+    _lostTrackingStartedAt ??= now;
+    if (now.difference(_lostTrackingStartedAt!) > config.fsm.lostTrackingGrace) {
+      _enterIdle();
+      return false;
+    }
+    return true;
+  }
+
+  void _enterIdle() {
+    _phase = MotionFsmPhase.idle;
+    _activeSide = null;
+    _candidateSide = null;
+    _candidateFrames = 0;
+    _reachedFrames = 0;
+    _lowerFrames = 0;
+    _raisingStartedAt = null;
+    _lostTrackingStartedAt = null;
+  }
+
+  _MotionMeasurement _measureSide({
+    required Pose pose,
+    required MotionSide side,
+  }) {
+    final shoulderType =
+        side == MotionSide.left ? PoseLandmarkType.leftShoulder : PoseLandmarkType.rightShoulder;
+    final oppositeShoulderType =
+        side == MotionSide.left ? PoseLandmarkType.rightShoulder : PoseLandmarkType.leftShoulder;
+    final hipType = side == MotionSide.left ? PoseLandmarkType.leftHip : PoseLandmarkType.rightHip;
+    final kneeType = side == MotionSide.left ? PoseLandmarkType.leftKnee : PoseLandmarkType.rightKnee;
+    final ankleType = side == MotionSide.left ? PoseLandmarkType.leftAnkle : PoseLandmarkType.rightAnkle;
+
+    final shoulderPrimary = _ema.smooth(shoulderType, pose.landmarks[shoulderType]);
+    final shoulderFallback =
+        _ema.smooth(oppositeShoulderType, pose.landmarks[oppositeShoulderType]);
+    final shoulder = shoulderPrimary ?? shoulderFallback;
+    final hip = _ema.smooth(hipType, pose.landmarks[hipType]);
+    final knee = _ema.smooth(kneeType, pose.landmarks[kneeType]);
+    final ankle = _ema.smooth(ankleType, pose.landmarks[ankleType]);
+
+    if (shoulder == null || hip == null) {
+      return const _MotionMeasurement(quality: false, normScore: 0, deltaDeg: 0, reachedGate: false);
+    }
+    final thighPoint = knee ?? ankle;
+    if (thighPoint == null) {
+      return const _MotionMeasurement(quality: false, normScore: 0, deltaDeg: 0, reachedGate: false);
+    }
+
+    final hipAngle = _angleBetweenVectors(shoulder - hip, thighPoint - hip);
+    if (!hipAngle.isFinite) {
+      return const _MotionMeasurement(quality: false, normScore: 0, deltaDeg: 0, reachedGate: false);
+    }
+
+    final tracker = _trackers[side]!;
+    tracker.baselineDeg ??= hipAngle;
+    var delta = tracker.baselineDeg! - hipAngle;
+    if (delta < 0) delta = 0;
+
+    if ((_phase == MotionFsmPhase.idle || _phase == MotionFsmPhase.cooldown) &&
+        delta < config.baselineUpdateGateDeg) {
+      tracker.baselineDeg =
+          _emaScalar(tracker.baselineDeg!, hipAngle, config.baselineAlpha);
+      delta = tracker.baselineDeg! - hipAngle;
+      if (delta < 0) delta = 0;
+    }
+
+    tracker.rangeDeg = math.max(config.minRangeDeg, math.max(tracker.rangeDeg * 0.995, delta));
+    final norm = (delta / tracker.rangeDeg).clamp(0.0, 2.0);
+
+    double kneeAngle = 180;
+    if (knee != null && ankle != null) {
+      kneeAngle = _angleAt(hip, knee, ankle);
+    }
+
+    return _MotionMeasurement(
+      quality: true,
+      normScore: norm,
+      deltaDeg: delta,
+      reachedGate: kneeAngle >= config.minKneeExtensionDeg,
+    );
+  }
+}
+
+double _emaScalar(double previous, double current, double alpha) {
+  return previous * (1 - alpha) + current * alpha;
+}
+
+double _angleAt(Offset a, Offset b, Offset c) {
+  return _angleBetweenVectors(a - b, c - b);
+}
+
+double _angleBetweenVectors(Offset v1, Offset v2) {
+  final norm1 = v1.distance;
+  final norm2 = v2.distance;
+  if (norm1 < 1e-6 || norm2 < 1e-6) {
+    return double.nan;
+  }
+  final cosValue = ((v1.dx * v2.dx) + (v1.dy * v2.dy)) / (norm1 * norm2);
+  final clamped = cosValue.clamp(-1.0, 1.0);
+  return math.acos(clamped) * 180 / math.pi;
 }
 
 // 姿态绘制器

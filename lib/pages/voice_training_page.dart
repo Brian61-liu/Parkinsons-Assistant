@@ -36,7 +36,11 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
   double _minDb = double.infinity; // 记录检测到的最小分贝值（用于计算比例）
   double _maxDb = 0.0; // 记录检测到的最大分贝值
   bool _wasInTargetZone = false; // 上次是否在目标区（用于震动反馈）
-  Color _lastColor = const Color(0xFF60A5FA); // 上次的颜色，用于检测颜色变化
+  // 语音训练模块主色（与主页对应）：绿色
+  static const Color _moduleColor = Color(0xFF10B981);
+  static const Color _moduleColorSoft = Color(0xFF34D399);
+
+  Color _lastColor = _moduleColorSoft; // 上次的颜色，用于检测颜色变化
   static const Duration _updateInterval = Duration(milliseconds: 200); // 更新间隔：200ms（提高响应速度）
   
   // 基线校准相关
@@ -162,7 +166,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
       // 启动定时器，以固定频率更新 UI（节流）
       double lastDisplayedDb = 0.0;
       double lastRadius = 80.0;
-      _lastColor = const Color(0xFF60A5FA);
+      _lastColor = _moduleColorSoft;
       _updateTimer = Timer.periodic(_updateInterval, (timer) {
         if (mounted && _latestReading != null) {
           final rawDb = _latestReading!.meanDecibel;
@@ -369,7 +373,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
   /// 获取圆的颜色
   Color _getCircleColor() {
     if (!_isListening || _latestReading == null) {
-      return const Color(0xFF60A5FA); // 默认：浅蓝色
+      return _moduleColorSoft; // 默认：主色浅色
     }
     
     // 优先检查是否达标，如果达标就显示绿色
@@ -388,7 +392,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
       case 4: // > 85 dB：过高
         return const Color(0xFF10B981); // 鲜绿色
       default:
-        return const Color(0xFF60A5FA); // 默认：浅蓝色
+        return _moduleColorSoft; // 默认：主色浅色
     }
   }
   
@@ -457,7 +461,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: CupertinoNavigationBarBackButton(
-          color: const Color(0xFF0EA5E9),
+          color: _moduleColor,
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -597,7 +601,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
                 child: CupertinoButton(
                   color: _isListening
                       ? Colors.red
-                      : const Color(0xFF0EA5E9),
+                      : _moduleColor,
                   borderRadius: BorderRadius.circular(16),
                   onPressed: _isListening ? _stopListening : _startListening,
                   child: Text(

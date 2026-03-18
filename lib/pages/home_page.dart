@@ -810,7 +810,7 @@ class _HomePageState extends State<HomePage> {
 
                     // 肢体动作训练按钮（副标题：点击开始训练）
                     _buildFeatureButton(
-                      icon: CupertinoIcons.hand_raised_fill,
+                      icon: Icons.directions_run,
                       title: l10n.movementTraining,
                       subtitle: l10n.clickToStartTraining,
                       color: const Color(0xFF8B5CF6),

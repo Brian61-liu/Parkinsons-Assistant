@@ -20,7 +20,8 @@ class _TremorTestPageState extends State<TremorTestPage> {
   final DatabaseService _databaseService = DatabaseService();
 
   static const Color _primaryColor = Color(0xFF0EA5E9);
-  static const Color _secondaryColor = Color(0xFF10B981);
+  // 手部震颤测试模块主色（与主页对应）：蓝色；辅助色使用更浅的蓝色，避免混入其它模块绿色
+  static const Color _secondaryColor = Color(0xFF38BDF8);
   static const Color _textPrimary = Color(0xFF1E3A5F);
   static const Color _textSecondary = Color(0xFF64748B);
 
@@ -237,7 +238,7 @@ class _TremorTestPageState extends State<TremorTestPage> {
             const SizedBox(height: 10),
             _buildResultRow(Icons.show_chart, l10n.avgAmplitude, avgAmplitude.toStringAsFixed(3), _secondaryColor),
             const SizedBox(height: 10),
-            _buildResultRow(Icons.trending_up, l10n.maxAmp, maxAmplitude.toStringAsFixed(3), const Color(0xFF8B5CF6)),
+            _buildResultRow(Icons.trending_up, l10n.maxAmp, maxAmplitude.toStringAsFixed(3), _secondaryColor),
           ],
         ),
         actions: [
@@ -392,7 +393,7 @@ class _TremorTestPageState extends State<TremorTestPage> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF10B981)]),
+                  gradient: const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF38BDF8)]),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [BoxShadow(color: _primaryColor.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
                 ),
@@ -464,7 +465,7 @@ class _TremorTestPageState extends State<TremorTestPage> {
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              gradient: const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF10B981)]),
+                              gradient: const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF38BDF8)]),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: const Icon(CupertinoIcons.waveform_path, color: Colors.white, size: 18),
@@ -627,7 +628,7 @@ class _TremorTestPageState extends State<TremorTestPage> {
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF10B981)]),
+                        gradient: const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF38BDF8)]),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(CupertinoIcons.clock, color: Colors.white, size: 22),
@@ -763,7 +764,7 @@ class _TremorTestPageState extends State<TremorTestPage> {
                 ),
                 Container(width: 1, height: 30, color: Colors.grey[200]),
                 Expanded(
-                  child: _buildHistoryMetric(l10n.duration, '${record.duration}${l10n.seconds}', const Color(0xFF8B5CF6)),
+                  child: _buildHistoryMetric(l10n.duration, '${record.duration}${l10n.seconds}', _secondaryColor),
                 ),
               ],
             ),

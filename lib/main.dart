@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'utils/gentle_page_route.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
 import 'pages/home_page.dart';
 import 'pages/login_page.dart';
+import 'pages/loading_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
 
   // 状态栏：浅色背景下使用深色图标与文字，提升对比度，便于康复/老年用户辨识
   SystemChrome.setSystemUIOverlayStyle(
@@ -25,10 +24,9 @@ void main() async {
     ),
   );
 
-  // 加载保存的语言设置
-  final savedLocale = await _loadSavedLocale();
-
-  runApp(AmplioApp(initialLocale: savedLocale));
+  // 关键：不要在 main() await 耗时初始化，否则会卡在原生启动图。
+  // 先渲染一个轻量 LoadingScreen，再在页面内完成初始化并跳转。
+  runApp(const AmplioApp(initialLocale: Locale('zh', '')));
 }
 
 /// 加载保存的语言设置
@@ -65,6 +63,12 @@ class _AmplioAppState extends State<AmplioApp> {
   void initState() {
     super.initState();
     _locale = widget.initialLocale;
+    _loadSavedLocale().then((saved) {
+      if (!mounted) return;
+      setState(() {
+        _locale = saved;
+      });
+    });
   }
 
   Future<void> changeLanguage(Locale locale) async {
@@ -143,22 +147,22 @@ class _AmplioAppState extends State<AmplioApp> {
           child: child!,
         );
       },
-      home: _AuthStateChecker(onLanguageChange: changeLanguage),
+      home: LoadingScreen(onLanguageChange: changeLanguage),
     );
   }
 }
 
 /// 认证状态检查器，支持游客模式
-class _AuthStateChecker extends StatefulWidget {
+class AuthGate extends StatefulWidget {
   final Function(Locale) onLanguageChange;
 
-  const _AuthStateChecker({required this.onLanguageChange});
+  const AuthGate({super.key, required this.onLanguageChange});
 
   @override
-  State<_AuthStateChecker> createState() => _AuthStateCheckerState();
+  State<AuthGate> createState() => _AuthStateCheckerState();
 }
 
-class _AuthStateCheckerState extends State<_AuthStateChecker> {
+class _AuthStateCheckerState extends State<AuthGate> {
   bool _isGuestMode = false;
 
   @override
