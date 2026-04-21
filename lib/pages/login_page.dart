@@ -196,7 +196,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF0F9FF),
@@ -236,192 +235,182 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             Expanded(
               child: FadeTransition(
                 opacity: _fadeAnimation,
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Column(
-                    children: [
-                      SizedBox(height: size.height * 0.05),
-                      
-                      // Logo - 融合设计
-                      Container(
-                        width: 150,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(36),
-                          boxShadow: [
-                            // 柔和的外阴影
-                            BoxShadow(
-                              color: const Color(0xFF0EA5E9).withValues(alpha: 0.15),
-                              blurRadius: 30,
-                              spreadRadius: 5,
-                              offset: const Offset(0, 10),
-                            ),
-                            // 内发光效果
-                            BoxShadow(
-                              color: Colors.white.withValues(alpha: 0.8),
-                              blurRadius: 20,
-                              spreadRadius: -5,
-                              offset: const Offset(0, -5),
-                            ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(36),
-                          child: Image.asset(
-                            'assets/icon/app_icon.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      
-                      const SizedBox(height: 28),
-                      
-                      // App 名称
-                      const Text(
-                        'Amplio',
-                        style: TextStyle(
-                          fontSize: 42,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF1E3A5F),
-                          letterSpacing: 2,
-                        ),
-                      ),
-                      
-                      const SizedBox(height: 12),
-                      
-                      // 副标题
-                      Text(
-                        l10n.appSubtitle,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Color(0xFF64748B),
-                          height: 1.5,
-                        ),
-                      ),
-                      
-                      SizedBox(height: size.height * 0.12),
-                      
-                      // Google 登录按钮
-                      SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: ElevatedButton(
-                          onPressed: _isLoading ? null : _signInWithGoogle,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: const Color(0xFF334155),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              side: BorderSide(
-                                color: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
-                                width: 1.5,
-                              ),
-                            ),
-                            elevation: 2,
-                            shadowColor: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
-                          ),
-                          child: _isLoading
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    const designWidth = 402.0;
+                    const designHeight = 919.0; // y:10 + 402 + 3*(43+126)
+
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: SizedBox(
+                                width: designWidth,
+                                height: designHeight,
+                                child: Column(
                                   children: [
+                                    const SizedBox(height: 10),
                                     SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2.5,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.grey[600]!,
+                                      width: 402,
+                                      height: 402,
+                                      child: ClipOval(
+                                        child: Image.asset(
+                                          'assets/icon/app_icon.png',
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(width: 12),
-                                    Text(
-                                      l10n.signingIn,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.grey[600],
+                                    const SizedBox(height: 43),
+                                    SizedBox(
+                                      width: 376,
+                                      height: 126,
+                                      child: ElevatedButton(
+                                        onPressed: _isLoading ? null : _signInWithGoogle,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          foregroundColor: const Color(0xFF334155),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(60),
+                                            side: BorderSide(
+                                              color: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
+                                              width: 1.5,
+                                            ),
+                                          ),
+                                          elevation: 2,
+                                          shadowColor: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
+                                        ),
+                                        child: _isLoading
+                                            ? Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 20,
+                                                    height: 20,
+                                                    child: CircularProgressIndicator(
+                                                      strokeWidth: 2.5,
+                                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                                        Colors.grey[600]!,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 12),
+                                                  Text(
+                                                    l10n.signingIn,
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.grey[600],
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    'assets/images/google_logo.svg',
+                                                    width: 22,
+                                                    height: 22,
+                                                  ),
+                                                  const SizedBox(width: 12),
+                                                  Text(
+                                                    l10n.signInWithGoogle,
+                                                    style: const TextStyle(
+                                                      fontSize: 24,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                       ),
                                     ),
-                                  ],
-                                )
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    // Google 官方 G Logo (SVG)
-                                    SvgPicture.asset(
-                                      'assets/images/google_logo.svg',
-                                      width: 22,
-                                      height: 22,
+                                    const SizedBox(height: 43),
+                                    SizedBox(
+                                      width: 376,
+                                      height: 126,
+                                      child: OutlinedButton.icon(
+                                        onPressed: null,
+                                        style: OutlinedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          disabledForegroundColor: const Color(0xFF334155),
+                                          disabledBackgroundColor: Colors.white,
+                                          side: BorderSide(
+                                            color: const Color(0xFF64748B).withValues(alpha: 0.3),
+                                            width: 1.5,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(60),
+                                          ),
+                                        ),
+                                        icon: const Icon(
+                                          Icons.apple,
+                                          size: 24,
+                                          color: Color(0xFF334155),
+                                        ),
+                                        label: const Text(
+                                          'Apple 登录',
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color(0xFF334155),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    const SizedBox(width: 12),
-                                    Text(
-                                      l10n.signInWithGoogle,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
+                                    const SizedBox(height: 43),
+                                    SizedBox(
+                                      width: 376,
+                                      height: 126,
+                                      child: OutlinedButton(
+                                        onPressed: widget.onGuestLogin,
+                                        style: OutlinedButton.styleFrom(
+                                          foregroundColor: const Color(0xFF64748B),
+                                          side: BorderSide(
+                                            color: const Color(0xFF64748B).withValues(alpha: 0.3),
+                                            width: 1.5,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(60),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          l10n.continueAsGuest,
+                                          style: const TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
-                        ),
-                      ),
-                      
-                      const SizedBox(height: 24),
-                      
-                      // 游客登录按钮
-                      if (widget.onGuestLogin != null)
-                        SizedBox(
-                          width: double.infinity,
-                          height: 56,
-                          child: OutlinedButton(
-                            onPressed: widget.onGuestLogin,
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: const Color(0xFF64748B),
-                              side: BorderSide(
-                                color: const Color(0xFF64748B).withValues(alpha: 0.3),
-                                width: 1.5,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                            ),
-                            child: Text(
-                              l10n.continueAsGuest,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
                         ),
-                      
-                      if (widget.onGuestLogin != null) const SizedBox(height: 16),
-                      
-                      // 隐私政策
-                      TextButton.icon(
-                        onPressed: () {
-                          pushGentle(context, const PrivacyPolicyPage());
-                        },
-                        icon: Icon(
-                          CupertinoIcons.lock_shield,
-                          size: 16,
-                          color: const Color(0xFF0EA5E9).withValues(alpha: 0.8),
-                        ),
-                        label: Text(
-                          l10n.privacyPolicy,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF0EA5E9),
-                            fontWeight: FontWeight.w500,
+                        TextButton.icon(
+                          onPressed: () {
+                            pushGentle(context, const PrivacyPolicyPage());
+                          },
+                          icon: Icon(
+                            CupertinoIcons.lock_shield,
+                            size: 16,
+                            color: const Color(0xFF0EA5E9).withValues(alpha: 0.8),
+                          ),
+                          label: Text(
+                            l10n.privacyPolicy,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF0EA5E9),
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                      ),
-                      
-                      const SizedBox(height: 40),
-                    ],
-                  ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
