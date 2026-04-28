@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'utils/gentle_page_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +9,7 @@ import 'l10n/app_localizations.dart';
 import 'pages/home_page.dart';
 import 'pages/login_page.dart';
 import 'pages/loading_screen.dart';
+import 'services/user_settings_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +28,17 @@ void main() async {
 
   // 关键：不要在 main() await 耗时初始化，否则会卡在原生启动图。
   // 先渲染一个轻量 LoadingScreen，再在页面内完成初始化并跳转。
-  runApp(const AmplioApp(initialLocale: Locale('zh', '')));
+  final userSettings = UserSettingsService();
+  // 异步加载，不阻塞首帧
+  // ignore: discarded_futures
+  userSettings.load();
+
+  runApp(
+    ChangeNotifierProvider<UserSettingsService>.value(
+      value: userSettings,
+      child: const AmplioApp(initialLocale: Locale('zh', '')),
+    ),
+  );
 }
 
 /// 加载保存的语言设置
@@ -112,38 +124,27 @@ class _AmplioAppState extends State<AmplioApp> {
         Locale('ru', ''), // 俄语 Russian
         Locale('es', ''), // 西班牙语 Spanish
       ],
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        appBarTheme: const AppBarTheme(
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
-            statusBarBrightness: Brightness.light,
+      theme: context.watch<UserSettingsService>().buildTheme().copyWith(
+            appBarTheme: const AppBarTheme(
+              systemOverlayStyle: SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+                statusBarIconBrightness: Brightness.dark,
+                statusBarBrightness: Brightness.light,
+              ),
+            ),
+            pageTransitionsTheme: const PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: GentlePageTransitionsBuilder(),
+                TargetPlatform.iOS: GentlePageTransitionsBuilder(),
+              },
+            ),
           ),
-        ),
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: GentlePageTransitionsBuilder(),
-            TargetPlatform.iOS: GentlePageTransitionsBuilder(),
-          },
-        ),
-        textTheme: const TextTheme(
-          displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-          displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-          displaySmall: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          headlineLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          headlineMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-          bodyLarge: TextStyle(fontSize: 18),
-          bodyMedium: TextStyle(fontSize: 16),
-        ),
-      ),
       builder: (context, child) {
+        final scale = context.watch<UserSettingsService>().fontScale;
         return MediaQuery(
           data: MediaQuery.of(
             context,
-          ).copyWith(textScaler: const TextScaler.linear(1.1)),
+          ).copyWith(textScaler: TextScaler.linear(scale)),
           child: child!,
         );
       },

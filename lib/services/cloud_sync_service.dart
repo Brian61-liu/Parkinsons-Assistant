@@ -110,7 +110,8 @@ class CloudSyncService {
 
   /// 上传肢体动作训练记录到云端
   Future<void> syncMovementTrainingRecordToCloud(
-      MovementTrainingRecord record) async {
+    MovementTrainingRecord record,
+  ) async {
     if (!isUserLoggedIn) {
       debugPrint('用户未登录，跳过云端同步');
       return;
@@ -144,7 +145,8 @@ class CloudSyncService {
   }
 
   /// 从云端获取所有肢体动作训练记录
-  Future<List<MovementTrainingRecord>> getMovementTrainingRecordsFromCloud() async {
+  Future<List<MovementTrainingRecord>>
+  getMovementTrainingRecordsFromCloud() async {
     if (!isUserLoggedIn) {
       return [];
     }
@@ -206,7 +208,7 @@ class CloudSyncService {
     }
 
     debugPrint('开始批量同步数据到云端...');
-    
+
     // 同步震颤测试记录
     for (final record in tremorRecords) {
       await syncTremorRecordToCloud(record);

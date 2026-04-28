@@ -18,17 +18,17 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
   StreamSubscription<NoiseReading>? _noiseSubscription;
   bool _isListening = false;
   bool _hasPermission = false;
-  
+
   // 新的阈值设置（基于手机距离嘴巴 30-50cm）
   static const double _veryLowThreshold = 60.0; // < 60 dB：过低/橙色
   static const double _lowThreshold = 65.0; // 60-65 dB：过低/橙色
   static const double _normalThreshold = 75.0; // 65-75 dB：普通/黄色
   static const double _targetMin = 75.0; // 75-90 dB：目标/绿色（放宽上限以允许稍微超过85dB）
   static const double _targetMax = 90.0;
-  
+
   // 目标参照圈的半径（固定大小，代表目标值）
   static const double _targetRingRadius = 140.0; // 目标圆环半径
-  
+
   // 性能优化：节流更新，避免过于频繁的 UI 刷新
   Timer? _updateTimer;
   double _displayedDb = 0.0; // 显示的平滑分贝值
@@ -41,14 +41,17 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
   static const Color _moduleColorSoft = Color(0xFF34D399);
 
   Color _lastColor = _moduleColorSoft; // 上次的颜色，用于检测颜色变化
-  static const Duration _updateInterval = Duration(milliseconds: 200); // 更新间隔：200ms（提高响应速度）
-  
+  static const Duration _updateInterval = Duration(
+    milliseconds: 200,
+  ); // 更新间隔：200ms（提高响应速度）
+
   // 基线校准相关
   double _baselineDb = 0.0; // 环境噪音基线（校准值）
   bool _isCalibrating = false; // 是否正在校准
   final List<double> _calibrationSamples = []; // 校准样本
   static const int _calibrationSampleCount = 10; // 校准样本数量（约3秒，300ms * 10）
-  static const double _minEffectiveVolumeDiff = 8.0; // 最小有效音量差值（超过基线8dB才认为是有效声音）
+  static const double _minEffectiveVolumeDiff =
+      8.0; // 最小有效音量差值（超过基线8dB才认为是有效声音）
 
   @override
   void initState() {
@@ -138,7 +141,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
       _calibrationSamples.clear();
       _baselineDb = 0.0;
       _isCalibrating = true;
-      
+
       NoiseMeter noiseMeter = NoiseMeter();
       _noiseSubscription = noiseMeter.noise.listen(
         (NoiseReading reading) {
@@ -162,7 +165,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
           }
         },
       );
-      
+
       // 启动定时器，以固定频率更新 UI（节流）
       double lastDisplayedDb = 0.0;
       double lastRadius = 80.0;
@@ -170,11 +173,11 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
       _updateTimer = Timer.periodic(_updateInterval, (timer) {
         if (mounted && _latestReading != null) {
           final rawDb = _latestReading!.meanDecibel;
-          
+
           // 校准阶段：收集环境噪音样本
           if (_isCalibrating) {
             _calibrationSamples.add(rawDb);
-            
+
             // 收集足够的样本后，计算基线
             if (_calibrationSamples.length >= _calibrationSampleCount) {
               // 计算平均值作为基线（排除异常值）
@@ -183,11 +186,15 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
               final start = (_calibrationSamples.length * 0.25).floor();
               final end = (_calibrationSamples.length * 0.75).ceil();
               double sum = 0.0;
-              for (int i = start; i < end && i < _calibrationSamples.length; i++) {
+              for (
+                int i = start;
+                i < end && i < _calibrationSamples.length;
+                i++
+              ) {
                 sum += _calibrationSamples[i];
               }
               _baselineDb = sum / (end - start);
-              
+
               // 校准完成，开始正常监听
               setState(() {
                 _isCalibrating = false;
@@ -201,18 +208,18 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
             }
             return; // 校准阶段不更新UI
           }
-          
+
           // 正常监听阶段：计算有效音量（减去基线）
           if (_isListening) {
             // 计算有效音量差值 = 原始音量 - 基线
             final effectiveDbDiff = rawDb - _baselineDb;
-            
+
             // 显示总音量（原始音量），但只有超过最小有效音量差值才认为是有效声音
             // 如果有效音量差值太小，认为是环境噪音，显示为基线值（表示没有有效声音输入）
-            final adjustedDb = effectiveDbDiff >= _minEffectiveVolumeDiff 
-                ? rawDb  // 有有效声音时，显示原始总音量
-                : _baselineDb;  // 低于阈值时，显示为基线值（表示没有有效声音输入）
-            
+            final adjustedDb = effectiveDbDiff >= _minEffectiveVolumeDiff
+                ? rawDb // 有有效声音时，显示原始总音量
+                : _baselineDb; // 低于阈值时，显示为基线值（表示没有有效声音输入）
+
             // 更新最小和最大分贝值（用于计算比例，使用调整后的值）
             if (adjustedDb < _minDb) {
               _minDb = adjustedDb;
@@ -220,28 +227,29 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
             if (adjustedDb > _maxDb) {
               _maxDb = adjustedDb;
             }
-            
+
             // 平滑处理：使用线性插值，平衡响应和平滑度
             final newDisplayedDb = _displayedDb * 0.6 + adjustedDb * 0.4;
             final newRadius = _getCircleRadiusFromDb(newDisplayedDb);
-            
+
             // 检查是否进入目标区（用于震动反馈）
             // 只有当有效音量差值足够大，且总音量在目标范围内时，才认为达标
-            final isInTargetZone = effectiveDbDiff >= _minEffectiveVolumeDiff && 
-                                   rawDb >= _targetMin && 
-                                   rawDb <= _targetMax;
+            final isInTargetZone =
+                effectiveDbDiff >= _minEffectiveVolumeDiff &&
+                rawDb >= _targetMin &&
+                rawDb <= _targetMax;
             if (isInTargetZone && !_wasInTargetZone) {
               // 刚进入目标区，触发震动反馈
               HapticFeedback.mediumImpact();
             }
             _wasInTargetZone = isInTargetZone;
-            
+
             // 降低更新阈值，让动画更流畅（但保持合理性能）
             // 检查颜色是否变化，如果变化了也要更新
             final currentColor = _getCircleColor();
             final colorChanged = _lastColor != currentColor;
-            
-            if ((newDisplayedDb - lastDisplayedDb).abs() > 0.3 || 
+
+            if ((newDisplayedDb - lastDisplayedDb).abs() > 0.3 ||
                 (newRadius - lastRadius).abs() > 1.5 ||
                 colorChanged) {
               _displayedDb = newDisplayedDb;
@@ -254,7 +262,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
           }
         }
       });
-      
+
       setState(() {
         _isListening = false; // 先设为false，校准完成后才设为true
         _displayedDb = 0.0;
@@ -308,20 +316,20 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
     if (!_isListening || _latestReading == null || _baselineDb == 0.0) {
       return 0; // 未开始或未校准
     }
-    
+
     final rawDb = _latestReading!.meanDecibel;
     final effectiveDbDiff = rawDb - _baselineDb;
-    
+
     // 如果有效音量差值太小，认为是环境噪音，返回最低等级
     if (effectiveDbDiff < _minEffectiveVolumeDiff) {
       return 0; // 过低（橙色）
     }
-    
+
     // 优先检查是否达标（在目标区）
     if (_isInTargetZone()) {
       return 3; // 目标（绿色）
     }
-    
+
     // 使用总音量（原始音量）来判断等级
     if (rawDb < _veryLowThreshold) {
       return 0; // 过低（橙色）
@@ -345,7 +353,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
       final radius = 40.0 + ((normalizedDb - 40.0) / 60.0) * 120.0; // 40-160 像素
       return radius;
     }
-    
+
     // 使用实际检测到的范围计算比例
     final range = _maxDb - _minDb;
     if (range < 10.0) {
@@ -354,7 +362,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
       final radius = 40.0 + ((normalizedDb - 40.0) / 60.0) * 120.0;
       return radius;
     }
-    
+
     // 基于实际检测范围计算
     final normalizedDb = db.clamp(_minDb, _maxDb);
     final progress = (normalizedDb - _minDb) / range;
@@ -375,12 +383,12 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
     if (!_isListening || _latestReading == null) {
       return _moduleColorSoft; // 默认：主色浅色
     }
-    
+
     // 优先检查是否达标，如果达标就显示绿色
     if (_isInTargetZone()) {
       return const Color(0xFF10B981); // 鲜绿色
     }
-    
+
     final level = _getVolumeLevel();
     switch (level) {
       case 0: // < 60 dB：过低
@@ -395,25 +403,27 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
         return _moduleColorSoft; // 默认：主色浅色
     }
   }
-  
+
   /// 判断是否达标（在目标区）
   bool _isInTargetZone() {
-    if (!_isListening || _latestReading == null || _baselineDb == 0.0) return false;
+    if (!_isListening || _latestReading == null || _baselineDb == 0.0) {
+      return false;
+    }
     final rawDb = _latestReading!.meanDecibel;
     final effectiveDbDiff = rawDb - _baselineDb;
     // 只有当有效音量差值足够大，且总音量在目标范围内时，才认为达标
     // 放宽上限到90dB，允许稍微超过85dB也算达标
-    return effectiveDbDiff >= _minEffectiveVolumeDiff && 
-           rawDb >= _targetMin && 
-           rawDb <= _targetMax;
+    return effectiveDbDiff >= _minEffectiveVolumeDiff &&
+        rawDb >= _targetMin &&
+        rawDb <= _targetMax;
   }
-  
+
   /// 获取提示语
   String _getFeedbackMessage() {
     if (!_isListening || _latestReading == null) {
       return ''; // 返回空字符串，由 build 方法处理
     }
-    
+
     final level = _getVolumeLevel();
     final l10n = AppLocalizations.of(context)!;
     switch (level) {
@@ -429,13 +439,13 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
         return l10n.voiceTrainingKeepGoing;
     }
   }
-  
+
   /// 获取提示语颜色
   Color _getFeedbackColor() {
     if (!_isListening || _latestReading == null) {
       return const Color(0xFF64748B);
     }
-    
+
     final level = _getVolumeLevel();
     switch (level) {
       case 0: // < 60 dB：过低
@@ -454,7 +464,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       backgroundColor: const Color(0xFFF0F9FF),
       appBar: AppBar(
@@ -490,7 +500,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-            
+
             // 中央圆形可视化区域
             Expanded(
               child: Center(
@@ -506,13 +516,13 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
                           SizedBox(
                             width: _targetRingRadius * 2,
                             height: _targetRingRadius * 2,
-                            child: CustomPaint(
-                              painter: _DashedCirclePainter(),
-                            ),
+                            child: CustomPaint(painter: _DashedCirclePainter()),
                           ),
                           // 动态圆形（使用AnimatedContainer实现平滑动画）
                           AnimatedContainer(
-                            duration: const Duration(milliseconds: 150), // 缩短动画时长，减少卡顿
+                            duration: const Duration(
+                              milliseconds: 150,
+                            ), // 缩短动画时长，减少卡顿
                             curve: Curves.easeOut,
                             width: _getCircleRadius() * 2,
                             height: _getCircleRadius() * 2,
@@ -524,9 +534,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
                                 ? Center(
                                     child: Text(
                                       '👍',
-                                      style: const TextStyle(
-                                        fontSize: 48,
-                                      ),
+                                      style: const TextStyle(fontSize: 48),
                                     ),
                                   )
                                 : null,
@@ -534,9 +542,9 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
                         ],
                       ),
                     ),
-                    
+
                     const SizedBox(height: 40),
-                    
+
                     // 分贝值显示（使用 RepaintBoundary 隔离重绘）
                     RepaintBoundary(
                       child: _isCalibrating
@@ -549,49 +557,51 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
                               ),
                             )
                           : _isListening && _latestReading != null
-                              ? Column(
-                                  children: [
-                                    Text(
-                                      '${_getCurrentDb().toStringAsFixed(1)} dB',
-                                      style: const TextStyle(
-                                        fontSize: 32,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF1E3A5F),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      _getFeedbackMessage(),
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: _getFeedbackColor(),
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      l10n.voiceTrainingTargetRange('${_targetMin.toStringAsFixed(0)}-${_targetMax.toStringAsFixed(0)}'),
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Color(0xFF64748B),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Text(
-                                  l10n.voiceTrainingReady,
+                          ? Column(
+                              children: [
+                                Text(
+                                  '${_getCurrentDb().toStringAsFixed(1)} dB',
                                   style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w500,
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF1E3A5F),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  _getFeedbackMessage(),
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: _getFeedbackColor(),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  l10n.voiceTrainingTargetRange(
+                                    '${_targetMin.toStringAsFixed(0)}-${_targetMax.toStringAsFixed(0)}',
+                                  ),
+                                  style: const TextStyle(
+                                    fontSize: 14,
                                     color: Color(0xFF64748B),
                                   ),
                                 ),
+                              ],
+                            )
+                          : Text(
+                              l10n.voiceTrainingReady,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF64748B),
+                              ),
+                            ),
                     ),
                   ],
                 ),
               ),
             ),
-            
+
             // 控制按钮
             Padding(
               padding: const EdgeInsets.all(24.0),
@@ -599,9 +609,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
                 width: double.infinity,
                 height: 56,
                 child: CupertinoButton(
-                  color: _isListening
-                      ? Colors.red
-                      : _moduleColor,
+                  color: _isListening ? Colors.red : _moduleColor,
                   borderRadius: BorderRadius.circular(16),
                   onPressed: _isListening ? _stopListening : _startListening,
                   child: Text(
@@ -615,16 +623,13 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
                 ),
               ),
             ),
-            
+
             // 原理说明（移到最底部，字体缩小，颜色变浅）
             Padding(
               padding: const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 16.0),
               child: Text(
                 l10n.voiceTrainingInstruction,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFF94A3B8),
-                ),
+                style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -643,16 +648,16 @@ class _DashedCirclePainter extends CustomPainter {
       ..color = Colors.grey.withValues(alpha: 0.4)
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
-    
+
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 1;
-    
+
     // 绘制虚线圆
     const dashWidth = 8.0;
     const dashSpace = 4.0;
     final totalLength = 2 * 3.14159 * radius;
     final dashCount = (totalLength / (dashWidth + dashSpace)).floor();
-    
+
     for (int i = 0; i < dashCount; i++) {
       final startAngle = (i * (dashWidth + dashSpace) / radius);
       final endAngle = startAngle + (dashWidth / radius);
@@ -665,7 +670,7 @@ class _DashedCirclePainter extends CustomPainter {
       );
     }
   }
-  
+
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

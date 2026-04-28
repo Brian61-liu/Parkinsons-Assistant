@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/gentle_page_route.dart';
 import '../main.dart';
+import 'onboarding_page.dart';
 
 class LoadingScreen extends StatefulWidget {
   final Function(Locale) onLanguageChange;
@@ -22,26 +24,42 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   Future<void> _boot() async {
+    // 并行：Firebase 初始化 + 最短启动帧 + 读取 onboarding 状态
+    late bool onboardingShown;
     try {
-      await Future.wait<void>([
-        Firebase.initializeApp().then((_) => null),
-        Future<void>.delayed(const Duration(seconds: 3)),
+      final results = await Future.wait<dynamic>([
+        Firebase.initializeApp(),
+        Future<void>.delayed(const Duration(seconds: 2)),
+        SharedPreferences.getInstance().then((p) => p.getBool('onboarding_shown') ?? false),
       ]);
+      onboardingShown = results[2] as bool;
     } catch (e, s) {
-      debugPrint('=== Firebase initialize FAILED: $e ===');
+      debugPrint('=== Boot FAILED: $e ===');
       debugPrint('$s');
-      await Future<void>.delayed(const Duration(seconds: 3));
+      await Future<void>.delayed(const Duration(seconds: 2));
+      onboardingShown = false;
     }
 
     if (!mounted || _navigated) return;
     _navigated = true;
 
-    Navigator.of(context).pushReplacement(
-      GentlePageRoute(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            AuthGate(onLanguageChange: widget.onLanguageChange),
-      ),
-    );
+    if (!onboardingShown) {
+      // 首次打开 → 新手引导
+      Navigator.of(context).pushReplacement(
+        GentlePageRoute(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              OnboardingPage(onLanguageChange: widget.onLanguageChange),
+        ),
+      );
+    } else {
+      // 已完成引导 → 正常认证流程
+      Navigator.of(context).pushReplacement(
+        GentlePageRoute(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              AuthGate(onLanguageChange: widget.onLanguageChange),
+        ),
+      );
+    }
   }
 
   @override
