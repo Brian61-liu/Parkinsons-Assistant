@@ -281,6 +281,15 @@ class DatabaseService {
     return await db.delete('movement_training_records');
   }
 
+  /// 清除所有本地健康数据（账户删除时调用）
+  Future<void> clearAllLocalData() async {
+    final db = await database;
+    await db.delete('tremor_records');
+    await db.delete('movement_training_records');
+    await db.delete('assessment_results');
+    await db.delete('training_records');
+  }
+
   // ========== 云端同步操作 ==========
 
   /// 从云端拉取数据并合并到本地（去重）

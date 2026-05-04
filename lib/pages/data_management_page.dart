@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
@@ -160,9 +161,25 @@ class _DataManagementPageState extends State<DataManagementPage> {
     setState(() => _isDeletingAccount = true);
 
     try {
+      // 1. 删除 Firestore 数据 + Firebase Auth 用户（在 auth_service 内完成）
       await _authService.deleteAccount();
-      
-      // 删除成功，返回到根页面（让 main.dart 的 StreamBuilder 处理导航）
+
+      // 2. 清除本地 SQLite 所有健康数据
+      try {
+        await _databaseService.clearAllLocalData();
+      } catch (e) {
+        debugPrint('清除本地数据库失败: $e');
+      }
+
+      // 3. 清除所有 SharedPreferences（含头像路径、训练缓存、设置等）
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.clear();
+      } catch (e) {
+        debugPrint('清除 SharedPreferences 失败: $e');
+      }
+
+      // 4. 返回根页面（让 main.dart 的 StreamBuilder 重新路由到登录页）
       if (mounted) {
         Navigator.of(context).popUntil((route) => route.isFirst);
       }

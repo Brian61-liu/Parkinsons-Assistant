@@ -224,7 +224,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get privacyPolicyIntroText =>
-      'Amplio s\'engage à protéger votre vie privée et vos données de santé. Cette politique explique comment nous collectons, utilisons, stockons et protégeons vos informations, conformément à HIPAA et GDPR.';
+      'Amplio s\'engage à protéger votre vie privée et vos données de santé. Cette politique explique comment nous collectons, utilisons, stockons et protégeons vos informations.';
 
   @override
   String get dataCollection => 'Données Collectées';
@@ -255,11 +255,11 @@ class AppLocalizationsFr extends AppLocalizations {
       'Nous ne vendons JAMAIS vos données de santé.\n\nLes données sont partagées uniquement :\n• Avec votre consentement explicite\n• Avec les prestataires de soins désignés\n• Lorsque la loi l\'exige\n\nLes données anonymisées peuvent être utilisées pour la recherche.';
 
   @override
-  String get userRights => 'Vos Droits (RGPD)';
+  String get userRights => 'Vos Droits sur les Données';
 
   @override
   String get userRightsText =>
-      'Selon le RGPD, vous avez le droit de :\n\n• Accès : Consulter toutes vos données\n• Portabilité : Exporter vos données\n• Effacement : Supprimer vos données\n• Retrait : Retirer votre consentement\n• Réclamation : Porter plainte auprès des autorités';
+      'Vous avez le droit de :\n\n• Accès : Consulter toutes vos données\n• Portabilité : Exporter vos données\n• Effacement : Supprimer vos données\n• Retrait : Retirer votre consentement\n• Contact : Pour toute question relative à la vie privée';
 
   @override
   String get dataSecurity => 'Mesures de Sécurité';
@@ -286,7 +286,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get gdprRights =>
-      'Selon RGPD et HIPAA, vous pouvez accéder, exporter et supprimer vos données de santé à tout moment.';
+      'Vous pouvez accéder, exporter et supprimer vos données de santé à tout moment.';
 
   @override
   String get exportData => 'Exporter mes Données';

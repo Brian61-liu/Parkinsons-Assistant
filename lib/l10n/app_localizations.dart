@@ -516,7 +516,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyIntroText.
   ///
   /// In en, this message translates to:
-  /// **'Amplio is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information in compliance with HIPAA and GDPR regulations.'**
+  /// **'Amplio is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information.'**
   String get privacyPolicyIntroText;
 
   /// No description provided for @dataCollection.
@@ -570,13 +570,13 @@ abstract class AppLocalizations {
   /// No description provided for @userRights.
   ///
   /// In en, this message translates to:
-  /// **'Your Rights (GDPR)'**
+  /// **'Your Data Rights'**
   String get userRights;
 
   /// No description provided for @userRightsText.
   ///
   /// In en, this message translates to:
-  /// **'Under GDPR, you have the right to:\n\n• Access: View all your data\n• Portability: Export your data\n• Erasure: Delete your data\n• Withdraw: Revoke consent anytime\n• Complain: Lodge complaints with authorities'**
+  /// **'You have the right to:\n\n• Access: View all your data\n• Portability: Export your data\n• Erasure: Delete your data\n• Withdraw: Revoke consent anytime\n• Contact: For any privacy inquiries'**
   String get userRightsText;
 
   /// No description provided for @dataSecurity.
@@ -624,7 +624,7 @@ abstract class AppLocalizations {
   /// No description provided for @gdprRights.
   ///
   /// In en, this message translates to:
-  /// **'Under GDPR and HIPAA, you have the right to access, export, and delete your personal health data at any time.'**
+  /// **'You can access, export, and delete your personal health data at any time.'**
   String get gdprRights;
 
   /// No description provided for @exportData.

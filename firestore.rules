@@ -54,15 +54,48 @@ service cloud.firestore {
         // 只有用户本人可以读取
         allow read: if isOwner(userId);
         
-        // 只有用户本人可以创建
+        // 只有用户本人可以创建或通过 set(merge:true) 更新同步记录
+        // 字段与 CloudSyncService.syncTremorRecordToCloud 保持一致
         allow create: if isOwner(userId)
-          && request.resource.data.keys().hasAll(['frequency', 'amplitude', 'severity', 'timestamp'])
-          && isValidNumber(request.resource.data.frequency, 0, 30)
-          && isValidNumber(request.resource.data.amplitude, 0, 100)
-          && isValidString(request.resource.data.severity, 50);
+          && request.resource.data.keys().hasAll([
+            'timestamp', 'averageFrequency', 'maxAmplitude',
+            'averageAmplitude', 'duration', 'accelerometerData', 'localId'
+          ])
+          && isValidNumber(request.resource.data.averageFrequency, 0, 30)
+          && isValidNumber(request.resource.data.maxAmplitude, 0, 100)
+          && isValidNumber(request.resource.data.averageAmplitude, 0, 100)
+          && request.resource.data.duration is number
+          && request.resource.data.localId is number;
         
-        // 不允许更新医疗记录（数据完整性）
-        allow update: if false;
+        // 允许所有者更新（满足 set(merge:true) 的幂等同步语义）
+        allow update: if isOwner(userId);
+        
+        // 允许删除（GDPR 数据删除权）
+        allow delete: if isOwner(userId);
+      }
+      
+      // ============================================
+      // 肢体动作训练记录
+      // ============================================
+      match /movement_training_records/{recordId} {
+        // 只有用户本人可以读取
+        allow read: if isOwner(userId);
+        
+        // 只有用户本人可以创建或通过 set(merge:true) 更新同步记录
+        // 字段与 CloudSyncService.syncMovementTrainingRecordToCloud 保持一致
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasAll([
+            'timestamp', 'duration', 'successCount',
+            'targetCount', 'goalReached', 'localId'
+          ])
+          && request.resource.data.duration is number
+          && request.resource.data.successCount is number
+          && request.resource.data.targetCount is number
+          && request.resource.data.goalReached is bool
+          && request.resource.data.localId is number;
+        
+        // 允许所有者更新（满足 set(merge:true) 的幂等同步语义）
+        allow update: if isOwner(userId);
         
         // 允许删除（GDPR 数据删除权）
         allow delete: if isOwner(userId);
@@ -109,6 +142,7 @@ service cloud.firestore {
         allow create: if isOwner(userId);
         allow update, delete: if false;
       }
+
     }
     
     // ============================================

@@ -222,7 +222,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyIntroText =>
-      'Amplio is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information in compliance with HIPAA and GDPR regulations.';
+      'Amplio is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information.';
 
   @override
   String get dataCollection => 'Data We Collect';
@@ -253,11 +253,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'We NEVER sell your personal health data.\n\nData is only shared:\n• With your explicit consent\n• With healthcare providers you designate\n• When required by law\n\nAnonymized data may be used for research.';
 
   @override
-  String get userRights => 'Your Rights (GDPR)';
+  String get userRights => 'Your Data Rights';
 
   @override
   String get userRightsText =>
-      'Under GDPR, you have the right to:\n\n• Access: View all your data\n• Portability: Export your data\n• Erasure: Delete your data\n• Withdraw: Revoke consent anytime\n• Complain: Lodge complaints with authorities';
+      'You have the right to:\n\n• Access: View all your data\n• Portability: Export your data\n• Erasure: Delete your data\n• Withdraw: Revoke consent anytime\n• Contact: For any privacy inquiries';
 
   @override
   String get dataSecurity => 'Security Measures';
@@ -284,7 +284,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gdprRights =>
-      'Under GDPR and HIPAA, you have the right to access, export, and delete your personal health data at any time.';
+      'You can access, export, and delete your personal health data at any time.';
 
   @override
   String get exportData => 'Export My Data';

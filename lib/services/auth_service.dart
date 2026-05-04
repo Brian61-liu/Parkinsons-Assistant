@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'secure_storage_service.dart';
 
 /// 认证服务
-/// 符合 HIPAA/GDPR 医疗数据安全标准
+/// 医疗健康数据需谨慎处理，上线前需完成安全与合规审计
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -352,31 +352,94 @@ class AuthService {
     return exportData;
   }
 
-  /// 删除用户账户及所有数据（GDPR 合规：被遗忘权）
+  /// 删除用户账户及所有数据（被遗忘权）
+  ///
+  /// 执行顺序：
+  /// 1. 在认证有效期间删除全部 Firestore 子集合与根文档
+  /// 2. 调用 Firebase Auth user.delete() 删除认证用户
+  /// 3. 登出 Google Sign-In
+  /// 4. 清理本地安全存储
+  ///
+  /// 若用户登录时间过久，user.delete() 可能抛出 requires-recent-login，
+  /// 此时会先登出，并向上层抛出友好错误，提示用户重新登录后再试。
   Future<void> deleteAccount() async {
     final user = currentUser;
     if (user == null) {
       throw Exception('用户未登录');
     }
 
-    // 先强制登出（最重要，确保用户立即被登出）
+    final userId = user.uid;
+
+    // ── 1. 删除所有 Firestore 用户数据（必须在认证有效期内执行）──
+    try {
+      await _deleteAllFirestoreUserData(userId);
+    } catch (e) {
+      debugPrint('删除 Firestore 数据失败，继续执行后续清理: $e');
+    }
+
+    // ── 2. 删除 Firebase Auth 用户 ──
+    try {
+      await user.delete();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        // user.delete() 需要近期登录凭证；先登出再让用户重新登录
+        try { await _googleSignIn.signOut(); } catch (_) {}
+        await _auth.signOut();
+        throw Exception('为保障账户安全，请重新登录后再删除账户。');
+      }
+      rethrow;
+    }
+
+    // ── 3. 登出 Google（user.delete() 已使 Firebase 会话失效）──
     try {
       await _googleSignIn.signOut();
     } catch (_) {}
-    
-    await _auth.signOut();
-    
-    // 后台清理数据（不阻塞用户）
-    // 这些操作即使失败也不影响登出
-    final userId = user.uid;
-    Future.microtask(() async {
-      try {
-        await _firestore.collection('users').doc(userId).delete();
-      } catch (_) {}
-      try {
-        await _secureStorage.clearAllSecure();
-      } catch (_) {}
-    });
+
+    // ── 4. 清理本地安全存储 ──
+    try {
+      await _secureStorage.clearAllSecure();
+    } catch (e) {
+      debugPrint('清除本地安全存储失败: $e');
+    }
+  }
+
+  /// 删除指定用户在 Firestore 中的所有子集合文档和根文档
+  Future<void> _deleteAllFirestoreUserData(String userId) async {
+    final userRef = _firestore.collection('users').doc(userId);
+
+    // 按 Firestore rules 中声明的所有子集合逐一清空
+    const subcollections = [
+      'tremor_records',
+      'movement_training_records',
+      'audit_logs',
+      'data_export_requests',
+      'settings',
+      'consent_records',
+    ];
+
+    for (final sub in subcollections) {
+      await _deleteSubcollection(userRef.collection(sub));
+    }
+
+    // 删除根文档
+    await userRef.delete();
+  }
+
+  /// 批量删除子集合（每批 ≤ 400 条，低于 Firestore 500 上限）
+  Future<void> _deleteSubcollection(CollectionReference col) async {
+    const batchSize = 400;
+    QuerySnapshot snapshot;
+
+    do {
+      snapshot = await col.limit(batchSize).get();
+      if (snapshot.docs.isEmpty) break;
+
+      final batch = _firestore.batch();
+      for (final doc in snapshot.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    } while (snapshot.docs.length == batchSize);
   }
 
   /// 检查用户是否已接受最新隐私政策

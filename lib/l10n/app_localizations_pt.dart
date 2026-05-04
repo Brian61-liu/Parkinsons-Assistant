@@ -223,7 +223,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get privacyPolicyIntroText =>
-      'A Amplio está comprometida em proteger sua privacidade e dados de saúde. Esta política explica como coletamos, usamos, armazenamos e protegemos suas informações, em conformidade com HIPAA e LGPD.';
+      'A Amplio está comprometida em proteger sua privacidade e dados de saúde. Esta política explica como coletamos, usamos, armazenamos e protegemos suas informações.';
 
   @override
   String get dataCollection => 'Dados que Coletamos';
@@ -254,11 +254,11 @@ class AppLocalizationsPt extends AppLocalizations {
       'NUNCA vendemos seus dados de saúde.\n\nDados são compartilhados apenas:\n• Com seu consentimento explícito\n• Com provedores de saúde designados\n• Quando exigido por lei\n\nDados anônimos podem ser usados para pesquisa.';
 
   @override
-  String get userRights => 'Seus Direitos (LGPD)';
+  String get userRights => 'Seus Direitos de Dados';
 
   @override
   String get userRightsText =>
-      'Segundo a LGPD, você tem direito a:\n\n• Acesso: Ver todos os seus dados\n• Portabilidade: Exportar seus dados\n• Exclusão: Excluir seus dados\n• Revogação: Revogar consentimento\n• Reclamação: Apresentar queixas às autoridades';
+      'Você tem direito a:\n\n• Acesso: Ver todos os seus dados\n• Portabilidade: Exportar seus dados\n• Exclusão: Excluir seus dados\n• Revogação: Revogar consentimento\n• Contato: Para consultas sobre privacidade';
 
   @override
   String get dataSecurity => 'Medidas de Segurança';
@@ -284,7 +284,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get gdprRights =>
-      'Segundo LGPD e HIPAA, você pode acessar, exportar e excluir seus dados de saúde a qualquer momento.';
+      'Você pode acessar, exportar e excluir seus dados de saúde a qualquer momento.';
 
   @override
   String get exportData => 'Exportar Meus Dados';

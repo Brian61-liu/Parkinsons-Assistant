@@ -220,7 +220,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get privacyPolicyIntroText =>
-      'تلتزم Amplio بحماية خصوصيتك وبياناتك الصحية. توضح هذه السياسة كيفية جمع واستخدام وتخزين وحماية معلوماتك، وفقاً لـ HIPAA و GDPR.';
+      'تلتزم Amplio بحماية خصوصيتك وبياناتك الصحية. توضح هذه السياسة كيفية جمع واستخدام وتخزين وحماية معلوماتك.';
 
   @override
   String get dataCollection => 'البيانات التي نجمعها';
@@ -251,11 +251,11 @@ class AppLocalizationsAr extends AppLocalizations {
       'لا نبيع أبداً بياناتك الصحية.\n\nتتم مشاركة البيانات فقط:\n• بموافقتك الصريحة\n• مع مقدمي الرعاية الصحية المعينين\n• عند مطالبة القانون\n\nقد تُستخدم البيانات المجهولة للبحث.';
 
   @override
-  String get userRights => 'حقوقك (GDPR)';
+  String get userRights => 'حقوقك في البيانات';
 
   @override
   String get userRightsText =>
-      'وفقاً لـ GDPR، لديك الحق في:\n\n• الوصول: عرض جميع بياناتك\n• النقل: تصدير بياناتك\n• المحو: حذف بياناتك\n• السحب: سحب الموافقة\n• الشكوى: تقديم شكاوى للسلطات';
+      'لديك الحق في:\n\n• الوصول: عرض جميع بياناتك\n• النقل: تصدير بياناتك\n• المحو: حذف بياناتك\n• السحب: سحب الموافقة\n• التواصل: لأي استفسارات تتعلق بالخصوصية';
 
   @override
   String get dataSecurity => 'إجراءات الأمان';
@@ -281,7 +281,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get gdprRights =>
-      'وفقاً لـ GDPR و HIPAA، يمكنك الوصول إلى بياناتك الصحية وتصديرها وحذفها في أي وقت.';
+      'يمكنك الوصول إلى بياناتك الصحية وتصديرها وحذفها في أي وقت.';
 
   @override
   String get exportData => 'تصدير بياناتي';

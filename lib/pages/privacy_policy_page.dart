@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import '../l10n/app_localizations.dart';
 
 /// 隐私政策页面
-/// 符合 GDPR/HIPAA 合规要求
 class PrivacyPolicyPage extends StatelessWidget {
   const PrivacyPolicyPage({super.key});
 
@@ -161,7 +160,7 @@ class PrivacyPolicyPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'HIPAA & GDPR',
+                  'Privacy & Security',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -170,7 +169,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Compliant',
+                  'Our Commitment',
                   style: TextStyle(
                     fontSize: 14,
                     color: _secondaryColor,

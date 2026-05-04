@@ -38,11 +38,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>需要访问相机以拍摄头像照片</string>
+	<string>Amplio uses the camera for body movement training (pose analysis via the front camera) and to take profile photos.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>需要访问麦克风以进行语音训练（基于 LSVT LOUD 疗法）</string>
+	<string>Amplio uses the microphone to measure your voice volume during voice training exercises.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>需要访问相册以选择头像图片</string>
+	<string>Amplio uses the photo library to let you select a profile photo.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

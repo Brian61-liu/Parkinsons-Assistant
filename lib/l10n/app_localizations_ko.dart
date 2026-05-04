@@ -218,7 +218,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get privacyPolicyIntroText =>
-      'Amplio는 귀하의 개인정보와 건강 데이터 보호에 최선을 다합니다. 본 정책은 HIPAA 및 GDPR을 준수하는 정보 수집, 사용, 저장, 보호에 대해 설명합니다.';
+      'Amplio는 귀하의 개인정보와 건강 데이터 보호에 최선을 다합니다. 본 정책은 정보 수집, 사용, 저장, 보호에 대해 설명합니다.';
 
   @override
   String get dataCollection => '수집하는 데이터';
@@ -249,11 +249,11 @@ class AppLocalizationsKo extends AppLocalizations {
       '귀하의 건강 데이터를 절대 판매하지 않습니다.\n\n데이터는 다음 경우에만 공유됩니다:\n• 귀하의 명시적 동의\n• 지정된 의료 제공자와 공유\n• 법적 요구 시\n\n익명화된 데이터는 연구에 사용될 수 있습니다.';
 
   @override
-  String get userRights => '귀하의 권리 (GDPR)';
+  String get userRights => '귀하의 데이터 권리';
 
   @override
   String get userRightsText =>
-      'GDPR에 따라 다음 권리가 있습니다:\n\n• 접근권: 모든 데이터 조회\n• 이동권: 데이터 내보내기\n• 삭제권: 데이터 삭제\n• 철회권: 언제든 동의 철회\n• 불만권: 감독 기관에 불만 제기';
+      '다음 권리가 있습니다:\n\n• 접근권: 모든 데이터 조회\n• 이동권: 데이터 내보내기\n• 삭제권: 데이터 삭제\n• 철회권: 언제든 동의 철회\n• 문의: 개인정보 관련 문의';
 
   @override
   String get dataSecurity => '보안 조치';
@@ -278,8 +278,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get dataManagement => '데이터 관리';
 
   @override
-  String get gdprRights =>
-      'GDPR 및 HIPAA에 따라 언제든 개인 건강 데이터에 접근, 내보내기, 삭제할 권리가 있습니다.';
+  String get gdprRights => '언제든 개인 건강 데이터에 접근, 내보내기, 삭제할 권리가 있습니다.';
 
   @override
   String get exportData => '데이터 내보내기';

@@ -4,7 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// 安全服务 - 遵循 HIPAA/GDPR 医疗数据安全标准
+/// 安全服务 - 医疗健康数据保护，上线前需完成安全与合规审计
 class SecurityService {
   static const String _encryptionKeyKey = 'encryption_key_v1';
   static const String _consentAcceptedKey = 'privacy_consent_accepted';

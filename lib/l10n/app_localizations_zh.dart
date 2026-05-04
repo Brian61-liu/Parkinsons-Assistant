@@ -218,7 +218,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get privacyPolicyIntroText =>
-      'Amplio 致力于保护您的隐私和个人健康数据的安全。本政策说明我们如何收集、使用、存储和保护您的信息，符合 HIPAA 和 GDPR 法规要求。';
+      'Amplio 致力于保护您的隐私和个人健康数据的安全。本政策说明我们如何收集、使用、存储和保护您的信息。';
 
   @override
   String get dataCollection => '我们收集的数据';
@@ -249,11 +249,11 @@ class AppLocalizationsZh extends AppLocalizations {
       '我们绝不出售您的个人健康数据。\n\n数据仅在以下情况下共享：\n• 经您明确同意\n• 与您指定的医疗保健提供者共享\n• 法律要求时\n\n汇总的匿名数据可能用于研究。';
 
   @override
-  String get userRights => '您的权利 (GDPR)';
+  String get userRights => '您的数据权利';
 
   @override
   String get userRightsText =>
-      '根据 GDPR，您享有以下权利：\n\n• 访问权：查看您的所有数据\n• 可携带权：导出您的数据\n• 删除权：删除您的数据（被遗忘权）\n• 撤回权：随时撤回同意\n• 投诉权：向监管机构投诉';
+      '您享有以下权利：\n\n• 访问权：查看您的所有数据\n• 可携带权：导出您的数据\n• 删除权：删除您的数据（被遗忘权）\n• 撤回权：随时撤回同意\n• 联系我们：如有隐私疑问请联系我们';
 
   @override
   String get dataSecurity => '安全措施';
@@ -278,7 +278,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dataManagement => '数据管理';
 
   @override
-  String get gdprRights => '根据 GDPR 和 HIPAA，您有权随时访问、导出和删除您的个人健康数据。';
+  String get gdprRights => '您有权随时访问、导出和删除您的个人健康数据。';
 
   @override
   String get exportData => '导出我的数据';
@@ -755,7 +755,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get privacyPolicyIntroText =>
-      'Amplio 致力於保護您的隱私和個人健康資料的安全。本政策說明我們如何收集、使用、儲存和保護您的資訊，符合 HIPAA 和 GDPR 法規要求。';
+      'Amplio 致力於保護您的隱私和個人健康資料的安全。本政策說明我們如何收集、使用、儲存和保護您的資訊。';
 
   @override
   String get dataCollection => '我們收集的資料';
@@ -786,11 +786,11 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
       '我們絕不出售您的個人健康資料。\n\n資料僅在以下情況下共享：\n• 經您明確同意\n• 與您指定的醫療保健提供者共享\n• 法律要求時\n\n彙總的匿名資料可能用於研究。';
 
   @override
-  String get userRights => '您的權利 (GDPR)';
+  String get userRights => '您的資料權利';
 
   @override
   String get userRightsText =>
-      '根據 GDPR，您享有以下權利：\n\n• 存取權：查看您的所有資料\n• 可攜權：匯出您的資料\n• 刪除權：刪除您的資料（被遺忘權）\n• 撤回權：隨時撤回同意\n• 投訴權：向監管機構投訴';
+      '您享有以下權利：\n\n• 存取權：查看您的所有資料\n• 可攜權：匯出您的資料\n• 刪除權：刪除您的資料（被遺忘權）\n• 撤回權：隨時撤回同意\n• 聯絡我們：如有隱私疑問請聯絡我們';
 
   @override
   String get dataSecurity => '安全措施';
@@ -815,7 +815,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get dataManagement => '資料管理';
 
   @override
-  String get gdprRights => '根據 GDPR 和 HIPAA，您有權隨時存取、匯出和刪除您的個人健康資料。';
+  String get gdprRights => '您有權隨時存取、匯出和刪除您的個人健康資料。';
 
   @override
   String get exportData => '匯出我的資料';

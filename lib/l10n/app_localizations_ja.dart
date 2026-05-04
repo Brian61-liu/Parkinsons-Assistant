@@ -218,7 +218,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get privacyPolicyIntroText =>
-      'Amplioはお客様のプライバシーと健康データの保護に努めています。本ポリシーでは、HIPAAおよびGDPRに準拠した情報の収集、使用、保存、保護について説明します。';
+      'Amplioはお客様のプライバシーと健康データの保護に努めています。本ポリシーでは、情報の収集、使用、保存、保護について説明します。';
 
   @override
   String get dataCollection => '収集するデータ';
@@ -249,11 +249,11 @@ class AppLocalizationsJa extends AppLocalizations {
       'お客様の健康データを販売することは決してありません。\n\nデータは以下の場合のみ共有されます：\n• お客様の明示的な同意がある場合\n• 指定された医療提供者との共有\n• 法律で要求された場合\n\n匿名化されたデータは研究に使用される場合があります。';
 
   @override
-  String get userRights => 'お客様の権利（GDPR）';
+  String get userRights => 'お客様のデータ権利';
 
   @override
   String get userRightsText =>
-      'GDPRに基づき、以下の権利があります：\n\n• アクセス権：すべてのデータを閲覧\n• ポータビリティ：データをエクスポート\n• 削除権：データを削除\n• 撤回権：いつでも同意を撤回\n• 苦情申立権：監督機関への申立て';
+      '以下の権利があります：\n\n• アクセス権：すべてのデータを閲覧\n• ポータビリティ：データをエクスポート\n• 削除権：データを削除\n• 撤回権：いつでも同意を撤回\n• お問い合わせ：プライバシーに関するご質問はこちら';
 
   @override
   String get dataSecurity => 'セキュリティ対策';
@@ -278,8 +278,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get dataManagement => 'データ管理';
 
   @override
-  String get gdprRights =>
-      'GDPRおよびHIPAAに基づき、お客様はいつでも個人健康データにアクセス、エクスポート、削除する権利があります。';
+  String get gdprRights => 'お客様はいつでも個人健康データにアクセス、エクスポート、削除する権利があります。';
 
   @override
   String get exportData => 'データをエクスポート';

@@ -4,7 +4,7 @@
 
 ## 0. 当前状态摘要
 
-最后更新：2026-04-28
+最后更新：2026-05-03
 
 状态标记：
 
@@ -16,11 +16,11 @@
 
 - `[ ]` Sign in with Apple 未完成。
 - `[ ]` iOS Google 登录配置仍需核对并替换占位符。
-- `[ ]` Firestore rules 与云同步字段不一致。
-- `[ ]` 账户删除闭环未完成。
-- `[ ]` 隐私与医疗合规声明需要降级或补齐证明。
+- `[x]` Firestore rules 与云同步字段不一致。
+- `[x]` 账户删除闭环未完成。
+- `[x]` 隐私与医疗合规声明需要降级或补齐证明。
 - `[ ]` 初始评估存在随机模拟评分。
-- `[ ]` 权限用途说明需要与真实功能对齐。
+- `[x]` 权限用途说明需要与真实功能对齐。
 
 更新规则：
 
@@ -161,16 +161,31 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
   - 验证方式：iOS 真机可使用 Apple 登录并完成 Firebase Auth。
 - [ ] 修复 iOS Google 登录配置。
   - 验证方式：`Info.plist` URL Scheme 不再包含占位符，iOS 真机 Google 登录成功。
-- [ ] 修复 Firestore rules 与实际上传字段。
-  - 验证方式：震颤记录和肢体训练记录均可在真实登录用户下成功同步、读取和删除。
-- [ ] 完成账户删除闭环，包括 Firebase Auth 用户和所有 Firestore 子集合。
-  - 验证方式：删除账户后，Firebase Auth 用户不存在，Firestore 用户文档和子集合数据不存在，本地敏感数据已清理。
-- [ ] 移除或降级 “HIPAA & GDPR Compliant” 等过度声明。
-  - 验证方式：隐私页、ARB 多语言文案和商店描述不再未经证明地宣称合规。
+- [x] 修复 Firestore rules 与实际上传字段。
+  - 完成日期：2026-05-03
+  - 改动：更新 `tremor_records` 规则中 `hasAll` 字段名与数值校验字段，与 `CloudSyncService.syncTremorRecordToCloud` 实际上传字段对齐（`averageFrequency`、`maxAmplitude`、`averageAmplitude`、`duration`、`accelerometerData`、`localId`）；将 `allow update: if false` 改为 `allow update: if isOwner(userId)` 以支持 `set(merge:true)` 的幂等同步语义；新增 `movement_training_records` 完整规则块（read/create/update/delete），字段与 `syncMovementTrainingRecordToCloud` 对齐。
+  - 验证方式：Firebase Console > Firestore > Rules Playground 用模拟认证用户验证：震颤记录 set 允许、肢体训练记录 set 允许、delete 允许、未认证写入拒绝、跨用户访问拒绝；真机登录后完成震颤测试和肢体训练，检查 Firebase Console 中对应子集合有新文档写入。
+  - 残余风险：`AuthService.saveTremorRecord`（旧字段名 `frequency`/`amplitude`/`severity`）为死代码，未被任何页面调用，不影响当前规则，但应在后续清理中移除，避免未来被误调用时触发规则拒绝。
+- [x] 完成账户删除闭环，包括 Firebase Auth 用户和所有 Firestore 子集合。
+  - 完成日期：2026-05-03
+  - 改动：
+    1. auth_service.dart deleteAccount() 重写：改为先删 Firestore 再删 Auth 用户（修复原先登出后再删 Firestore 导致认证失效的根本错误）；新增 _deleteAllFirestoreUserData() 逐一批量删除 6 个子集合（tremor_records / movement_training_records / audit_logs / data_export_requests / settings / consent_records）再删根文档；调用 user.delete() 删除 Firebase Auth 用户；处理 requires-recent-login 异常（友好提示重新登录）。
+    2. database_service.dart 新增 clearAllLocalData()：清空 SQLite 全部 4 张表（tremor_records / movement_training_records / assessment_results / training_records）。
+    3. data_management_page.dart _deleteAccount()：deleteAccount() 成功后依次调用 clearAllLocalData() 和 SharedPreferences.clear()，完成本地数据全清。
+  - 验证方式：删除账户后，Firebase Console > Authentication 中该用户不存在；Firestore 中 users/{uid} 及所有子集合文档不存在；App 内无法看到旧训练记录；重新安装后无任何残留数据。
+  - 残余风险：Firestore 子集合删除在客户端逐批执行，若用户在删除过程中断网，子集合可能部分残留。建议后续用 Firebase Cloud Functions + Firestore TTL 做服务端级联删除兜底。
+- [x] 移除或降级 “HIPAA & GDPR Compliant” 等过度声明。
+  - 完成日期：2026-05-03
+  - 改动：1) privacy_policy_page.dart badge 从 "HIPAA & GDPR / Compliant" 改为 "Privacy & Security / Our Commitment"；2) 全部 12 个 ARB 语言文件移除 3 类合规声明（introText、userRights 括注、gdprRights 法规前置）；3) 运行 flutter gen-l10n 重新生成所有 dart 本地化文件。
+  - 验证方式：rg "HIPAA|Compliant" lib/l10n/ 返回空；隐私政策页显示 "Privacy & Security / Our Commitment"。
+  - 残余风险：无。auth_service.dart 和 security_service.dart 文件头注释已同步改为保守表述（2026-05-03）。
 - [ ] 处理随机模拟评估，改为真实逻辑、显式演示标记或从上线版移除。
   - 验证方式：用户不会把随机分数理解为真实健康评估。
-- [ ] 修正相机、麦克风、相册权限说明。
-  - 验证方式：iOS `Info.plist` 和 Android 权限说明覆盖头像、语音训练、动作训练等真实用途。
+- [x] 修正相机、麦克风、相册权限说明。
+  - 完成日期：2026-05-03
+  - 改动：1) iOS Info.plist 的 NSCameraUsageDescription 补充肢体动作训练姿态检测用途，NSMicrophoneUsageDescription 移除 "LSVT LOUD" 专业疗法名称（改为描述测量语音音量），三条说明均从中文改为英文（无 InfoPlist.strings 本地化文件时英文为通用 fallback）；2) Android AndroidManifest.xml 相机权限注释补充动作训练用途。
+  - 验证方式：iOS 真机首次请求相机权限时弹窗说明覆盖头像和动作训练两种用途；麦克风弹窗不再出现 LSVT LOUD；相册弹窗说明清晰；Android 权限注释准确。
+  - 残余风险：Info.plist 权限说明为英文单一语言，未为 12 种支持语言提供本地化 InfoPlist.strings。建议上架前补充主要市场语言（至少中文）的 InfoPlist.strings。
 
 ### P1：安全与质量
 
