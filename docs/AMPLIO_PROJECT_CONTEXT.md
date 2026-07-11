@@ -339,12 +339,12 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
 每次完成代码修改后，遵循以下流程：
 
 1. 运行 `flutter analyze` 和相关测试。
-2. 根据实际功能范围将改动拆分为清晰、独立的 commits。
-3. 每个 commit 的 Summary 和 Description 必须使用英文，并简短说明实际改动。
-4. Cursor 负责检查改动、整理暂存范围并创建本地 commits。
-5. Cursor 不执行 `git push`。
-6. 用户确认本地 commits 后，通过 GitHub Desktop 手动点击 **Push origin**。
-7. 提交前排除敏感信息、临时文件和无关改动。
+2. Cursor 汇报改动与检查结果，等待用户审查；用户确认前不得执行 `git add` 或创建 commit。
+3. 只有用户明确确认满意后，Cursor 才根据实际功能范围将改动拆分为清晰、独立的 commits。
+4. 每个 commit 的 Summary 和 Description 必须使用英文，并简短说明实际改动。
+5. 提交前排除敏感信息、临时文件和无关改动。
+6. Cursor 不执行 `git push`。
+7. 用户确认本地 commits 后，通过 GitHub Desktop 手动点击 **Push origin**。
 8. 未经用户明确要求，不修改已有 commit，也不执行强制推送。
 
 ## 9. 新对话启动提示
