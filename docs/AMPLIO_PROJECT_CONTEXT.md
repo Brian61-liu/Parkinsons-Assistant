@@ -4,7 +4,7 @@
 
 ## 0. 当前状态摘要
 
-最后更新：2026-07-11（产品重心调整为 iPhone-only，仅上架 Apple App Store，移除非 iOS 平台工程与发布计划）
+最后更新：2026-07-11（将 Firebase App Check 记入 P1 待办；上架前非阻塞，先 Monitor 再 Enforcement）
 
 状态标记：
 
@@ -23,7 +23,7 @@
 
 产品决策：2026-07-11 起 Amplio 只服务 iPhone 用户，仅上架 Apple App Store；非 iOS 客户端与其他商店路线已放弃。
 
-非阻塞上架：用药清单 MVP（本地清单 + 手动打卡）已合入代码，见 §7 P2；待 iPhone 真机走查，不新增系统通知权限。
+非阻塞上架：用药清单 MVP（本地清单 + 手动打卡）已合入代码，见 §7 P2；待 iPhone 真机走查，不新增系统通知权限。Firebase App Check 见 §7 P1，上架前非阻塞。
 
 更新规则：
 
@@ -129,6 +129,7 @@ Amplio 是一个帮助帕金森患者进行康复训练的 iPhone App。
 - 明确医疗免责声明，不声明诊断或治疗效果。
 - 使用真实设备完整测试登录、游客模式、权限拒绝、训练、数据删除。
 - 用药清单 MVP 无需通知权限；若上架前更新隐私政策 / App Privacy Nutrition Labels，需声明可选的、仅保存在本机的用药昵称清单（见 §7 P2 用药清单相关待办）。
+- Firebase App Check：上架前非阻塞；见 §7 P1，先 Monitor，稳定后再 Enforcement。
 
 ### 全球化
 
@@ -219,6 +220,12 @@ Amplio 是一个帮助帕金森患者进行康复训练的 iPhone App。
   - 验证方式：移除非 iOS 平台工程；`.metadata` 仅保留 root / ios；`pubspec.yaml` 的图标和启动图配置仅生成 iOS 资源。
 - [ ] 完成隐私政策、服务条款、医疗免责声明。
   - 验证方式：App 内和商店链接可访问，法律主体、联系邮箱和品牌一致。
+- [ ] 配置 Firebase App Check（仅 iOS：App Attest / DeviceCheck）。
+  - 完成日期：
+  - 改动：在 Firebase Console 为 iOS App（`com.amplio.app`）注册 App Check provider；集成 `firebase_app_check`；Xcode 添加对应 capability。不注册非 iOS provider。
+  - 验证方式：真机请求带 App Check token；Console Metrics 显示合法流量；确认未误开 Authentication / Firestore 强制 Enforcement。
+  - 残余风险：过早强制 Enforcement 可能拦截合法真机 / TestFlight 请求。
+  - 备注：上架前非阻塞；先 Monitor，稳定后再逐步 Enforcement。
 
 ### P2：产品可信度
 
