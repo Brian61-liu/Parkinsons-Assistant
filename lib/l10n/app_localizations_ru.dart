@@ -183,6 +183,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get signInWithGoogle => 'Войти через Google';
 
   @override
+  String get signInWithApple => 'Войти через Apple';
+
+  @override
   String get signingIn => 'Вход...';
 
   @override
@@ -557,4 +560,329 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get trainingType => 'Тип Тренировки';
+
+  @override
+  String get medicationList => 'Medication list';
+
+  @override
+  String get medicationListEnable => 'Set up medication list';
+
+  @override
+  String get medicationDisclaimer =>
+      'Amplio\'s medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. All data stays on this device only.';
+
+  @override
+  String get medicationDisclaimerAccept => 'I understand and enable';
+
+  @override
+  String get medicationLabel => 'Label';
+
+  @override
+  String get medicationLabelHint => 'e.g. After breakfast (nickname is fine)';
+
+  @override
+  String get medicationTime => 'Time';
+
+  @override
+  String get medicationTaken => 'Taken';
+
+  @override
+  String get medicationUndo => 'Undo';
+
+  @override
+  String get medicationUndoConfirm => 'Remove today\'s check-in for this item?';
+
+  @override
+  String medicationTodayProgress(int done, int total) {
+    return 'Today $done/$total';
+  }
+
+  @override
+  String get medicationManage => 'Manage';
+
+  @override
+  String get medicationAdd => 'Add reminder';
+
+  @override
+  String get medicationEdit => 'Edit reminder';
+
+  @override
+  String get medicationClose => 'Turn off medication list';
+
+  @override
+  String get medicationCloseConfirm =>
+      'You can hide the list or also delete all medication data on this device.';
+
+  @override
+  String get medicationCloseHideOnly => 'Hide only';
+
+  @override
+  String get medicationCloseAndDelete => 'Hide and delete all data';
+
+  @override
+  String get medicationDeleteAllData => 'Delete medication list data';
+
+  @override
+  String get medicationDeleteAllDataDescription =>
+      'Permanently delete all medication reminders and check-ins on this device.';
+
+  @override
+  String get medicationDeleteAllDataConfirm =>
+      'Delete all medication list data on this device? This cannot be undone.';
+
+  @override
+  String get medicationCollapse => 'Collapse';
+
+  @override
+  String get medicationExpand => 'Expand';
+
+  @override
+  String get medicationEmptyToday =>
+      'No reminders for today. Add one in Manage.';
+
+  @override
+  String medicationCompletedAt(String time) {
+    return 'Done at $time';
+  }
+
+  @override
+  String get medicationSave => 'Save';
+
+  @override
+  String get medicationDeleteReminder => 'Delete reminder';
+
+  @override
+  String get medicationDeleteReminderConfirm => 'Delete this reminder?';
+
+  @override
+  String get medicationNoReminders => 'No reminders yet';
+
+  @override
+  String get medicationDeleteSuccess => 'Medication list data deleted';
+
+  @override
+  String get rehabReport => 'Rehab report';
+
+  @override
+  String get rehabReportDisclaimer =>
+      'For rehabilitation reference only. Not a medical diagnosis and does not replace advice from your care team.';
+
+  @override
+  String get reportOverallScore => 'Overall score';
+
+  @override
+  String reportDailyProgress(int percent) {
+    return 'Today\'s goals: $percent%';
+  }
+
+  @override
+  String reportWeeklyProgress(int percent) {
+    return 'This week: $percent%';
+  }
+
+  @override
+  String reportStreak(int days) {
+    return 'Streak: $days days';
+  }
+
+  @override
+  String get reportNoData => 'Not enough training data yet';
+
+  @override
+  String get handTraining => 'Hand';
+
+  @override
+  String get voiceTrainingShort => 'Voice';
+
+  @override
+  String get motionTrainingShort => 'Movement';
+
+  @override
+  String get tabHome => 'Home';
+
+  @override
+  String get tabPlan => 'Plan';
+
+  @override
+  String get tabData => 'Data';
+
+  @override
+  String get tabProfile => 'Profile';
+
+  @override
+  String get comingSoon => 'Coming soon';
+
+  @override
+  String trainingStreak(int days) {
+    return '$days days';
+  }
+
+  @override
+  String get trainingStreakLabel => 'Training Streak';
+
+  @override
+  String get voiceClarity => 'Voice Clarity';
+
+  @override
+  String get handStability => 'Hand Stability';
+
+  @override
+  String get movementAbility => 'Movement Ability';
+
+  @override
+  String get medicationReminder => 'Medication';
+
+  @override
+  String lastTrainingAgo(String timeAgo) {
+    return 'Last training · $timeAgo';
+  }
+
+  @override
+  String lastMeasurementAgo(String timeAgo) {
+    return 'Last measured · $timeAgo';
+  }
+
+  @override
+  String get relativeToday => 'Today';
+
+  @override
+  String get relativeYesterday => 'Yesterday';
+
+  @override
+  String relativeDaysAgo(int days) {
+    return '$days days ago';
+  }
+
+  @override
+  String get noTrainingYet => 'No training yet';
+
+  @override
+  String get noMeasurementYet => 'No measurement yet';
+
+  @override
+  String get tapToStart => 'Tap to start';
+
+  @override
+  String durationSec(int count) {
+    return '${count}s';
+  }
+
+  @override
+  String durationMin(int count) {
+    return '$count min';
+  }
+
+  @override
+  String get voiceSessionCount => '1 session';
+
+  @override
+  String get handMeasurementCount => '1 measurement';
+
+  @override
+  String motionCompletionCount(int done, int total) {
+    return '$done/$total reps';
+  }
+
+  @override
+  String get medicationSetupPrompt => 'Set up medication reminders';
+
+  @override
+  String get medicationSetupSubtitle => 'Saved on this device only';
+
+  @override
+  String get medicationNoUpcoming => 'No upcoming reminders today';
+
+  @override
+  String get medicationNextDoseLabel => 'Next dose';
+
+  @override
+  String medicationNextDoseTime(String time) {
+    return '$time';
+  }
+
+  @override
+  String get medicationStatusUpcoming => 'Upcoming';
+
+  @override
+  String get medicationStatusPending => 'Pending';
+
+  @override
+  String get recentActivity => 'Recent Activity';
+
+  @override
+  String get nonMedicalDisclaimerTitle => 'For reference only';
+
+  @override
+  String get nonMedicalDisclaimerBody =>
+      'Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.';
+
+  @override
+  String get voicePrepHint =>
+      'Sit comfortably. Hold your phone about 30 cm from your mouth.';
+
+  @override
+  String voicePrepDurationHint(int seconds) {
+    return 'Practice for about $seconds seconds';
+  }
+
+  @override
+  String get voicePrepEnvironmentHint =>
+      'Practice in a quiet room for best results';
+
+  @override
+  String voiceCalibratingCountdown(int seconds) {
+    return 'Please stay quiet · ${seconds}s';
+  }
+
+  @override
+  String voiceElapsedLabel(int seconds) {
+    return 'Practiced ${seconds}s';
+  }
+
+  @override
+  String voiceTargetDurationChip(int seconds) {
+    return 'Goal: ${seconds}s';
+  }
+
+  @override
+  String get voiceLegendTarget => 'Target volume';
+
+  @override
+  String get voiceLegendYours => 'Your volume';
+
+  @override
+  String get voiceShowDetail => 'Show number';
+
+  @override
+  String get voiceHideDetail => 'Hide number';
+
+  @override
+  String get voiceCompletedTitle => 'Practice Complete';
+
+  @override
+  String get voiceCompletedDurationLabel => 'This session';
+
+  @override
+  String get voiceCompletedTargetLabel => 'Time at target volume';
+
+  @override
+  String get voiceCompletedEncourageGood =>
+      'Great job! Keep up the habit of speaking loudly.';
+
+  @override
+  String get voiceCompletedEncourageTryMore =>
+      'Good try. Aim to speak a bit louder next time.';
+
+  @override
+  String get voiceRetryButton => 'Practice Again';
+
+  @override
+  String get voiceFinishButton => 'Done';
+
+  @override
+  String get voicePracticeFooterHint =>
+      'This exercise encourages speaking loudly for voice training. For reference only, not a medical diagnosis.';
+
+  @override
+  String get voiceSessionTooShort => 'Session was too short and was not saved';
 }

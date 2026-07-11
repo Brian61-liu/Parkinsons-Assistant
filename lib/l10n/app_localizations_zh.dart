@@ -179,6 +179,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get signInWithGoogle => '使用 Google 登录';
 
   @override
+  String get signInWithApple => '使用 Apple 登录';
+
+  @override
   String get signingIn => '正在登录...';
 
   @override
@@ -539,6 +542,321 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get trainingType => '训练类型';
+
+  @override
+  String get medicationList => '用药清单';
+
+  @override
+  String get medicationListEnable => '设置用药清单';
+
+  @override
+  String get medicationDisclaimer =>
+      'Amplio 用药清单仅帮助您在本机自行记录服药时间，不能替代医生或药师建议，不提供用药或剂量指导。所有数据仅保存在本设备。';
+
+  @override
+  String get medicationDisclaimerAccept => '我了解并开启';
+
+  @override
+  String get medicationLabel => '标签';
+
+  @override
+  String get medicationLabelHint => '例如：早饭后（可用昵称，不必填真实药名）';
+
+  @override
+  String get medicationTime => '时间';
+
+  @override
+  String get medicationTaken => '已服用';
+
+  @override
+  String get medicationUndo => '撤销';
+
+  @override
+  String get medicationUndoConfirm => '撤销今日该条的打卡记录？';
+
+  @override
+  String medicationTodayProgress(int done, int total) {
+    return '今日 $done/$total';
+  }
+
+  @override
+  String get medicationManage => '管理';
+
+  @override
+  String get medicationAdd => '添加提醒';
+
+  @override
+  String get medicationEdit => '编辑提醒';
+
+  @override
+  String get medicationClose => '关闭用药清单';
+
+  @override
+  String get medicationCloseConfirm => '可以仅隐藏清单，也可同时删除本机全部用药数据。';
+
+  @override
+  String get medicationCloseHideOnly => '仅隐藏';
+
+  @override
+  String get medicationCloseAndDelete => '隐藏并删除全部数据';
+
+  @override
+  String get medicationDeleteAllData => '删除用药清单数据';
+
+  @override
+  String get medicationDeleteAllDataDescription => '永久删除本设备上的全部用药提醒与打卡记录。';
+
+  @override
+  String get medicationDeleteAllDataConfirm => '确定删除本设备上的全部用药清单数据？此操作无法撤消。';
+
+  @override
+  String get medicationCollapse => '折叠';
+
+  @override
+  String get medicationExpand => '展开';
+
+  @override
+  String get medicationEmptyToday => '今日暂无提醒，请在管理中添加。';
+
+  @override
+  String medicationCompletedAt(String time) {
+    return '已于 $time 完成';
+  }
+
+  @override
+  String get medicationSave => '保存';
+
+  @override
+  String get medicationDeleteReminder => '删除提醒';
+
+  @override
+  String get medicationDeleteReminderConfirm => '确定删除该提醒？';
+
+  @override
+  String get medicationNoReminders => '暂无提醒';
+
+  @override
+  String get medicationDeleteSuccess => '用药清单数据已删除';
+
+  @override
+  String get rehabReport => '康复报告';
+
+  @override
+  String get rehabReportDisclaimer => '仅供参考，不构成医学诊断，也不替代医生或治疗师建议。';
+
+  @override
+  String get reportOverallScore => '综合评分';
+
+  @override
+  String reportDailyProgress(int percent) {
+    return '今日目标：$percent%';
+  }
+
+  @override
+  String reportWeeklyProgress(int percent) {
+    return '本周目标：$percent%';
+  }
+
+  @override
+  String reportStreak(int days) {
+    return '连续训练 $days 天';
+  }
+
+  @override
+  String get reportNoData => '训练数据尚不足';
+
+  @override
+  String get handTraining => '手部';
+
+  @override
+  String get voiceTrainingShort => '语音';
+
+  @override
+  String get motionTrainingShort => '肢体';
+
+  @override
+  String get tabHome => '首页';
+
+  @override
+  String get tabPlan => '计划';
+
+  @override
+  String get tabData => '数据';
+
+  @override
+  String get tabProfile => '我的';
+
+  @override
+  String get comingSoon => '即将推出';
+
+  @override
+  String trainingStreak(int days) {
+    return '$days 天';
+  }
+
+  @override
+  String get trainingStreakLabel => '训练连续';
+
+  @override
+  String get voiceClarity => '语音训练';
+
+  @override
+  String get handStability => '手部测量';
+
+  @override
+  String get movementAbility => '肢体训练';
+
+  @override
+  String get medicationReminder => '用药提醒';
+
+  @override
+  String lastTrainingAgo(String timeAgo) {
+    return '上次训练 · $timeAgo';
+  }
+
+  @override
+  String lastMeasurementAgo(String timeAgo) {
+    return '上次测量 · $timeAgo';
+  }
+
+  @override
+  String get relativeToday => '今天';
+
+  @override
+  String get relativeYesterday => '昨天';
+
+  @override
+  String relativeDaysAgo(int days) {
+    return '$days 天前';
+  }
+
+  @override
+  String get noTrainingYet => '尚未训练';
+
+  @override
+  String get noMeasurementYet => '尚未测量';
+
+  @override
+  String get tapToStart => '点击开始';
+
+  @override
+  String durationSec(int count) {
+    return '$count秒';
+  }
+
+  @override
+  String durationMin(int count) {
+    return '$count 分钟';
+  }
+
+  @override
+  String get voiceSessionCount => '1 次训练';
+
+  @override
+  String get handMeasurementCount => '1 次测量';
+
+  @override
+  String motionCompletionCount(int done, int total) {
+    return '$done/$total 次';
+  }
+
+  @override
+  String get medicationSetupPrompt => '设置用药提醒';
+
+  @override
+  String get medicationSetupSubtitle => '仅保存在本机';
+
+  @override
+  String get medicationNoUpcoming => '今日暂无待打卡提醒';
+
+  @override
+  String get medicationNextDoseLabel => '下次';
+
+  @override
+  String medicationNextDoseTime(String time) {
+    return '$time';
+  }
+
+  @override
+  String get medicationStatusUpcoming => '即将到';
+
+  @override
+  String get medicationStatusPending => '待打卡';
+
+  @override
+  String get recentActivity => '最近活动';
+
+  @override
+  String get nonMedicalDisclaimerTitle => '仅供参考';
+
+  @override
+  String get nonMedicalDisclaimerBody =>
+      '所展示的测量结果仅供康复训练参考，不能用于医学诊断，也不能替代医生或治疗师的建议。';
+
+  @override
+  String get voicePrepHint => '请坐稳，将手机举到嘴边，距离大约 30 厘米';
+
+  @override
+  String voicePrepDurationHint(int seconds) {
+    return '本次练习大约 $seconds 秒';
+  }
+
+  @override
+  String get voicePrepEnvironmentHint => '建议在安静的房间练习，效果更好';
+
+  @override
+  String voiceCalibratingCountdown(int seconds) {
+    return '请保持安静 · 还剩 $seconds 秒';
+  }
+
+  @override
+  String voiceElapsedLabel(int seconds) {
+    return '已练习 $seconds 秒';
+  }
+
+  @override
+  String voiceTargetDurationChip(int seconds) {
+    return '目标：$seconds 秒';
+  }
+
+  @override
+  String get voiceLegendTarget => '目标音量';
+
+  @override
+  String get voiceLegendYours => '你的音量';
+
+  @override
+  String get voiceShowDetail => '显示数值';
+
+  @override
+  String get voiceHideDetail => '隐藏数值';
+
+  @override
+  String get voiceCompletedTitle => '练习完成';
+
+  @override
+  String get voiceCompletedDurationLabel => '本次练习';
+
+  @override
+  String get voiceCompletedTargetLabel => '达到目标音量时长';
+
+  @override
+  String get voiceCompletedEncourageGood => '非常好！继续保持大声说话的习惯。';
+
+  @override
+  String get voiceCompletedEncourageTryMore => '不错的尝试，下次可以试着更大声一点。';
+
+  @override
+  String get voiceRetryButton => '再练一次';
+
+  @override
+  String get voiceFinishButton => '完成';
+
+  @override
+  String get voicePracticeFooterHint => '此练习通过大声说话帮助语音训练，仅供参考，非医学诊断。';
+
+  @override
+  String get voiceSessionTooShort => '练习时间过短，未保存本次记录';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -714,6 +1032,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get signInWithGoogle => '使用 Google 登入';
+
+  @override
+  String get signInWithApple => '使用 Apple 登入';
 
   @override
   String get signingIn => '正在登入...';
@@ -1075,4 +1396,320 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get trainingType => '訓練類型';
+
+  @override
+  String get medicationList => '用藥清單';
+
+  @override
+  String get medicationListEnable => '設定用藥清單';
+
+  @override
+  String get medicationDisclaimer =>
+      'Amplio 用藥清單僅幫助您在本機自行記錄服藥時間，不能替代醫師或藥師建議，不提供用藥或劑量指導。所有資料僅保存在本裝置。';
+
+  @override
+  String get medicationDisclaimerAccept => '我了解並開啟';
+
+  @override
+  String get medicationLabel => '標籤';
+
+  @override
+  String get medicationLabelHint => '例如：早飯後（可用暱稱，不必填真實藥名）';
+
+  @override
+  String get medicationTime => '時間';
+
+  @override
+  String get medicationTaken => '已服用';
+
+  @override
+  String get medicationUndo => '撤銷';
+
+  @override
+  String get medicationUndoConfirm => '撤銷今日該條的打卡記錄？';
+
+  @override
+  String medicationTodayProgress(int done, int total) {
+    return '今日 $done/$total';
+  }
+
+  @override
+  String get medicationManage => '管理';
+
+  @override
+  String get medicationAdd => '新增提醒';
+
+  @override
+  String get medicationEdit => '編輯提醒';
+
+  @override
+  String get medicationClose => '關閉用藥清單';
+
+  @override
+  String get medicationCloseConfirm => '可以僅隱藏清單，也可同時刪除本機全部用藥資料。';
+
+  @override
+  String get medicationCloseHideOnly => '僅隱藏';
+
+  @override
+  String get medicationCloseAndDelete => '隱藏並刪除全部資料';
+
+  @override
+  String get medicationDeleteAllData => '刪除用藥清單資料';
+
+  @override
+  String get medicationDeleteAllDataDescription => '永久刪除本裝置上的全部用藥提醒與打卡記錄。';
+
+  @override
+  String get medicationDeleteAllDataConfirm => '確定刪除本裝置上的全部用藥清單資料？此操作無法撤銷。';
+
+  @override
+  String get medicationCollapse => '摺疊';
+
+  @override
+  String get medicationExpand => '展開';
+
+  @override
+  String get medicationEmptyToday => '今日暫無提醒，請在管理中添加。';
+
+  @override
+  String medicationCompletedAt(String time) {
+    return '已於 $time 完成';
+  }
+
+  @override
+  String get medicationSave => '儲存';
+
+  @override
+  String get medicationDeleteReminder => '刪除提醒';
+
+  @override
+  String get medicationDeleteReminderConfirm => '確定刪除該提醒？';
+
+  @override
+  String get medicationNoReminders => '暫無提醒';
+
+  @override
+  String get medicationDeleteSuccess => 'Medication list data deleted';
+
+  @override
+  String get rehabReport => 'Rehab report';
+
+  @override
+  String get rehabReportDisclaimer =>
+      'For rehabilitation reference only. Not a medical diagnosis and does not replace advice from your care team.';
+
+  @override
+  String get reportOverallScore => 'Overall score';
+
+  @override
+  String reportDailyProgress(int percent) {
+    return 'Today\'s goals: $percent%';
+  }
+
+  @override
+  String reportWeeklyProgress(int percent) {
+    return 'This week: $percent%';
+  }
+
+  @override
+  String reportStreak(int days) {
+    return 'Streak: $days days';
+  }
+
+  @override
+  String get reportNoData => 'Not enough training data yet';
+
+  @override
+  String get handTraining => 'Hand';
+
+  @override
+  String get voiceTrainingShort => 'Voice';
+
+  @override
+  String get motionTrainingShort => 'Movement';
+
+  @override
+  String get tabHome => '首頁';
+
+  @override
+  String get tabPlan => '計畫';
+
+  @override
+  String get tabData => '數據';
+
+  @override
+  String get tabProfile => '我的';
+
+  @override
+  String get comingSoon => '即將推出';
+
+  @override
+  String trainingStreak(int days) {
+    return '$days 天';
+  }
+
+  @override
+  String get trainingStreakLabel => '連續訓練';
+
+  @override
+  String get voiceClarity => '語音訓練';
+
+  @override
+  String get handStability => '手部測量';
+
+  @override
+  String get movementAbility => '肢體訓練';
+
+  @override
+  String get medicationReminder => '用藥提醒';
+
+  @override
+  String lastTrainingAgo(String timeAgo) {
+    return 'Last training · $timeAgo';
+  }
+
+  @override
+  String lastMeasurementAgo(String timeAgo) {
+    return 'Last measured · $timeAgo';
+  }
+
+  @override
+  String get relativeToday => '今天';
+
+  @override
+  String get relativeYesterday => '昨天';
+
+  @override
+  String relativeDaysAgo(int days) {
+    return '$days days ago';
+  }
+
+  @override
+  String get noTrainingYet => '尚未訓練';
+
+  @override
+  String get noMeasurementYet => '尚未測量';
+
+  @override
+  String get tapToStart => '點擊開始';
+
+  @override
+  String durationSec(int count) {
+    return '${count}s';
+  }
+
+  @override
+  String durationMin(int count) {
+    return '$count min';
+  }
+
+  @override
+  String get voiceSessionCount => '1 次訓練';
+
+  @override
+  String get handMeasurementCount => '1 次測量';
+
+  @override
+  String motionCompletionCount(int done, int total) {
+    return '$done/$total reps';
+  }
+
+  @override
+  String get medicationSetupPrompt => '設定用藥提醒';
+
+  @override
+  String get medicationSetupSubtitle => '僅保存在本機';
+
+  @override
+  String get medicationNoUpcoming => '今日暫無待打卡提醒';
+
+  @override
+  String get medicationNextDoseLabel => '下次';
+
+  @override
+  String medicationNextDoseTime(String time) {
+    return '$time';
+  }
+
+  @override
+  String get medicationStatusUpcoming => '即將到';
+
+  @override
+  String get medicationStatusPending => '待打卡';
+
+  @override
+  String get recentActivity => '最近活動';
+
+  @override
+  String get nonMedicalDisclaimerTitle => '僅供參考';
+
+  @override
+  String get nonMedicalDisclaimerBody =>
+      'Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.';
+
+  @override
+  String get voicePrepHint => '請坐穩，將手機舉到嘴邊，距離大約 30 公分';
+
+  @override
+  String voicePrepDurationHint(int seconds) {
+    return '本次練習大約 $seconds 秒';
+  }
+
+  @override
+  String get voicePrepEnvironmentHint => '建議在安靜的房間練習，效果更好';
+
+  @override
+  String voiceCalibratingCountdown(int seconds) {
+    return '請保持安靜 · 還剩 $seconds 秒';
+  }
+
+  @override
+  String voiceElapsedLabel(int seconds) {
+    return '已練習 $seconds 秒';
+  }
+
+  @override
+  String voiceTargetDurationChip(int seconds) {
+    return '目標：$seconds 秒';
+  }
+
+  @override
+  String get voiceLegendTarget => '目標音量';
+
+  @override
+  String get voiceLegendYours => '你的音量';
+
+  @override
+  String get voiceShowDetail => '顯示數值';
+
+  @override
+  String get voiceHideDetail => '隱藏數值';
+
+  @override
+  String get voiceCompletedTitle => '練習完成';
+
+  @override
+  String get voiceCompletedDurationLabel => '本次練習';
+
+  @override
+  String get voiceCompletedTargetLabel => '達到目標音量時長';
+
+  @override
+  String get voiceCompletedEncourageGood => '非常好！繼續保持大聲說話的習慣。';
+
+  @override
+  String get voiceCompletedEncourageTryMore => '不錯的嘗試，下次可以試著更大聲一點。';
+
+  @override
+  String get voiceRetryButton => '再練一次';
+
+  @override
+  String get voiceFinishButton => '完成';
+
+  @override
+  String get voicePracticeFooterHint => '此練習透過大聲說話幫助語音訓練，僅供參考，非醫學診斷。';
+
+  @override
+  String get voiceSessionTooShort => '練習時間過短，未保存本次記錄';
 }

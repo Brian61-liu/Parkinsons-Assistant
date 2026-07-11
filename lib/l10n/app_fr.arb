@@ -82,6 +82,7 @@
   "severitySevere": "Sévère",
   "appSubtitle": "Votre assistant Parkinson personnel pour le suivi et l'analyse des mouvements",
   "signInWithGoogle": "Connexion Google",
+  "signInWithApple": "Connexion Apple",
   "signingIn": "Connexion...",
   "privacyNotice": "En vous connectant, vous acceptez nos Conditions d'utilisation et notre Politique de confidentialité",
   "loginError": "Erreur de Connexion",
@@ -319,5 +320,147 @@
   "trainingType": "Type d'Entraînement",
   "@trainingType": {
     "description": "Training type label"
-  }
+  },
+  "medicationList": "Medication list",
+  "medicationListEnable": "Set up medication list",
+  "medicationDisclaimer": "Amplio's medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. All data stays on this device only.",
+  "medicationDisclaimerAccept": "I understand and enable",
+  "medicationLabel": "Label",
+  "medicationLabelHint": "e.g. After breakfast (nickname is fine)",
+  "medicationTime": "Time",
+  "medicationTaken": "Taken",
+  "medicationUndo": "Undo",
+  "medicationUndoConfirm": "Remove today's check-in for this item?",
+  "medicationTodayProgress": "Today {done}/{total}",
+  "medicationManage": "Manage",
+  "medicationAdd": "Add reminder",
+  "medicationEdit": "Edit reminder",
+  "medicationClose": "Turn off medication list",
+  "medicationCloseConfirm": "You can hide the list or also delete all medication data on this device.",
+  "medicationCloseHideOnly": "Hide only",
+  "medicationCloseAndDelete": "Hide and delete all data",
+  "medicationDeleteAllData": "Delete medication list data",
+  "medicationDeleteAllDataDescription": "Permanently delete all medication reminders and check-ins on this device.",
+  "medicationDeleteAllDataConfirm": "Delete all medication list data on this device? This cannot be undone.",
+  "medicationCollapse": "Collapse",
+  "medicationExpand": "Expand",
+  "medicationEmptyToday": "No reminders for today. Add one in Manage.",
+  "medicationCompletedAt": "Done at {time}",
+  "medicationSave": "Save",
+  "medicationDeleteReminder": "Delete reminder",
+  "medicationDeleteReminderConfirm": "Delete this reminder?",
+  "medicationNoReminders": "No reminders yet",
+  "medicationDeleteSuccess": "Medication list data deleted",
+  "rehabReport": "Rehab report",
+  "rehabReportDisclaimer": "For rehabilitation reference only. Not a medical diagnosis and does not replace advice from your care team.",
+  "reportOverallScore": "Overall score",
+  "reportDailyProgress": "Today's goals: {percent}%",
+  "reportWeeklyProgress": "This week: {percent}%",
+  "reportStreak": "Streak: {days} days",
+  "reportNoData": "Not enough training data yet",
+  "handTraining": "Hand",
+  "voiceTrainingShort": "Voice",
+  "motionTrainingShort": "Movement",
+
+  "tabHome": "Home",
+  "tabPlan": "Plan",
+  "tabData": "Data",
+  "tabProfile": "Profile",
+  "comingSoon": "Coming soon",
+
+  "trainingStreak": "{days} days",
+  "@trainingStreak": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "trainingStreakLabel": "Training Streak",
+
+  "voiceClarity": "Voice Clarity",
+  "handStability": "Hand Stability",
+  "movementAbility": "Movement Ability",
+  "medicationReminder": "Medication",
+
+  "lastTrainingAgo": "Last training · {timeAgo}",
+  "@lastTrainingAgo": {
+    "placeholders": { "timeAgo": { "type": "String" } }
+  },
+  "lastMeasurementAgo": "Last measured · {timeAgo}",
+  "@lastMeasurementAgo": {
+    "placeholders": { "timeAgo": { "type": "String" } }
+  },
+  "relativeToday": "Today",
+  "relativeYesterday": "Yesterday",
+  "relativeDaysAgo": "{days} days ago",
+  "@relativeDaysAgo": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+
+  "noTrainingYet": "No training yet",
+  "noMeasurementYet": "No measurement yet",
+  "tapToStart": "Tap to start",
+
+  "durationSec": "{count}s",
+  "@durationSec": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "durationMin": "{count} min",
+  "@durationMin": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "voiceSessionCount": "1 session",
+  "handMeasurementCount": "1 measurement",
+  "motionCompletionCount": "{done}/{total} reps",
+  "@motionCompletionCount": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "medicationSetupPrompt": "Set up medication reminders",
+  "medicationSetupSubtitle": "Saved on this device only",
+  "medicationNoUpcoming": "No upcoming reminders today",
+  "medicationNextDoseLabel": "Next dose",
+  "medicationNextDoseTime": "{time}",
+  "@medicationNextDoseTime": {
+    "placeholders": { "time": { "type": "String" } }
+  },
+  "medicationStatusUpcoming": "Upcoming",
+  "medicationStatusPending": "Pending",
+
+  "recentActivity": "Recent Activity",
+  "nonMedicalDisclaimerTitle": "For reference only",
+  "nonMedicalDisclaimerBody": "Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.",
+
+  "voicePrepHint": "Sit comfortably. Hold your phone about 30 cm from your mouth.",
+  "voicePrepDurationHint": "Practice for about {seconds} seconds",
+  "@voicePrepDurationHint": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "voicePrepEnvironmentHint": "Practice in a quiet room for best results",
+  "voiceCalibratingCountdown": "Please stay quiet · {seconds}s",
+  "@voiceCalibratingCountdown": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "voiceElapsedLabel": "Practiced {seconds}s",
+  "@voiceElapsedLabel": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "voiceTargetDurationChip": "Goal: {seconds}s",
+  "@voiceTargetDurationChip": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "voiceLegendTarget": "Target volume",
+  "voiceLegendYours": "Your volume",
+  "voiceShowDetail": "Show number",
+  "voiceHideDetail": "Hide number",
+  "voiceCompletedTitle": "Practice Complete",
+  "voiceCompletedDurationLabel": "This session",
+  "voiceCompletedTargetLabel": "Time at target volume",
+  "voiceCompletedEncourageGood": "Great job! Keep up the habit of speaking loudly.",
+  "voiceCompletedEncourageTryMore": "Good try. Aim to speak a bit louder next time.",
+  "voiceRetryButton": "Practice Again",
+  "voiceFinishButton": "Done",
+  "voicePracticeFooterHint": "This exercise encourages speaking loudly for voice training. For reference only, not a medical diagnosis.",
+  "voiceSessionTooShort": "Session was too short and was not saved"
 }

@@ -82,6 +82,7 @@
   "severitySevere": "重度",
   "appSubtitle": "您的帕金森運動追蹤與分析助手",
   "signInWithGoogle": "使用 Google 登入",
+  "signInWithApple": "使用 Apple 登入",
   "signingIn": "正在登入...",
   "privacyNotice": "登入即表示您同意我們的服務條款和隱私政策",
   "loginError": "登入錯誤",
@@ -319,5 +320,147 @@
   "trainingType": "訓練類型",
   "@trainingType": {
     "description": "Training type label"
-  }
+  },
+  "medicationList": "用藥清單",
+  "medicationListEnable": "設定用藥清單",
+  "medicationDisclaimer": "Amplio 用藥清單僅幫助您在本機自行記錄服藥時間，不能替代醫師或藥師建議，不提供用藥或劑量指導。所有資料僅保存在本裝置。",
+  "medicationDisclaimerAccept": "我了解並開啟",
+  "medicationLabel": "標籤",
+  "medicationLabelHint": "例如：早飯後（可用暱稱，不必填真實藥名）",
+  "medicationTime": "時間",
+  "medicationTaken": "已服用",
+  "medicationUndo": "撤銷",
+  "medicationUndoConfirm": "撤銷今日該條的打卡記錄？",
+  "medicationTodayProgress": "今日 {done}/{total}",
+  "medicationManage": "管理",
+  "medicationAdd": "新增提醒",
+  "medicationEdit": "編輯提醒",
+  "medicationClose": "關閉用藥清單",
+  "medicationCloseConfirm": "可以僅隱藏清單，也可同時刪除本機全部用藥資料。",
+  "medicationCloseHideOnly": "僅隱藏",
+  "medicationCloseAndDelete": "隱藏並刪除全部資料",
+  "medicationDeleteAllData": "刪除用藥清單資料",
+  "medicationDeleteAllDataDescription": "永久刪除本裝置上的全部用藥提醒與打卡記錄。",
+  "medicationDeleteAllDataConfirm": "確定刪除本裝置上的全部用藥清單資料？此操作無法撤銷。",
+  "medicationCollapse": "摺疊",
+  "medicationExpand": "展開",
+  "medicationEmptyToday": "今日暫無提醒，請在管理中添加。",
+  "medicationCompletedAt": "已於 {time} 完成",
+  "medicationSave": "儲存",
+  "medicationDeleteReminder": "刪除提醒",
+  "medicationDeleteReminderConfirm": "確定刪除該提醒？",
+  "medicationNoReminders": "暫無提醒",
+  "medicationDeleteSuccess": "Medication list data deleted",
+  "rehabReport": "Rehab report",
+  "rehabReportDisclaimer": "For rehabilitation reference only. Not a medical diagnosis and does not replace advice from your care team.",
+  "reportOverallScore": "Overall score",
+  "reportDailyProgress": "Today's goals: {percent}%",
+  "reportWeeklyProgress": "This week: {percent}%",
+  "reportStreak": "Streak: {days} days",
+  "reportNoData": "Not enough training data yet",
+  "handTraining": "Hand",
+  "voiceTrainingShort": "Voice",
+  "motionTrainingShort": "Movement",
+
+  "tabHome": "首頁",
+  "tabPlan": "計畫",
+  "tabData": "數據",
+  "tabProfile": "我的",
+  "comingSoon": "即將推出",
+
+  "trainingStreak": "{days} 天",
+  "@trainingStreak": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "trainingStreakLabel": "連續訓練",
+
+  "voiceClarity": "語音訓練",
+  "handStability": "手部測量",
+  "movementAbility": "肢體訓練",
+  "medicationReminder": "用藥提醒",
+
+  "lastTrainingAgo": "Last training · {timeAgo}",
+  "@lastTrainingAgo": {
+    "placeholders": { "timeAgo": { "type": "String" } }
+  },
+  "lastMeasurementAgo": "Last measured · {timeAgo}",
+  "@lastMeasurementAgo": {
+    "placeholders": { "timeAgo": { "type": "String" } }
+  },
+  "relativeToday": "今天",
+  "relativeYesterday": "昨天",
+  "relativeDaysAgo": "{days} days ago",
+  "@relativeDaysAgo": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+
+  "noTrainingYet": "尚未訓練",
+  "noMeasurementYet": "尚未測量",
+  "tapToStart": "點擊開始",
+
+  "durationSec": "{count}s",
+  "@durationSec": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "durationMin": "{count} min",
+  "@durationMin": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "voiceSessionCount": "1 次訓練",
+  "handMeasurementCount": "1 次測量",
+  "motionCompletionCount": "{done}/{total} reps",
+  "@motionCompletionCount": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "medicationSetupPrompt": "設定用藥提醒",
+  "medicationSetupSubtitle": "僅保存在本機",
+  "medicationNoUpcoming": "今日暫無待打卡提醒",
+  "medicationNextDoseLabel": "下次",
+  "medicationNextDoseTime": "{time}",
+  "@medicationNextDoseTime": {
+    "placeholders": { "time": { "type": "String" } }
+  },
+  "medicationStatusUpcoming": "即將到",
+  "medicationStatusPending": "待打卡",
+
+  "recentActivity": "最近活動",
+  "nonMedicalDisclaimerTitle": "僅供參考",
+  "nonMedicalDisclaimerBody": "Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.",
+
+  "voicePrepHint": "請坐穩，將手機舉到嘴邊，距離大約 30 公分",
+  "voicePrepDurationHint": "本次練習大約 {seconds} 秒",
+  "@voicePrepDurationHint": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "voicePrepEnvironmentHint": "建議在安靜的房間練習，效果更好",
+  "voiceCalibratingCountdown": "請保持安靜 · 還剩 {seconds} 秒",
+  "@voiceCalibratingCountdown": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "voiceElapsedLabel": "已練習 {seconds} 秒",
+  "@voiceElapsedLabel": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "voiceTargetDurationChip": "目標：{seconds} 秒",
+  "@voiceTargetDurationChip": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "voiceLegendTarget": "目標音量",
+  "voiceLegendYours": "你的音量",
+  "voiceShowDetail": "顯示數值",
+  "voiceHideDetail": "隱藏數值",
+  "voiceCompletedTitle": "練習完成",
+  "voiceCompletedDurationLabel": "本次練習",
+  "voiceCompletedTargetLabel": "達到目標音量時長",
+  "voiceCompletedEncourageGood": "非常好！繼續保持大聲說話的習慣。",
+  "voiceCompletedEncourageTryMore": "不錯的嘗試，下次可以試著更大聲一點。",
+  "voiceRetryButton": "再練一次",
+  "voiceFinishButton": "完成",
+  "voicePracticeFooterHint": "此練習透過大聲說話幫助語音訓練，僅供參考，非醫學診斷。",
+  "voiceSessionTooShort": "練習時間過短，未保存本次記錄"
 }

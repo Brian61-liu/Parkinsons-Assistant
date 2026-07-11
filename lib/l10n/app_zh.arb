@@ -82,6 +82,7 @@
   "severitySevere": "重度",
   "appSubtitle": "您的帕金森运动追踪与分析助手",
   "signInWithGoogle": "使用 Google 登录",
+  "signInWithApple": "使用 Apple 登录",
   "signingIn": "正在登录...",
   "privacyNotice": "登录即表示您同意我们的服务条款和隐私政策",
   "loginError": "登录错误",
@@ -300,5 +301,147 @@
   "trainingType": "训练类型",
   "@trainingType": {
     "description": "Training type label"
-  }
+  },
+  "medicationList": "用药清单",
+  "medicationListEnable": "设置用药清单",
+  "medicationDisclaimer": "Amplio 用药清单仅帮助您在本机自行记录服药时间，不能替代医生或药师建议，不提供用药或剂量指导。所有数据仅保存在本设备。",
+  "medicationDisclaimerAccept": "我了解并开启",
+  "medicationLabel": "标签",
+  "medicationLabelHint": "例如：早饭后（可用昵称，不必填真实药名）",
+  "medicationTime": "时间",
+  "medicationTaken": "已服用",
+  "medicationUndo": "撤销",
+  "medicationUndoConfirm": "撤销今日该条的打卡记录？",
+  "medicationTodayProgress": "今日 {done}/{total}",
+  "medicationManage": "管理",
+  "medicationAdd": "添加提醒",
+  "medicationEdit": "编辑提醒",
+  "medicationClose": "关闭用药清单",
+  "medicationCloseConfirm": "可以仅隐藏清单，也可同时删除本机全部用药数据。",
+  "medicationCloseHideOnly": "仅隐藏",
+  "medicationCloseAndDelete": "隐藏并删除全部数据",
+  "medicationDeleteAllData": "删除用药清单数据",
+  "medicationDeleteAllDataDescription": "永久删除本设备上的全部用药提醒与打卡记录。",
+  "medicationDeleteAllDataConfirm": "确定删除本设备上的全部用药清单数据？此操作无法撤消。",
+  "medicationCollapse": "折叠",
+  "medicationExpand": "展开",
+  "medicationEmptyToday": "今日暂无提醒，请在管理中添加。",
+  "medicationCompletedAt": "已于 {time} 完成",
+  "medicationSave": "保存",
+  "medicationDeleteReminder": "删除提醒",
+  "medicationDeleteReminderConfirm": "确定删除该提醒？",
+  "medicationNoReminders": "暂无提醒",
+  "medicationDeleteSuccess": "用药清单数据已删除",
+  "rehabReport": "康复报告",
+  "rehabReportDisclaimer": "仅供参考，不构成医学诊断，也不替代医生或治疗师建议。",
+  "reportOverallScore": "综合评分",
+  "reportDailyProgress": "今日目标：{percent}%",
+  "reportWeeklyProgress": "本周目标：{percent}%",
+  "reportStreak": "连续训练 {days} 天",
+  "reportNoData": "训练数据尚不足",
+  "handTraining": "手部",
+  "voiceTrainingShort": "语音",
+  "motionTrainingShort": "肢体",
+
+  "tabHome": "首页",
+  "tabPlan": "计划",
+  "tabData": "数据",
+  "tabProfile": "我的",
+  "comingSoon": "即将推出",
+
+  "trainingStreak": "{days} 天",
+  "@trainingStreak": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "trainingStreakLabel": "训练连续",
+
+  "voiceClarity": "语音训练",
+  "handStability": "手部测量",
+  "movementAbility": "肢体训练",
+  "medicationReminder": "用药提醒",
+
+  "lastTrainingAgo": "上次训练 · {timeAgo}",
+  "@lastTrainingAgo": {
+    "placeholders": { "timeAgo": { "type": "String" } }
+  },
+  "lastMeasurementAgo": "上次测量 · {timeAgo}",
+  "@lastMeasurementAgo": {
+    "placeholders": { "timeAgo": { "type": "String" } }
+  },
+  "relativeToday": "今天",
+  "relativeYesterday": "昨天",
+  "relativeDaysAgo": "{days} 天前",
+  "@relativeDaysAgo": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+
+  "noTrainingYet": "尚未训练",
+  "noMeasurementYet": "尚未测量",
+  "tapToStart": "点击开始",
+
+  "durationSec": "{count}秒",
+  "@durationSec": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "durationMin": "{count} 分钟",
+  "@durationMin": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "voiceSessionCount": "1 次训练",
+  "handMeasurementCount": "1 次测量",
+  "motionCompletionCount": "{done}/{total} 次",
+  "@motionCompletionCount": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "medicationSetupPrompt": "设置用药提醒",
+  "medicationSetupSubtitle": "仅保存在本机",
+  "medicationNoUpcoming": "今日暂无待打卡提醒",
+  "medicationNextDoseLabel": "下次",
+  "medicationNextDoseTime": "{time}",
+  "@medicationNextDoseTime": {
+    "placeholders": { "time": { "type": "String" } }
+  },
+  "medicationStatusUpcoming": "即将到",
+  "medicationStatusPending": "待打卡",
+
+  "recentActivity": "最近活动",
+  "nonMedicalDisclaimerTitle": "仅供参考",
+  "nonMedicalDisclaimerBody": "所展示的测量结果仅供康复训练参考，不能用于医学诊断，也不能替代医生或治疗师的建议。",
+
+  "voicePrepHint": "请坐稳，将手机举到嘴边，距离大约 30 厘米",
+  "voicePrepDurationHint": "本次练习大约 {seconds} 秒",
+  "@voicePrepDurationHint": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "voicePrepEnvironmentHint": "建议在安静的房间练习，效果更好",
+  "voiceCalibratingCountdown": "请保持安静 · 还剩 {seconds} 秒",
+  "@voiceCalibratingCountdown": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "voiceElapsedLabel": "已练习 {seconds} 秒",
+  "@voiceElapsedLabel": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "voiceTargetDurationChip": "目标：{seconds} 秒",
+  "@voiceTargetDurationChip": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "voiceLegendTarget": "目标音量",
+  "voiceLegendYours": "你的音量",
+  "voiceShowDetail": "显示数值",
+  "voiceHideDetail": "隐藏数值",
+  "voiceCompletedTitle": "练习完成",
+  "voiceCompletedDurationLabel": "本次练习",
+  "voiceCompletedTargetLabel": "达到目标音量时长",
+  "voiceCompletedEncourageGood": "非常好！继续保持大声说话的习惯。",
+  "voiceCompletedEncourageTryMore": "不错的尝试，下次可以试着更大声一点。",
+  "voiceRetryButton": "再练一次",
+  "voiceFinishButton": "完成",
+  "voicePracticeFooterHint": "此练习通过大声说话帮助语音训练，仅供参考，非医学诊断。",
+  "voiceSessionTooShort": "练习时间过短，未保存本次记录"
 }

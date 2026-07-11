@@ -441,6 +441,12 @@ abstract class AppLocalizations {
   /// **'Sign in with Google'**
   String get signInWithGoogle;
 
+  /// Apple sign in button text
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Apple'**
+  String get signInWithApple;
+
   /// Google sign in button text
   ///
   /// In en, this message translates to:
@@ -1130,6 +1136,564 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Training Type'**
   String get trainingType;
+
+  /// No description provided for @medicationList.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication list'**
+  String get medicationList;
+
+  /// No description provided for @medicationListEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up medication list'**
+  String get medicationListEnable;
+
+  /// No description provided for @medicationDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Amplio\'s medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. All data stays on this device only.'**
+  String get medicationDisclaimer;
+
+  /// No description provided for @medicationDisclaimerAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand and enable'**
+  String get medicationDisclaimerAccept;
+
+  /// No description provided for @medicationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get medicationLabel;
+
+  /// No description provided for @medicationLabelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. After breakfast (nickname is fine)'**
+  String get medicationLabelHint;
+
+  /// No description provided for @medicationTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get medicationTime;
+
+  /// No description provided for @medicationTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'Taken'**
+  String get medicationTaken;
+
+  /// No description provided for @medicationUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get medicationUndo;
+
+  /// No description provided for @medicationUndoConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove today\'s check-in for this item?'**
+  String get medicationUndoConfirm;
+
+  /// No description provided for @medicationTodayProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Today {done}/{total}'**
+  String medicationTodayProgress(int done, int total);
+
+  /// No description provided for @medicationManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage'**
+  String get medicationManage;
+
+  /// No description provided for @medicationAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add reminder'**
+  String get medicationAdd;
+
+  /// No description provided for @medicationEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit reminder'**
+  String get medicationEdit;
+
+  /// No description provided for @medicationClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off medication list'**
+  String get medicationClose;
+
+  /// No description provided for @medicationCloseConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'You can hide the list or also delete all medication data on this device.'**
+  String get medicationCloseConfirm;
+
+  /// No description provided for @medicationCloseHideOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide only'**
+  String get medicationCloseHideOnly;
+
+  /// No description provided for @medicationCloseAndDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide and delete all data'**
+  String get medicationCloseAndDelete;
+
+  /// No description provided for @medicationDeleteAllData.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete medication list data'**
+  String get medicationDeleteAllData;
+
+  /// No description provided for @medicationDeleteAllDataDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently delete all medication reminders and check-ins on this device.'**
+  String get medicationDeleteAllDataDescription;
+
+  /// No description provided for @medicationDeleteAllDataConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all medication list data on this device? This cannot be undone.'**
+  String get medicationDeleteAllDataConfirm;
+
+  /// No description provided for @medicationCollapse.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse'**
+  String get medicationCollapse;
+
+  /// No description provided for @medicationExpand.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand'**
+  String get medicationExpand;
+
+  /// No description provided for @medicationEmptyToday.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminders for today. Add one in Manage.'**
+  String get medicationEmptyToday;
+
+  /// No description provided for @medicationCompletedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Done at {time}'**
+  String medicationCompletedAt(String time);
+
+  /// No description provided for @medicationSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get medicationSave;
+
+  /// No description provided for @medicationDeleteReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete reminder'**
+  String get medicationDeleteReminder;
+
+  /// No description provided for @medicationDeleteReminderConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this reminder?'**
+  String get medicationDeleteReminderConfirm;
+
+  /// No description provided for @medicationNoReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminders yet'**
+  String get medicationNoReminders;
+
+  /// No description provided for @medicationDeleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication list data deleted'**
+  String get medicationDeleteSuccess;
+
+  /// No description provided for @rehabReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Rehab report'**
+  String get rehabReport;
+
+  /// No description provided for @rehabReportDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'For rehabilitation reference only. Not a medical diagnosis and does not replace advice from your care team.'**
+  String get rehabReportDisclaimer;
+
+  /// No description provided for @reportOverallScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall score'**
+  String get reportOverallScore;
+
+  /// No description provided for @reportDailyProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s goals: {percent}%'**
+  String reportDailyProgress(int percent);
+
+  /// No description provided for @reportWeeklyProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'This week: {percent}%'**
+  String reportWeeklyProgress(int percent);
+
+  /// No description provided for @reportStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak: {days} days'**
+  String reportStreak(int days);
+
+  /// No description provided for @reportNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough training data yet'**
+  String get reportNoData;
+
+  /// No description provided for @handTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Hand'**
+  String get handTraining;
+
+  /// No description provided for @voiceTrainingShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get voiceTrainingShort;
+
+  /// No description provided for @motionTrainingShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Movement'**
+  String get motionTrainingShort;
+
+  /// No description provided for @tabHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get tabHome;
+
+  /// No description provided for @tabPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan'**
+  String get tabPlan;
+
+  /// No description provided for @tabData.
+  ///
+  /// In en, this message translates to:
+  /// **'Data'**
+  String get tabData;
+
+  /// No description provided for @tabProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get tabProfile;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get comingSoon;
+
+  /// No description provided for @trainingStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days'**
+  String trainingStreak(int days);
+
+  /// No description provided for @trainingStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Training Streak'**
+  String get trainingStreakLabel;
+
+  /// No description provided for @voiceClarity.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Clarity'**
+  String get voiceClarity;
+
+  /// No description provided for @handStability.
+  ///
+  /// In en, this message translates to:
+  /// **'Hand Stability'**
+  String get handStability;
+
+  /// No description provided for @movementAbility.
+  ///
+  /// In en, this message translates to:
+  /// **'Movement Ability'**
+  String get movementAbility;
+
+  /// No description provided for @medicationReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication'**
+  String get medicationReminder;
+
+  /// No description provided for @lastTrainingAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Last training · {timeAgo}'**
+  String lastTrainingAgo(String timeAgo);
+
+  /// No description provided for @lastMeasurementAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Last measured · {timeAgo}'**
+  String lastMeasurementAgo(String timeAgo);
+
+  /// No description provided for @relativeToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get relativeToday;
+
+  /// No description provided for @relativeYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get relativeYesterday;
+
+  /// No description provided for @relativeDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days ago'**
+  String relativeDaysAgo(int days);
+
+  /// No description provided for @noTrainingYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No training yet'**
+  String get noTrainingYet;
+
+  /// No description provided for @noMeasurementYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No measurement yet'**
+  String get noMeasurementYet;
+
+  /// No description provided for @tapToStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to start'**
+  String get tapToStart;
+
+  /// No description provided for @durationSec.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}s'**
+  String durationSec(int count);
+
+  /// No description provided for @durationMin.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} min'**
+  String durationMin(int count);
+
+  /// No description provided for @voiceSessionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'1 session'**
+  String get voiceSessionCount;
+
+  /// No description provided for @handMeasurementCount.
+  ///
+  /// In en, this message translates to:
+  /// **'1 measurement'**
+  String get handMeasurementCount;
+
+  /// No description provided for @motionCompletionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{done}/{total} reps'**
+  String motionCompletionCount(int done, int total);
+
+  /// No description provided for @medicationSetupPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up medication reminders'**
+  String get medicationSetupPrompt;
+
+  /// No description provided for @medicationSetupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved on this device only'**
+  String get medicationSetupSubtitle;
+
+  /// No description provided for @medicationNoUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'No upcoming reminders today'**
+  String get medicationNoUpcoming;
+
+  /// No description provided for @medicationNextDoseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Next dose'**
+  String get medicationNextDoseLabel;
+
+  /// No description provided for @medicationNextDoseTime.
+  ///
+  /// In en, this message translates to:
+  /// **'{time}'**
+  String medicationNextDoseTime(String time);
+
+  /// No description provided for @medicationStatusUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get medicationStatusUpcoming;
+
+  /// No description provided for @medicationStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get medicationStatusPending;
+
+  /// No description provided for @recentActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Activity'**
+  String get recentActivity;
+
+  /// No description provided for @nonMedicalDisclaimerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'For reference only'**
+  String get nonMedicalDisclaimerTitle;
+
+  /// No description provided for @nonMedicalDisclaimerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.'**
+  String get nonMedicalDisclaimerBody;
+
+  /// No description provided for @voicePrepHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sit comfortably. Hold your phone about 30 cm from your mouth.'**
+  String get voicePrepHint;
+
+  /// No description provided for @voicePrepDurationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice for about {seconds} seconds'**
+  String voicePrepDurationHint(int seconds);
+
+  /// No description provided for @voicePrepEnvironmentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice in a quiet room for best results'**
+  String get voicePrepEnvironmentHint;
+
+  /// No description provided for @voiceCalibratingCountdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Please stay quiet · {seconds}s'**
+  String voiceCalibratingCountdown(int seconds);
+
+  /// No description provided for @voiceElapsedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Practiced {seconds}s'**
+  String voiceElapsedLabel(int seconds);
+
+  /// No description provided for @voiceTargetDurationChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal: {seconds}s'**
+  String voiceTargetDurationChip(int seconds);
+
+  /// No description provided for @voiceLegendTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Target volume'**
+  String get voiceLegendTarget;
+
+  /// No description provided for @voiceLegendYours.
+  ///
+  /// In en, this message translates to:
+  /// **'Your volume'**
+  String get voiceLegendYours;
+
+  /// No description provided for @voiceShowDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Show number'**
+  String get voiceShowDetail;
+
+  /// No description provided for @voiceHideDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide number'**
+  String get voiceHideDetail;
+
+  /// No description provided for @voiceCompletedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice Complete'**
+  String get voiceCompletedTitle;
+
+  /// No description provided for @voiceCompletedDurationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'This session'**
+  String get voiceCompletedDurationLabel;
+
+  /// No description provided for @voiceCompletedTargetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Time at target volume'**
+  String get voiceCompletedTargetLabel;
+
+  /// No description provided for @voiceCompletedEncourageGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Great job! Keep up the habit of speaking loudly.'**
+  String get voiceCompletedEncourageGood;
+
+  /// No description provided for @voiceCompletedEncourageTryMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Good try. Aim to speak a bit louder next time.'**
+  String get voiceCompletedEncourageTryMore;
+
+  /// No description provided for @voiceRetryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice Again'**
+  String get voiceRetryButton;
+
+  /// No description provided for @voiceFinishButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get voiceFinishButton;
+
+  /// No description provided for @voicePracticeFooterHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This exercise encourages speaking loudly for voice training. For reference only, not a medical diagnosis.'**
+  String get voicePracticeFooterHint;
+
+  /// No description provided for @voiceSessionTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Session was too short and was not saved'**
+  String get voiceSessionTooShort;
 }
 
 class _AppLocalizationsDelegate
