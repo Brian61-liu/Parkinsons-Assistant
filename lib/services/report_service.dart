@@ -1,38 +1,33 @@
-import '../models/assessment_result.dart';
 import '../models/report.dart';
 import '../models/training_item.dart';
 import '../models/training_record.dart';
-import 'database_service.dart';
 import 'goal_manager.dart';
 import 'training_analytics_service.dart';
 
-/// 康复报告服务：聚合评估、趋势与目标完成情况。
+/// 康复报告服务：聚合训练周均分、趋势与目标完成情况。
 class ReportService {
-  final DatabaseService _databaseService;
   final TrainingAnalyticsService _analyticsService;
   final GoalManager _goalManager;
 
   ReportService({
-    DatabaseService? databaseService,
     TrainingAnalyticsService? analyticsService,
     GoalManager? goalManager,
-  })  : _databaseService = databaseService ?? DatabaseService(),
-        _analyticsService = analyticsService ?? TrainingAnalyticsService(),
+  })  : _analyticsService = analyticsService ?? TrainingAnalyticsService(),
         _goalManager = goalManager ?? GoalManager();
 
   /// 生成当前康复报告。
   Future<RehabReport> generateReport() async {
     final results = await Future.wait<dynamic>([
-      _databaseService.getLatestAssessmentResult(),
+      _analyticsService.getWeeklyAverage(),
       _analyticsService.getTrend(),
       _goalManager.getSnapshot(),
     ]);
 
-    final assessment = results[0] as AssessmentResult?;
+    final weeklyAvg = results[0] as Map<String, double>;
     final trends = results[1] as List<TrendResult>;
     final goalSnapshot = results[2] as GoalSnapshot;
 
-    final reportScores = _buildScores(assessment);
+    final reportScores = _buildScoresFromWeeklyAverage(weeklyAvg);
     final reportTrends = _buildTrends(trends);
     final reportCompletion = _buildCompletion(goalSnapshot);
     final summary = _buildSummary(
@@ -111,24 +106,40 @@ class ReportService {
     );
   }
 
-  ReportScores _buildScores(AssessmentResult? assessment) {
-    if (assessment == null) {
+  ReportScores _buildScoresFromWeeklyAverage(Map<String, double> weeklyAvg) {
+    final hand = weeklyAvg[TrainingType.hand.key];
+    final voice = weeklyAvg[TrainingType.voice.key];
+    final motion = weeklyAvg[TrainingType.motion.key];
+
+    if (hand == null && voice == null && motion == null) {
       return const ReportScores(
         hand: 0,
         voice: 0,
         motion: 0,
         overall: 0,
-        level: '未评估',
+        level: '暂无数据',
       );
     }
 
+    final handScore = hand ?? 0;
+    final voiceScore = voice ?? 0;
+    final motionScore = motion ?? 0;
+    final overall =
+        handScore * 0.4 + voiceScore * 0.3 + motionScore * 0.3;
+
     return ReportScores(
-      hand: assessment.handScore,
-      voice: assessment.voiceScore,
-      motion: assessment.motionScore,
-      overall: assessment.overallScore,
-      level: assessment.level,
+      hand: handScore,
+      voice: voiceScore,
+      motion: motionScore,
+      overall: overall,
+      level: _calcLevel(overall),
     );
+  }
+
+  static String _calcLevel(double score) {
+    if (score >= 70) return '高';
+    if (score >= 45) return '中';
+    return '低';
   }
 
   ReportTrends _buildTrends(List<TrendResult> trendResults) {
@@ -168,8 +179,8 @@ class ReportService {
     required ReportTrends trends,
     required ReportCompletion completion,
   }) {
-    final scorePart = scores.level == '未评估'
-        ? '尚未完成初始评估'
+    final scorePart = scores.level == '暂无数据'
+        ? '暂无足够训练记录'
         : '当前综合评分 ${scores.overall.toStringAsFixed(0)} 分（${scores.level}）';
 
     final trendPart = trends.highlights.isNotEmpty
