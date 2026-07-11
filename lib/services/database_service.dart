@@ -3,15 +3,16 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/tremor_record.dart';
 import '../models/movement_training_record.dart';
-import '../models/assessment_result.dart';
 import '../models/training_record.dart';
+import '../models/medication_reminder.dart';
+import '../models/medication_check_in.dart';
 import 'cloud_sync_service.dart';
 
 // 数据库服务类
 class DatabaseService {
   static Database? _database;
   static const String _dbName = 'parkinson_rehab.db';
-  static const int _dbVersion = 5; // v5：新增 training_records 表
+  static const int _dbVersion = 7; // v7：移除 assessment_results
 
   final CloudSyncService _cloudSyncService = CloudSyncService();
 
@@ -63,19 +64,6 @@ class DatabaseService {
       )
     ''');
 
-    // 初始评估结果表
-    await db.execute('''
-      CREATE TABLE assessment_results (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        timestamp TEXT NOT NULL,
-        handScore REAL NOT NULL,
-        voiceScore REAL NOT NULL,
-        motionScore REAL NOT NULL,
-        overallScore REAL NOT NULL,
-        level TEXT NOT NULL
-      )
-    ''');
-
     // 训练记录表（用于趋势分析）
     await db.execute('''
       CREATE TABLE training_records (
@@ -91,6 +79,36 @@ class DatabaseService {
         'CREATE INDEX idx_training_records_date ON training_records(date)');
     await db.execute(
         'CREATE INDEX idx_training_records_type ON training_records(type)');
+
+    await _createMedicationTables(db);
+  }
+
+  static Future<void> _createMedicationTables(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS medication_reminders (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        label TEXT NOT NULL,
+        time_hhmm TEXT NOT NULL,
+        enabled INTEGER NOT NULL DEFAULT 1,
+        sort_order INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS medication_check_ins (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        reminder_id INTEGER NOT NULL,
+        scheduled_date TEXT NOT NULL,
+        scheduled_time TEXT NOT NULL,
+        checked_at TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'taken',
+        FOREIGN KEY (reminder_id) REFERENCES medication_reminders(id) ON DELETE CASCADE
+      )
+    ''');
+    await db.execute('''
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_med_checkin_unique
+        ON medication_check_ins(reminder_id, scheduled_date, scheduled_time)
+    ''');
   }
 
   // 数据库升级
@@ -121,19 +139,6 @@ class DatabaseService {
         debugPrint('添加训练类型字段时出错（可能已存在）: $e');
       }
     }
-    if (oldVersion < 4) {
-      await db.execute('''
-        CREATE TABLE IF NOT EXISTS assessment_results (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          timestamp TEXT NOT NULL,
-          handScore REAL NOT NULL,
-          voiceScore REAL NOT NULL,
-          motionScore REAL NOT NULL,
-          overallScore REAL NOT NULL,
-          level TEXT NOT NULL
-        )
-      ''');
-    }
     if (oldVersion < 5) {
       await db.execute('''
         CREATE TABLE IF NOT EXISTS training_records (
@@ -149,6 +154,12 @@ class DatabaseService {
           'CREATE INDEX IF NOT EXISTS idx_training_records_date ON training_records(date)');
       await db.execute(
           'CREATE INDEX IF NOT EXISTS idx_training_records_type ON training_records(type)');
+    }
+    if (oldVersion < 6) {
+      await _createMedicationTables(db);
+    }
+    if (oldVersion < 7) {
+      await db.execute('DROP TABLE IF EXISTS assessment_results');
     }
   }
 
@@ -286,9 +297,142 @@ class DatabaseService {
     final db = await database;
     await db.delete('tremor_records');
     await db.delete('movement_training_records');
-    await db.delete('assessment_results');
     await db.delete('training_records');
+    await db.delete('medication_check_ins');
+    await db.delete('medication_reminders');
   }
+
+  // ========== 用药清单（仅本地，不同步云端）==========
+
+  Future<int> insertMedicationReminder(MedicationReminder reminder) async {
+    final db = await database;
+    return await db.insert('medication_reminders', reminder.toMap());
+  }
+
+  Future<int> updateMedicationReminder(MedicationReminder reminder) async {
+    final db = await database;
+    if (reminder.id == null) {
+      throw ArgumentError('reminder.id is required for update');
+    }
+    return await db.update(
+      'medication_reminders',
+      reminder.toMap(),
+      where: 'id = ?',
+      whereArgs: [reminder.id],
+    );
+  }
+
+  Future<int> deleteMedicationReminder(int id) async {
+    final db = await database;
+    return await db.delete(
+      'medication_reminders',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<List<MedicationReminder>> getAllMedicationReminders() async {
+    final db = await database;
+    final maps = await db.query(
+      'medication_reminders',
+      orderBy: 'sort_order ASC, time_hhmm ASC',
+    );
+    return maps.map(MedicationReminder.fromMap).toList();
+  }
+
+  Future<List<MedicationReminder>> getEnabledMedicationReminders() async {
+    final db = await database;
+    final maps = await db.query(
+      'medication_reminders',
+      where: 'enabled = ?',
+      whereArgs: [1],
+      orderBy: 'time_hhmm ASC, sort_order ASC',
+    );
+    return maps.map(MedicationReminder.fromMap).toList();
+  }
+
+  Future<List<MedicationTodayItem>> getTodayMedicationItems({
+    String? date,
+  }) async {
+    final scheduledDate = date ?? _medicationDateKey(DateTime.now());
+    final reminders = await getEnabledMedicationReminders();
+    if (reminders.isEmpty) return [];
+
+    final db = await database;
+    final checkInMaps = await db.query(
+      'medication_check_ins',
+      where: 'scheduled_date = ?',
+      whereArgs: [scheduledDate],
+    );
+    final checkInsByKey = <String, MedicationCheckIn>{};
+    for (final m in checkInMaps) {
+      final c = MedicationCheckIn.fromMap(m);
+      checkInsByKey['${c.reminderId}|${c.scheduledTime}'] = c;
+    }
+
+    return reminders.map((r) {
+      final key = '${r.id}|${r.timeHhmm}';
+      final checkIn = checkInsByKey[key];
+      return MedicationTodayItem(
+        reminder: r,
+        isTaken: checkIn != null,
+        checkedAt: checkIn?.checkedAt,
+      );
+    }).toList();
+  }
+
+  Future<void> checkInMedication({
+    required int reminderId,
+    required String scheduledDate,
+    required String scheduledTime,
+  }) async {
+    final db = await database;
+    await db.insert(
+      'medication_check_ins',
+      MedicationCheckIn(
+        reminderId: reminderId,
+        scheduledDate: scheduledDate,
+        scheduledTime: scheduledTime,
+        checkedAt: DateTime.now(),
+      ).toMap(),
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
+  }
+
+  Future<int> undoMedicationCheckIn({
+    required int reminderId,
+    required String scheduledDate,
+    required String scheduledTime,
+  }) async {
+    final db = await database;
+    return await db.delete(
+      'medication_check_ins',
+      where:
+          'reminder_id = ? AND scheduled_date = ? AND scheduled_time = ?',
+      whereArgs: [reminderId, scheduledDate, scheduledTime],
+    );
+  }
+
+  Future<void> deleteAllMedicationData() async {
+    final db = await database;
+    await db.delete('medication_check_ins');
+    await db.delete('medication_reminders');
+  }
+
+  Future<int> purgeMedicationCheckInsOlderThan(int days) async {
+    final db = await database;
+    final cutoff = DateTime.now().subtract(Duration(days: days));
+    final cutoffKey = _medicationDateKey(cutoff);
+    return await db.delete(
+      'medication_check_ins',
+      where: 'scheduled_date < ?',
+      whereArgs: [cutoffKey],
+    );
+  }
+
+  static String _medicationDateKey(DateTime d) =>
+      '${d.year}-${d.month.toString().padLeft(2, '0')}-'
+      '${d.day.toString().padLeft(2, '0')}';
 
   // ========== 云端同步操作 ==========
 
@@ -365,36 +509,6 @@ class DatabaseService {
     } catch (e) {
       debugPrint('同步到云端失败: $e');
     }
-  }
-
-  // ========== 初始评估结果操作 ==========
-
-  /// 插入评估结果
-  Future<int> insertAssessmentResult(AssessmentResult result) async {
-    final db = await database;
-    return await db.insert('assessment_results', result.toMap());
-  }
-
-  /// 获取最新一条评估结果（首次评估基准）
-  Future<AssessmentResult?> getLatestAssessmentResult() async {
-    final db = await database;
-    final maps = await db.query(
-      'assessment_results',
-      orderBy: 'timestamp DESC',
-      limit: 1,
-    );
-    if (maps.isEmpty) return null;
-    return AssessmentResult.fromMap(maps.first);
-  }
-
-  /// 获取所有评估结果
-  Future<List<AssessmentResult>> getAllAssessmentResults() async {
-    final db = await database;
-    final maps = await db.query(
-      'assessment_results',
-      orderBy: 'timestamp DESC',
-    );
-    return maps.map(AssessmentResult.fromMap).toList();
   }
 
   // ========== 训练记录操作（趋势分析用）==========
