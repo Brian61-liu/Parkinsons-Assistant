@@ -1,7 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'dart:convert';
+import 'dart:io' show Platform;
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 import 'secure_storage_service.dart';
 
 /// 认证服务
@@ -17,6 +24,125 @@ class AuthService {
 
   // 监听认证状态变化
   Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  /// Sign in with Apple（仅 iOS / macOS 平台支持原生流程）
+  ///
+  /// 使用 nonce + SHA256 防重放：客户端生成原始 nonce，发给 Apple 的是其
+  /// SHA256，Firebase 通过原始 nonce + Apple 返回的 idToken 校验签名。
+  ///
+  /// Apple 仅在「首次登录」时返回 fullName / email；后续登录都拿不到。
+  /// 因此首次登录时尝试把 givenName + familyName 写到 Firebase 用户档案，
+  /// 之后即可由 Firebase user.displayName 直接读取。
+  Future<UserCredential?> signInWithApple() async {
+    try {
+      if (!_appleSignInAvailable()) {
+        throw Exception('Sign in with Apple is only available on iOS / macOS.');
+      }
+
+      debugPrint('signInWithApple: 开始 Apple 登录...');
+
+      final rawNonce = _generateNonce();
+      final hashedNonce = _sha256OfString(rawNonce);
+
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: hashedNonce,
+      );
+
+      debugPrint('signInWithApple: 获取 Apple 凭证，构造 Firebase OAuth 凭证...');
+
+      final oauthCredential = OAuthProvider('apple.com').credential(
+        idToken: appleCredential.identityToken,
+        rawNonce: rawNonce,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      final userCredential = await _auth.signInWithCredential(oauthCredential);
+      debugPrint('signInWithApple: Firebase 登录成功！');
+
+      final user = userCredential.user;
+      if (user != null) {
+        // 首次登录：拼接 fullName 写入 Firebase 用户档案
+        final fullName = [
+          appleCredential.givenName ?? '',
+          appleCredential.familyName ?? '',
+        ].where((s) => s.isNotEmpty).join(' ').trim();
+
+        if (fullName.isNotEmpty &&
+            (user.displayName == null || user.displayName!.isEmpty)) {
+          try {
+            await user.updateDisplayName(fullName);
+            await user.reload();
+          } catch (e) {
+            debugPrint('updateDisplayName 失败: $e');
+          }
+        }
+
+        // 后台保存用户信息（不阻塞登录流程）
+        Future.microtask(() async {
+          try {
+            await _saveUserToFirestore(_auth.currentUser ?? user).timeout(
+              const Duration(seconds: 10),
+              onTimeout: () => debugPrint('保存用户信息超时，跳过'),
+            );
+            await _logAuditEvent(
+              user.uid,
+              'LOGIN',
+              'User logged in via Apple',
+            ).timeout(
+              const Duration(seconds: 5),
+              onTimeout: () => debugPrint('记录审计日志超时，跳过'),
+            );
+          } catch (e) {
+            debugPrint('后台保存用户信息失败: $e');
+          }
+        });
+      }
+
+      return userCredential;
+    } on SignInWithAppleAuthorizationException catch (e) {
+      // 用户取消按取消处理（与 Google 流程一致，返回 null 不抛错）
+      if (e.code == AuthorizationErrorCode.canceled) {
+        debugPrint('signInWithApple: 用户取消了登录');
+        return null;
+      }
+      debugPrint('Apple 登录授权错误: code=${e.code}, message=${e.message}');
+      rethrow;
+    } catch (e) {
+      debugPrint('Apple 登录错误: $e');
+      rethrow;
+    }
+  }
+
+  /// 仅 iOS / macOS 暴露原生 Sign in with Apple
+  bool _appleSignInAvailable() {
+    if (kIsWeb) return false;
+    try {
+      return Platform.isIOS || Platform.isMacOS;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// 生成密码学安全的随机 nonce（字符集：URL-safe）
+  String _generateNonce([int length = 32]) {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(
+      length,
+      (_) => charset[random.nextInt(charset.length)],
+    ).join();
+  }
+
+  /// 对 nonce 取 SHA256（Apple 要求传入哈希后的 nonce）
+  String _sha256OfString(String input) {
+    final bytes = utf8.encode(input);
+    return sha256.convert(bytes).toString();
+  }
 
   /// Google 登录
   Future<UserCredential?> signInWithGoogle() async {

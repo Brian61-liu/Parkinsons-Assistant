@@ -12,9 +12,15 @@ import '../pages/privacy_policy_page.dart';
 import '../services/auth_service.dart';
 import '../services/avatar_service.dart';
 import '../services/database_service.dart';
+import '../services/home_dashboard_service.dart';
+import '../models/home_dashboard_snapshot.dart';
 import '../utils/gentle_page_route.dart';
+import '../pages/rehab_report_page.dart';
+import '../services/medication_reminder_service.dart';
+import 'medication_reminders_page.dart';
+import '../theme/app_colors.dart';
+import '../theme/app_spacing.dart';
 
-// 主页面
 class HomePage extends StatefulWidget {
   final Function(Locale) onLanguageChange;
   final Function(bool)? onGuestModeChanged;
@@ -33,52 +39,56 @@ class _HomePageState extends State<HomePage> {
   final AuthService _authService = AuthService();
   final AvatarService _avatarService = AvatarService();
   final DatabaseService _databaseService = DatabaseService();
+  final HomeDashboardService _dashboardService = HomeDashboardService();
+
   bool _isUploadingAvatar = false;
-  String? _localAvatarPath; // 本地头像路径
-  bool _isSyncing = false; // 是否正在同步
+  String? _localAvatarPath;
+  bool _isSyncing = false;
+
+  HomeDashboardSnapshot _snapshot = HomeDashboardSnapshot.empty;
+  bool _snapshotLoading = true;
 
   @override
   void initState() {
     super.initState();
     _loadLocalAvatar();
     _syncDataOnLogin();
+    _loadDashboard();
   }
 
-  /// 登录时自动同步数据（仅登录用户，游客模式不同步）
+  Future<void> _loadDashboard() async {
+    final snap = await _dashboardService.load();
+    if (mounted) {
+      setState(() {
+        _snapshot = snap;
+        _snapshotLoading = false;
+      });
+    }
+  }
+
   Future<void> _syncDataOnLogin() async {
     final user = FirebaseAuth.instance.currentUser;
-    // 游客模式通过 SharedPreferences 的 is_guest_mode 标识，此时 currentUser 为 null
-    // 只有真正登录的用户才会同步数据
     if (user != null) {
-      // 延迟一下，确保页面已加载
       Future.delayed(const Duration(seconds: 1), () async {
         await _syncData(showMessage: false);
       });
     }
   }
 
-  /// 同步数据（双向同步）
   Future<void> _syncData({bool showMessage = true}) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       if (showMessage && mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('请先登录以使用云端同步功能')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('请先登录以使用云端同步功能')),
+        );
       }
       return;
     }
-
     if (_isSyncing) return;
-
-    setState(() {
-      _isSyncing = true;
-    });
-
+    setState(() => _isSyncing = true);
     try {
-      // 双向同步：先拉取云端数据，再推送本地数据
       await _databaseService.syncFromCloud();
-
       if (showMessage && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -87,6 +97,7 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       }
+      await _loadDashboard();
     } catch (e) {
       if (showMessage && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -97,30 +108,22 @@ class _HomePageState extends State<HomePage> {
         );
       }
     } finally {
-      if (mounted) {
-        setState(() {
-          _isSyncing = false;
-        });
-      }
+      if (mounted) setState(() => _isSyncing = false);
     }
   }
 
-  /// 加载本地头像路径
   Future<void> _loadLocalAvatar() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       final path = await _avatarService.getLocalAvatarPath(user.uid);
-      if (mounted) {
-        setState(() {
-          _localAvatarPath = path;
-        });
-      }
+      if (mounted) setState(() => _localAvatarPath = path);
     }
   }
 
+  // ── 设置菜单 ─────────────────────────────────────────────
+
   void _showLanguageDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
     final languages = [
       {'code': 'ar', 'country': '', 'name': l10n.arabic},
       {'code': 'zh', 'country': '', 'name': l10n.chinese},
@@ -209,37 +212,29 @@ class _HomePageState extends State<HomePage> {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        // 已登录用户，执行登出
-        debugPrint('开始执行登出...');
         await _authService.signOut();
-        debugPrint('登出成功');
       } else {
-        // 游客模式，退出游客模式
-        debugPrint('退出游客模式...');
         widget.onGuestModeChanged?.call(false);
-        debugPrint('已退出游客模式');
       }
     } catch (e) {
-      debugPrint('退出失败: $e');
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('退出失败: $e')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('退出失败: $e')));
       }
     }
   }
 
   void _showLogoutDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final user = FirebaseAuth.instance.currentUser;
-    final isGuest = user == null;
-
+    final isGuest = FirebaseAuth.instance.currentUser == null;
     showCupertinoDialog(
       context: context,
       builder: (dialogContext) => CupertinoAlertDialog(
         title: Text(isGuest ? '退出游客模式' : l10n.logout),
         content: Text(
-          isGuest ? '确定要退出游客模式吗？退出后需要重新登录才能使用。' : l10n.logoutConfirm,
+          isGuest
+              ? '确定要退出游客模式吗？退出后需要重新登录才能使用。'
+              : l10n.logoutConfirm,
         ),
         actions: [
           CupertinoDialogAction(
@@ -251,9 +246,7 @@ class _HomePageState extends State<HomePage> {
           ),
           CupertinoDialogAction(
             isDestructiveAction: true,
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-            },
+            onPressed: () => Navigator.of(dialogContext).pop(),
             child: Text(l10n.cancel),
           ),
         ],
@@ -263,95 +256,112 @@ class _HomePageState extends State<HomePage> {
 
   void _showSettingsMenu(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (ctx) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 16),
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(2),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 16),
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              l10n.settings,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1E3A5F),
+              const SizedBox(height: 16),
+              Text(
+                l10n.settings,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1E3A5F),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            // 语言设置
-            _buildSettingsItem(
-              icon: CupertinoIcons.globe,
-              color: const Color(0xFF0EA5E9),
-              title: l10n.selectLanguage,
-              onTap: () {
-                Navigator.pop(ctx);
-                _showLanguageDialog(context);
-              },
-            ),
-            // 数据同步（仅登录用户）
-            if (FirebaseAuth.instance.currentUser != null)
+              const SizedBox(height: 8),
               _buildSettingsItem(
-                icon: CupertinoIcons.cloud_upload,
-                color: const Color(0xFF8B5CF6),
-                title: _isSyncing ? '同步中...' : '同步数据',
+                icon: CupertinoIcons.globe,
+                color: AppColors.primary,
+                title: l10n.selectLanguage,
                 onTap: () {
-                  if (!_isSyncing) {
-                    Navigator.pop(ctx);
-                    _syncData();
-                  }
+                  Navigator.pop(ctx);
+                  _showLanguageDialog(context);
                 },
               ),
-            // 数据管理
-            _buildSettingsItem(
-              icon: CupertinoIcons.shield_lefthalf_fill,
-              color: const Color(0xFF10B981),
-              title: l10n.dataManagement,
-              onTap: () {
-                Navigator.pop(ctx);
-                pushGentle(context, const DataManagementPage());
-              },
-            ),
-            // 隐私政策
-            _buildSettingsItem(
-              icon: CupertinoIcons.doc_text,
-              color: const Color(0xFF8B5CF6),
-              title: l10n.privacyPolicy,
-              onTap: () {
-                Navigator.pop(ctx);
-                pushGentle(context, const PrivacyPolicyPage());
-              },
-            ),
-            const Divider(height: 1),
-            // 退出登录/退出游客模式
-            _buildSettingsItem(
-              icon: CupertinoIcons.square_arrow_left,
-              color: Colors.red,
-              title: FirebaseAuth.instance.currentUser == null
-                  ? '退出游客模式'
-                  : l10n.logout,
-              onTap: () {
-                Navigator.pop(ctx);
-                _showLogoutDialog(context);
-              },
-              isDestructive: true,
-            ),
-            const SizedBox(height: 16),
-          ],
+              if (FirebaseAuth.instance.currentUser != null)
+                _buildSettingsItem(
+                  icon: CupertinoIcons.cloud_upload,
+                  color: const Color(0xFF8B5CF6),
+                  title: _isSyncing ? '同步中...' : '同步数据',
+                  onTap: () {
+                    if (!_isSyncing) {
+                      Navigator.pop(ctx);
+                      _syncData();
+                    }
+                  },
+                ),
+              if (_snapshot.medicationEnabled)
+                _buildSettingsItem(
+                  icon: Icons.medication_outlined,
+                  color: AppColors.warningAmber,
+                  title: l10n.medicationList,
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    pushGentle(context, const MedicationRemindersPage())
+                        .then((_) => _loadDashboard());
+                  },
+                ),
+              _buildSettingsItem(
+                icon: CupertinoIcons.chart_bar_alt_fill,
+                color: const Color(0xFF6366F1),
+                title: l10n.rehabReport,
+                onTap: () {
+                  Navigator.pop(ctx);
+                  pushGentle(context, const RehabReportPage());
+                },
+              ),
+              _buildSettingsItem(
+                icon: CupertinoIcons.shield_lefthalf_fill,
+                color: AppColors.successGreen,
+                title: l10n.dataManagement,
+                onTap: () {
+                  Navigator.pop(ctx);
+                  pushGentle(context, const DataManagementPage());
+                },
+              ),
+              _buildSettingsItem(
+                icon: CupertinoIcons.doc_text,
+                color: const Color(0xFF8B5CF6),
+                title: l10n.privacyPolicy,
+                onTap: () {
+                  Navigator.pop(ctx);
+                  pushGentle(context, const PrivacyPolicyPage());
+                },
+              ),
+              const Divider(height: 1),
+              _buildSettingsItem(
+                icon: CupertinoIcons.square_arrow_left,
+                color: Colors.red,
+                title: FirebaseAuth.instance.currentUser == null
+                    ? '退出游客模式'
+                    : l10n.logout,
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _showLogoutDialog(context);
+                },
+                isDestructive: true,
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );
@@ -365,6 +375,9 @@ class _HomePageState extends State<HomePage> {
     bool isDestructive = false,
   }) {
     return ListTile(
+      visualDensity: VisualDensity.compact,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+      minVerticalPadding: 8,
       leading: Container(
         width: 40,
         height: 40,
@@ -382,181 +395,73 @@ class _HomePageState extends State<HomePage> {
           color: isDestructive ? Colors.red : const Color(0xFF334155),
         ),
       ),
-      trailing: Icon(
-        CupertinoIcons.chevron_right,
-        color: Colors.grey[400],
-        size: 18,
-      ),
+      trailing: Icon(CupertinoIcons.chevron_right, color: Colors.grey[400], size: 18),
       onTap: onTap,
     );
   }
 
-  // 构建用户头像
-  Widget _buildUserAvatar(User user) {
-    final String displayName = user.displayName ?? 'User';
-    final String initials = _getInitials(displayName);
+  // ── 头像 ─────────────────────────────────────────────────
 
-    Widget avatarWidget;
+  Widget _buildAvatar(User user, double size) {
+    final initials = _getInitials(user.displayName ?? 'User');
+    Widget inner;
 
     if (_isUploadingAvatar) {
-      // 上传中状态
-      avatarWidget = Container(
-        width: 100,
-        height: 100,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF0EA5E9), Color(0xFF10B981)],
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF0EA5E9).withValues(alpha: 0.35),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.all(3),
-        child: Container(
-          width: 94,
-          height: 94,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-          ),
-          child: const Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 3,
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0EA5E9)),
-            ),
-          ),
-        ),
+      inner = const Center(
+        child: CircularProgressIndicator(strokeWidth: 2.5),
       );
     } else if (_localAvatarPath != null &&
         File(_localAvatarPath!).existsSync()) {
-      // 使用本地头像
-      avatarWidget = Container(
-        width: 100,
-        height: 100,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF0EA5E9), Color(0xFF10B981)],
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF0EA5E9).withValues(alpha: 0.35),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.all(3),
-        child: ClipOval(
-          child: Image.file(
-            File(_localAvatarPath!),
-            width: 94,
-            height: 94,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return _buildDefaultAvatarContent(initials);
-            },
-          ),
+      inner = ClipOval(
+        child: Image.file(
+          File(_localAvatarPath!),
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorBuilder: (_, e, s) => _initialsText(initials, size),
         ),
       );
     } else {
-      // 使用默认头像（显示首字母）
-      avatarWidget = _buildDefaultAvatar(initials);
+      inner = _initialsText(initials, size);
     }
 
-    // 添加点击功能和编辑图标
-    return GestureDetector(
-      onTap: _isUploadingAvatar ? null : () => _showChangeAvatarDialog(context),
-      child: Stack(
-        children: [
-          avatarWidget,
-          if (!_isUploadingAvatar)
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0EA5E9),
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.2),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  CupertinoIcons.camera_fill,
-                  color: Colors.white,
-                  size: 16,
-                ),
-              ),
+    return Tooltip(
+      message: '更换头像',
+      child: Semantics(
+        button: true,
+        label: '用户头像',
+        hint: _isUploadingAvatar ? '正在上传头像' : '双击更换头像',
+        child: GestureDetector(
+          onTap: _isUploadingAvatar
+              ? null
+              : () => _showChangeAvatarDialog(context),
+          child: Container(
+            width: size,
+            height: size,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.primaryLight,
             ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDefaultAvatar(String initials) {
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF0EA5E9), Color(0xFF10B981)],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF0EA5E9).withValues(alpha: 0.35),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+            child: inner,
           ),
-        ],
+        ),
       ),
-      child: _buildDefaultAvatarContent(initials),
     );
   }
 
-  Widget _buildDefaultAvatarContent(String initials) {
-    return Container(
-      width: 94,
-      height: 94,
-      margin: const EdgeInsets.all(3),
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white,
-      ),
-      child: Center(
+  Widget _initialsText(String initials, double avatarSize) => Center(
         child: Text(
           initials,
-          style: const TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF0EA5E9),
+          style: TextStyle(
+            fontSize: avatarSize * 0.38,
+            fontWeight: FontWeight.w700,
+            color: AppColors.primary,
           ),
         ),
-      ),
-    );
-  }
+      );
 
   String _getInitials(String name) {
-    final List<String> parts = name.trim().split(RegExp(r'\s+'));
+    final parts = name.trim().split(RegExp(r'\s+'));
     if (parts.isEmpty) return 'U';
     if (parts.length == 1) {
       return parts[0].isNotEmpty ? parts[0][0].toUpperCase() : 'U';
@@ -564,17 +469,8 @@ class _HomePageState extends State<HomePage> {
     return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
   }
 
-  String _getDisplayName(User user) {
-    if (user.displayName != null && user.displayName!.isNotEmpty) {
-      return user.displayName!;
-    }
-    return 'User';
-  }
-
-  /// 显示更改头像选项菜单
   void _showChangeAvatarDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
     showCupertinoModalPopup(
       context: context,
       builder: (ctx) => CupertinoActionSheet(
@@ -604,68 +500,118 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// 选择并保存头像到本地
   Future<void> _pickAndUploadAvatar(
     BuildContext context,
     ImageSource source,
   ) async {
     final l10n = AppLocalizations.of(context)!;
     final user = FirebaseAuth.instance.currentUser;
-
     if (user == null) return;
-
-    // 在 await 之前捕获 ScaffoldMessenger 引用
     final scaffoldMessenger = ScaffoldMessenger.of(context);
-
     try {
-      setState(() {
-        _isUploadingAvatar = true;
-      });
-
-      // 选择图片
+      setState(() => _isUploadingAvatar = true);
       final XFile? imageFile = await _avatarService.pickImage(source: source);
-
       if (imageFile == null) {
-        if (mounted) {
-          setState(() {
-            _isUploadingAvatar = false;
-          });
-        }
+        if (mounted) setState(() => _isUploadingAvatar = false);
         return;
       }
-
-      // 保存头像到本地
-      final File file = File(imageFile.path);
-      final String localPath = await _avatarService.uploadAvatar(file, user);
-
-      // 重置状态并更新本地路径
+      final file = File(imageFile.path);
+      final localPath = await _avatarService.uploadAvatar(file, user);
       if (mounted) {
         setState(() {
           _isUploadingAvatar = false;
           _localAvatarPath = localPath;
         });
-
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text(l10n.avatarUpdated),
-            backgroundColor: Colors.green,
-          ),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(
+          content: Text(l10n.avatarUpdated),
+          backgroundColor: Colors.green,
+        ));
       }
     } catch (e) {
       if (mounted) {
-        setState(() {
-          _isUploadingAvatar = false;
-        });
-
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('${l10n.avatarUpdateFailed}: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        setState(() => _isUploadingAvatar = false);
+        scaffoldMessenger.showSnackBar(SnackBar(
+          content: Text('${l10n.avatarUpdateFailed}: $e'),
+          backgroundColor: Colors.red,
+        ));
       }
     }
+  }
+
+  // ── 工具 ─────────────────────────────────────────────────
+
+  String _relativeTime(BuildContext context, DateTime dt) {
+    final l10n = AppLocalizations.of(context)!;
+    final now = DateTime.now();
+    final diff = now.difference(dt);
+    if (diff.inDays == 0) return l10n.relativeToday;
+    if (diff.inDays == 1) return l10n.relativeYesterday;
+    return l10n.relativeDaysAgo(diff.inDays);
+  }
+
+  String _formatDuration(BuildContext context, int? secs) {
+    final l10n = AppLocalizations.of(context)!;
+    if (secs == null) return '';
+    if (secs < 60) return l10n.durationSec(secs);
+    return l10n.durationMin(secs ~/ 60);
+  }
+
+  // ── BUILD ─────────────────────────────────────────────────
+
+  /// 根据可用高度计算紧凑布局参数，保证一屏内排下所有板块。
+  _HomeLayoutMetrics _layoutMetrics(double height) {
+    if (height < 620) {
+      return const _HomeLayoutMetrics(
+        sectionGap: 4,
+        headerTop: 8,
+        cardPadding: 10,
+        iconBgSize: 34,
+        iconSize: 18,
+        labelFontSize: 11,
+        bodyFontSize: 11,
+        appTitleSize: 24,
+        streakPaddingH: 10,
+        streakPaddingV: 6,
+        avatarSize: 40,
+        activityIconSize: 30,
+        gridFlex: 52,
+        activityFlex: 28,
+      );
+    }
+    if (height < 740) {
+      return const _HomeLayoutMetrics(
+        sectionGap: 6,
+        headerTop: 10,
+        cardPadding: 12,
+        iconBgSize: 38,
+        iconSize: 20,
+        labelFontSize: 12,
+        bodyFontSize: 11,
+        appTitleSize: 26,
+        streakPaddingH: 12,
+        streakPaddingV: 8,
+        avatarSize: 44,
+        activityIconSize: 32,
+        gridFlex: 54,
+        activityFlex: 30,
+      );
+    }
+    return const _HomeLayoutMetrics(
+      sectionGap: 8,
+      headerTop: 12,
+      cardPadding: 14,
+      iconBgSize: 42,
+      iconSize: 22,
+      labelFontSize: 13,
+      bodyFontSize: 12,
+      appTitleSize: 28,
+      streakPaddingH: 14,
+      streakPaddingV: 10,
+      avatarSize: 48,
+      activityIconSize: 34,
+      gridFlex: 56,
+      activityFlex: 32,
+    );
   }
 
   @override
@@ -674,233 +620,807 @@ class _HomePageState extends State<HomePage> {
     final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F9FF),
+      backgroundColor: AppColors.scaffoldBackground,
       body: SafeArea(
-        child: Column(
-          children: [
-            // 顶部导航栏
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final metrics = _layoutMetrics(constraints.maxHeight);
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.pageHorizontal,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Logo 和标题
-                  Expanded(
+                  // ── App Bar ──────────────────────────────
+                  Padding(
+                    padding: EdgeInsets.only(top: metrics.headerTop),
                     child: Row(
                       children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(
-                                  0xFF0EA5E9,
-                                ).withValues(alpha: 0.25),
-                                blurRadius: 8,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              'assets/icon/app_icon.png',
-                              fit: BoxFit.cover,
-                            ),
+                        Expanded(
+                          child: Text(
+                            l10n.appTitle,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge
+                                ?.copyWith(fontSize: metrics.appTitleSize),
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        Text(
-                          l10n.appTitle,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                            color: Color(0xFF1E3A5F),
+                        Tooltip(
+                          message: l10n.settings,
+                          child: Semantics(
+                            button: true,
+                            label: l10n.settings,
+                            hint: '打开设置菜单',
+                            child: InkWell(
+                              onTap: () => _showSettingsMenu(context),
+                              borderRadius: BorderRadius.circular(12),
+                              child: const SizedBox(
+                                width: AppSpacing.minTapTarget,
+                                height: AppSpacing.minTapTarget,
+                                child: Icon(
+                                  CupertinoIcons.gear,
+                                  color: AppColors.textSecondary,
+                                  size: 24,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  // 设置按钮
-                  Material(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    elevation: 2,
-                    shadowColor: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
-                    child: InkWell(
-                      onTap: () => _showSettingsMenu(context),
-                      borderRadius: BorderRadius.circular(12),
-                      child: const SizedBox(
-                        width: 48,
-                        height: 48,
-                        child: Icon(
-                          CupertinoIcons.gear,
-                          color: Color(0xFF0EA5E9),
-                          size: 24,
+
+                  SizedBox(height: metrics.sectionGap),
+
+                  // ── 头像行 + Streak ──────────────────────
+                  Row(
+                    children: [
+                      if (user != null) ...[
+                        _buildAvatar(user, metrics.avatarSize),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            user.displayName?.isNotEmpty == true
+                                ? user.displayName!
+                                : 'User',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: metrics.labelFontSize + 3,
+                                ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
+                      ] else
+                        const Spacer(),
+                      _buildStreakCard(context, l10n, metrics),
+                    ],
+                  ),
+
+                  SizedBox(height: metrics.sectionGap),
+
+                  // ── 2×2 卡片网格（占剩余高度的大头） ────────
+                  Expanded(
+                    flex: metrics.gridFlex,
+                    child: LayoutBuilder(
+                      builder: (context, gridConstraints) {
+                        final gap = AppSpacing.cardGap;
+                        final cellW =
+                            (gridConstraints.maxWidth - gap) / 2;
+                        final cellH =
+                            (gridConstraints.maxHeight - gap) / 2;
+                        final aspectRatio =
+                            cellW / cellH.clamp(1, double.infinity);
+
+                        return GridView.count(
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount: 2,
+                          mainAxisSpacing: gap,
+                          crossAxisSpacing: gap,
+                          childAspectRatio: aspectRatio,
+                          children: [
+                            _buildVoiceCard(context, l10n, metrics),
+                            _buildHandCard(context, l10n, metrics),
+                            _buildMotionCard(context, l10n, metrics),
+                            _buildMedicationCard(context, l10n, metrics),
+                          ],
+                        );
+                      },
                     ),
                   ),
+
+                  SizedBox(height: metrics.sectionGap),
+
+                  // ── 最近活动标题 ─────────────────────────
+                  Text(
+                    l10n.recentActivity,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontSize: metrics.labelFontSize + 2,
+                        ),
+                  ),
+
+                  SizedBox(height: metrics.sectionGap / 2),
+
+                  // ── 最近活动列表（填满剩余高度） ───────────
+                  Expanded(
+                    flex: metrics.activityFlex,
+                    child: _buildRecentActivityList(context, l10n, metrics),
+                  ),
+
+                  SizedBox(height: metrics.sectionGap),
                 ],
               ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  // ── Streak 小卡片 ────────────────────────────────────────
+
+  Widget _buildStreakCard(
+    BuildContext context,
+    AppLocalizations l10n,
+    _HomeLayoutMetrics metrics,
+  ) {
+    final days = _snapshot.trainingStreakDays;
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: metrics.streakPaddingH,
+        vertical: metrics.streakPaddingV,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: _cardShadow(),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: metrics.iconBgSize - 4,
+            height: metrics.iconBgSize - 4,
+            decoration: BoxDecoration(
+              color: AppColors.primaryLight,
+              borderRadius: BorderRadius.circular(10),
             ),
-
-            // 主内容区域
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 40),
-
-                    // 用户头像
-                    if (user != null) ...[
-                      _buildUserAvatar(user),
-                      const SizedBox(height: 20),
-                      Text(
-                        l10n.welcome(_getDisplayName(user)),
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF1E3A5F),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 40),
-                    ],
-
-                    // 功能选择提示
-                    Text(
-                      l10n.selectTraining,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFF64748B),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // 手部震颤测试按钮（副标题：点击开始测试）
-                    _buildFeatureButton(
-                      icon: CupertinoIcons.hand_raised,
-                      title: l10n.tremorTest,
-                      subtitle: l10n.clickToStartTest,
-                      color: const Color(0xFF0EA5E9),
-                      onTap: () {
-                        pushGentle(context, const TremorTestPage());
-                      },
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // 语音训练按钮（副标题：点击开始训练）
-                    _buildFeatureButton(
-                      icon: CupertinoIcons.mic_fill,
-                      title: l10n.voiceTraining,
-                      subtitle: l10n.clickToStartTraining,
-                      color: const Color(0xFF10B981),
-                      onTap: () {
-                        pushGentle(context, const VoiceTrainingPage());
-                      },
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // 肢体动作训练按钮（副标题：点击开始训练）
-                    _buildFeatureButton(
-                      icon: Icons.directions_run,
-                      title: l10n.movementTraining,
-                      subtitle: l10n.clickToStartTraining,
-                      color: const Color(0xFF8B5CF6),
-                      onTap: () {
-                        pushGentle(context, const MovementTrainingPage());
-                      },
-                    ),
-
-                    const SizedBox(height: 40),
-                  ],
+            child: Icon(
+              Icons.calendar_today_outlined,
+              size: metrics.iconSize - 2,
+              color: AppColors.primary,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l10n.trainingStreakLabel,
+                style: TextStyle(
+                  fontSize: metrics.bodyFontSize,
+                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
+              const SizedBox(height: 1),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    days == 0 ? '—' : '$days',
+                    style: TextStyle(
+                      fontSize: metrics.labelFontSize + 8,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  if (days > 0) ...[
+                    const SizedBox(width: 3),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: Text(
+                        l10n.trainingStreak(days),
+                        style: TextStyle(
+                          fontSize: metrics.bodyFontSize,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 2),
+                    Text('🔥', style: TextStyle(fontSize: metrics.iconSize - 4)),
+                  ],
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── 通用卡片骨架 ─────────────────────────────────────────
+
+  Widget _buildMetricCard({
+    required BuildContext context,
+    required String title,
+    required IconData icon,
+    required Color iconBgColor,
+    required VoidCallback onTap,
+    required Widget content,
+    required _HomeLayoutMetrics metrics,
+    bool showInfoButton = false,
+  }) {
+    return Semantics(
+      button: true,
+      label: title,
+      child: Material(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+              boxShadow: _cardShadow(),
             ),
-          ],
+            padding: EdgeInsets.all(metrics.cardPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: metrics.iconBgSize,
+                      height: metrics.iconBgSize,
+                      decoration: BoxDecoration(
+                        color: iconBgColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        icon,
+                        color: AppColors.primary,
+                        size: metrics.iconSize,
+                      ),
+                    ),
+                    const Spacer(),
+                    if (showInfoButton)
+                      ExcludeSemantics(
+                        child: GestureDetector(
+                          onTap: () => _showNonMedicalDisclaimer(context),
+                          child: Icon(
+                            Icons.info_outline,
+                            size: metrics.iconSize - 4,
+                            color: AppColors.textTertiary,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                SizedBox(height: metrics.sectionGap / 2 + 2),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: metrics.labelFontSize,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textSecondary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: metrics.sectionGap / 2),
+                Expanded(child: content),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildFeatureButton({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: color.withValues(alpha: 0.2),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
+  void _showNonMedicalDisclaimer(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    showCupertinoDialog(
+      context: context,
+      builder: (ctx) => CupertinoAlertDialog(
+        title: Text(l10n.nonMedicalDisclaimerTitle),
+        content: Text(l10n.nonMedicalDisclaimerBody),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.ok),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── 语音卡片 ─────────────────────────────────────────────
+
+  Widget _buildVoiceCard(
+    BuildContext context,
+    AppLocalizations l10n,
+    _HomeLayoutMetrics metrics,
+  ) {
+    final item = _snapshot.lastVoice;
+    return _buildMetricCard(
+      context: context,
+      title: l10n.voiceClarity,
+      icon: CupertinoIcons.mic_fill,
+      iconBgColor: AppColors.voiceIconBg,
+      metrics: metrics,
+      onTap: () => pushGentle(context, const VoiceTrainingPage())
+          .then((_) => _loadDashboard()),
+      content: _snapshotLoading
+          ? _loadingIndicator()
+          : item == null
+              ? _emptyState(l10n.noTrainingYet, l10n.tapToStart, metrics)
+              : _trainingInfo(
+                  context,
+                  metrics: metrics,
+                  topLine: l10n.lastTrainingAgo(
+                      _relativeTime(context, item.timestamp)),
+                  details: [
+                    _formatDuration(context, item.durationSeconds),
+                    l10n.voiceSessionCount,
+                  ].where((s) => s.isNotEmpty).join(' · '),
+                ),
+    );
+  }
+
+  Widget _buildHandCard(
+    BuildContext context,
+    AppLocalizations l10n,
+    _HomeLayoutMetrics metrics,
+  ) {
+    final item = _snapshot.lastHand;
+    return _buildMetricCard(
+      context: context,
+      title: l10n.handStability,
+      icon: CupertinoIcons.hand_raised_fill,
+      iconBgColor: AppColors.handIconBg,
+      metrics: metrics,
+      showInfoButton: true,
+      onTap: () => pushGentle(context, const TremorTestPage())
+          .then((_) => _loadDashboard()),
+      content: _snapshotLoading
+          ? _loadingIndicator()
+          : item == null
+              ? _emptyState(l10n.noMeasurementYet, l10n.tapToStart, metrics)
+              : _trainingInfo(
+                  context,
+                  metrics: metrics,
+                  topLine: l10n.lastMeasurementAgo(
+                      _relativeTime(context, item.timestamp)),
+                  details: [
+                    _formatDuration(context, item.durationSeconds),
+                    l10n.handMeasurementCount,
+                  ].where((s) => s.isNotEmpty).join(' · '),
+                ),
+    );
+  }
+
+  Widget _buildMotionCard(
+    BuildContext context,
+    AppLocalizations l10n,
+    _HomeLayoutMetrics metrics,
+  ) {
+    final item = _snapshot.lastMotion;
+    return _buildMetricCard(
+      context: context,
+      title: l10n.movementAbility,
+      icon: Icons.directions_walk,
+      iconBgColor: AppColors.motionIconBg,
+      metrics: metrics,
+      onTap: () => pushGentle(context, const MovementTrainingPage())
+          .then((_) => _loadDashboard()),
+      content: _snapshotLoading
+          ? _loadingIndicator()
+          : item == null
+              ? _emptyState(l10n.noTrainingYet, l10n.tapToStart, metrics)
+              : _trainingInfo(
+                  context,
+                  metrics: metrics,
+                  topLine: l10n.lastTrainingAgo(
+                      _relativeTime(context, item.timestamp)),
+                  details: [
+                    _formatDuration(context, item.durationSeconds),
+                    l10n.motionCompletionCount(
+                        item.successCount, item.targetCount),
+                  ].where((s) => s.isNotEmpty).join(' · '),
+                ),
+    );
+  }
+
+  Widget _buildMedicationCard(
+    BuildContext context,
+    AppLocalizations l10n,
+    _HomeLayoutMetrics metrics,
+  ) {
+    final enabled = _snapshot.medicationEnabled;
+    final nextTime = _snapshot.nextMedicationTime;
+
+    return _buildMetricCard(
+      context: context,
+      title: l10n.medicationReminder,
+      icon: Icons.medication_outlined,
+      iconBgColor: AppColors.medIconBg,
+      metrics: metrics,
+      onTap: () {
+        pushGentle(context, const MedicationRemindersPage())
+            .then((_) => _loadDashboard());
+      },
+      content: _snapshotLoading
+          ? _loadingIndicator()
+          : !enabled
+              ? _emptyState(
+                  l10n.medicationSetupPrompt,
+                  l10n.medicationSetupSubtitle,
+                  metrics,
+                )
+              : nextTime == null
+                  ? _emptyState(l10n.medicationNoUpcoming, '', metrics)
+                  : _medicationInfo(context, l10n, nextTime, metrics),
+    );
+  }
+
+  Widget _medicationInfo(
+    BuildContext context,
+    AppLocalizations l10n,
+    String timeHhmm,
+    _HomeLayoutMetrics metrics,
+  ) {
+    final (h, m) = MedicationReminderService.parseTime(timeHhmm);
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, h, m);
+    final isPast = dt.isBefore(now);
+
+    final formatted = TimeOfDay(hour: h, minute: m).format(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          l10n.medicationNextDoseLabel,
+          style: TextStyle(
+            fontSize: metrics.bodyFontSize,
+            color: AppColors.textTertiary,
+          ),
         ),
-        child: Row(
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(icon, color: color, size: 30),
+        const SizedBox(height: 2),
+        Text(
+          formatted,
+          style: TextStyle(
+            fontSize: metrics.labelFontSize + 6,
+            fontWeight: FontWeight.w700,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          decoration: BoxDecoration(
+            color: isPast
+                ? AppColors.warningAmberLight
+                : AppColors.successGreenLight,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Text(
+            isPast
+                ? l10n.medicationStatusPending
+                : l10n.medicationStatusUpcoming,
+            style: TextStyle(
+              fontSize: metrics.bodyFontSize,
+              fontWeight: FontWeight.w600,
+              color: isPast ? AppColors.warningAmber : AppColors.successGreen,
             ),
-            const SizedBox(width: 20),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _trainingInfo(
+    BuildContext context, {
+    required _HomeLayoutMetrics metrics,
+    required String topLine,
+    required String details,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          topLine,
+          style: TextStyle(
+            fontSize: metrics.labelFontSize,
+            fontWeight: FontWeight.w500,
+            color: AppColors.textPrimary,
+          ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        if (details.isNotEmpty) ...[
+          const SizedBox(height: 2),
+          Text(
+            details,
+            style: TextStyle(
+              fontSize: metrics.bodyFontSize,
+              color: AppColors.textSecondary,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _emptyState(
+    String title,
+    String subtitle,
+    _HomeLayoutMetrics metrics,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: metrics.labelFontSize,
+            fontWeight: FontWeight.w500,
+            color: AppColors.textPrimary,
+          ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        if (subtitle.isNotEmpty) ...[
+          const SizedBox(height: 2),
+          Text(
+            subtitle,
+            style: TextStyle(
+              fontSize: metrics.bodyFontSize,
+              color: AppColors.textTertiary,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _loadingIndicator() => const Center(
+        child: SizedBox(
+          width: 18,
+          height: 18,
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+      );
+
+  // ── 最近活动列表 ─────────────────────────────────────────
+
+  Widget _buildRecentActivityList(
+    BuildContext context,
+    AppLocalizations l10n,
+    _HomeLayoutMetrics metrics,
+  ) {
+    final items = _snapshot.recentActivities;
+
+    if (items.isEmpty) {
+      return Container(
+        decoration: BoxDecoration(
+          color: AppColors.cardBackground,
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          boxShadow: _cardShadow(),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          l10n.noTrainingYet,
+          style: TextStyle(
+            fontSize: metrics.bodyFontSize,
+            color: AppColors.textSecondary,
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        boxShadow: _cardShadow(),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          for (int i = 0; i < items.length; i++)
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E3A5F),
+                  Expanded(
+                    child: _buildActivityTile(
+                      context,
+                      l10n,
+                      items[i],
+                      metrics,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: TextStyle(fontSize: 14, color: Colors.grey[500]),
-                  ),
+                  if (i < items.length - 1)
+                    const Divider(
+                      height: 1,
+                      indent: 12,
+                      endIndent: 12,
+                      color: AppColors.borderLight,
+                    ),
                 ],
               ),
             ),
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                CupertinoIcons.arrow_right,
-                color: Colors.white,
-                size: 22,
-              ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActivityTile(
+    BuildContext context,
+    AppLocalizations l10n,
+    RecentActivityItem item,
+    _HomeLayoutMetrics metrics,
+  ) {
+    final String title;
+    final IconData icon;
+    final VoidCallback onTap;
+
+    switch (item.type) {
+      case ActivityType.voice:
+        title = l10n.voiceTraining;
+        icon = CupertinoIcons.mic_fill;
+        onTap = () => pushGentle(context, const VoiceTrainingPage())
+            .then((_) => _loadDashboard());
+      case ActivityType.hand:
+        title = l10n.tremorTest;
+        icon = CupertinoIcons.hand_raised_fill;
+        onTap = () => pushGentle(context, const TremorTestPage())
+            .then((_) => _loadDashboard());
+      case ActivityType.motion:
+        title = l10n.movementTraining;
+        icon = Icons.directions_walk;
+        onTap = () => pushGentle(context, const MovementTrainingPage())
+            .then((_) => _loadDashboard());
+    }
+
+    final timeLabel = _relativeTime(context, item.timestamp);
+    final durationLabel = _formatDuration(context, item.durationSeconds);
+
+    String detailLine = timeLabel;
+    if (durationLabel.isNotEmpty) detailLine += ' · $durationLabel';
+    if (item.type == ActivityType.motion &&
+        item.successCount != null &&
+        item.targetCount != null) {
+      detailLine +=
+          ' · ${l10n.motionCompletionCount(item.successCount!, item.targetCount!)}';
+    }
+    if (item.type == ActivityType.voice) {
+      detailLine += ' · ${l10n.voiceSessionCount}';
+    }
+
+    return Semantics(
+      button: true,
+      label: title,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                ExcludeSemantics(
+                  child: Container(
+                    width: metrics.activityIconSize,
+                    height: metrics.activityIconSize,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryLight,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      icon,
+                      color: AppColors.primary,
+                      size: metrics.iconSize - 4,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: metrics.labelFontSize + 1,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        detailLine,
+                        style: TextStyle(
+                          fontSize: metrics.bodyFontSize,
+                          color: AppColors.textSecondary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  CupertinoIcons.chevron_right,
+                  size: metrics.iconSize - 6,
+                  color: AppColors.textTertiary,
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
+
+  // ── 卡片阴影 ────────────────────────────────────────────
+
+  List<BoxShadow> _cardShadow() => [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.06),
+          blurRadius: 12,
+          offset: const Offset(0, 4),
+        ),
+      ];
+}
+
+/// 根据屏幕可用高度动态调整的布局参数，保证一屏内排下所有板块。
+class _HomeLayoutMetrics {
+  final double sectionGap;
+  final double headerTop;
+  final double cardPadding;
+  final double iconBgSize;
+  final double iconSize;
+  final double labelFontSize;
+  final double bodyFontSize;
+  final double appTitleSize;
+  final double streakPaddingH;
+  final double streakPaddingV;
+  final double avatarSize;
+  final double activityIconSize;
+  final int gridFlex;
+  final int activityFlex;
+
+  const _HomeLayoutMetrics({
+    required this.sectionGap,
+    required this.headerTop,
+    required this.cardPadding,
+    required this.iconBgSize,
+    required this.iconSize,
+    required this.labelFontSize,
+    required this.bodyFontSize,
+    required this.appTitleSize,
+    required this.streakPaddingH,
+    required this.streakPaddingV,
+    required this.avatarSize,
+    required this.activityIconSize,
+    required this.gridFlex,
+    required this.activityFlex,
+  });
 }

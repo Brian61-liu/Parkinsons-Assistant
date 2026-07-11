@@ -1,8 +1,12 @@
-import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../services/auth_service.dart';
+
 import '../l10n/app_localizations.dart';
+import '../services/auth_service.dart';
 import '../utils/gentle_page_route.dart';
 import 'privacy_policy_page.dart';
 
@@ -81,6 +85,69 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
           _showErrorDialog('登录失败，请重试');
         }
       }
+    }
+  }
+
+  Future<void> _signInWithApple() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final result = await _authService.signInWithApple().timeout(
+        const Duration(seconds: 60),
+        onTimeout: () {
+          throw Exception('timeout');
+        },
+      );
+      if (result != null && mounted) {
+        // 登录成功，Firebase 会自动跳转
+      } else if (mounted) {
+        // 用户取消了登录
+        setState(() => _isLoading = false);
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        final errorMessage = e.toString().toLowerCase();
+
+        // 用户取消登录，不显示错误
+        if (errorMessage.contains('cancel') ||
+            errorMessage.contains('canceled') ||
+            errorMessage.contains('取消')) {
+          return;
+        }
+
+        // 网络/超时问题
+        if (errorMessage.contains('timeout') ||
+            errorMessage.contains('network') ||
+            errorMessage.contains('connection') ||
+            errorMessage.contains('unreachable') ||
+            errorMessage.contains('failed host lookup')) {
+          _showErrorDialog('无法连接到 Apple 服务\n\n请确保：\n• 网络连接正常\n• 设备已登录 Apple ID');
+          return;
+        }
+
+        // 设备未登录 Apple ID 或不支持
+        if (errorMessage.contains('not handled') ||
+            errorMessage.contains('not supported') ||
+            errorMessage.contains('not available')) {
+          _showErrorDialog('Apple 登录不可用\n\n请在「设置 → Apple ID」中登录后重试。');
+          return;
+        }
+
+        _showErrorDialog('Apple 登录失败，请重试');
+      }
+    }
+  }
+
+  /// 仅在 iOS / macOS 显示 Apple 登录按钮。
+  /// Android / Web 上 sign_in_with_apple 需要走 Service ID + Web 重定向，
+  /// 配置成本较高且当前 P0 只要求满足 App Store 4.8 合规要求。
+  bool _isAppleSignInAvailable() {
+    if (kIsWeb) return false;
+    try {
+      return Platform.isIOS || Platform.isMacOS;
+    } catch (_) {
+      return false;
     }
   }
 
@@ -208,21 +275,29 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Material(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    elevation: 2,
-                    shadowColor: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
-                    child: InkWell(
-                      onTap: _onLanguageButtonPressed,
-                      borderRadius: BorderRadius.circular(12),
-                      child: const SizedBox(
-                        width: 48,
-                        height: 48,
-                        child: Icon(
-                          CupertinoIcons.globe,
-                          color: Color(0xFF0EA5E9),
-                          size: 24,
+                  Tooltip(
+                    message: l10n.selectLanguage,
+                    child: Semantics(
+                      button: true,
+                      label: l10n.selectLanguage,
+                      hint: '打开语言选择',
+                      child: Material(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        elevation: 2,
+                        shadowColor: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
+                        child: InkWell(
+                          onTap: _onLanguageButtonPressed,
+                          borderRadius: BorderRadius.circular(12),
+                          child: const SizedBox(
+                            width: 48,
+                            height: 48,
+                            child: Icon(
+                              CupertinoIcons.globe,
+                              color: Color(0xFF0EA5E9),
+                              size: 24,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -266,7 +341,11 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                     SizedBox(
                                       width: 376,
                                       height: 126,
-                                      child: ElevatedButton(
+                                      child: Semantics(
+                                        button: true,
+                                        label: l10n.signInWithGoogle,
+                                        hint: '使用 Google 账号登录',
+                                        child: ElevatedButton(
                                         onPressed: _isLoading ? null : _signInWithGoogle,
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.white,
@@ -324,46 +403,79 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                                   ),
                                                 ],
                                               ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 43),
-                                    SizedBox(
-                                      width: 376,
-                                      height: 126,
-                                      child: OutlinedButton.icon(
-                                        onPressed: null,
-                                        style: OutlinedButton.styleFrom(
-                                          backgroundColor: Colors.white,
-                                          disabledForegroundColor: const Color(0xFF334155),
-                                          disabledBackgroundColor: Colors.white,
-                                          side: BorderSide(
-                                            color: const Color(0xFF64748B).withValues(alpha: 0.3),
-                                            width: 1.5,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(60),
-                                          ),
-                                        ),
-                                        icon: const Icon(
-                                          Icons.apple,
-                                          size: 24,
-                                          color: Color(0xFF334155),
-                                        ),
-                                        label: const Text(
-                                          'Apple 登录',
-                                          style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color(0xFF334155),
-                                          ),
                                         ),
                                       ),
                                     ),
                                     const SizedBox(height: 43),
+                                    if (_isAppleSignInAvailable()) ...[
+                                      SizedBox(
+                                        width: 376,
+                                        height: 126,
+                                        child: Semantics(
+                                          button: true,
+                                          label: l10n.signInWithApple,
+                                          hint: '使用 Apple 账号登录',
+                                          child: ElevatedButton(
+                                          onPressed: _isLoading ? null : _signInWithApple,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.black,
+                                            foregroundColor: Colors.white,
+                                            disabledBackgroundColor: Colors.black54,
+                                            disabledForegroundColor: Colors.white70,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(60),
+                                            ),
+                                            elevation: 2,
+                                            shadowColor: Colors.black.withValues(alpha: 0.3),
+                                          ),
+                                          child: _isLoading
+                                              ? Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: const [
+                                                    SizedBox(
+                                                      width: 20,
+                                                      height: 20,
+                                                      child: CircularProgressIndicator(
+                                                        strokeWidth: 2.5,
+                                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                                          Colors.white70,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                              : Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.apple,
+                                                      size: 28,
+                                                      color: Colors.white,
+                                                    ),
+                                                    const SizedBox(width: 12),
+                                                    Text(
+                                                      l10n.signInWithApple,
+                                                      style: const TextStyle(
+                                                        fontSize: 24,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 43),
+                                    ],
                                     SizedBox(
                                       width: 376,
                                       height: 126,
-                                      child: OutlinedButton(
+                                      child: Semantics(
+                                        button: true,
+                                        label: l10n.continueAsGuest,
+                                        hint: '以游客模式继续',
+                                        child: OutlinedButton(
                                         onPressed: widget.onGuestLogin,
                                         style: OutlinedButton.styleFrom(
                                           foregroundColor: const Color(0xFF64748B),
@@ -381,6 +493,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                             fontSize: 24,
                                             fontWeight: FontWeight.w600,
                                           ),
+                                        ),
                                         ),
                                       ),
                                     ),

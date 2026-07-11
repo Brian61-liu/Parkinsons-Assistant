@@ -1,13 +1,13 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 
 /// 简易语音/可访问性提示服务。
 ///
-/// 当前为模拟实现：
-/// - 通过 [debugPrint] 输出语音提示文案，方便联调与日志追踪
+/// 当前实现：
+/// - 通过系统语义播报接口触发读屏提示（VoiceOver/TalkBack）
+/// - 保留 [debugPrint] 便于联调与日志追踪
 /// - 通过系统 [HapticFeedback] 提供触觉反馈
-///
-/// 未来可替换为 flutter_tts 等真实语音合成实现。
 class VoiceAssistService {
   /// 是否启用语音提示（由 UserSettings 控制）
   bool enabled;
@@ -18,6 +18,12 @@ class VoiceAssistService {
   /// 朗读文本（模拟）。
   void speak(String message) {
     if (!enabled) return;
+    try {
+      // ignore: deprecated_member_use
+      SemanticsService.announce(message, TextDirection.ltr);
+    } catch (_) {
+      // 某些环境可能不支持 announce，降级为日志输出
+    }
     debugPrint('[VoiceAssist] $message');
     onSpeak?.call(message);
   }

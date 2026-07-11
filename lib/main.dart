@@ -6,7 +6,7 @@ import 'utils/gentle_page_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
-import 'pages/home_page.dart';
+import 'pages/main_shell.dart';
 import 'pages/login_page.dart';
 import 'pages/loading_screen.dart';
 import 'services/user_settings_service.dart';
@@ -200,9 +200,9 @@ class _AuthStateCheckerState extends State<AuthGate> {
 
   @override
   Widget build(BuildContext context) {
-    // 如果是游客模式，直接显示主页
+    // 如果是游客模式，直接显示主 shell
     if (_isGuestMode) {
-      return HomePage(
+      return MainShell(
         onLanguageChange: widget.onLanguageChange,
         onGuestModeChanged: _setGuestMode,
       );
@@ -219,9 +219,9 @@ class _AuthStateCheckerState extends State<AuthGate> {
           );
         }
 
-        // 已登录 -> 显示主页
+        // 已登录 -> 显示主 shell
         if (snapshot.hasData) {
-          return HomePage(
+          return MainShell(
             onLanguageChange: widget.onLanguageChange,
             onGuestModeChanged: _setGuestMode,
           );
