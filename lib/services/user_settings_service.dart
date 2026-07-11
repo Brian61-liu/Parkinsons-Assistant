@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user_settings.dart';
+import '../theme/app_theme.dart';
 
 /// 无障碍设置状态管理（基于 ChangeNotifier，配合 provider 使用）。
 ///
@@ -106,19 +107,6 @@ class UserSettingsService extends ChangeNotifier {
       );
     }
 
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-      textTheme: const TextTheme(
-        displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-        displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-        displaySmall: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        headlineLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-        headlineMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-        bodyLarge: TextStyle(fontSize: 18),
-        bodyMedium: TextStyle(fontSize: 16),
-      ),
-    );
+    return AppTheme.light;
   }
 }
