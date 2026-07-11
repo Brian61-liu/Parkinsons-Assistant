@@ -41,6 +41,7 @@ dependencies:
   firebase_core: ^3.8.1
   firebase_auth: ^5.3.4
   google_sign_in: ^6.2.2
+  sign_in_with_apple: ^7.0.1  # Sign in with Apple（App Store 4.8 合规要求）
   cloud_firestore: ^5.6.0  # 云端数据存储
 
   # 传感器相关
