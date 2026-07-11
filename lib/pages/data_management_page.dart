@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
+import '../services/medication_reminder_service.dart';
 
 /// 数据管理页面
 /// GDPR 合规：数据可携带权、数据删除权
@@ -19,8 +20,10 @@ class DataManagementPage extends StatefulWidget {
 class _DataManagementPageState extends State<DataManagementPage> {
   final AuthService _authService = AuthService();
   final DatabaseService _databaseService = DatabaseService();
+  final MedicationReminderService _medicationService = MedicationReminderService();
   bool _isExporting = false;
   bool _isDeletingRecords = false;
+  bool _isDeletingMedication = false;
   bool _isDeletingAccount = false;
 
   // 操作超时时间（秒）
@@ -106,6 +109,52 @@ class _DataManagementPageState extends State<DataManagementPage> {
     } finally {
       if (mounted) {
         setState(() => _isDeletingRecords = false);
+      }
+    }
+  }
+
+  Future<void> _deleteMedicationData() async {
+    final l10n = AppLocalizations.of(context)!;
+
+    final confirmed = await showCupertinoDialog<bool>(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(l10n.medicationDeleteAllData),
+        content: Text(l10n.medicationDeleteAllDataConfirm),
+        actions: [
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.delete),
+          ),
+          CupertinoDialogAction(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    setState(() => _isDeletingMedication = true);
+
+    try {
+      await _medicationService.deleteAllMedicationData();
+      await _medicationService.disableFeature(deleteAllData: false);
+      if (mounted) {
+        _showSuccessDialog(
+          l10n.deleteSuccess,
+          l10n.medicationDeleteSuccess,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        _showErrorDialog(l10n.error, e.toString());
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isDeletingMedication = false);
       }
     }
   }
@@ -323,6 +372,19 @@ class _DataManagementPageState extends State<DataManagementPage> {
                 isDestructive: true,
                 isLoading: _isDeletingRecords,
                 onPressed: _isDeletingRecords ? null : _deleteAllRecords,
+              ),
+
+              const SizedBox(height: 16),
+
+              _buildActionCard(
+                icon: Icons.medication_outlined,
+                iconColor: const Color(0xFFF59E0B),
+                title: l10n.medicationDeleteAllData,
+                description: l10n.medicationDeleteAllDataDescription,
+                buttonText: l10n.delete,
+                isDestructive: true,
+                isLoading: _isDeletingMedication,
+                onPressed: _isDeletingMedication ? null : _deleteMedicationData,
               ),
 
               const SizedBox(height: 16),
