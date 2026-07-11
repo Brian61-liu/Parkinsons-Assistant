@@ -5,6 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import '../l10n/app_localizations.dart';
 import '../services/sensor_service.dart';
 import '../services/database_service.dart';
+import '../services/training_score_service.dart';
 import '../models/tremor_record.dart';
 import '../utils/constants.dart';
 
@@ -128,6 +129,11 @@ class _TremorTestPageState extends State<TremorTestPage> {
       );
 
       await _databaseService.insertTremorRecord(record);
+      await TrainingScoreService().recordHandFromTremor(
+        averageAmplitude: avgAmplitude,
+        maxAmplitude: maxAmplitude,
+        durationSeconds: AppConstants.tremorTestDuration,
+      );
 
       if (mounted) {
         setState(() {
@@ -353,17 +359,25 @@ class _TremorTestPageState extends State<TremorTestPage> {
               // 顶部导航
               Row(
                 children: [
-                  GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [BoxShadow(color: _primaryColor.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 2))],
+                  Tooltip(
+                    message: '返回',
+                    child: Semantics(
+                      button: true,
+                      label: '返回',
+                      hint: '返回上一页',
+                      child: GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [BoxShadow(color: _primaryColor.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 2))],
+                          ),
+                          child: const Icon(CupertinoIcons.back, color: _primaryColor, size: 22),
+                        ),
                       ),
-                      child: const Icon(CupertinoIcons.back, color: _primaryColor, size: 22),
                     ),
                   ),
                   const SizedBox(width: 14),
@@ -371,17 +385,25 @@ class _TremorTestPageState extends State<TremorTestPage> {
                     child: Text(l10n.tremorTestTitle, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: _textPrimary)),
                   ),
                   // 历史记录按钮
-                  GestureDetector(
-                    onTap: () => _showHistorySheet(context),
-                    child: Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [BoxShadow(color: _primaryColor.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 2))],
+                  Tooltip(
+                    message: l10n.testHistory,
+                    child: Semantics(
+                      button: true,
+                      label: l10n.testHistory,
+                      hint: '打开测试历史',
+                      child: GestureDetector(
+                        onTap: () => _showHistorySheet(context),
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [BoxShadow(color: _primaryColor.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 2))],
+                          ),
+                          child: const Icon(CupertinoIcons.clock, color: _primaryColor, size: 22),
+                        ),
                       ),
-                      child: const Icon(CupertinoIcons.clock, color: _primaryColor, size: 22),
                     ),
                   ),
                 ],
@@ -770,15 +792,27 @@ class _TremorTestPageState extends State<TremorTestPage> {
             ),
             const SizedBox(height: 12),
             // 删除按钮
-            GestureDetector(
-              onTap: () => _confirmDeleteRecord(context, record, l10n),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(CupertinoIcons.delete, size: 16, color: Colors.red[400]),
-                  const SizedBox(width: 4),
-                  Text(l10n.deleteRecord, style: TextStyle(fontSize: 12, color: Colors.red[400])),
-                ],
+            Align(
+              alignment: Alignment.centerRight,
+              child: Semantics(
+                button: true,
+                label: l10n.deleteRecord,
+                hint: '删除当前测试记录',
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                  child: TextButton.icon(
+                    onPressed: () => _confirmDeleteRecord(context, record, l10n),
+                    icon: Icon(CupertinoIcons.delete, size: 18, color: Colors.red[400]),
+                    label: Text(
+                      l10n.deleteRecord,
+                      style: TextStyle(fontSize: 13, color: Colors.red[400]),
+                    ),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.red[400],
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

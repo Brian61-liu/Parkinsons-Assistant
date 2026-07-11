@@ -4,7 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:noise_meter/noise_meter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
+import '../services/user_settings_service.dart';
+import '../services/voice_assist_service.dart';
+import '../services/training_score_service.dart';
+
+/// 语音训练的四个阶段：
+/// 准备 → 校准环境噪音（自动） → 练习中 → 完成总结
+enum _Stage { preparation, calibrating, practicing, completed }
 
 class VoiceTrainingPage extends StatefulWidget {
   const VoiceTrainingPage({super.key});
@@ -19,6 +27,8 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
   bool _isListening = false;
   bool _hasPermission = false;
 
+  _Stage _stage = _Stage.preparation;
+
   // 新的阈值设置（基于手机距离嘴巴 30-50cm）
   static const double _veryLowThreshold = 60.0; // < 60 dB：过低/橙色
   static const double _lowThreshold = 65.0; // 60-65 dB：过低/橙色
@@ -27,10 +37,14 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
   static const double _targetMax = 90.0;
 
   // 目标参照圈的半径（固定大小，代表目标值）
-  static const double _targetRingRadius = 140.0; // 目标圆环半径
+  static const double _targetRingRadius = 120.0;
+
+  // 推荐练习时长（仅用于展示进度，不会强制停止）
+  static const int _recommendedDurationSeconds = 15;
 
   // 性能优化：节流更新，避免过于频繁的 UI 刷新
   Timer? _updateTimer;
+  Timer? _secondTicker; // 每秒刷新一次已练习时长 / 倒计时展示
   double _displayedDb = 0.0; // 显示的平滑分贝值
   double _targetRadius = 80.0; // 目标半径
   double _minDb = double.infinity; // 记录检测到的最小分贝值（用于计算比例）
@@ -45,13 +59,29 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
     milliseconds: 200,
   ); // 更新间隔：200ms（提高响应速度）
 
+  VoiceAssistService _voiceAssist() {
+    final enabled = context.read<UserSettingsService>().voiceHints;
+    return VoiceAssistService(enabled: enabled);
+  }
+
   // 基线校准相关
   double _baselineDb = 0.0; // 环境噪音基线（校准值）
   bool _isCalibrating = false; // 是否正在校准
   final List<double> _calibrationSamples = []; // 校准样本
-  static const int _calibrationSampleCount = 10; // 校准样本数量（约3秒，300ms * 10）
+  static const int _calibrationSampleCount = 10; // 校准样本数量（约2秒，200ms * 10）
   static const double _minEffectiveVolumeDiff =
       8.0; // 最小有效音量差值（超过基线8dB才认为是有效声音）
+
+  final List<double> _sessionRawSamples = [];
+  DateTime? _sessionStartedAt;
+
+  // 本次练习在目标区内累计的秒数（用于完成总结）
+  double _targetZoneAccumSeconds = 0.0;
+  bool _showDbDetail = false;
+
+  // 上一次已完成练习的总结数据
+  int? _lastSessionDurationSeconds;
+  int? _lastSessionTargetSeconds;
 
   @override
   void initState() {
@@ -61,7 +91,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
 
   @override
   void dispose() {
-    _updateTimer?.cancel();
+    // 若用户在练习中直接返回，仍尝试保存本次记录（内部已做 mounted 保护）。
     _stopListening();
     super.dispose();
   }
@@ -69,14 +99,8 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
   /// 检查麦克风权限
   Future<void> _checkMicrophonePermission() async {
     final status = await Permission.microphone.status;
-    if (status.isGranted) {
-      setState(() {
-        _hasPermission = true;
-      });
-    } else {
-      setState(() {
-        _hasPermission = false;
-      });
+    if (mounted) {
+      setState(() => _hasPermission = status.isGranted);
     }
   }
 
@@ -127,15 +151,19 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
     }
   }
 
-  /// 开始监听（包含基线校准）
-  Future<void> _startListening() async {
+  /// 用户点击「开始练习」：先切到校准阶段，再启动麦克风监听。
+  Future<void> _beginPractice() async {
     if (!_hasPermission) {
       await _requestMicrophonePermission();
-      if (!_hasPermission) {
-        return;
-      }
+      if (!_hasPermission) return;
     }
+    setState(() => _stage = _Stage.calibrating);
+    _voiceAssist().speak('开始语音训练');
+    await _startListening();
+  }
 
+  /// 开始监听（包含基线校准）
+  Future<void> _startListening() async {
     try {
       // 重置校准数据
       _calibrationSamples.clear();
@@ -151,9 +179,11 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
         onError: (error) {
           if (mounted) {
             _updateTimer?.cancel();
+            _secondTicker?.cancel();
             setState(() {
               _isListening = false;
               _isCalibrating = false;
+              _stage = _Stage.preparation;
             });
             final l10n = AppLocalizations.of(context)!;
             ScaffoldMessenger.of(context).showSnackBar(
@@ -196,6 +226,8 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
               _baselineDb = sum / (end - start);
 
               // 校准完成，开始正常监听
+              _sessionRawSamples.clear();
+              _sessionStartedAt = DateTime.now();
               setState(() {
                 _isCalibrating = false;
                 _isListening = true;
@@ -204,13 +236,25 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
                 _minDb = double.infinity;
                 _maxDb = 0.0;
                 _wasInTargetZone = false;
+                _targetZoneAccumSeconds = 0.0;
+                _showDbDetail = false;
+                _stage = _Stage.practicing;
               });
+
+              _secondTicker?.cancel();
+              _secondTicker = Timer.periodic(const Duration(seconds: 1), (_) {
+                if (mounted) setState(() {});
+              });
+            } else {
+              // 刷新校准倒计时显示
+              setState(() {});
             }
-            return; // 校准阶段不更新UI
+            return; // 校准阶段不更新UI其余部分
           }
 
           // 正常监听阶段：计算有效音量（减去基线）
           if (_isListening) {
+            _sessionRawSamples.add(rawDb);
             // 计算有效音量差值 = 原始音量 - 基线
             final effectiveDbDiff = rawDb - _baselineDb;
 
@@ -238,9 +282,14 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
                 effectiveDbDiff >= _minEffectiveVolumeDiff &&
                 rawDb >= _targetMin &&
                 rawDb <= _targetMax;
+            if (isInTargetZone) {
+              _targetZoneAccumSeconds +=
+                  _updateInterval.inMilliseconds / 1000.0;
+            }
             if (isInTargetZone && !_wasInTargetZone) {
               // 刚进入目标区，触发震动反馈
               HapticFeedback.mediumImpact();
+              _voiceAssist().speak('当前音量达标，请继续保持');
             }
             _wasInTargetZone = isInTargetZone;
 
@@ -271,9 +320,11 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
         _maxDb = 0.0;
         _wasInTargetZone = false;
       });
+      _voiceAssist().speak('正在校准环境噪音，请稍候');
     } catch (e) {
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
+        setState(() => _stage = _Stage.preparation);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('${l10n.microphoneError}: $e'),
@@ -284,25 +335,76 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
     }
   }
 
-  /// 停止监听
-  void _stopListening() {
+  /// 停止监听：保存记录（若有效），并切换到对应阶段。
+  Future<void> _stopListening() async {
+    final wasPracticing = _stage == _Stage.practicing;
+    final baseline = _baselineDb;
+    final samples = List<double>.from(_sessionRawSamples);
+    final startedAt = _sessionStartedAt;
+    final targetZoneSeconds = _targetZoneAccumSeconds;
+
     _updateTimer?.cancel();
     _updateTimer = null;
+    _secondTicker?.cancel();
+    _secondTicker = null;
     _noiseSubscription?.cancel();
     _noiseSubscription = null;
-    setState(() {
-      _isListening = false;
-      _isCalibrating = false;
-      _latestReading = null;
-      _displayedDb = 0.0;
-      _targetRadius = 80.0;
-      _minDb = double.infinity;
-      _maxDb = 0.0;
-      _wasInTargetZone = false;
-      _baselineDb = 0.0;
-      _calibrationSamples.clear();
-    });
+
+    final hadValidSession =
+        baseline > 0 && samples.length >= 12 && startedAt != null;
+    final sessionDuration = startedAt != null
+        ? DateTime.now().difference(startedAt).inSeconds
+        : 0;
+
+    if (mounted) {
+      setState(() {
+        _isListening = false;
+        _isCalibrating = false;
+        _latestReading = null;
+        _displayedDb = 0.0;
+        _targetRadius = 80.0;
+        _minDb = double.infinity;
+        _maxDb = 0.0;
+        _wasInTargetZone = false;
+        _baselineDb = 0.0;
+        _calibrationSamples.clear();
+        _sessionRawSamples.clear();
+        _sessionStartedAt = null;
+        _targetZoneAccumSeconds = 0.0;
+        _showDbDetail = false;
+
+        if (hadValidSession) {
+          _lastSessionDurationSeconds = sessionDuration > 0
+              ? sessionDuration
+              : 1;
+          _lastSessionTargetSeconds = targetZoneSeconds.round();
+          _stage = _Stage.completed;
+        } else {
+          _stage = _Stage.preparation;
+        }
+      });
+
+      _voiceAssist().speak('语音训练已停止');
+
+      if (!hadValidSession && wasPracticing) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.voiceSessionTooShort),
+          ),
+        );
+      }
+    }
+
+    if (hadValidSession) {
+      await TrainingScoreService().recordVoiceSession(
+        baselineDb: baseline,
+        rawDbSamples: samples,
+        durationSeconds: sessionDuration > 0 ? sessionDuration : 1,
+      );
+    }
   }
+
+  // ── 计算辅助 ─────────────────────────────────────────────
 
   /// 获取当前分贝值（使用平滑后的值）
   double _getCurrentDb() {
@@ -421,7 +523,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
   /// 获取提示语
   String _getFeedbackMessage() {
     if (!_isListening || _latestReading == null) {
-      return ''; // 返回空字符串，由 build 方法处理
+      return '';
     }
 
     final level = _getVolumeLevel();
@@ -461,6 +563,28 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
     }
   }
 
+  /// 校准阶段剩余秒数（用于倒计时展示）
+  int _calibrationRemainingSeconds() {
+    final remainingSamples = (_calibrationSampleCount -
+            _calibrationSamples.length)
+        .clamp(0, _calibrationSampleCount);
+    final ms = remainingSamples * _updateInterval.inMilliseconds;
+    return (ms / 1000).ceil();
+  }
+
+  /// 本次练习已进行的秒数
+  int _elapsedSeconds() {
+    if (_sessionStartedAt == null) return 0;
+    return DateTime.now().difference(_sessionStartedAt!).inSeconds;
+  }
+
+  String _formatSeconds(AppLocalizations l10n, int seconds) {
+    if (seconds < 60) return l10n.durationSec(seconds);
+    return l10n.durationMin(seconds ~/ 60);
+  }
+
+  // ── BUILD ─────────────────────────────────────────────────
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -485,155 +609,534 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            // 主指令标题（醒目的大号标题）
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24.0, 32.0, 24.0, 16.0),
-              child: Text(
-                l10n.voiceTrainingMainInstruction,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1E3A5F),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          child: switch (_stage) {
+            _Stage.preparation => _buildPreparationStage(context, l10n),
+            _Stage.calibrating => _buildCalibratingStage(context, l10n),
+            _Stage.practicing => _buildPracticingStage(context, l10n),
+            _Stage.completed => _buildCompletedStage(context, l10n),
+          },
+        ),
+      ),
+    );
+  }
 
-            // 中央圆形可视化区域
-            Expanded(
-              child: Center(
-                child: Column(
+  // ── 阶段 1：准备 ─────────────────────────────────────────
+
+  Widget _buildPreparationStage(BuildContext context, AppLocalizations l10n) {
+    return Column(
+      key: const ValueKey(_Stage.preparation),
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 28),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 16),
+                Container(
+                  width: 132,
+                  height: 132,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _moduleColor.withValues(alpha: 0.12),
+                  ),
+                  child: const Icon(
+                    CupertinoIcons.mic_fill,
+                    size: 60,
+                    color: _moduleColor,
+                  ),
+                ),
+                const SizedBox(height: 28),
+                Text(
+                  l10n.voiceTrainingMainInstruction,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1E3A5F),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                _buildHintRow(
+                  icon: CupertinoIcons.person_crop_circle,
+                  text: l10n.voicePrepHint,
+                ),
+                const SizedBox(height: 12),
+                _buildHintRow(
+                  icon: CupertinoIcons.timer,
+                  text: l10n.voicePrepDurationHint(
+                    _recommendedDurationSeconds,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _buildHintRow(
+                  icon: CupertinoIcons.volume_off,
+                  text: l10n.voicePrepEnvironmentHint,
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        ),
+        _buildPrimaryButton(
+          label: l10n.startListening,
+          color: _moduleColor,
+          onPressed: _beginPractice,
+          semanticsHint: '开始准备并校准环境噪音',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHintRow({required IconData icon, required String text}) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 20, color: _moduleColor),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(fontSize: 15, color: Color(0xFF475569)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ── 阶段 2：校准环境噪音 ──────────────────────────────────
+
+  Widget _buildCalibratingStage(BuildContext context, AppLocalizations l10n) {
+    final remaining = _calibrationRemainingSeconds();
+    return Column(
+      key: const ValueKey(_Stage.calibrating),
+      children: [
+        Expanded(
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 120,
+                  height: 120,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      const SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 4,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            _moduleColorSoft,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '$remaining',
+                        style: const TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1E3A5F),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 28),
+                Text(
+                  l10n.voiceCalibratingCountdown(remaining),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF64748B),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TextButton(
+            onPressed: _stopListening,
+            child: Text(l10n.cancel),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ── 阶段 3：练习中 ────────────────────────────────────────
+
+  Widget _buildPracticingStage(BuildContext context, AppLocalizations l10n) {
+    final elapsed = _elapsedSeconds();
+    final targetReached = elapsed >= _recommendedDurationSeconds;
+
+    return Column(
+      key: const ValueKey(_Stage.practicing),
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+          child: Row(
+            children: [
+              _buildChip(
+                icon: CupertinoIcons.timer,
+                label: l10n.voiceElapsedLabel(elapsed),
+              ),
+              const Spacer(),
+              _buildChip(
+                icon: targetReached
+                    ? CupertinoIcons.checkmark_alt_circle_fill
+                    : CupertinoIcons.flag_fill,
+                label: l10n.voiceTargetDurationChip(
+                  _recommendedDurationSeconds,
+                ),
+                highlighted: targetReached,
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RepaintBoundary(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        width: _targetRingRadius * 2,
+                        height: _targetRingRadius * 2,
+                        child: CustomPaint(painter: _DashedCirclePainter()),
+                      ),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        curve: Curves.easeOut,
+                        width: _getCircleRadius() * 2,
+                        height: _getCircleRadius() * 2,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _getCircleColor(),
+                        ),
+                        child: _isInTargetZone()
+                            ? const Center(
+                                child: Text(
+                                  '👍',
+                                  style: TextStyle(fontSize: 44),
+                                ),
+                              )
+                            : null,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // 目标参照圈 + 动态圆形的组合
-                    RepaintBoundary(
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          // 目标参照圈（虚线圆环，固定大小）
-                          SizedBox(
-                            width: _targetRingRadius * 2,
-                            height: _targetRingRadius * 2,
-                            child: CustomPaint(painter: _DashedCirclePainter()),
-                          ),
-                          // 动态圆形（使用AnimatedContainer实现平滑动画）
-                          AnimatedContainer(
-                            duration: const Duration(
-                              milliseconds: 150,
-                            ), // 缩短动画时长，减少卡顿
-                            curve: Curves.easeOut,
-                            width: _getCircleRadius() * 2,
-                            height: _getCircleRadius() * 2,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _getCircleColor(),
-                            ),
-                            child: _isInTargetZone()
-                                ? Center(
-                                    child: Text(
-                                      '👍',
-                                      style: const TextStyle(fontSize: 48),
-                                    ),
-                                  )
-                                : null,
-                          ),
-                        ],
+                    _legendDot(color: Colors.grey.shade400, outline: true),
+                    Text(
+                      l10n.voiceLegendTarget,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade600,
                       ),
                     ),
-
-                    const SizedBox(height: 40),
-
-                    // 分贝值显示（使用 RepaintBoundary 隔离重绘）
-                    RepaintBoundary(
-                      child: _isCalibrating
-                          ? Text(
-                              l10n.voiceTrainingCalibrating,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF64748B),
-                              ),
-                            )
-                          : _isListening && _latestReading != null
-                          ? Column(
-                              children: [
-                                Text(
-                                  '${_getCurrentDb().toStringAsFixed(1)} dB',
-                                  style: const TextStyle(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF1E3A5F),
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  _getFeedbackMessage(),
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: _getFeedbackColor(),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  l10n.voiceTrainingTargetRange(
-                                    '${_targetMin.toStringAsFixed(0)}-${_targetMax.toStringAsFixed(0)}',
-                                  ),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Color(0xFF64748B),
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Text(
-                              l10n.voiceTrainingReady,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF64748B),
-                              ),
-                            ),
+                    const SizedBox(width: 20),
+                    _legendDot(color: _getCircleColor()),
+                    Text(
+                      l10n.voiceLegendYours,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade600,
+                      ),
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 28),
+                RepaintBoundary(
+                  child: _isCalibrating
+                      ? const SizedBox.shrink()
+                      : Column(
+                          children: [
+                            Text(
+                              _getFeedbackMessage(),
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: _getFeedbackColor(),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 6),
+                            TextButton(
+                              onPressed: () => setState(
+                                () => _showDbDetail = !_showDbDetail,
+                              ),
+                              child: Text(
+                                _showDbDetail
+                                    ? l10n.voiceHideDetail
+                                    : l10n.voiceShowDetail,
+                                style: const TextStyle(fontSize: 13),
+                              ),
+                            ),
+                            if (_showDbDetail)
+                              Text(
+                                '${_getCurrentDb().toStringAsFixed(1)} dB',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF94A3B8),
+                                ),
+                              ),
+                          ],
+                        ),
+                ),
+              ],
             ),
+          ),
+        ),
+        _buildPrimaryButton(
+          label: l10n.stopListening,
+          color: Colors.red,
+          onPressed: _stopListening,
+          semanticsHint: '停止语音训练',
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+          child: Text(
+            l10n.voicePracticeFooterHint,
+            style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
+  }
 
-            // 控制按钮
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: CupertinoButton(
-                  color: _isListening ? Colors.red : _moduleColor,
-                  borderRadius: BorderRadius.circular(16),
-                  onPressed: _isListening ? _stopListening : _startListening,
+  Widget _buildChip({
+    required IconData icon,
+    required String label,
+    bool highlighted = false,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: highlighted ? _moduleColor.withValues(alpha: 0.12) : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: highlighted ? _moduleColor : Colors.grey.shade300,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 15,
+            color: highlighted ? _moduleColor : Colors.grey.shade600,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: highlighted ? _moduleColor : Colors.grey.shade700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _legendDot({required Color color, bool outline = false}) {
+    return Container(
+      width: 12,
+      height: 12,
+      margin: const EdgeInsets.only(right: 6),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: outline ? Colors.transparent : color,
+        border: outline ? Border.all(color: color, width: 2) : null,
+      ),
+    );
+  }
+
+  // ── 阶段 4：完成总结 ──────────────────────────────────────
+
+  Widget _buildCompletedStage(BuildContext context, AppLocalizations l10n) {
+    final duration = _lastSessionDurationSeconds ?? 0;
+    final targetSeconds = (_lastSessionTargetSeconds ?? 0).clamp(0, duration);
+    final ratio = duration > 0 ? targetSeconds / duration : 0.0;
+    final encourageGood = ratio >= 0.3;
+
+    return Column(
+      key: const ValueKey(_Stage.completed),
+      children: [
+        Expanded(
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 96,
+                  height: 96,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _moduleColor.withValues(alpha: 0.12),
+                  ),
+                  child: const Icon(
+                    CupertinoIcons.checkmark_alt_circle_fill,
+                    color: _moduleColor,
+                    size: 52,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  l10n.voiceCompletedTitle,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1E3A5F),
+                  ),
+                ),
+                const SizedBox(height: 28),
+                _buildSummaryRow(
+                  label: l10n.voiceCompletedDurationLabel,
+                  value: _formatSeconds(l10n, duration),
+                ),
+                const SizedBox(height: 14),
+                _buildSummaryRow(
+                  label: l10n.voiceCompletedTargetLabel,
+                  value: _formatSeconds(l10n, targetSeconds),
+                ),
+                const SizedBox(height: 28),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: Text(
-                    _isListening ? l10n.stopListening : l10n.startListening,
+                    encourageGood
+                        ? l10n.voiceCompletedEncourageGood
+                        : l10n.voiceCompletedEncourageTryMore,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: encourageGood
+                          ? _moduleColor
+                          : const Color(0xFFF59E0B),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    side: const BorderSide(color: _moduleColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  onPressed: () =>
+                      setState(() => _stage = _Stage.preparation),
+                  child: Text(
+                    l10n.voiceRetryButton,
                     style: const TextStyle(
-                      fontSize: 18,
+                      color: _moduleColor,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
                     ),
                   ),
                 ),
               ),
-            ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: _moduleColor,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    l10n.voiceFinishButton,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
-            // 原理说明（移到最底部，字体缩小，颜色变浅）
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 16.0),
-              child: Text(
-                l10n.voiceTrainingInstruction,
-                style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
-                textAlign: TextAlign.center,
+  Widget _buildSummaryRow({required String label, required String value}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontSize: 15, color: Color(0xFF64748B)),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF1E3A5F),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── 通用按钮 ─────────────────────────────────────────────
+
+  Widget _buildPrimaryButton({
+    required String label,
+    required Color color,
+    required VoidCallback onPressed,
+    String? semanticsHint,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+      child: SizedBox(
+        width: double.infinity,
+        height: 56,
+        child: Semantics(
+          button: true,
+          label: label,
+          hint: semanticsHint,
+          child: CupertinoButton(
+            color: color,
+            borderRadius: BorderRadius.circular(16),
+            onPressed: onPressed,
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

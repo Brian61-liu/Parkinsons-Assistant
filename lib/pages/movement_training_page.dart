@@ -1,14 +1,18 @@
 import 'dart:async';
-import 'dart:typed_data';
-import 'dart:math' as math;
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../services/database_service.dart';
+import '../services/training_score_service.dart';
+import '../services/motion_detection_service.dart';
+import '../services/user_settings_service.dart';
+import '../services/voice_assist_service.dart';
 import '../models/movement_training_record.dart';
 import '../utils/gentle_page_route.dart';
 import 'movement_training_history_page.dart';
@@ -22,13 +26,23 @@ class MovementTrainingPage extends StatefulWidget {
 
 class _MovementTrainingPageState extends State<MovementTrainingPage> {
   CameraController? _cameraController;
+  CameraDescription? _camera; // 当前使用的摄像头描述（含 sensorOrientation/lensDirection）
   PoseDetector? _poseDetector;
   bool _isDetecting = false;
   bool _hasPermission = false;
   bool _isInitialized = false;
   Pose? _currentPose;
   Size? _imageSize;
-  bool _isFrontCamera = false; // 是否使用前置摄像头
+  bool _personDetected = false; // 当前帧是否检测到人体
+  InputImageRotation _imageRotation = InputImageRotation.rotation0deg;
+
+  // Android 设备方向 -> 旋转补偿角度（ML Kit 输入旋转计算用）
+  static const Map<DeviceOrientation, int> _deviceOrientationDegrees = {
+    DeviceOrientation.portraitUp: 0,
+    DeviceOrientation.landscapeLeft: 90,
+    DeviceOrientation.portraitDown: 180,
+    DeviceOrientation.landscapeRight: 270,
+  };
   
   // 训练类型
   TrainingType _currentTrainingType = TrainingType.armsRaised; // 当前训练类型
@@ -43,28 +57,32 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     activeSide: null,
     repCompleted: false,
   );
-  MotionSensitivity _sensitivity = MotionSensitivity.rehab;
-  
+
   // 动作状态：0=初始/放下, 1=举高
   int _actionState = 0;
-  
+
   // 计时功能
   Timer? _trainingTimer;
   int _trainingDuration = 0; // 训练时长（秒）
   DateTime? _trainingStartTime;
-  
+
   // 数据库服务
   final DatabaseService _databaseService = DatabaseService();
 
-  // 新动作检测引擎：可配置参数 + EMA + 角度特征 + FSM
-  late MotionDetectionConfig _motionConfig;
-  late ArmRaiseDetector _armDetector;
-  late LegLiftDetector _legDetector;
+  // 动作检测引擎：单一保守难度（2026-06-20 起取消双模式）。
+  final MotionDetectionConfig _motionConfig =
+      MotionDetectionConfig.defaultPreset();
+  late final ArmRaiseDetector _armDetector = ArmRaiseDetector(_motionConfig.arm);
+  late final LegLiftDetector _legDetector = LegLiftDetector(_motionConfig.leg);
+
+  VoiceAssistService _voiceAssist(BuildContext context) {
+    final enabled = context.read<UserSettingsService>().voiceHints;
+    return VoiceAssistService(enabled: enabled);
+  }
 
   @override
   void initState() {
     super.initState();
-    _applySensitivityPreset(_sensitivity);
     _showTrainingTypeSelection();
   }
   
@@ -90,6 +108,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         setState(() {
           _hasPermission = false;
         });
+        _voiceAssist(context).speak('相机权限未开启，无法开始训练');
         _showPermissionDialog();
       }
       return;
@@ -124,11 +143,16 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
       return;
     }
 
-    // 初始化摄像头控制器
+    _camera = frontCamera;
+
+    // 初始化摄像头控制器。
+    // ML Kit 要求平台特定的像素格式：iOS 用 bgra8888，Android 用 nv21（单平面）。
     _cameraController = CameraController(
       frontCamera,
       ResolutionPreset.medium,
       enableAudio: false,
+      imageFormatGroup:
+          Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.bgra8888,
     );
 
     try {
@@ -137,7 +161,6 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         setState(() {
           _hasPermission = true;
           _isInitialized = true;
-          _isFrontCamera = frontCamera?.lensDirection == CameraLensDirection.front;
         });
         _startImageStream();
       }
@@ -177,55 +200,88 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   }
 
   Future<void> _processImage(CameraImage image) async {
-    if (_poseDetector == null) {
+    final detector = _poseDetector;
+    if (detector == null) {
       _isDetecting = false;
       return;
     }
 
-    final inputImage = _inputImageFromCameraImage(image);
-    if (inputImage == null) {
-      _isDetecting = false;
-      return;
-    }
+    try {
+      final inputImage = _inputImageFromCameraImage(image);
+      if (inputImage == null) {
+        return;
+      }
 
-    final poses = await _poseDetector!.processImage(inputImage);
-    
-    if (mounted) {
+      final poses = await detector.processImage(inputImage);
+      if (!mounted) return;
+
       setState(() {
-        _imageSize = Size(image.width.toDouble(), image.height.toDouble());
+        _imageSize = inputImage.metadata?.size;
+        _imageRotation = inputImage.metadata?.rotation ?? _imageRotation;
         if (poses.isNotEmpty) {
           _currentPose = poses.first;
+          _personDetected = true;
           _checkAction();
         } else {
           _currentPose = null;
+          _personDetected = false;
           _isActionPerformed = false;
         }
-        _isDetecting = false;
       });
-    } else {
+    } catch (e) {
+      // ML Kit / 相机帧异常不能让检测永久卡死：记录后由 finally 释放节流标志。
+      debugPrint('姿态检测处理失败: $e');
+    } finally {
       _isDetecting = false;
     }
   }
 
+  /// 将相机帧转换为 ML Kit 可识别的 [InputImage]。
+  ///
+  /// 关键点（旧实现固定 rotation0deg + yuv420，导致 iOS 真机完全检测不到人体）：
+  /// - 旋转角度根据摄像头 sensorOrientation 与设备方向计算；
+  /// - 图像格式从相机帧实际格式推导，并校验平台支持的格式；
+  /// - iOS(bgra8888)/Android(nv21) 均为单平面，直接取首平面字节。
   InputImage? _inputImageFromCameraImage(CameraImage image) {
-    if (_cameraController == null) return null;
+    final controller = _cameraController;
+    final camera = _camera;
+    if (controller == null || camera == null) return null;
 
-    final rotation = InputImageRotation.rotation0deg;
-    final format = InputImageFormat.yuv420;
+    final sensorOrientation = camera.sensorOrientation;
+    InputImageRotation? rotation;
+    if (Platform.isIOS) {
+      rotation = InputImageRotationValue.fromRawValue(sensorOrientation);
+    } else if (Platform.isAndroid) {
+      var rotationCompensation =
+          _deviceOrientationDegrees[controller.value.deviceOrientation];
+      if (rotationCompensation == null) return null;
+      if (camera.lensDirection == CameraLensDirection.front) {
+        rotationCompensation = (sensorOrientation + rotationCompensation) % 360;
+      } else {
+        rotationCompensation =
+            (sensorOrientation - rotationCompensation + 360) % 360;
+      }
+      rotation = InputImageRotationValue.fromRawValue(rotationCompensation);
+    }
+    if (rotation == null) return null;
 
-    // 对于YUV420格式，需要正确构建bytes
-    final allBytes = BytesBuilder();
-    for (final Plane plane in image.planes) {
-      allBytes.add(plane.bytes);
+    final format = InputImageFormatValue.fromRawValue(image.format.raw);
+    if (format == null ||
+        (Platform.isAndroid && format != InputImageFormat.nv21) ||
+        (Platform.isIOS && format != InputImageFormat.bgra8888)) {
+      return null;
     }
 
+    if (image.planes.length != 1) return null;
+    final plane = image.planes.first;
+
     return InputImage.fromBytes(
-      bytes: allBytes.takeBytes(),
+      bytes: plane.bytes,
       metadata: InputImageMetadata(
         size: Size(image.width.toDouble(), image.height.toDouble()),
         rotation: rotation,
         format: format,
-        bytesPerRow: image.planes[0].bytesPerRow,
+        bytesPerRow: plane.bytesPerRow,
       ),
     );
   }
@@ -593,11 +649,13 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     if (!result.repCompleted || _isGoalReached) return;
 
     _successCount++;
+    _voiceAssist(context).speak('已完成 $_successCount 次，共 $_targetCount 次');
     if (_successCount >= _targetCount) {
       _isGoalReached = true;
       _cameraController?.stopImageStream();
       _trainingTimer?.cancel();
       _saveTrainingRecord();
+      _voiceAssist(context).announceConfirm('已完成目标训练次数');
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) {
           _showSuccessDialog(context);
@@ -608,19 +666,6 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     }
 
     HapticFeedback.mediumImpact();
-  }
-
-  void _applySensitivityPreset(MotionSensitivity mode) {
-    _motionConfig = mode == MotionSensitivity.rehab
-        ? MotionDetectionConfig.rehabPreset()
-        : MotionDetectionConfig.standardPreset();
-    _armDetector = ArmRaiseDetector(_motionConfig.arm);
-    _legDetector = LegLiftDetector(_motionConfig.leg);
-    _latestMotionResult = const MotionDetectionResult(
-      phase: MotionFsmPhase.idle,
-      activeSide: null,
-      repCompleted: false,
-    );
   }
 
   String _phaseLabel(MotionFsmPhase phase) {
@@ -817,6 +862,12 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         trainingType: _currentTrainingType,
       );
       await _databaseService.insertMovementTrainingRecord(record);
+      await TrainingScoreService().recordMotion(
+        successCount: _successCount,
+        targetCount: _targetCount,
+        goalReached: _isGoalReached,
+        durationSeconds: _trainingDuration,
+      );
     } catch (e) {
       debugPrint('保存训练记录失败: $e');
     }
@@ -890,10 +941,18 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.pop(context),
-          child: const Icon(
-            CupertinoIcons.arrow_left,
-            color: Colors.white,
-            size: 28,
+          child: Tooltip(
+            message: '返回',
+            child: Semantics(
+              button: true,
+              label: '返回',
+              hint: '返回上一页',
+              child: Icon(
+                CupertinoIcons.arrow_left,
+                color: Colors.white,
+                size: 28,
+              ),
+            ),
           ),
         ),
         title: Text(
@@ -909,20 +968,36 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
           CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: () => _showTrainingHistory(context),
-            child: const Icon(
-              CupertinoIcons.clock,
-              color: Colors.white,
-              size: 24,
+            child: Tooltip(
+              message: l10n.testHistory,
+              child: Semantics(
+                button: true,
+                label: l10n.testHistory,
+                hint: '打开训练历史',
+                child: const Icon(
+                  CupertinoIcons.clock,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
             ),
           ),
           const SizedBox(width: 8),
           CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: _isGoalReached ? null : () => _showGoalSettingDialog(context),
-            child: Icon(
-              CupertinoIcons.flag_fill,
-              color: _isGoalReached ? Colors.grey : Colors.white,
-              size: 24,
+            child: Tooltip(
+              message: l10n.setGoal,
+              child: Semantics(
+                button: true,
+                label: l10n.setGoal,
+                hint: '设置目标训练次数',
+                child: Icon(
+                  CupertinoIcons.flag_fill,
+                  color: _isGoalReached ? Colors.grey : Colors.white,
+                  size: 24,
+                ),
+              ),
             ),
           ),
           const SizedBox(width: 8),
@@ -992,15 +1067,57 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
           child: CameraPreview(_cameraController!),
         ),
         // 姿态检测覆盖层
-        if (_currentPose != null && _imageSize != null)
+        if (_currentPose != null && _imageSize != null && _camera != null)
           Positioned.fill(
             child: CustomPaint(
               painter: PosePainter(
                 pose: _currentPose!,
                 imageSize: _imageSize!,
+                rotation: _imageRotation,
+                cameraLensDirection: _camera!.lensDirection,
                 isActionPerformed: _isActionPerformed,
-                isFrontCamera: _isFrontCamera,
                 trainingType: _currentTrainingType,
+              ),
+            ),
+          ),
+        // 未检测到人体时的引导提示
+        if (!_personDetected && !_isGoalReached)
+          Positioned(
+            left: 24,
+            right: 24,
+            bottom: 200,
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.6),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(
+                      CupertinoIcons.person_crop_circle_badge_exclam,
+                      color: Colors.orangeAccent,
+                      size: 22,
+                    ),
+                    SizedBox(width: 10),
+                    Flexible(
+                      child: Text(
+                        '未检测到人体\n请让上半身完整进入画面，保持光线充足',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -1079,46 +1196,6 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 10),
-                CupertinoSlidingSegmentedControl<MotionSensitivity>(
-                  groupValue: _sensitivity,
-                  backgroundColor: Colors.white.withValues(alpha: 0.18),
-                  thumbColor: Colors.white.withValues(alpha: 0.32),
-                  children: const {
-                    MotionSensitivity.rehab: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      child: Text(
-                        '康复增强',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    MotionSensitivity.standard: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      child: Text(
-                        '标准',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  },
-                  onValueChanged: (value) {
-                    if (_isGoalReached) return;
-                    if (value == null || value == _sensitivity) return;
-                    setState(() {
-                      _sensitivity = value;
-                      _applySensitivityPreset(value);
-                      _isActionPerformed = false;
-                      _actionState = 0;
-                    });
-                  },
                 ),
               ],
             ),
@@ -1219,869 +1296,31 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   }
 }
 
-enum MotionFsmPhase { idle, raising, reached, lowering, cooldown }
-
-enum MotionSide { left, right }
-
-enum MotionSensitivity { rehab, standard }
-
-class MotionDetectionResult {
-  final MotionFsmPhase phase;
-  final MotionSide? activeSide;
-  final bool repCompleted;
-  final double? normScore;
-  final double? deltaDeg;
-
-  const MotionDetectionResult({
-    required this.phase,
-    required this.activeSide,
-    required this.repCompleted,
-    this.normScore,
-    this.deltaDeg,
-  });
-
-  bool get inActionCycle =>
-      phase == MotionFsmPhase.raising ||
-      phase == MotionFsmPhase.reached ||
-      phase == MotionFsmPhase.lowering;
-}
-
-class MotionDetectionConfig {
-  final ArmDetectionConfig arm;
-  final LegDetectionConfig leg;
-
-  const MotionDetectionConfig({
-    required this.arm,
-    required this.leg,
-  });
-
-  factory MotionDetectionConfig.rehabPreset() {
-    const fsm = FsmConfig(
-      raiseConfirmFrames: 2,
-      reachedHoldFrames: 2,
-      lowerConfirmFrames: 2,
-      raisingTimeout: Duration(milliseconds: 1800),
-      lostTrackingGrace: Duration(milliseconds: 550),
-      cooldown: Duration(milliseconds: 650),
-    );
-
-    return const MotionDetectionConfig(
-      arm: ArmDetectionConfig(
-        emaAlpha: 0.28,
-        baselineAlpha: 0.08,
-        baselineUpdateGateDeg: 8.0,
-        minRangeDeg: 26.0,
-        enterNorm: 0.18,
-        reachedNorm: 0.30,
-        loweringNorm: 0.16,
-        exitNorm: 0.10,
-        enterDeltaDeg: 5.0,
-        reachedDeltaDeg: 8.0,
-        loweringDeltaDeg: 5.0,
-        exitDeltaDeg: 3.0,
-        minElbowExtensionDeg: 95.0,
-        fsm: fsm,
-      ),
-      leg: LegDetectionConfig(
-        emaAlpha: 0.26,
-        baselineAlpha: 0.08,
-        baselineUpdateGateDeg: 6.0,
-        minRangeDeg: 18.0,
-        enterNorm: 0.18,
-        reachedNorm: 0.30,
-        loweringNorm: 0.16,
-        exitNorm: 0.10,
-        enterDeltaDeg: 3.0,
-        reachedDeltaDeg: 5.0,
-        loweringDeltaDeg: 3.0,
-        exitDeltaDeg: 1.8,
-        minKneeExtensionDeg: 40.0,
-        fsm: fsm,
-      ),
-    );
-  }
-
-  factory MotionDetectionConfig.standardPreset() {
-    const fsm = FsmConfig(
-      raiseConfirmFrames: 3,
-      reachedHoldFrames: 3,
-      lowerConfirmFrames: 3,
-      raisingTimeout: Duration(milliseconds: 1500),
-      lostTrackingGrace: Duration(milliseconds: 450),
-      cooldown: Duration(milliseconds: 750),
-    );
-
-    return const MotionDetectionConfig(
-      arm: ArmDetectionConfig(
-        emaAlpha: 0.22,
-        baselineAlpha: 0.06,
-        baselineUpdateGateDeg: 6.0,
-        minRangeDeg: 32.0,
-        enterNorm: 0.22,
-        reachedNorm: 0.36,
-        loweringNorm: 0.18,
-        exitNorm: 0.12,
-        enterDeltaDeg: 7.0,
-        reachedDeltaDeg: 11.0,
-        loweringDeltaDeg: 7.0,
-        exitDeltaDeg: 4.0,
-        minElbowExtensionDeg: 105.0,
-        fsm: fsm,
-      ),
-      leg: LegDetectionConfig(
-        emaAlpha: 0.22,
-        baselineAlpha: 0.06,
-        baselineUpdateGateDeg: 5.0,
-        minRangeDeg: 24.0,
-        enterNorm: 0.22,
-        reachedNorm: 0.36,
-        loweringNorm: 0.18,
-        exitNorm: 0.12,
-        enterDeltaDeg: 4.0,
-        reachedDeltaDeg: 7.0,
-        loweringDeltaDeg: 4.0,
-        exitDeltaDeg: 2.2,
-        minKneeExtensionDeg: 55.0,
-        fsm: fsm,
-      ),
-    );
-  }
-}
-
-class FsmConfig {
-  final int raiseConfirmFrames;
-  final int reachedHoldFrames;
-  final int lowerConfirmFrames;
-  final Duration raisingTimeout;
-  final Duration lostTrackingGrace;
-  final Duration cooldown;
-
-  const FsmConfig({
-    required this.raiseConfirmFrames,
-    required this.reachedHoldFrames,
-    required this.lowerConfirmFrames,
-    required this.raisingTimeout,
-    required this.lostTrackingGrace,
-    required this.cooldown,
-  });
-}
-
-class ArmDetectionConfig {
-  final double emaAlpha;
-  final double baselineAlpha;
-  final double baselineUpdateGateDeg;
-  final double minRangeDeg;
-  final double enterNorm;
-  final double reachedNorm;
-  final double loweringNorm;
-  final double exitNorm;
-  final double enterDeltaDeg;
-  final double reachedDeltaDeg;
-  final double loweringDeltaDeg;
-  final double exitDeltaDeg;
-  final double minElbowExtensionDeg;
-  final FsmConfig fsm;
-
-  const ArmDetectionConfig({
-    required this.emaAlpha,
-    required this.baselineAlpha,
-    required this.baselineUpdateGateDeg,
-    required this.minRangeDeg,
-    required this.enterNorm,
-    required this.reachedNorm,
-    required this.loweringNorm,
-    required this.exitNorm,
-    required this.enterDeltaDeg,
-    required this.reachedDeltaDeg,
-    required this.loweringDeltaDeg,
-    required this.exitDeltaDeg,
-    required this.minElbowExtensionDeg,
-    required this.fsm,
-  });
-}
-
-class LegDetectionConfig {
-  final double emaAlpha;
-  final double baselineAlpha;
-  final double baselineUpdateGateDeg;
-  final double minRangeDeg;
-  final double enterNorm;
-  final double reachedNorm;
-  final double loweringNorm;
-  final double exitNorm;
-  final double enterDeltaDeg;
-  final double reachedDeltaDeg;
-  final double loweringDeltaDeg;
-  final double exitDeltaDeg;
-  final double minKneeExtensionDeg;
-  final FsmConfig fsm;
-
-  const LegDetectionConfig({
-    required this.emaAlpha,
-    required this.baselineAlpha,
-    required this.baselineUpdateGateDeg,
-    required this.minRangeDeg,
-    required this.enterNorm,
-    required this.reachedNorm,
-    required this.loweringNorm,
-    required this.exitNorm,
-    required this.enterDeltaDeg,
-    required this.reachedDeltaDeg,
-    required this.loweringDeltaDeg,
-    required this.exitDeltaDeg,
-    required this.minKneeExtensionDeg,
-    required this.fsm,
-  });
-}
-
-class _SideTracker {
-  double? baselineDeg;
-  double rangeDeg;
-
-  _SideTracker(this.rangeDeg);
-}
-
-class _EmaLandmarkFilter {
-  final double alpha;
-  final Map<PoseLandmarkType, Offset> _cache = {};
-
-  _EmaLandmarkFilter(this.alpha);
-
-  Offset? smooth(PoseLandmarkType type, PoseLandmark? landmark) {
-    if (landmark == null) return null;
-    final raw = Offset(landmark.x, landmark.y);
-    final prev = _cache[type];
-    if (prev == null) {
-      _cache[type] = raw;
-      return raw;
-    }
-    final next = Offset(
-      prev.dx * (1 - alpha) + raw.dx * alpha,
-      prev.dy * (1 - alpha) + raw.dy * alpha,
-    );
-    _cache[type] = next;
-    return next;
-  }
-
-  void reset() => _cache.clear();
-}
-
-class _MotionMeasurement {
-  final bool quality;
-  final double normScore;
-  final double deltaDeg;
-  final bool reachedGate;
-
-  const _MotionMeasurement({
-    required this.quality,
-    required this.normScore,
-    required this.deltaDeg,
-    required this.reachedGate,
-  });
-}
-
-class ArmRaiseDetector {
-  final ArmDetectionConfig config;
-  final _EmaLandmarkFilter _ema;
-  final Map<MotionSide, _SideTracker> _trackers;
-
-  MotionFsmPhase _phase = MotionFsmPhase.idle;
-  MotionSide? _activeSide;
-  MotionSide? _candidateSide;
-  int _candidateFrames = 0;
-  int _reachedFrames = 0;
-  int _lowerFrames = 0;
-  DateTime? _raisingStartedAt;
-  DateTime? _lostTrackingStartedAt;
-  DateTime? _cooldownUntil;
-
-  ArmRaiseDetector(this.config)
-      : _ema = _EmaLandmarkFilter(config.emaAlpha),
-        _trackers = {
-          MotionSide.left: _SideTracker(config.minRangeDeg),
-          MotionSide.right: _SideTracker(config.minRangeDeg),
-        };
-
-  void reset() {
-    _phase = MotionFsmPhase.idle;
-    _activeSide = null;
-    _candidateSide = null;
-    _candidateFrames = 0;
-    _reachedFrames = 0;
-    _lowerFrames = 0;
-    _raisingStartedAt = null;
-    _lostTrackingStartedAt = null;
-    _cooldownUntil = null;
-    for (final tracker in _trackers.values) {
-      tracker.baselineDeg = null;
-      tracker.rangeDeg = config.minRangeDeg;
-    }
-    _ema.reset();
-  }
-
-  MotionDetectionResult update(Pose pose, DateTime now) {
-    if (_phase == MotionFsmPhase.cooldown) {
-      if (_cooldownUntil != null && now.isBefore(_cooldownUntil!)) {
-        return MotionDetectionResult(
-          phase: _phase,
-          activeSide: _activeSide,
-          repCompleted: false,
-          normScore: null,
-          deltaDeg: null,
-        );
-      }
-      _enterIdle();
-    }
-
-    final left = _measureSide(
-      pose: pose,
-      side: MotionSide.left,
-      now: now,
-    );
-    final right = _measureSide(
-      pose: pose,
-      side: MotionSide.right,
-      now: now,
-    );
-    final measurements = {
-      MotionSide.left: left,
-      MotionSide.right: right,
-    };
-
-    bool repCompleted = false;
-
-    switch (_phase) {
-      case MotionFsmPhase.idle:
-        final candidate = _pickBestEnteringSide(measurements);
-        if (candidate != null) {
-          if (_candidateSide == candidate) {
-            _candidateFrames++;
-          } else {
-            _candidateSide = candidate;
-            _candidateFrames = 1;
-          }
-          if (_candidateFrames >= config.fsm.raiseConfirmFrames) {
-            _phase = MotionFsmPhase.raising;
-            _activeSide = candidate;
-            _raisingStartedAt = now;
-            _reachedFrames = 0;
-            _lowerFrames = 0;
-            _lostTrackingStartedAt = null;
-          }
-        } else {
-          _candidateSide = null;
-          _candidateFrames = 0;
-        }
-        break;
-
-      case MotionFsmPhase.raising:
-        final m = measurements[_activeSide]!;
-        if (!_handleTrackingLoss(m.quality, now)) {
-          break;
-        }
-        if (_isReached(m)) {
-          _reachedFrames++;
-          if (_reachedFrames >= config.fsm.reachedHoldFrames) {
-            _phase = MotionFsmPhase.reached;
-            _lowerFrames = 0;
-          }
-        } else {
-          _reachedFrames = 0;
-        }
-        if (_raisingStartedAt != null && now.difference(_raisingStartedAt!) > config.fsm.raisingTimeout) {
-          _enterIdle();
-        }
-        break;
-
-      case MotionFsmPhase.reached:
-        final m = measurements[_activeSide]!;
-        if (!_handleTrackingLoss(m.quality, now)) {
-          break;
-        }
-        if (_isLowering(m)) {
-          _lowerFrames++;
-          if (_lowerFrames >= config.fsm.lowerConfirmFrames) {
-            _phase = MotionFsmPhase.lowering;
-          }
-        } else {
-          _lowerFrames = 0;
-        }
-        break;
-
-      case MotionFsmPhase.lowering:
-        final m = measurements[_activeSide]!;
-        if (!_handleTrackingLoss(m.quality, now)) {
-          break;
-        }
-        if (_isExited(m)) {
-          repCompleted = true;
-          _phase = MotionFsmPhase.cooldown;
-          _cooldownUntil = now.add(config.fsm.cooldown);
-          _candidateFrames = 0;
-          _candidateSide = null;
-        } else if (_isReached(m)) {
-          // 回弹抖动：回到 reached 继续等待放下
-          _phase = MotionFsmPhase.reached;
-          _lowerFrames = 0;
-        }
-        break;
-
-      case MotionFsmPhase.cooldown:
-        break;
-    }
-
-    final activeMeasurement =
-        _activeSide == null ? null : measurements[_activeSide!];
-
-    return MotionDetectionResult(
-      phase: _phase,
-      activeSide: _activeSide,
-      repCompleted: repCompleted,
-      normScore: activeMeasurement?.normScore,
-      deltaDeg: activeMeasurement?.deltaDeg,
-    );
-  }
-
-  MotionSide? _pickBestEnteringSide(Map<MotionSide, _MotionMeasurement> measurements) {
-    MotionSide? best;
-    double bestScore = -1;
-    for (final entry in measurements.entries) {
-      final m = entry.value;
-      if (!_isEntering(m)) continue;
-      if (m.normScore > bestScore) {
-        bestScore = m.normScore;
-        best = entry.key;
-      }
-    }
-    return best;
-  }
-
-  bool _isEntering(_MotionMeasurement m) =>
-      m.quality &&
-      m.normScore >= config.enterNorm &&
-      m.deltaDeg >= config.enterDeltaDeg;
-
-  bool _isReached(_MotionMeasurement m) =>
-      m.quality &&
-      m.reachedGate &&
-      m.normScore >= config.reachedNorm &&
-      m.deltaDeg >= config.reachedDeltaDeg;
-
-  bool _isLowering(_MotionMeasurement m) =>
-      m.quality &&
-      (m.normScore <= config.loweringNorm || m.deltaDeg <= config.loweringDeltaDeg);
-
-  bool _isExited(_MotionMeasurement m) =>
-      m.quality &&
-      (m.normScore <= config.exitNorm || m.deltaDeg <= config.exitDeltaDeg);
-
-  bool _handleTrackingLoss(bool quality, DateTime now) {
-    if (quality) {
-      _lostTrackingStartedAt = null;
-      return true;
-    }
-    _lostTrackingStartedAt ??= now;
-    if (now.difference(_lostTrackingStartedAt!) > config.fsm.lostTrackingGrace) {
-      _enterIdle();
-      return false;
-    }
-    return true;
-  }
-
-  void _enterIdle() {
-    _phase = MotionFsmPhase.idle;
-    _activeSide = null;
-    _candidateSide = null;
-    _candidateFrames = 0;
-    _reachedFrames = 0;
-    _lowerFrames = 0;
-    _raisingStartedAt = null;
-    _lostTrackingStartedAt = null;
-  }
-
-  _MotionMeasurement _measureSide({
-    required Pose pose,
-    required MotionSide side,
-    required DateTime now,
-  }) {
-    final shoulderType =
-        side == MotionSide.left ? PoseLandmarkType.leftShoulder : PoseLandmarkType.rightShoulder;
-    final hipType = side == MotionSide.left ? PoseLandmarkType.leftHip : PoseLandmarkType.rightHip;
-    final elbowType = side == MotionSide.left ? PoseLandmarkType.leftElbow : PoseLandmarkType.rightElbow;
-    final wristType = side == MotionSide.left ? PoseLandmarkType.leftWrist : PoseLandmarkType.rightWrist;
-
-    final shoulder = _ema.smooth(shoulderType, pose.landmarks[shoulderType]);
-    final hip = _ema.smooth(hipType, pose.landmarks[hipType]);
-    final elbow = _ema.smooth(elbowType, pose.landmarks[elbowType]);
-    final wrist = _ema.smooth(wristType, pose.landmarks[wristType]);
-
-    if (shoulder == null || hip == null) {
-      return const _MotionMeasurement(quality: false, normScore: 0, deltaDeg: 0, reachedGate: false);
-    }
-    final armEnd = elbow ?? wrist;
-    if (armEnd == null) {
-      return const _MotionMeasurement(quality: false, normScore: 0, deltaDeg: 0, reachedGate: false);
-    }
-
-    final shoulderAngle = _angleBetweenVectors(hip - shoulder, armEnd - shoulder);
-    if (!shoulderAngle.isFinite) {
-      return const _MotionMeasurement(quality: false, normScore: 0, deltaDeg: 0, reachedGate: false);
-    }
-
-    final tracker = _trackers[side]!;
-    tracker.baselineDeg ??= shoulderAngle;
-    var delta = shoulderAngle - tracker.baselineDeg!;
-    if (delta < 0) delta = 0;
-
-    if ((_phase == MotionFsmPhase.idle || _phase == MotionFsmPhase.cooldown) &&
-        delta < config.baselineUpdateGateDeg) {
-      tracker.baselineDeg =
-          _emaScalar(tracker.baselineDeg!, shoulderAngle, config.baselineAlpha);
-      delta = shoulderAngle - tracker.baselineDeg!;
-      if (delta < 0) delta = 0;
-    }
-
-    tracker.rangeDeg = math.max(config.minRangeDeg, math.max(tracker.rangeDeg * 0.995, delta));
-    final norm = (delta / tracker.rangeDeg).clamp(0.0, 2.0);
-
-    double elbowAngle = 180;
-    if (elbow != null && wrist != null) {
-      elbowAngle = _angleAt(shoulder, elbow, wrist);
-    }
-
-    return _MotionMeasurement(
-      quality: true,
-      normScore: norm,
-      deltaDeg: delta,
-      reachedGate: elbowAngle >= config.minElbowExtensionDeg,
-    );
-  }
-}
-
-class LegLiftDetector {
-  final LegDetectionConfig config;
-  final _EmaLandmarkFilter _ema;
-  final Map<MotionSide, _SideTracker> _trackers;
-
-  MotionFsmPhase _phase = MotionFsmPhase.idle;
-  MotionSide? _activeSide;
-  MotionSide? _candidateSide;
-  int _candidateFrames = 0;
-  int _reachedFrames = 0;
-  int _lowerFrames = 0;
-  DateTime? _raisingStartedAt;
-  DateTime? _lostTrackingStartedAt;
-  DateTime? _cooldownUntil;
-
-  LegLiftDetector(this.config)
-      : _ema = _EmaLandmarkFilter(config.emaAlpha),
-        _trackers = {
-          MotionSide.left: _SideTracker(config.minRangeDeg),
-          MotionSide.right: _SideTracker(config.minRangeDeg),
-        };
-
-  void reset() {
-    _phase = MotionFsmPhase.idle;
-    _activeSide = null;
-    _candidateSide = null;
-    _candidateFrames = 0;
-    _reachedFrames = 0;
-    _lowerFrames = 0;
-    _raisingStartedAt = null;
-    _lostTrackingStartedAt = null;
-    _cooldownUntil = null;
-    for (final tracker in _trackers.values) {
-      tracker.baselineDeg = null;
-      tracker.rangeDeg = config.minRangeDeg;
-    }
-    _ema.reset();
-  }
-
-  MotionDetectionResult update(Pose pose, DateTime now) {
-    if (_phase == MotionFsmPhase.cooldown) {
-      if (_cooldownUntil != null && now.isBefore(_cooldownUntil!)) {
-        return MotionDetectionResult(
-          phase: _phase,
-          activeSide: _activeSide,
-          repCompleted: false,
-          normScore: null,
-          deltaDeg: null,
-        );
-      }
-      _enterIdle();
-    }
-
-    final left = _measureSide(pose: pose, side: MotionSide.left);
-    final right = _measureSide(pose: pose, side: MotionSide.right);
-    final measurements = {
-      MotionSide.left: left,
-      MotionSide.right: right,
-    };
-
-    bool repCompleted = false;
-
-    switch (_phase) {
-      case MotionFsmPhase.idle:
-        final candidate = _pickBestEnteringSide(measurements);
-        if (candidate != null) {
-          if (_candidateSide == candidate) {
-            _candidateFrames++;
-          } else {
-            _candidateSide = candidate;
-            _candidateFrames = 1;
-          }
-          if (_candidateFrames >= config.fsm.raiseConfirmFrames) {
-            _phase = MotionFsmPhase.raising;
-            _activeSide = candidate;
-            _raisingStartedAt = now;
-            _reachedFrames = 0;
-            _lowerFrames = 0;
-            _lostTrackingStartedAt = null;
-          }
-        } else {
-          _candidateSide = null;
-          _candidateFrames = 0;
-        }
-        break;
-
-      case MotionFsmPhase.raising:
-        final m = measurements[_activeSide]!;
-        if (!_handleTrackingLoss(m.quality, now)) {
-          break;
-        }
-        if (_isReached(m)) {
-          _reachedFrames++;
-          if (_reachedFrames >= config.fsm.reachedHoldFrames) {
-            _phase = MotionFsmPhase.reached;
-            _lowerFrames = 0;
-          }
-        } else {
-          _reachedFrames = 0;
-        }
-        if (_raisingStartedAt != null && now.difference(_raisingStartedAt!) > config.fsm.raisingTimeout) {
-          _enterIdle();
-        }
-        break;
-
-      case MotionFsmPhase.reached:
-        final m = measurements[_activeSide]!;
-        if (!_handleTrackingLoss(m.quality, now)) {
-          break;
-        }
-        if (_isLowering(m)) {
-          _lowerFrames++;
-          if (_lowerFrames >= config.fsm.lowerConfirmFrames) {
-            _phase = MotionFsmPhase.lowering;
-          }
-        } else {
-          _lowerFrames = 0;
-        }
-        break;
-
-      case MotionFsmPhase.lowering:
-        final m = measurements[_activeSide]!;
-        if (!_handleTrackingLoss(m.quality, now)) {
-          break;
-        }
-        if (_isExited(m)) {
-          repCompleted = true;
-          _phase = MotionFsmPhase.cooldown;
-          _cooldownUntil = now.add(config.fsm.cooldown);
-          _candidateFrames = 0;
-          _candidateSide = null;
-        } else if (_isReached(m)) {
-          _phase = MotionFsmPhase.reached;
-          _lowerFrames = 0;
-        }
-        break;
-
-      case MotionFsmPhase.cooldown:
-        break;
-    }
-
-    final activeMeasurement =
-        _activeSide == null ? null : measurements[_activeSide!];
-
-    return MotionDetectionResult(
-      phase: _phase,
-      activeSide: _activeSide,
-      repCompleted: repCompleted,
-      normScore: activeMeasurement?.normScore,
-      deltaDeg: activeMeasurement?.deltaDeg,
-    );
-  }
-
-  MotionSide? _pickBestEnteringSide(Map<MotionSide, _MotionMeasurement> measurements) {
-    MotionSide? best;
-    double bestScore = -1;
-    for (final entry in measurements.entries) {
-      final m = entry.value;
-      if (!_isEntering(m)) continue;
-      if (m.normScore > bestScore) {
-        bestScore = m.normScore;
-        best = entry.key;
-      }
-    }
-    return best;
-  }
-
-  bool _isEntering(_MotionMeasurement m) =>
-      m.quality &&
-      m.normScore >= config.enterNorm &&
-      m.deltaDeg >= config.enterDeltaDeg;
-
-  bool _isReached(_MotionMeasurement m) =>
-      m.quality &&
-      m.reachedGate &&
-      m.normScore >= config.reachedNorm &&
-      m.deltaDeg >= config.reachedDeltaDeg;
-
-  bool _isLowering(_MotionMeasurement m) =>
-      m.quality &&
-      (m.normScore <= config.loweringNorm || m.deltaDeg <= config.loweringDeltaDeg);
-
-  bool _isExited(_MotionMeasurement m) =>
-      m.quality &&
-      (m.normScore <= config.exitNorm || m.deltaDeg <= config.exitDeltaDeg);
-
-  bool _handleTrackingLoss(bool quality, DateTime now) {
-    if (quality) {
-      _lostTrackingStartedAt = null;
-      return true;
-    }
-    _lostTrackingStartedAt ??= now;
-    if (now.difference(_lostTrackingStartedAt!) > config.fsm.lostTrackingGrace) {
-      _enterIdle();
-      return false;
-    }
-    return true;
-  }
-
-  void _enterIdle() {
-    _phase = MotionFsmPhase.idle;
-    _activeSide = null;
-    _candidateSide = null;
-    _candidateFrames = 0;
-    _reachedFrames = 0;
-    _lowerFrames = 0;
-    _raisingStartedAt = null;
-    _lostTrackingStartedAt = null;
-  }
-
-  _MotionMeasurement _measureSide({
-    required Pose pose,
-    required MotionSide side,
-  }) {
-    final shoulderType =
-        side == MotionSide.left ? PoseLandmarkType.leftShoulder : PoseLandmarkType.rightShoulder;
-    final oppositeShoulderType =
-        side == MotionSide.left ? PoseLandmarkType.rightShoulder : PoseLandmarkType.leftShoulder;
-    final hipType = side == MotionSide.left ? PoseLandmarkType.leftHip : PoseLandmarkType.rightHip;
-    final kneeType = side == MotionSide.left ? PoseLandmarkType.leftKnee : PoseLandmarkType.rightKnee;
-    final ankleType = side == MotionSide.left ? PoseLandmarkType.leftAnkle : PoseLandmarkType.rightAnkle;
-
-    final shoulderPrimary = _ema.smooth(shoulderType, pose.landmarks[shoulderType]);
-    final shoulderFallback =
-        _ema.smooth(oppositeShoulderType, pose.landmarks[oppositeShoulderType]);
-    final shoulder = shoulderPrimary ?? shoulderFallback;
-    final hip = _ema.smooth(hipType, pose.landmarks[hipType]);
-    final knee = _ema.smooth(kneeType, pose.landmarks[kneeType]);
-    final ankle = _ema.smooth(ankleType, pose.landmarks[ankleType]);
-
-    if (shoulder == null || hip == null) {
-      return const _MotionMeasurement(quality: false, normScore: 0, deltaDeg: 0, reachedGate: false);
-    }
-    final thighPoint = knee ?? ankle;
-    if (thighPoint == null) {
-      return const _MotionMeasurement(quality: false, normScore: 0, deltaDeg: 0, reachedGate: false);
-    }
-
-    final hipAngle = _angleBetweenVectors(shoulder - hip, thighPoint - hip);
-    if (!hipAngle.isFinite) {
-      return const _MotionMeasurement(quality: false, normScore: 0, deltaDeg: 0, reachedGate: false);
-    }
-
-    final tracker = _trackers[side]!;
-    tracker.baselineDeg ??= hipAngle;
-    var delta = tracker.baselineDeg! - hipAngle;
-    if (delta < 0) delta = 0;
-
-    if ((_phase == MotionFsmPhase.idle || _phase == MotionFsmPhase.cooldown) &&
-        delta < config.baselineUpdateGateDeg) {
-      tracker.baselineDeg =
-          _emaScalar(tracker.baselineDeg!, hipAngle, config.baselineAlpha);
-      delta = tracker.baselineDeg! - hipAngle;
-      if (delta < 0) delta = 0;
-    }
-
-    tracker.rangeDeg = math.max(config.minRangeDeg, math.max(tracker.rangeDeg * 0.995, delta));
-    final norm = (delta / tracker.rangeDeg).clamp(0.0, 2.0);
-
-    double kneeAngle = 180;
-    if (knee != null && ankle != null) {
-      kneeAngle = _angleAt(hip, knee, ankle);
-    }
-
-    return _MotionMeasurement(
-      quality: true,
-      normScore: norm,
-      deltaDeg: delta,
-      reachedGate: kneeAngle >= config.minKneeExtensionDeg,
-    );
-  }
-}
-
-double _emaScalar(double previous, double current, double alpha) {
-  return previous * (1 - alpha) + current * alpha;
-}
-
-double _angleAt(Offset a, Offset b, Offset c) {
-  return _angleBetweenVectors(a - b, c - b);
-}
-
-double _angleBetweenVectors(Offset v1, Offset v2) {
-  final norm1 = v1.distance;
-  final norm2 = v2.distance;
-  if (norm1 < 1e-6 || norm2 < 1e-6) {
-    return double.nan;
-  }
-  final cosValue = ((v1.dx * v2.dx) + (v1.dy * v2.dy)) / (norm1 * norm2);
-  final clamped = cosValue.clamp(-1.0, 1.0);
-  return math.acos(clamped) * 180 / math.pi;
-}
 
 // 姿态绘制器
 class PosePainter extends CustomPainter {
   final Pose pose;
-  final Size imageSize;
+  final Size imageSize; // ML Kit 输入帧的原始尺寸（未旋转）
+  final InputImageRotation rotation; // 传给 ML Kit 的旋转角度
+  final CameraLensDirection cameraLensDirection; // 摄像头朝向（前置需镜像）
   final bool isActionPerformed;
-  final bool isFrontCamera; // 是否使用前置摄像头（需要镜像翻转）
   final TrainingType trainingType; // 训练类型
 
   PosePainter({
     required this.pose,
     required this.imageSize,
+    required this.rotation,
+    required this.cameraLensDirection,
     required this.isActionPerformed,
-    required this.isFrontCamera,
     required this.trainingType,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    // 计算缩放比例
-    final scaleX = size.width / imageSize.width;
-    final scaleY = size.height / imageSize.height;
-    
-    // 如果是前置摄像头，需要水平翻转坐标（镜像效果）
-    // 翻转函数：flippedX = imageSize.width - originalX
-    double flipX(double x) {
-      return isFrontCamera ? imageSize.width - x : x;
-    }
-
     // 根据训练类型定义不同的骨骼连接关系
     List<List<PoseLandmarkType>> connections = [];
     List<PoseLandmarkType> relevantLandmarks = [];
-    
+
     switch (trainingType) {
       case TrainingType.armsRaised:
         // 举手运动：显示手臂
@@ -2121,6 +1360,13 @@ class PosePainter extends CustomPainter {
         break;
     }
 
+    Offset toCanvas(PoseLandmark landmark) {
+      return Offset(
+        _translateX(landmark.x, size, imageSize, rotation, cameraLensDirection),
+        _translateY(landmark.y, size, imageSize, rotation, cameraLensDirection),
+      );
+    }
+
     // 绘制骨骼连线（白色）
     final linePaint = Paint()
       ..color = Colors.white
@@ -2130,17 +1376,11 @@ class PosePainter extends CustomPainter {
     for (final connection in connections) {
       final startPoint = pose.landmarks[connection[0]];
       final endPoint = pose.landmarks[connection[1]];
-      
+
       if (startPoint != null && endPoint != null) {
-        // 应用镜像翻转（如果是前置摄像头）
-        final startX = flipX(startPoint.x) * scaleX;
-        final startY = startPoint.y * scaleY;
-        final endX = flipX(endPoint.x) * scaleX;
-        final endY = endPoint.y * scaleY;
-        
         canvas.drawLine(
-          Offset(startX, startY),
-          Offset(endX, endY),
+          toCanvas(startPoint),
+          toCanvas(endPoint),
           linePaint,
         );
       }
@@ -2154,25 +1394,67 @@ class PosePainter extends CustomPainter {
     for (final landmarkType in relevantLandmarks) {
       final landmark = pose.landmarks[landmarkType];
       if (landmark != null) {
-        // 应用镜像翻转（如果是前置摄像头）
-        final x = flipX(landmark.x) * scaleX;
-        final y = landmark.y * scaleY;
-        
-        canvas.drawCircle(
-          Offset(x, y),
-          5.0, // 圆点半径
-          pointPaint,
-        );
+        canvas.drawCircle(toCanvas(landmark), 5.0, pointPaint);
       }
     }
   }
 
-
   @override
   bool shouldRepaint(PosePainter oldDelegate) {
-    return oldDelegate.pose != pose || 
-           oldDelegate.isActionPerformed != isActionPerformed ||
-           oldDelegate.isFrontCamera != isFrontCamera ||
-           oldDelegate.trainingType != trainingType;
+    return oldDelegate.pose != pose ||
+        oldDelegate.isActionPerformed != isActionPerformed ||
+        oldDelegate.rotation != rotation ||
+        oldDelegate.cameraLensDirection != cameraLensDirection ||
+        oldDelegate.trainingType != trainingType;
+  }
+}
+
+/// 将 ML Kit 返回的横坐标映射到画布坐标（考虑旋转与前置镜像）。
+/// 移植自 google_mlkit 官方示例的坐标转换逻辑。
+double _translateX(
+  double x,
+  Size canvasSize,
+  Size imageSize,
+  InputImageRotation rotation,
+  CameraLensDirection cameraLensDirection,
+) {
+  switch (rotation) {
+    case InputImageRotation.rotation90deg:
+      return x *
+          canvasSize.width /
+          (Platform.isIOS ? imageSize.width : imageSize.height);
+    case InputImageRotation.rotation270deg:
+      return canvasSize.width -
+          x *
+              canvasSize.width /
+              (Platform.isIOS ? imageSize.width : imageSize.height);
+    case InputImageRotation.rotation0deg:
+    case InputImageRotation.rotation180deg:
+      switch (cameraLensDirection) {
+        case CameraLensDirection.back:
+          return x * canvasSize.width / imageSize.width;
+        default:
+          return canvasSize.width - x * canvasSize.width / imageSize.width;
+      }
+  }
+}
+
+/// 将 ML Kit 返回的纵坐标映射到画布坐标（考虑旋转）。
+double _translateY(
+  double y,
+  Size canvasSize,
+  Size imageSize,
+  InputImageRotation rotation,
+  CameraLensDirection cameraLensDirection,
+) {
+  switch (rotation) {
+    case InputImageRotation.rotation90deg:
+    case InputImageRotation.rotation270deg:
+      return y *
+          canvasSize.height /
+          (Platform.isIOS ? imageSize.height : imageSize.width);
+    case InputImageRotation.rotation0deg:
+    case InputImageRotation.rotation180deg:
+      return y * canvasSize.height / imageSize.height;
   }
 }
