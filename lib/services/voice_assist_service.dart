@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 /// 简易语音/可访问性提示服务。
 ///
 /// 当前实现：
-/// - 通过系统语义播报接口触发读屏提示（VoiceOver/TalkBack）
+/// - 通过系统语义播报接口触发 iOS VoiceOver 提示
 /// - 保留 [debugPrint] 便于联调与日志追踪
 /// - 通过系统 [HapticFeedback] 提供触觉反馈
 class VoiceAssistService {

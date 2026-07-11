@@ -125,20 +125,17 @@ class _AmplioAppState extends State<AmplioApp> {
         Locale('es', ''), // 西班牙语 Spanish
       ],
       theme: context.watch<UserSettingsService>().buildTheme().copyWith(
-            appBarTheme: const AppBarTheme(
-              systemOverlayStyle: SystemUiOverlayStyle(
-                statusBarColor: Colors.transparent,
-                statusBarIconBrightness: Brightness.dark,
-                statusBarBrightness: Brightness.light,
-              ),
-            ),
-            pageTransitionsTheme: const PageTransitionsTheme(
-              builders: {
-                TargetPlatform.android: GentlePageTransitionsBuilder(),
-                TargetPlatform.iOS: GentlePageTransitionsBuilder(),
-              },
-            ),
+        appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
           ),
+        ),
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {TargetPlatform.iOS: GentlePageTransitionsBuilder()},
+        ),
+      ),
       builder: (context, child) {
         final scale = context.watch<UserSettingsService>().fontScale;
         return MediaQuery(

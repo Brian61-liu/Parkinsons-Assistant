@@ -25,7 +25,7 @@ class AuthService {
   // 监听认证状态变化
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  /// Sign in with Apple（仅 iOS / macOS 平台支持原生流程）
+  /// Sign in with Apple（仅 iOS 平台支持原生流程）
   ///
   /// 使用 nonce + SHA256 防重放：客户端生成原始 nonce，发给 Apple 的是其
   /// SHA256，Firebase 通过原始 nonce + Apple 返回的 idToken 校验签名。
@@ -36,7 +36,7 @@ class AuthService {
   Future<UserCredential?> signInWithApple() async {
     try {
       if (!_appleSignInAvailable()) {
-        throw Exception('Sign in with Apple is only available on iOS / macOS.');
+        throw Exception('Sign in with Apple is only available on iOS.');
       }
 
       debugPrint('signInWithApple: 开始 Apple 登录...');
@@ -117,11 +117,10 @@ class AuthService {
     }
   }
 
-  /// 仅 iOS / macOS 暴露原生 Sign in with Apple
+  /// 仅 iOS 暴露原生 Sign in with Apple
   bool _appleSignInAvailable() {
-    if (kIsWeb) return false;
     try {
-      return Platform.isIOS || Platform.isMacOS;
+      return Platform.isIOS;
     } catch (_) {
       return false;
     }
@@ -148,23 +147,23 @@ class AuthService {
   Future<UserCredential?> signInWithGoogle() async {
     try {
       debugPrint('signInWithGoogle: 开始 Google 登录...');
-      
+
       // 触发 Google 登录流程
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      
+
       if (googleUser == null) {
         debugPrint('signInWithGoogle: 用户取消了登录');
         return null;
       }
-      
+
       debugPrint('signInWithGoogle: 获取 Google 认证信息...');
 
       // 获取认证信息
-      final GoogleSignInAuthentication googleAuth = 
+      final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
       debugPrint('signInWithGoogle: 创建 Firebase 凭证...');
-      
+
       // 创建 Firebase 凭证
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -172,10 +171,10 @@ class AuthService {
       );
 
       debugPrint('signInWithGoogle: 登录 Firebase...');
-      
+
       // 使用凭证登录 Firebase
       final userCredential = await _auth.signInWithCredential(credential);
-      
+
       debugPrint('signInWithGoogle: Firebase 登录成功！');
 
       // 后台保存用户信息（不阻塞登录流程）
@@ -210,27 +209,25 @@ class AuthService {
   /// 保存用户信息到 Firestore（最小化数据原则）
   Future<void> _saveUserToFirestore(User user) async {
     final userDoc = _firestore.collection('users').doc(user.uid);
-    
+
     // 只存储必要的用户信息（数据最小化原则）
     final userData = {
       'uid': user.uid,
       // 邮箱使用部分遮蔽处理
       'emailMasked': _maskEmail(user.email ?? ''),
       // 不直接存储完整姓名
-      'displayNameInitial': user.displayName?.isNotEmpty == true 
-          ? user.displayName![0] 
+      'displayNameInitial': user.displayName?.isNotEmpty == true
+          ? user.displayName![0]
           : '?',
       'lastLoginAt': FieldValue.serverTimestamp(),
-      'dataEncryptionVersion': 1,  // 用于将来的加密升级
+      'dataEncryptionVersion': 1, // 用于将来的加密升级
     };
 
     // 检查用户是否已存在
     final docSnapshot = await userDoc.get();
     if (docSnapshot.exists) {
       // 更新最后登录时间
-      await userDoc.update({
-        'lastLoginAt': FieldValue.serverTimestamp(),
-      });
+      await userDoc.update({'lastLoginAt': FieldValue.serverTimestamp()});
     } else {
       // 创建新用户
       userData['createdAt'] = FieldValue.serverTimestamp();
@@ -246,7 +243,7 @@ class AuthService {
     final parts = email.split('@');
     final name = parts[0];
     final domain = parts[1];
-    
+
     if (name.length <= 2) {
       return '***@$domain';
     }
@@ -267,11 +264,11 @@ class AuthService {
           .doc(userId)
           .collection('audit_logs')
           .add({
-        'eventType': eventType,
-        'description': description,
-        'timestamp': FieldValue.serverTimestamp(),
-        'ipAddress': 'redacted', // 真实实现中不应存储 IP
-      });
+            'eventType': eventType,
+            'description': description,
+            'timestamp': FieldValue.serverTimestamp(),
+            'ipAddress': 'redacted', // 真实实现中不应存储 IP
+          });
     } catch (e) {
       // 审计日志失败不应阻止正常操作
       debugPrint('审计日志记录失败: $e');
@@ -282,23 +279,23 @@ class AuthService {
   Future<void> signOut() async {
     try {
       final userId = currentUser?.uid;
-      
+
       // 先执行关键的登出操作
       try {
         await _googleSignIn.signOut();
       } catch (e) {
         debugPrint('Google 登出错误: $e');
       }
-      
+
       await _auth.signOut();
-      
+
       // 非关键操作放在后面，不阻塞登出流程
       if (userId != null) {
         _logAuditEvent(userId, 'LOGOUT', 'User logged out').catchError((e) {
           debugPrint('审计日志记录失败: $e');
         });
       }
-      
+
       // 清除本地安全存储的数据
       _secureStorage.clearAllSecure().catchError((e) {
         debugPrint('清除本地存储失败: $e');
@@ -342,7 +339,7 @@ class AuthService {
       'createdAt': FieldValue.serverTimestamp(),
       // 数据完整性哈希
       'dataHash': _secureStorage.hashData(
-        '$frequency$amplitude$severity${timestamp.toIso8601String()}'
+        '$frequency$amplitude$severity${timestamp.toIso8601String()}',
       ),
     };
 
@@ -442,9 +439,9 @@ class AuthService {
         .doc(user.uid)
         .collection('data_export_requests')
         .add({
-      'requestedAt': FieldValue.serverTimestamp(),
-      'status': 'completed',
-    });
+          'requestedAt': FieldValue.serverTimestamp(),
+          'status': 'completed',
+        });
 
     // 获取用户基本信息
     final userData = await getUserData();
@@ -469,11 +466,7 @@ class AuthService {
       }).toList(),
     };
 
-    await _logAuditEvent(
-      user.uid,
-      'DATA_EXPORT',
-      'User data exported',
-    );
+    await _logAuditEvent(user.uid, 'DATA_EXPORT', 'User data exported');
 
     return exportData;
   }
@@ -509,7 +502,9 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
         // user.delete() 需要近期登录凭证；先登出再让用户重新登录
-        try { await _googleSignIn.signOut(); } catch (_) {}
+        try {
+          await _googleSignIn.signOut();
+        } catch (_) {}
         await _auth.signOut();
         throw Exception('为保障账户安全，请重新登录后再删除账户。');
       }

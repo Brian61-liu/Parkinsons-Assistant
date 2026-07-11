@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -36,17 +35,9 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   bool _personDetected = false; // 当前帧是否检测到人体
   InputImageRotation _imageRotation = InputImageRotation.rotation0deg;
 
-  // Android 设备方向 -> 旋转补偿角度（ML Kit 输入旋转计算用）
-  static const Map<DeviceOrientation, int> _deviceOrientationDegrees = {
-    DeviceOrientation.portraitUp: 0,
-    DeviceOrientation.landscapeLeft: 90,
-    DeviceOrientation.portraitDown: 180,
-    DeviceOrientation.landscapeRight: 270,
-  };
-  
   // 训练类型
   TrainingType _currentTrainingType = TrainingType.armsRaised; // 当前训练类型
-  
+
   // 动作检测相关（通用）
   bool _isActionPerformed = false; // 是否完成动作（根据训练类型不同而不同）
   int _successCount = 0;
@@ -72,7 +63,9 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   // 动作检测引擎：单一保守难度（2026-06-20 起取消双模式）。
   final MotionDetectionConfig _motionConfig =
       MotionDetectionConfig.defaultPreset();
-  late final ArmRaiseDetector _armDetector = ArmRaiseDetector(_motionConfig.arm);
+  late final ArmRaiseDetector _armDetector = ArmRaiseDetector(
+    _motionConfig.arm,
+  );
   late final LegLiftDetector _legDetector = LegLiftDetector(_motionConfig.leg);
 
   VoiceAssistService _voiceAssist(BuildContext context) {
@@ -85,14 +78,16 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     super.initState();
     _showTrainingTypeSelection();
   }
-  
+
   // 启动训练计时器
   void _startTrainingTimer() {
     _trainingStartTime = DateTime.now();
     _trainingTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (mounted && !_isGoalReached) {
         setState(() {
-          _trainingDuration = DateTime.now().difference(_trainingStartTime!).inSeconds;
+          _trainingDuration = DateTime.now()
+              .difference(_trainingStartTime!)
+              .inSeconds;
         });
       } else {
         timer.cancel();
@@ -118,9 +113,9 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     final cameras = await availableCameras();
     if (cameras.isEmpty) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('未找到可用摄像头')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('未找到可用摄像头')));
       }
       return;
     }
@@ -136,23 +131,21 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
 
     if (frontCamera == null) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('未找到前置摄像头')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('未找到前置摄像头')));
       }
       return;
     }
 
     _camera = frontCamera;
 
-    // 初始化摄像头控制器。
-    // ML Kit 要求平台特定的像素格式：iOS 用 bgra8888，Android 用 nv21（单平面）。
+    // 初始化 iPhone 摄像头控制器。ML Kit 在 iOS 上要求 bgra8888 单平面格式。
     _cameraController = CameraController(
       frontCamera,
       ResolutionPreset.medium,
       enableAudio: false,
-      imageFormatGroup:
-          Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.bgra8888,
+      imageFormatGroup: ImageFormatGroup.bgra8888,
     );
 
     try {
@@ -166,9 +159,9 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('摄像头初始化失败: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('摄像头初始化失败: $e')));
       }
     }
   }
@@ -185,7 +178,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     if (_cameraController == null || !_cameraController!.value.isInitialized) {
       return;
     }
-    
+
     // 如果已达到目标，不启动流
     if (_isGoalReached) {
       return;
@@ -236,39 +229,22 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     }
   }
 
-  /// 将相机帧转换为 ML Kit 可识别的 [InputImage]。
+  /// 将 iPhone 相机帧转换为 ML Kit 可识别的 [InputImage]。
   ///
   /// 关键点（旧实现固定 rotation0deg + yuv420，导致 iOS 真机完全检测不到人体）：
   /// - 旋转角度根据摄像头 sensorOrientation 与设备方向计算；
-  /// - 图像格式从相机帧实际格式推导，并校验平台支持的格式；
-  /// - iOS(bgra8888)/Android(nv21) 均为单平面，直接取首平面字节。
+  /// - 图像格式从相机帧实际格式推导，并校验为 iOS 支持的 bgra8888；
+  /// - bgra8888 为单平面，直接取首平面字节。
   InputImage? _inputImageFromCameraImage(CameraImage image) {
-    final controller = _cameraController;
     final camera = _camera;
-    if (controller == null || camera == null) return null;
+    if (camera == null) return null;
 
     final sensorOrientation = camera.sensorOrientation;
-    InputImageRotation? rotation;
-    if (Platform.isIOS) {
-      rotation = InputImageRotationValue.fromRawValue(sensorOrientation);
-    } else if (Platform.isAndroid) {
-      var rotationCompensation =
-          _deviceOrientationDegrees[controller.value.deviceOrientation];
-      if (rotationCompensation == null) return null;
-      if (camera.lensDirection == CameraLensDirection.front) {
-        rotationCompensation = (sensorOrientation + rotationCompensation) % 360;
-      } else {
-        rotationCompensation =
-            (sensorOrientation - rotationCompensation + 360) % 360;
-      }
-      rotation = InputImageRotationValue.fromRawValue(rotationCompensation);
-    }
+    final rotation = InputImageRotationValue.fromRawValue(sensorOrientation);
     if (rotation == null) return null;
 
     final format = InputImageFormatValue.fromRawValue(image.format.raw);
-    if (format == null ||
-        (Platform.isAndroid && format != InputImageFormat.nv21) ||
-        (Platform.isIOS && format != InputImageFormat.bgra8888)) {
+    if (format == null || format != InputImageFormat.bgra8888) {
       return null;
     }
 
@@ -310,17 +286,21 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   }
 
   // 构建训练演示对话框
-  Widget _buildTrainingDemoDialog(BuildContext context, AppLocalizations l10n, TrainingType type) {
+  Widget _buildTrainingDemoDialog(
+    BuildContext context,
+    AppLocalizations l10n,
+    TrainingType type,
+  ) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     // 根据训练类型设置不同的属性
     String title;
     IconData icon;
     Color color;
     String gifPath;
     String instruction;
-    
+
     switch (type) {
       case TrainingType.armsRaised:
         title = l10n.armsRaisedTraining;
@@ -337,7 +317,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         instruction = l10n.legLiftInstruction;
         break;
     }
-    
+
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
@@ -365,11 +345,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
               ),
               child: Row(
                 children: [
-                  Icon(
-                    icon,
-                    color: color,
-                    size: 24,
-                  ),
+                  Icon(icon, color: color, size: 24),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
@@ -403,10 +379,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          gifPath,
-                          fit: BoxFit.contain,
-                        ),
+                        child: Image.asset(gifPath, fit: BoxFit.contain),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -475,7 +448,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
 
   Widget _buildTrainingTypeSelectionDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return CupertinoAlertDialog(
       title: Text(l10n.selectTrainingType),
       content: Column(
@@ -491,11 +464,15 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     );
   }
 
-  Widget _buildTrainingTypeOption(BuildContext context, TrainingType type, AppLocalizations l10n) {
+  Widget _buildTrainingTypeOption(
+    BuildContext context,
+    TrainingType type,
+    AppLocalizations l10n,
+  ) {
     String title;
     IconData icon;
     Color color;
-    
+
     switch (type) {
       case TrainingType.armsRaised:
         title = l10n.armsRaisedTraining;
@@ -506,7 +483,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         icon = CupertinoIcons.arrow_up_circle_fill;
         color = const Color(0xFF8B5CF6);
     }
-    
+
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: () {
@@ -696,7 +673,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
 
   void _showGoalSettingDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
@@ -724,9 +701,13 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     );
   }
 
-  Widget _buildGoalOption(BuildContext context, int count, AppLocalizations l10n) {
+  Widget _buildGoalOption(
+    BuildContext context,
+    int count,
+    AppLocalizations l10n,
+  ) {
     final isSelected = _targetCount == count;
-    
+
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: () {
@@ -739,7 +720,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
           } else {
             _isGoalReached = false;
             // 如果之前停止了，重新启动
-            if (_cameraController != null && 
+            if (_cameraController != null &&
                 _cameraController!.value.isInitialized &&
                 !_cameraController!.value.isStreamingImages) {
               _startImageStream();
@@ -752,7 +733,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          color: isSelected 
+          color: isSelected
               ? Colors.blue.withValues(alpha: 0.2)
               : Colors.grey.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
@@ -781,7 +762,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
       builder: (dialogContext) {
         // 使用对话框的 context 获取本地化
         final l10n = AppLocalizations.of(dialogContext)!;
-        
+
         return Dialog(
           backgroundColor: Colors.transparent,
           child: Container(
@@ -789,10 +770,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
             decoration: BoxDecoration(
               color: Colors.black.withValues(alpha: 0.9),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                color: Colors.green,
-                width: 2,
-              ),
+              border: Border.all(color: Colors.green, width: 2),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -814,20 +792,14 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                 const SizedBox(height: 16),
                 Text(
                   l10n.goalCompleted,
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 18,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 18),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 // 显示训练统计信息
                 Text(
                   '${l10n.successCount}: $_successCount / $_targetCount | ${l10n.duration}: ${_formatDuration(_trainingDuration)}',
-                  style: TextStyle(
-                    color: Colors.white60,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.white60, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
@@ -885,12 +857,12 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
 
     _initArmDetectionState();
     _initLegLiftHistory();
-    
+
     // 重新启动计时器
     _startTrainingTimer();
-    
+
     // 重新启动图像流
-    if (_cameraController != null && 
+    if (_cameraController != null &&
         _cameraController!.value.isInitialized &&
         !_cameraController!.value.isStreamingImages) {
       _startImageStream();
@@ -933,7 +905,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -985,7 +957,9 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
           const SizedBox(width: 8),
           CupertinoButton(
             padding: EdgeInsets.zero,
-            onPressed: _isGoalReached ? null : () => _showGoalSettingDialog(context),
+            onPressed: _isGoalReached
+                ? null
+                : () => _showGoalSettingDialog(context),
             child: Tooltip(
               message: l10n.setGoal,
               child: Semantics(
@@ -1034,10 +1008,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
             const SizedBox(height: 16),
             Text(
               l10n.cameraPermissionDeniedMessage,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 16,
-              ),
+              style: const TextStyle(color: Colors.white70, fontSize: 16),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
@@ -1063,9 +1034,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     return Stack(
       children: [
         // 摄像头预览
-        Positioned.fill(
-          child: CameraPreview(_cameraController!),
-        ),
+        Positioned.fill(child: CameraPreview(_cameraController!)),
         // 姿态检测覆盖层
         if (_currentPose != null && _imageSize != null && _camera != null)
           Positioned.fill(
@@ -1153,10 +1122,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                 // 显示训练时长
                 Text(
                   _formatDuration(_trainingDuration),
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 12),
@@ -1251,11 +1217,16 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                             width: 60,
                             height: 60,
                             child: CircularProgressIndicator(
-                              value: _targetCount > 0 
-                                  ? (_successCount / _targetCount).clamp(0.0, 1.0)
+                              value: _targetCount > 0
+                                  ? (_successCount / _targetCount).clamp(
+                                      0.0,
+                                      1.0,
+                                    )
                                   : 0.0,
                               strokeWidth: 4,
-                              backgroundColor: Colors.white.withValues(alpha: 0.3),
+                              backgroundColor: Colors.white.withValues(
+                                alpha: 0.3,
+                              ),
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 _isGoalReached ? Colors.green : Colors.white,
                               ),
@@ -1295,7 +1266,6 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     );
   }
 }
-
 
 // 姿态绘制器
 class PosePainter extends CustomPainter {
@@ -1378,11 +1348,7 @@ class PosePainter extends CustomPainter {
       final endPoint = pose.landmarks[connection[1]];
 
       if (startPoint != null && endPoint != null) {
-        canvas.drawLine(
-          toCanvas(startPoint),
-          toCanvas(endPoint),
-          linePaint,
-        );
+        canvas.drawLine(toCanvas(startPoint), toCanvas(endPoint), linePaint);
       }
     }
 
@@ -1420,14 +1386,9 @@ double _translateX(
 ) {
   switch (rotation) {
     case InputImageRotation.rotation90deg:
-      return x *
-          canvasSize.width /
-          (Platform.isIOS ? imageSize.width : imageSize.height);
+      return x * canvasSize.width / imageSize.width;
     case InputImageRotation.rotation270deg:
-      return canvasSize.width -
-          x *
-              canvasSize.width /
-              (Platform.isIOS ? imageSize.width : imageSize.height);
+      return canvasSize.width - x * canvasSize.width / imageSize.width;
     case InputImageRotation.rotation0deg:
     case InputImageRotation.rotation180deg:
       switch (cameraLensDirection) {
@@ -1450,9 +1411,7 @@ double _translateY(
   switch (rotation) {
     case InputImageRotation.rotation90deg:
     case InputImageRotation.rotation270deg:
-      return y *
-          canvasSize.height /
-          (Platform.isIOS ? imageSize.height : imageSize.width);
+      return y * canvasSize.height / imageSize.height;
     case InputImageRotation.rotation0deg:
     case InputImageRotation.rotation180deg:
       return y * canvasSize.height / imageSize.height;

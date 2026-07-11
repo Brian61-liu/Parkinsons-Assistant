@@ -4,7 +4,7 @@
 
 ## 0. 当前状态摘要
 
-最后更新：2026-06-20（肢体动作训练修复输入层 + 改为单一保守难度，避免误测与双阈值矩阵）
+最后更新：2026-07-11（产品重心调整为 iPhone-only，仅上架 Apple App Store，移除非 iOS 平台工程与发布计划）
 
 状态标记：
 
@@ -21,7 +21,9 @@
 - `[x]` 隐私与医疗合规声明需要降级或补齐证明。
 - `[x]` 权限用途说明需要与真实功能对齐。
 
-非阻塞上架：用药清单 MVP（本地清单 + 手动打卡）已合入代码，见 §7 P2；待真机走查，不新增系统通知权限。
+产品决策：2026-07-11 起 Amplio 只服务 iPhone 用户，仅上架 Apple App Store；非 iOS 客户端与其他商店路线已放弃。
+
+非阻塞上架：用药清单 MVP（本地清单 + 手动打卡）已合入代码，见 §7 P2；待 iPhone 真机走查，不新增系统通知权限。
 
 更新规则：
 
@@ -32,12 +34,12 @@
 
 ## 1. 产品背景
 
-Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
+Amplio 是一个帮助帕金森患者进行康复训练的 iPhone App。
 
 计划上架路径：
 
-- 先上架 Apple App Store。
-- 后续上架 Google Play。
+- 仅上架 Apple App Store。
+- 专为 iPhone 用户服务，不维护非 iOS 客户端。
 - 上架地区为全球，除中国大陆。
 
 产品定位应保持为“康复训练辅助工具”，不能声称可以诊断、治疗、治愈帕金森，也不能替代医生、物理治疗师或语言治疗师建议。
@@ -79,7 +81,7 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
 
 - iOS 使用 Google 登录时，通常必须同时提供 Sign in with Apple。目前 Apple 登录按钮存在但不可用。
 - `ios/Runner/Info.plist` 中 Google 登录 URL Scheme 仍含 `YOUR_CLIENT_ID` 占位符，需要替换为真实 iOS Client ID。
-- 需要确认 `GoogleService-Info.plist`、`google-services.json`、bundle id、application id、Firebase Auth provider 配置全部一致。
+- 需要确认 `GoogleService-Info.plist`、bundle id、Apple Developer signing/capabilities、Firebase Auth provider 配置全部一致。
 
 ### Firebase 与云同步
 
@@ -111,8 +113,8 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
 
 - `test/widget_test.dart` 仍是 Flutter 计数器模板测试，与当前 App 不匹配。
 - 缺少数据库 migration、训练分数写入、云同步映射、账户删除、数据导出、权限拒绝、核心页面 smoke test。
-- Android release 仍使用 debug signing config，Google Play 前必须配置正式签名。
-- `pubspec.yaml` 仍有模板描述，需要改为正式产品描述。
+- 非 iOS 客户端与其他商店路线已放弃；相关工程与配置已移除，不再作为发布阻塞项。
+- `pubspec.yaml` 已改为正式 iPhone 产品描述。
 
 ## 5. 上架前检查清单
 
@@ -128,15 +130,6 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
 - 使用真实设备完整测试登录、游客模式、权限拒绝、训练、数据删除。
 - 用药清单 MVP 无需通知权限；若上架前更新隐私政策 / App Privacy Nutrition Labels，需声明可选的、仅保存在本机的用药昵称清单（见 §7 P2 用药清单相关待办）。
 
-### Google Play
-
-- 配置 release signing，不使用 debug key。
-- 完成 Data Safety 表单。
-- 核对 Android 权限是否最小化。
-- 准备隐私政策 URL、服务条款 URL、支持 URL。
-- 确认目标地区排除中国大陆。
-- 完整测试 Android 相机、麦克风、传感器和后台行为。
-
 ### 全球化
 
 - 默认语言建议跟随系统语言，fallback 使用英文。
@@ -150,7 +143,7 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
 - 不夸大医疗效果，不替代医生建议。
 - 所有健康数据必须可解释、可导出、可删除。
 - 云端失败不能静默吞掉，关键数据操作要给用户明确反馈。
-- 上架前必须用真实设备测试 iOS 和 Android。
+- 上架前必须用真实 iPhone 测试核心功能与权限流程。
 - 新增功能优先沿用项目现有 Flutter/Firebase/SQLite 模式，避免不必要的新架构。
 
 ## 7. 建议实施优先级
@@ -162,7 +155,7 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
   - 改动：
     1. `pubspec.yaml` 新增 `sign_in_with_apple: ^7.0.1`。
     2. `lib/services/auth_service.dart` 新增 `signInWithApple()`：使用 `Random.secure()` 生成原始 nonce，传给 Apple 的是 `sha256(rawNonce)`，再用 `OAuthProvider('apple.com').credential(idToken, rawNonce, accessToken)` 走 Firebase Auth；`SignInWithAppleAuthorizationException(canceled)` 与 Google 流程一致返回 `null`；首次登录时把 `givenName + familyName` 写入 Firebase `user.displayName`（Apple 仅在首次返回 fullName）。
-    3. `lib/pages/login_page.dart` 移除原 `onPressed: null` 占位按钮，新增黑底白字的 Apple 按钮（仅 iOS / macOS 显示，Android / Web 隐藏避免 web 重定向流程的复杂配置），错误处理覆盖：取消、超时/网络、未登录 Apple ID。
+    3. `lib/pages/login_page.dart` 移除原 `onPressed: null` 占位按钮，新增黑底白字的 Apple 按钮（仅 iOS 显示），错误处理覆盖：取消、超时/网络、未登录 Apple ID。
     4. 12 个 ARB 文件 + `AppLocalizations`/`AppLocalizationsXx` 新增 `signInWithApple` 文案。
     5. 新增 `ios/Runner/Runner.entitlements`，声明 `com.apple.developer.applesignin = [Default]`。
     6. `ios/Runner.xcodeproj/project.pbxproj` 在 Runner target 三个构建配置（Debug/Release/Profile）添加 `CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;`，无需在 Xcode UI 重新挂接。
@@ -206,8 +199,8 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
   - 残余风险：无。auth_service.dart 和 security_service.dart 文件头注释已同步改为保守表述（2026-05-03）。
 - [x] 修正相机、麦克风、相册权限说明。
   - 完成日期：2026-05-03
-  - 改动：1) iOS Info.plist 的 NSCameraUsageDescription 补充肢体动作训练姿态检测用途，NSMicrophoneUsageDescription 移除 "LSVT LOUD" 专业疗法名称（改为描述测量语音音量），三条说明均从中文改为英文（无 InfoPlist.strings 本地化文件时英文为通用 fallback）；2) Android AndroidManifest.xml 相机权限注释补充动作训练用途。
-  - 验证方式：iOS 真机首次请求相机权限时弹窗说明覆盖头像和动作训练两种用途；麦克风弹窗不再出现 LSVT LOUD；相册弹窗说明清晰；Android 权限注释准确。
+  - 改动：iOS Info.plist 的 NSCameraUsageDescription 补充肢体动作训练姿态检测用途，NSMicrophoneUsageDescription 移除 "LSVT LOUD" 专业疗法名称（改为描述测量语音音量），三条说明均从中文改为英文（无 InfoPlist.strings 本地化文件时英文为通用 fallback）。
+  - 验证方式：iOS 真机首次请求相机权限时弹窗说明覆盖头像和动作训练两种用途；麦克风弹窗不再出现 LSVT LOUD；相册弹窗说明清晰。
   - 残余风险：Info.plist 权限说明为英文单一语言，未为 12 种支持语言提供本地化 InfoPlist.strings。建议上架前补充主要市场语言（至少中文）的 InfoPlist.strings。
 
 ### P1：安全与质量
@@ -220,8 +213,10 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
   - 验证方式：网络失败时用户能看到状态，恢复网络后可重试。
 - [ ] 补齐核心单元测试、widget test 和集成测试。
   - 验证方式：测试覆盖训练分数映射、数据库 migration、云同步映射、权限拒绝和关键页面 smoke test。
-- [ ] 配置 Android release signing。
-  - 验证方式：release 构建不再使用 debug signing config。
+- [x] 废弃非 iOS 发布签名。
+  - 完成日期：2026-07-11
+  - 原因：产品决策改为仅服务 iPhone 用户、仅上架 Apple App Store；非 iOS 客户端与其他商店路线已放弃。
+  - 验证方式：移除非 iOS 平台工程；`.metadata` 仅保留 root / ios；`pubspec.yaml` 的图标和启动图配置仅生成 iOS 资源。
 - [ ] 完成隐私政策、服务条款、医疗免责声明。
   - 验证方式：App 内和商店链接可访问，法律主体、联系邮箱和品牌一致。
 
@@ -233,8 +228,8 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
   - 完成日期：2026-06-20（代码侧）
   - 根因：`lib/pages/movement_training_page.dart` 的 `_inputImageFromCameraImage()` 把 ML Kit 输入帧写死为 `InputImageRotation.rotation0deg` + `InputImageFormat.yuv420`，并把多平面字节拼接传入。iOS 真机相机帧实际为 `bgra8888`、且需要按 `sensorOrientation` 旋转，导致 ML Kit 始终解析不到 Pose（无骨架、无计数）。`_processImage()` 无异常保护，一旦 ML Kit 抛错 `_isDetecting` 会永久卡在 `true`，后续帧全部被跳过。
   - 改动（仅 `lib/pages/movement_training_page.dart`，未改 `motion_detection_service.dart` 计数算法）：
-    1. `CameraController` 增加 `imageFormatGroup`：Android=`nv21`、iOS=`bgra8888`（ML Kit 要求的单平面格式）。
-    2. 保存 `CameraDescription _camera`，重写 `_inputImageFromCameraImage()`：iOS 用 `sensorOrientation` 求旋转，Android 用设备方向 + 前/后摄像头补偿；图像格式由 `image.format.raw` 推导并校验平台支持格式；取首平面 `bytes`/`bytesPerRow`。
+    1. `CameraController` 增加 `imageFormatGroup`：iOS=`bgra8888`（ML Kit 要求的单平面格式）。
+    2. 保存 `CameraDescription _camera`，重写 `_inputImageFromCameraImage()`：iOS 用 `sensorOrientation` 求旋转；图像格式由 `image.format.raw` 推导并校验平台支持格式；取首平面 `bytes`/`bytesPerRow`。
     3. `_processImage()` 增加 `try/catch/finally`，确保异常后 `_isDetecting` 一定复位；记录 `_personDetected` 与实际旋转角。
     4. `PosePainter` 重写坐标映射：移植 google_mlkit 官方示例的 `translateX/translateY`，按 `rotation` + `cameraLensDirection` 还原坐标（替代旧的固定缩放 + 手动镜像）。
     5. 新增「未检测到人体」引导提示（上半身完整入镜、保持光线充足）。
@@ -243,7 +238,7 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
     1. iOS 真机进入举手训练 → 出现黄色关键点 + 白色骨架 → 举/放手臂能稳定 +1，达到目标弹成功对话框。
     2. iOS 真机进入抬腿训练 → 出现腿部骨架 → 抬/放腿能稳定 +1。
     3. 骨架叠加层与真人位置大致对齐（前置镜像方向正确）。
-    4. 条件具备时在 Android 真机复测一次（`nv21` 路径）。
+    4. 不再要求非 iOS 客户端复测。
   - 残余风险：
     1. 真机端到端尚未验证；ML Kit Pose 在低光、半身遮挡、深色背景下仍可能丢失人体。
     2. `PosePainter` 采用 stretch 缩放，非等比 `BoxFit.cover`，骨架叠加层在极端宽高比下可能与预览有偏移（不影响计数，计数只依赖关节角度）。
@@ -264,7 +259,7 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
     2. 取消双模式后，旧用户的「康复增强」偏好不再生效；当前产品未上架、无用户偏好需要迁移。
 - [ ] 校准震颤、语音、动作训练算法和阈值（含 `TrainingScoreService` 映射与语音跟练计分）。
   - 验证方式：真实设备、不同年龄和不同机型下有测试记录。
-- [~] 补充更完整的无障碍体验：VoiceOver/TalkBack 标签、大触控区、语音提示、低认知负担流程。
+- [~] 补充更完整的无障碍体验：VoiceOver 标签、大触控区、语音提示、低认知负担流程。
   - 完成日期：2026-05-10（代码侧）
   - 改动：
     1. `lib/pages/home_page.dart`：为设置入口、头像编辑入口、三个训练入口补充 `Semantics/Tooltip`，训练入口改为 `MergeSemantics + ExcludeSemantics` 降低读屏噪音。
@@ -272,12 +267,12 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
     3. `lib/pages/login_page.dart`：语言按钮与 Google/Apple/游客登录按钮补充语义标签与提示。
     4. `lib/pages/voice_training_page.dart`：关键操作按钮补充语义；在开始/重试/取消/完成等节点接入语音提示调用。
     5. `lib/pages/movement_training_page.dart`：返回/历史/目标设置按钮补充语义与提示；在计数增长、目标完成、权限拒绝时增加语音提示。
-    6. `lib/services/voice_assist_service.dart`：由仅 `debugPrint` 升级为系统语义播报（VoiceOver/TalkBack announce）+ 触觉反馈。
+    6. `lib/services/voice_assist_service.dart`：由仅 `debugPrint` 升级为系统语义播报（VoiceOver announce）+ 触觉反馈。
   - 验证方式：
     1. `flutter analyze`（针对本次改动文件）0 issue。
     2. 静态走查确认关键点击区域（尤其自定义按钮）最小触控区达到 `48dp`。
   - 残余风险：
-    1. iOS VoiceOver 与 Android TalkBack 的真机端到端回归尚未完成，当前仍缺少“读屏焦点顺序、播报时机、复杂页面连续导航”的设备侧证据。
+    1. iOS VoiceOver 的真机端到端回归尚未完成，当前仍缺少“读屏焦点顺序、播报时机、复杂页面连续导航”的设备侧证据。
     2. `SemanticsService.announce` 在不同平台版本存在行为差异；后续建议在真机验证中记录是否需要节流与文案优化。
 - [ ] 完成人工多语言校对。
   - 验证方式：隐私、权限、医疗免责声明和核心训练文案完成校对。
@@ -310,7 +305,7 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
   - 完成日期：2026-05-18
   - 改动：`MedicationReminderService.maybePurgeOldCheckIns()` 调用 `purgeMedicationCheckInsOlderThan(90)`。
   - 验证方式：代码审查 + 可在调试时人工插入旧日期打卡后验证删除行数。
-- [ ] 用药清单：系统本地通知（`flutter_local_notifications` + iOS/Android 权限与用途说明）。
+- [ ] 用药清单：系统本地通知（`flutter_local_notifications` + iOS 权限与用途说明）。
   - 验证方式：真机到点提醒；商店隐私与权限声明已更新。
 - [ ] 用药清单：登录用户 Firestore 同步（需 `firestore.rules` + `CloudSyncService` + 失败反馈，与 P1 云同步改进一并做）。
   - 验证方式：换机后提醒与打卡可恢复；规则 Playground 通过。

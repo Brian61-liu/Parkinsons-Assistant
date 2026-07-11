@@ -1,7 +1,6 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -24,7 +23,8 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
   final AuthService _authService = AuthService();
   bool _isLoading = false;
   late AnimationController _animationController;
@@ -69,18 +69,24 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       if (mounted) {
         setState(() => _isLoading = false);
         String errorMessage = e.toString().toLowerCase();
-        
+
         // 用户取消登录，不显示错误
-        if (errorMessage.contains('cancel') || errorMessage.contains('取消') ||
-            errorMessage.contains('sign_in_canceled') || errorMessage.contains('aborted')) {
+        if (errorMessage.contains('cancel') ||
+            errorMessage.contains('取消') ||
+            errorMessage.contains('sign_in_canceled') ||
+            errorMessage.contains('aborted')) {
           return;
         }
-        
+
         // 网络/超时问题
-        if (errorMessage.contains('timeout') || errorMessage.contains('network') ||
-            errorMessage.contains('connection') || errorMessage.contains('unreachable') ||
+        if (errorMessage.contains('timeout') ||
+            errorMessage.contains('network') ||
+            errorMessage.contains('connection') ||
+            errorMessage.contains('unreachable') ||
             errorMessage.contains('failed host lookup')) {
-          _showErrorDialog('无法连接到 Google 服务\n\n请确保：\n• 网络连接正常\n• 可以访问 Google（可能需要 VPN）');
+          _showErrorDialog(
+            '无法连接到 Google 服务\n\n请确保：\n• 网络连接正常\n• 可以访问 Google（可能需要 VPN）',
+          );
         } else {
           _showErrorDialog('登录失败，请重试');
         }
@@ -122,7 +128,9 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             errorMessage.contains('connection') ||
             errorMessage.contains('unreachable') ||
             errorMessage.contains('failed host lookup')) {
-          _showErrorDialog('无法连接到 Apple 服务\n\n请确保：\n• 网络连接正常\n• 设备已登录 Apple ID');
+          _showErrorDialog(
+            '无法连接到 Apple 服务\n\n请确保：\n• 网络连接正常\n• 设备已登录 Apple ID',
+          );
           return;
         }
 
@@ -139,13 +147,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     }
   }
 
-  /// 仅在 iOS / macOS 显示 Apple 登录按钮。
-  /// Android / Web 上 sign_in_with_apple 需要走 Service ID + Web 重定向，
-  /// 配置成本较高且当前 P0 只要求满足 App Store 4.8 合规要求。
+  /// 仅在 iPhone 客户端显示 Apple 登录按钮。
   bool _isAppleSignInAvailable() {
-    if (kIsWeb) return false;
     try {
-      return Platform.isIOS || Platform.isMacOS;
+      return Platform.isIOS;
     } catch (_) {
       return false;
     }
@@ -160,7 +165,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
         content: Padding(
           padding: const EdgeInsets.only(top: 12),
           child: Text(
-            message, 
+            message,
             style: const TextStyle(fontSize: 14, height: 1.5),
             textAlign: TextAlign.left,
           ),
@@ -177,7 +182,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
 
   void _onLanguageButtonPressed() {
     final l10n = AppLocalizations.of(context)!;
-    
+
     final languages = [
       {'locale': const Locale('ar'), 'name': 'العربية'},
       {'locale': const Locale('zh'), 'name': '中文简体'},
@@ -247,10 +252,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
               onPressed: () => Navigator.pop(ctx),
               child: Text(
                 l10n.cancel,
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontSize: 17,
-                ),
+                style: const TextStyle(color: Colors.red, fontSize: 17),
               ),
             ),
             const SizedBox(height: 16),
@@ -285,7 +287,9 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
                         elevation: 2,
-                        shadowColor: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
+                        shadowColor: const Color(
+                          0xFF0EA5E9,
+                        ).withValues(alpha: 0.3),
                         child: InkWell(
                           onTap: _onLanguageButtonPressed,
                           borderRadius: BorderRadius.circular(12),
@@ -305,7 +309,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                 ],
               ),
             ),
-            
+
             // 主内容
             Expanded(
               child: FadeTransition(
@@ -346,63 +350,79 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                         label: l10n.signInWithGoogle,
                                         hint: '使用 Google 账号登录',
                                         child: ElevatedButton(
-                                        onPressed: _isLoading ? null : _signInWithGoogle,
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.white,
-                                          foregroundColor: const Color(0xFF334155),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(60),
-                                            side: BorderSide(
-                                              color: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
-                                              width: 1.5,
+                                          onPressed: _isLoading
+                                              ? null
+                                              : _signInWithGoogle,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.white,
+                                            foregroundColor: const Color(
+                                              0xFF334155,
                                             ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(60),
+                                              side: BorderSide(
+                                                color: const Color(
+                                                  0xFF0EA5E9,
+                                                ).withValues(alpha: 0.3),
+                                                width: 1.5,
+                                              ),
+                                            ),
+                                            elevation: 2,
+                                            shadowColor: const Color(
+                                              0xFF0EA5E9,
+                                            ).withValues(alpha: 0.3),
                                           ),
-                                          elevation: 2,
-                                          shadowColor: const Color(0xFF0EA5E9).withValues(alpha: 0.3),
-                                        ),
-                                        child: _isLoading
-                                            ? Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  SizedBox(
-                                                    width: 20,
-                                                    height: 20,
-                                                    child: CircularProgressIndicator(
-                                                      strokeWidth: 2.5,
-                                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                                        Colors.grey[600]!,
+                                          child: _isLoading
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 20,
+                                                      height: 20,
+                                                      child: CircularProgressIndicator(
+                                                        strokeWidth: 2.5,
+                                                        valueColor:
+                                                            AlwaysStoppedAnimation<
+                                                              Color
+                                                            >(
+                                                              Colors.grey[600]!,
+                                                            ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  const SizedBox(width: 12),
-                                                  Text(
-                                                    l10n.signingIn,
-                                                    style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: Colors.grey[600],
+                                                    const SizedBox(width: 12),
+                                                    Text(
+                                                      l10n.signingIn,
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: Colors.grey[600],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              )
-                                            : Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  SvgPicture.asset(
-                                                    'assets/images/google_logo.svg',
-                                                    width: 22,
-                                                    height: 22,
-                                                  ),
-                                                  const SizedBox(width: 12),
-                                                  Text(
-                                                    l10n.signInWithGoogle,
-                                                    style: const TextStyle(
-                                                      fontSize: 24,
-                                                      fontWeight: FontWeight.w600,
+                                                  ],
+                                                )
+                                              : Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      'assets/images/google_logo.svg',
+                                                      width: 22,
+                                                      height: 22,
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
+                                                    const SizedBox(width: 12),
+                                                    Text(
+                                                      l10n.signInWithGoogle,
+                                                      style: const TextStyle(
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                         ),
                                       ),
                                     ),
@@ -416,53 +436,65 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                           label: l10n.signInWithApple,
                                           hint: '使用 Apple 账号登录',
                                           child: ElevatedButton(
-                                          onPressed: _isLoading ? null : _signInWithApple,
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.black,
-                                            foregroundColor: Colors.white,
-                                            disabledBackgroundColor: Colors.black54,
-                                            disabledForegroundColor: Colors.white70,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(60),
+                                            onPressed: _isLoading
+                                                ? null
+                                                : _signInWithApple,
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.black,
+                                              foregroundColor: Colors.white,
+                                              disabledBackgroundColor:
+                                                  Colors.black54,
+                                              disabledForegroundColor:
+                                                  Colors.white70,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(60),
+                                              ),
+                                              elevation: 2,
+                                              shadowColor: Colors.black
+                                                  .withValues(alpha: 0.3),
                                             ),
-                                            elevation: 2,
-                                            shadowColor: Colors.black.withValues(alpha: 0.3),
-                                          ),
-                                          child: _isLoading
-                                              ? Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: const [
-                                                    SizedBox(
-                                                      width: 20,
-                                                      height: 20,
-                                                      child: CircularProgressIndicator(
-                                                        strokeWidth: 2.5,
-                                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                                          Colors.white70,
+                                            child: _isLoading
+                                                ? Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: const [
+                                                      SizedBox(
+                                                        width: 20,
+                                                        height: 20,
+                                                        child: CircularProgressIndicator(
+                                                          strokeWidth: 2.5,
+                                                          valueColor:
+                                                              AlwaysStoppedAnimation<
+                                                                Color
+                                                              >(Colors.white70),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                )
-                                              : Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.apple,
-                                                      size: 28,
-                                                      color: Colors.white,
-                                                    ),
-                                                    const SizedBox(width: 12),
-                                                    Text(
-                                                      l10n.signInWithApple,
-                                                      style: const TextStyle(
-                                                        fontSize: 24,
-                                                        fontWeight: FontWeight.w600,
+                                                    ],
+                                                  )
+                                                : Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      const Icon(
+                                                        Icons.apple,
+                                                        size: 28,
                                                         color: Colors.white,
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                      const SizedBox(width: 12),
+                                                      Text(
+                                                        l10n.signInWithApple,
+                                                        style: const TextStyle(
+                                                          fontSize: 24,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                           ),
                                         ),
                                       ),
@@ -476,24 +508,29 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                         label: l10n.continueAsGuest,
                                         hint: '以游客模式继续',
                                         child: OutlinedButton(
-                                        onPressed: widget.onGuestLogin,
-                                        style: OutlinedButton.styleFrom(
-                                          foregroundColor: const Color(0xFF64748B),
-                                          side: BorderSide(
-                                            color: const Color(0xFF64748B).withValues(alpha: 0.3),
-                                            width: 1.5,
+                                          onPressed: widget.onGuestLogin,
+                                          style: OutlinedButton.styleFrom(
+                                            foregroundColor: const Color(
+                                              0xFF64748B,
+                                            ),
+                                            side: BorderSide(
+                                              color: const Color(
+                                                0xFF64748B,
+                                              ).withValues(alpha: 0.3),
+                                              width: 1.5,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(60),
+                                            ),
                                           ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(60),
+                                          child: Text(
+                                            l10n.continueAsGuest,
+                                            style: const TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
-                                        ),
-                                        child: Text(
-                                          l10n.continueAsGuest,
-                                          style: const TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
                                         ),
                                       ),
                                     ),
@@ -510,7 +547,9 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                           icon: Icon(
                             CupertinoIcons.lock_shield,
                             size: 16,
-                            color: const Color(0xFF0EA5E9).withValues(alpha: 0.8),
+                            color: const Color(
+                              0xFF0EA5E9,
+                            ).withValues(alpha: 0.8),
                           ),
                           label: Text(
                             l10n.privacyPolicy,

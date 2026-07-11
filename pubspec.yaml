@@ -1,5 +1,5 @@
 name: parkinson_new
-description: "A new Flutter project."
+description: "Amplio is an iPhone rehabilitation support app for people living with Parkinson's disease."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -9,13 +9,9 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # followed by an optional build number separated by a +.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
 # In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-# In Windows, build-name is used as the major, minor, and patch parts
-# of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
 environment:
@@ -101,24 +97,12 @@ flutter_native_splash:
   image: "assets/icon/app_icon.png"
   image_dark: "assets/icon/app_icon.png"
   fullscreen: true
-  android_gravity: center
   ios_content_mode: center
-  android_12:
-    color: "#FFFFFF"
-    color_dark: "#FFFFFF"
-    image: "assets/icon/app_icon.png"
-    image_dark: "assets/icon/app_icon.png"
-    icon_background_color: "#FFFFFF"
-    icon_background_color_dark: "#FFFFFF"
 
 # 应用图标配置
 flutter_launcher_icons:
-  android: true
   ios: true
   image_path: "assets/icon/app_icon.png"
-  adaptive_icon_background: "#F0F9FF"
-  adaptive_icon_foreground: "assets/icon/app_icon.png"
-  min_sdk_android: 23
   remove_alpha_ios: true
 
 # For information on the generic Dart part of this file, see the
