@@ -1,6 +1,6 @@
-# Amplio Project Context
+# Amplio 项目上下文
 
-> 给 Cursor 新对话使用的项目上下文。新开会话时可直接让 Agent 先阅读本文件，再继续开发或审查。
+> Amplio 项目的长期上下文与状态记录。`.cursor/rules/amplio-workflow.mdc` 会要求 Cursor 在处理项目任务前先阅读本文件。
 
 ## 0. 当前状态摘要
 
@@ -336,27 +336,37 @@ Amplio 是一个帮助帕金森患者进行康复训练的 Flutter App。
 
 ## 8. Git 提交工作流
 
-每次完成代码修改后，遵循以下流程：
+强制执行规则位于 `.cursor/rules/amplio-workflow.mdc`；本节用于说明日常使用方法。
 
-1. 运行 `flutter analyze` 和相关测试。
-2. Cursor 汇报改动与检查结果，等待用户审查；用户确认前不得执行 `git add` 或创建 commit。
-3. 只有用户明确确认满意后，Cursor 才根据实际功能范围将改动拆分为清晰、独立的 commits。
-4. 每个 commit 的 Summary 和 Description 必须使用英文，并简短说明实际改动。
-5. 提交前排除敏感信息、临时文件和无关改动。
-6. Cursor 不执行 `git push`。
-7. 用户确认本地 commits 后，通过 GitHub Desktop 手动点击 **Push origin**。
-8. 未经用户明确要求，不修改已有 commit，也不执行强制推送。
+### 日常流程
+
+1. Cursor 修改代码，运行与改动相关的分析和测试，然后汇报结果。
+2. 用户检查代码并自行测试：满意可点击 **Keep**，不满意可使用 **Undo** 或要求继续修改。
+3. 用户完全满意后，在对话中回复“确认提交”。
+4. Cursor 检查全部差异，排除敏感信息与无关改动，再按实际功能范围创建一个或多个本地提交（commits）。
+5. 每个提交的摘要（Summary）和说明（Description）使用英文，并简短准确地说明实际改动。
+6. 用户在 GitHub Desktop 检查本地提交，然后手动点击 **Push origin**。
+
+### 关键说明
+
+- **Keep**：仅保留文件改动，不等于允许创建 commit。
+- **Undo**：用于撤销尚未提交的文件改动；如果已经创建 commit，应先说明情况，不要直接 Push。
+- **确认提交**：明确授权 Cursor 执行 `git add` 和 `git commit`，但不授权 Push。
+- **Push origin**：只有用户在 GitHub Desktop 中手动执行，Cursor 不执行 `git push`。
+- 未经用户明确要求，Cursor 不修改已有 commit，不改写 Git 历史，也不执行强制推送。
 
 ## 9. 新对话启动提示
 
-新开 Cursor 对话时，可直接使用下面这句话：
+项目规则设置为自动应用。正常情况下，新开对话后不需要再提醒 Cursor 阅读本文档，可以直接描述任务，例如：
 
 ```text
-请先阅读 docs/AMPLIO_PROJECT_CONTEXT.md。你现在是 Amplio 的技术负责人和审查员，请基于该文档继续帮助我开发、审查和准备上架。
+请检查当前最高优先级的未完成问题，并给出处理建议。
 ```
 
-如果是要处理具体问题，可以补充：
+或者：
 
 ```text
-请先阅读 docs/AMPLIO_PROJECT_CONTEXT.md，然后优先处理 P0 中的第一个未完成项。
+请修复语音训练页面的问题，完成后先让我检查，不要提交。
 ```
+
+如果项目规则被禁用、删除或未加载，再明确要求 Cursor 先阅读 `docs/AMPLIO_PROJECT_CONTEXT.md`。
