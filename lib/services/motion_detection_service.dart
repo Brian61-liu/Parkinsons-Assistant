@@ -187,16 +187,26 @@ class _SideTracker {
 }
 
 class _EmaLandmarkFilter {
+  static const double minLikelihood = 0.5;
+  static const Duration staleGap = Duration(milliseconds: 500);
+
   final double alpha;
   final Map<PoseLandmarkType, Offset> _cache = {};
+  final Map<PoseLandmarkType, DateTime> _lastUpdate = {};
 
   _EmaLandmarkFilter(this.alpha);
 
-  Offset? smooth(PoseLandmarkType type, PoseLandmark? landmark) {
-    if (landmark == null) return null;
+  /// 低置信度关键点按缺失处理（交给 FSM 的丢失宽限），避免鬼点参与计数；
+  /// 长时间未更新后直接采用新值，避免陈旧缓存拖拽首帧。
+  Offset? smooth(PoseLandmarkType type, PoseLandmark? landmark, DateTime now) {
+    if (landmark == null || landmark.likelihood < minLikelihood) {
+      return null;
+    }
     final raw = Offset(landmark.x, landmark.y);
     final prev = _cache[type];
-    if (prev == null) {
+    final last = _lastUpdate[type];
+    _lastUpdate[type] = now;
+    if (prev == null || last == null || now.difference(last) > staleGap) {
       _cache[type] = raw;
       return raw;
     }
@@ -208,7 +218,121 @@ class _EmaLandmarkFilter {
     return next;
   }
 
-  void reset() => _cache.clear();
+  void reset() {
+    _cache.clear();
+    _lastUpdate.clear();
+  }
+}
+
+/// 显示层专用 One-Euro 滤波：静止时强力去抖，快速移动时自动降低平滑量避免拖影。
+/// 与计数用 EMA 分离，互不影响已调好的 FSM 阈值。
+class PoseDisplayFilter {
+  final double minCutoff;
+  final double beta;
+  final double dCutoff;
+  final double minLikelihood;
+  final Duration staleGap;
+
+  final Map<PoseLandmarkType, _OneEuroPoint> _points = {};
+  final Map<PoseLandmarkType, DateTime> _lastSeen = {};
+  DateTime? _lastFrameAt;
+
+  PoseDisplayFilter({
+    this.minCutoff = 1.15,
+    this.beta = 0.008,
+    this.dCutoff = 1.0,
+    this.minLikelihood = 0.3,
+    this.staleGap = const Duration(milliseconds: 400),
+  });
+
+  Map<PoseLandmarkType, Offset> filterPose(Pose pose, DateTime now) {
+    final last = _lastFrameAt;
+    final dt = last == null
+        ? 0.0
+        : now.difference(last).inMicroseconds /
+            Duration.microsecondsPerSecond;
+    _lastFrameAt = now;
+
+    final result = <PoseLandmarkType, Offset>{};
+    pose.landmarks.forEach((type, landmark) {
+      if (landmark.likelihood < minLikelihood) return;
+      final seen = _lastSeen[type];
+      var point = _points[type];
+      if (point == null || seen == null || now.difference(seen) > staleGap) {
+        point = _OneEuroPoint(
+          minCutoff: minCutoff,
+          beta: beta,
+          dCutoff: dCutoff,
+        );
+        _points[type] = point;
+      }
+      _lastSeen[type] = now;
+      result[type] = point.filter(Offset(landmark.x, landmark.y), dt);
+    });
+    return result;
+  }
+
+  void reset() {
+    _points.clear();
+    _lastSeen.clear();
+    _lastFrameAt = null;
+  }
+}
+
+class _OneEuroPoint {
+  final double minCutoff;
+  final double beta;
+  final double dCutoff;
+  final _OneEuroAxis _x = _OneEuroAxis();
+  final _OneEuroAxis _y = _OneEuroAxis();
+
+  _OneEuroPoint({
+    required this.minCutoff,
+    required this.beta,
+    required this.dCutoff,
+  });
+
+  Offset filter(Offset raw, double dt) => Offset(
+        _x.filter(raw.dx, dt, minCutoff, beta, dCutoff),
+        _y.filter(raw.dy, dt, minCutoff, beta, dCutoff),
+      );
+}
+
+class _OneEuroAxis {
+  double? _value;
+  double _velocity = 0;
+
+  double filter(
+    double raw,
+    double dt,
+    double minCutoff,
+    double beta,
+    double dCutoff,
+  ) {
+    final prev = _value;
+    // dt 异常（首帧 / 长时间卡顿）时直接采用原始值，避免滤波器发散。
+    if (prev == null || dt <= 0 || dt > 0.5) {
+      _value = raw;
+      _velocity = 0;
+      return raw;
+    }
+    final rawVelocity = (raw - prev) / dt;
+    _velocity = _lerpByCutoff(_velocity, rawVelocity, dCutoff, dt);
+    final cutoff = minCutoff + beta * _velocity.abs();
+    _value = _lerpByCutoff(prev, raw, cutoff, dt);
+    return _value!;
+  }
+
+  static double _lerpByCutoff(
+    double prev,
+    double next,
+    double cutoff,
+    double dt,
+  ) {
+    final tau = 1 / (2 * math.pi * cutoff);
+    final alpha = 1 / (1 + tau / dt);
+    return prev + alpha * (next - prev);
+  }
 }
 
 class _MotionMeasurement {
@@ -465,10 +589,11 @@ class ArmRaiseDetector {
         ? PoseLandmarkType.leftWrist
         : PoseLandmarkType.rightWrist;
 
-    final shoulder = _ema.smooth(shoulderType, pose.landmarks[shoulderType]);
-    final hip = _ema.smooth(hipType, pose.landmarks[hipType]);
-    final elbow = _ema.smooth(elbowType, pose.landmarks[elbowType]);
-    final wrist = _ema.smooth(wristType, pose.landmarks[wristType]);
+    final shoulder =
+        _ema.smooth(shoulderType, pose.landmarks[shoulderType], now);
+    final hip = _ema.smooth(hipType, pose.landmarks[hipType], now);
+    final elbow = _ema.smooth(elbowType, pose.landmarks[elbowType], now);
+    final wrist = _ema.smooth(wristType, pose.landmarks[wristType], now);
 
     if (shoulder == null || hip == null) {
       return const _MotionMeasurement(
@@ -571,8 +696,8 @@ class LegLiftDetector {
       _enterIdle();
     }
 
-    final left = _measureSide(pose: pose, side: MotionSide.left);
-    final right = _measureSide(pose: pose, side: MotionSide.right);
+    final left = _measureSide(pose: pose, side: MotionSide.left, now: now);
+    final right = _measureSide(pose: pose, side: MotionSide.right, now: now);
     final measurements = {
       MotionSide.left: left,
       MotionSide.right: right,
@@ -735,6 +860,7 @@ class LegLiftDetector {
   _MotionMeasurement _measureSide({
     required Pose pose,
     required MotionSide side,
+    required DateTime now,
   }) {
     final shoulderType = side == MotionSide.left
         ? PoseLandmarkType.leftShoulder
@@ -753,13 +879,13 @@ class LegLiftDetector {
         : PoseLandmarkType.rightAnkle;
 
     final shoulderPrimary =
-        _ema.smooth(shoulderType, pose.landmarks[shoulderType]);
-    final shoulderFallback =
-        _ema.smooth(oppositeShoulderType, pose.landmarks[oppositeShoulderType]);
+        _ema.smooth(shoulderType, pose.landmarks[shoulderType], now);
+    final shoulderFallback = _ema.smooth(
+        oppositeShoulderType, pose.landmarks[oppositeShoulderType], now);
     final shoulder = shoulderPrimary ?? shoulderFallback;
-    final hip = _ema.smooth(hipType, pose.landmarks[hipType]);
-    final knee = _ema.smooth(kneeType, pose.landmarks[kneeType]);
-    final ankle = _ema.smooth(ankleType, pose.landmarks[ankleType]);
+    final hip = _ema.smooth(hipType, pose.landmarks[hipType], now);
+    final knee = _ema.smooth(kneeType, pose.landmarks[kneeType], now);
+    final ankle = _ema.smooth(ankleType, pose.landmarks[ankleType], now);
 
     if (shoulder == null || hip == null) {
       return const _MotionMeasurement(

@@ -30,31 +30,52 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   bool _isDetecting = false;
   bool _hasPermission = false;
   bool _isInitialized = false;
-  Pose? _currentPose;
-  Size? _imageSize;
-  bool _personDetected = false; // 当前帧是否检测到人体
   InputImageRotation _imageRotation = InputImageRotation.rotation0deg;
 
   // 训练类型
   TrainingType _currentTrainingType = TrainingType.armsRaised; // 当前训练类型
 
+  // 骨架叠加层与状态条走 ValueNotifier 局部重绘，避免每帧整页 setState 造成卡顿。
+  final ValueNotifier<PoseOverlayData?> _poseOverlay = ValueNotifier(null);
+  final ValueNotifier<MotionUiStatus> _motionStatus = ValueNotifier(
+    const MotionUiStatus.initial(),
+  );
+
+  // 显示层专用平滑（与计数用 EMA 分离）。
+  final PoseDisplayFilter _displayFilter = PoseDisplayFilter();
+
+  // 人体丢失宽限：单帧漏检不立刻清空骨架/弹提示，避免闪烁。
+  static const Duration _poseLostGrace = Duration(milliseconds: 400);
+  DateTime? _lastPersonSeenAt;
+
+  // iPhone X 上对活动 image stream 帧调用 ML Kit 会导致 CameraPreview 黑屏；
+  // takePicture 连续取样又会触发白屏闪烁。
+  // 因此采用“短暂开流抓一帧 -> 立刻停流 -> 离线送 ML Kit”的折中方案。
+  static const bool _useSampledStreamDetection = true;
+  static const Duration _sampledFrameInterval = Duration(milliseconds: 900);
+
+  // 保留 image-stream 相关字段，方便后续在新机型上重新评估流式检测。
+  static const Duration _minProcessInterval = Duration(milliseconds: 700);
+  DateTime? _lastProcessStartedAt;
+  DateTime? _imageStreamStartedAt;
+  Timer? _snapshotDetectionTimer;
+  bool _isCapturingSampleFrame = false;
+
+  // 用户点过演示「确定」后才真正请求相机；此前不展示「权限被拒」占位，避免误导。
+  bool _didRequestCamera = false;
+
+  // 临时隔离开关：真机已确认纯 CameraPreview + image stream 不黑屏。
+  // 现在恢复 ML Kit，但延迟初始化并低频处理。
+  static const bool _imageStreamProbeMode = false;
+
   // 动作检测相关（通用）
-  bool _isActionPerformed = false; // 是否完成动作（根据训练类型不同而不同）
   int _successCount = 0;
   int _targetCount = 10; // 目标次数
   bool _isGoalReached = false; // 是否达到目标
-  MotionDetectionResult _latestMotionResult = const MotionDetectionResult(
-    phase: MotionFsmPhase.idle,
-    activeSide: null,
-    repCompleted: false,
-  );
 
-  // 动作状态：0=初始/放下, 1=举高
-  int _actionState = 0;
-
-  // 计时功能
+  // 计时：用 ValueNotifier，禁止每秒 setState 整页（会重建 CameraPreview → iOS 预览变黑）。
   Timer? _trainingTimer;
-  int _trainingDuration = 0; // 训练时长（秒）
+  final ValueNotifier<int> _trainingDuration = ValueNotifier(0);
   DateTime? _trainingStartTime;
 
   // 数据库服务
@@ -81,17 +102,17 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
 
   // 启动训练计时器
   void _startTrainingTimer() {
+    _trainingTimer?.cancel();
     _trainingStartTime = DateTime.now();
+    _trainingDuration.value = 0;
     _trainingTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (mounted && !_isGoalReached) {
-        setState(() {
-          _trainingDuration = DateTime.now()
-              .difference(_trainingStartTime!)
-              .inSeconds;
-        });
-      } else {
+      if (!mounted || _isGoalReached) {
         timer.cancel();
+        return;
       }
+      // 只更新时长 notifier，绝不 setState 整页（否则 CameraPreview 被拆掉重建会黑屏）。
+      _trainingDuration.value =
+          DateTime.now().difference(_trainingStartTime!).inSeconds;
     });
   }
 
@@ -141,9 +162,10 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     _camera = frontCamera;
 
     // 初始化 iPhone 摄像头控制器。ML Kit 在 iOS 上要求 bgra8888 单平面格式。
+    // 使用 low 分辨率降低 BGRA 帧大小，避免 iPhone X 上预览 + 检测抢资源导致黑屏。
     _cameraController = CameraController(
       frontCamera,
-      ResolutionPreset.medium,
+      ResolutionPreset.low,
       enableAudio: false,
       imageFormatGroup: ImageFormatGroup.bgra8888,
     );
@@ -155,7 +177,16 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
           _hasPermission = true;
           _isInitialized = true;
         });
-        _startImageStream();
+        // 先让 CameraPreview 的 Texture 稳定挂载，再延迟初始化 ML Kit。
+        Future.delayed(const Duration(milliseconds: 1500), () {
+          if (!mounted || _isGoalReached) return;
+          _initializePoseDetector();
+          if (_useSampledStreamDetection) {
+            _startSnapshotDetection();
+          } else {
+            _startImageStream();
+          }
+        });
       }
     } catch (e) {
       if (mounted) {
@@ -167,9 +198,11 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   }
 
   void _initializePoseDetector() {
+    if (_poseDetector != null) return;
     final options = PoseDetectorOptions(
       mode: PoseDetectionMode.stream,
-      model: PoseDetectionModel.accurate,
+      // base 模型延迟更低、资源占用更小；当前目标是训练动作计数与稳定预览。
+      model: PoseDetectionModel.base,
     );
     _poseDetector = PoseDetector(options: options);
   }
@@ -184,12 +217,112 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
       return;
     }
 
+    _imageStreamStartedAt = DateTime.now();
     _cameraController!.startImageStream((CameraImage image) {
       if (_isDetecting || _isGoalReached) return;
+      // 限制检测频率：降低 CPU/发热，先验证 ML Kit 不再触发预览黑屏。
+      final now = DateTime.now();
+      final streamStartedAt = _imageStreamStartedAt;
+      if (streamStartedAt != null &&
+          now.difference(streamStartedAt) < const Duration(milliseconds: 800)) {
+        return;
+      }
+      final last = _lastProcessStartedAt;
+      if (last != null && now.difference(last) < _minProcessInterval) {
+        return;
+      }
+      _lastProcessStartedAt = now;
       _isDetecting = true;
+
+      if (_imageStreamProbeMode) {
+        // 隔离验证：只确认 startImageStream 是否会导致预览变黑，不运行 ML Kit。
+        _isDetecting = false;
+        return;
+      }
 
       _processImage(image);
     });
+  }
+
+  void _startSnapshotDetection() {
+    final controller = _cameraController;
+    if (controller == null || !controller.value.isInitialized || _isGoalReached) {
+      return;
+    }
+
+    _snapshotDetectionTimer?.cancel();
+    _snapshotDetectionTimer = Timer.periodic(_sampledFrameInterval, (_) {
+      if (!mounted || _isGoalReached) return;
+      _captureSampleFrame();
+    });
+    // 立即跑一次，避免用户等待第一轮 timer。
+    _captureSampleFrame();
+  }
+
+  Future<void> _captureSampleFrame() async {
+    final controller = _cameraController;
+    if (controller == null ||
+        !controller.value.isInitialized ||
+        controller.value.isStreamingImages ||
+        _isCapturingSampleFrame ||
+        _isGoalReached) {
+      return;
+    }
+
+    _isCapturingSampleFrame = true;
+    try {
+      await controller.startImageStream((CameraImage image) {
+        if (!_isCapturingSampleFrame) return;
+        final inputImage = _inputImageFromCameraImage(image, copyBytes: true);
+        if (inputImage == null) {
+          return;
+        }
+        unawaited(_processSampledStreamFrame(inputImage));
+      });
+    } catch (e) {
+      _isCapturingSampleFrame = false;
+      debugPrint('姿态取样流启动失败: $e');
+    }
+  }
+
+  Future<void> _processSampledStreamFrame(InputImage inputImage) async {
+    final detector = _poseDetector;
+    final controller = _cameraController;
+    try {
+      // 关键：先停掉 image stream，再运行 ML Kit，避免“活动流 + ML Kit”触发预览黑屏。
+      if (controller != null &&
+          controller.value.isInitialized &&
+          controller.value.isStreamingImages) {
+        await controller.stopImageStream();
+      }
+      if (!mounted || detector == null || _isGoalReached) return;
+
+      final poses = await detector.processImage(inputImage);
+      if (!mounted) return;
+
+      final now = DateTime.now();
+      final imageSize = inputImage.metadata?.size;
+      _imageRotation = inputImage.metadata?.rotation ?? _imageRotation;
+
+      if (poses.isNotEmpty && imageSize != null && _camera != null) {
+        _lastPersonSeenAt = now;
+        final pose = poses.first;
+        _poseOverlay.value = PoseOverlayData(
+          points: _displayFilter.filterPose(pose, now),
+          imageSize: imageSize,
+          rotation: _imageRotation,
+          lensDirection: _camera!.lensDirection,
+          trainingType: _currentTrainingType,
+        );
+        _checkAction(pose, now);
+      } else {
+        _handlePoseNotFound(now);
+      }
+    } catch (e) {
+      debugPrint('姿态取样检测失败: $e');
+    } finally {
+      _isCapturingSampleFrame = false;
+    }
   }
 
   Future<void> _processImage(CameraImage image) async {
@@ -208,24 +341,46 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
       final poses = await detector.processImage(inputImage);
       if (!mounted) return;
 
-      setState(() {
-        _imageSize = inputImage.metadata?.size;
-        _imageRotation = inputImage.metadata?.rotation ?? _imageRotation;
-        if (poses.isNotEmpty) {
-          _currentPose = poses.first;
-          _personDetected = true;
-          _checkAction();
-        } else {
-          _currentPose = null;
-          _personDetected = false;
-          _isActionPerformed = false;
-        }
-      });
+      final now = DateTime.now();
+      final imageSize = inputImage.metadata?.size;
+      _imageRotation = inputImage.metadata?.rotation ?? _imageRotation;
+
+      if (poses.isNotEmpty && imageSize != null && _camera != null) {
+        _lastPersonSeenAt = now;
+        final pose = poses.first;
+        // 显示层单独平滑（One-Euro），与计数层 EMA 解耦。
+        _poseOverlay.value = PoseOverlayData(
+          points: _displayFilter.filterPose(pose, now),
+          imageSize: imageSize,
+          rotation: _imageRotation,
+          lensDirection: _camera!.lensDirection,
+          trainingType: _currentTrainingType,
+        );
+        _checkAction(pose, now);
+      } else {
+        _handlePoseNotFound(now);
+      }
     } catch (e) {
       // ML Kit / 相机帧异常不能让检测永久卡死：记录后由 finally 释放节流标志。
       debugPrint('姿态检测处理失败: $e');
     } finally {
       _isDetecting = false;
+    }
+  }
+
+  void _handlePoseNotFound(DateTime now) {
+    // 单帧漏检不立即清骨架/弹提示，超过宽限期才算真正丢失，避免闪烁。
+    final lastSeen = _lastPersonSeenAt;
+    final lostConfirmed =
+        lastSeen == null || now.difference(lastSeen) > _poseLostGrace;
+    if (lostConfirmed && _motionStatus.value.personDetected) {
+      _displayFilter.reset();
+      _poseOverlay.value = null;
+      _motionStatus.value = _motionStatus.value.copyWith(
+        personDetected: false,
+        isActionPerformed: false,
+        actionState: 0,
+      );
     }
   }
 
@@ -235,7 +390,10 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   /// - 旋转角度根据摄像头 sensorOrientation 与设备方向计算；
   /// - 图像格式从相机帧实际格式推导，并校验为 iOS 支持的 bgra8888；
   /// - bgra8888 为单平面，直接取首平面字节。
-  InputImage? _inputImageFromCameraImage(CameraImage image) {
+  InputImage? _inputImageFromCameraImage(
+    CameraImage image, {
+    bool copyBytes = false,
+  }) {
     final camera = _camera;
     if (camera == null) return null;
 
@@ -252,7 +410,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     final plane = image.planes.first;
 
     return InputImage.fromBytes(
-      bytes: plane.bytes,
+      bytes: copyBytes ? Uint8List.fromList(plane.bytes) : plane.bytes,
       metadata: InputImageMetadata(
         size: Size(image.width.toDouble(), image.height.toDouble()),
         rotation: rotation,
@@ -426,8 +584,10 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                       _initLegLiftHistory();
                     }
                     // 初始化并开始训练
+                    setState(() {
+                      _didRequestCamera = true;
+                    });
                     _initializeCamera();
-                    _initializePoseDetector();
                     _startTrainingTimer();
                   },
                   child: Text(
@@ -490,13 +650,17 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         setState(() {
           _currentTrainingType = type;
         });
-        _actionState = 0;
-        _isActionPerformed = false;
+        _motionStatus.value = const MotionUiStatus.initial();
+        _displayFilter.reset();
         _initArmDetectionState();
         _initLegLiftHistory();
         Navigator.pop(context);
-        // 显示演示页面（两种训练类型都有演示）
-        _showTrainingDemo(context, type);
+        // 对话框 context 在 pop 后已卸载；必须用 State 的 context，并延后到下一帧再弹演示，
+        // 否则 showCupertinoDialog 会静默失败，页面停在「相机权限」占位（现象 B）。
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          _showTrainingDemo(this.context, type);
+        });
       },
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -541,22 +705,14 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     }
   }
 
-  String _getActionStatusText(AppLocalizations l10n) {
-    if (_actionState == 1) {
-      // 已经完成动作，提示恢复
+  String _getActionStatusText(AppLocalizations l10n, MotionUiStatus status) {
+    if (status.actionState == 1) {
+      // 动作进行中，提示恢复
       switch (_currentTrainingType) {
         case TrainingType.armsRaised:
           return l10n.lowerArms;
         case TrainingType.legLift:
           return l10n.lowerLegs;
-      }
-    } else if (_isActionPerformed) {
-      // 动作已完成
-      switch (_currentTrainingType) {
-        case TrainingType.armsRaised:
-          return l10n.armsRaised;
-        case TrainingType.legLift:
-          return l10n.legsRaised;
       }
     } else {
       // 提示开始动作
@@ -570,31 +726,18 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   }
 
   // 通用动作检测方法（根据训练类型调用不同的检测逻辑）
-  void _checkAction() {
+  void _checkAction(Pose pose, DateTime now) {
+    final MotionDetectionResult result;
     switch (_currentTrainingType) {
       case TrainingType.armsRaised:
-        _checkArmsRaised();
+        result = _armDetector.update(pose, now);
         break;
       case TrainingType.legLift:
-        _checkLegLift();
+        result = _legDetector.update(pose, now);
         break;
     }
-  }
-
-  // 举手运动检测
-  void _checkArmsRaised() {
-    final pose = _currentPose;
-    if (pose == null) {
-      _isActionPerformed = false;
-      _actionState = 0;
-      return;
-    }
-
-    final result = _armDetector.update(pose, DateTime.now());
     _applyMotionResult(result);
   }
-
-  // 初始化历史记录
 
   // 初始化抬腿运动历史记录
   void _initLegLiftHistory() {
@@ -605,36 +748,30 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     _armDetector.reset();
   }
 
-  // 原地抬腿运动检测（FSM）
-  void _checkLegLift() {
-    final pose = _currentPose;
-    if (pose == null) {
-      _isActionPerformed = false;
-      _actionState = 0;
-      return;
-    }
-
-    final result = _legDetector.update(pose, DateTime.now());
-    _applyMotionResult(result);
-  }
-
   void _applyMotionResult(MotionDetectionResult result) {
-    _latestMotionResult = result;
-    _isActionPerformed = result.inActionCycle;
-    _actionState = result.inActionCycle ? 1 : 0;
+    _motionStatus.value = _motionStatus.value.copyWith(
+      personDetected: true,
+      isActionPerformed: result.inActionCycle,
+      actionState: result.inActionCycle ? 1 : 0,
+      latestResult: result,
+    );
 
     if (!result.repCompleted || _isGoalReached) return;
 
     _successCount++;
+    _motionStatus.value = _motionStatus.value.copyWith(
+      successCount: _successCount,
+    );
     _voiceAssist(context).speak('已完成 $_successCount 次，共 $_targetCount 次');
     if (_successCount >= _targetCount) {
       _isGoalReached = true;
-      _cameraController?.stopImageStream();
+      _stopImageStreamSafely();
       _trainingTimer?.cancel();
       _saveTrainingRecord();
       _voiceAssist(context).announceConfirm('已完成目标训练次数');
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) {
+          setState(() {}); // 目标达成：同步整页状态（历史/目标按钮态等）
           _showSuccessDialog(context);
         }
       });
@@ -643,6 +780,17 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     }
 
     HapticFeedback.mediumImpact();
+  }
+
+  void _stopImageStreamSafely() {
+    _snapshotDetectionTimer?.cancel();
+    _snapshotDetectionTimer = null;
+    final controller = _cameraController;
+    if (controller != null &&
+        controller.value.isInitialized &&
+        controller.value.isStreamingImages) {
+      controller.stopImageStream();
+    }
   }
 
   String _phaseLabel(MotionFsmPhase phase) {
@@ -713,14 +861,21 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
       onPressed: () {
         setState(() {
           _targetCount = count;
+          _motionStatus.value = _motionStatus.value.copyWith(
+            targetCount: count,
+          );
           // 如果当前计数超过新目标，重置
           if (_successCount >= _targetCount) {
             _isGoalReached = true;
-            _cameraController?.stopImageStream();
+            _stopImageStreamSafely();
           } else {
             _isGoalReached = false;
             // 如果之前停止了，重新启动
             if (_cameraController != null &&
+                _cameraController!.value.isInitialized &&
+                _useSampledStreamDetection) {
+              _startSnapshotDetection();
+            } else if (_cameraController != null &&
                 _cameraController!.value.isInitialized &&
                 !_cameraController!.value.isStreamingImages) {
               _startImageStream();
@@ -798,7 +953,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                 const SizedBox(height: 8),
                 // 显示训练统计信息
                 Text(
-                  '${l10n.successCount}: $_successCount / $_targetCount | ${l10n.duration}: ${_formatDuration(_trainingDuration)}',
+                  '${l10n.successCount}: $_successCount / $_targetCount | ${l10n.duration}: ${_formatDuration(_trainingDuration.value)}',
                   style: TextStyle(color: Colors.white60, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
@@ -827,7 +982,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     try {
       final record = MovementTrainingRecord(
         timestamp: _trainingStartTime ?? DateTime.now(),
-        duration: _trainingDuration,
+        duration: _trainingDuration.value,
         successCount: _successCount,
         targetCount: _targetCount,
         goalReached: _isGoalReached,
@@ -838,7 +993,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
         successCount: _successCount,
         targetCount: _targetCount,
         goalReached: _isGoalReached,
-        durationSeconds: _trainingDuration,
+        durationSeconds: _trainingDuration.value,
       );
     } catch (e) {
       debugPrint('保存训练记录失败: $e');
@@ -849,11 +1004,14 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
     setState(() {
       _successCount = 0;
       _isGoalReached = false;
-      _actionState = 0;
-      _trainingDuration = 0;
       _trainingStartTime = DateTime.now();
-      _isActionPerformed = false;
     });
+    _trainingDuration.value = 0;
+    _motionStatus.value = MotionUiStatus.initial().copyWith(
+      targetCount: _targetCount,
+    );
+    _displayFilter.reset();
+    _poseOverlay.value = null;
 
     _initArmDetectionState();
     _initLegLiftHistory();
@@ -863,6 +1021,10 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
 
     // 重新启动图像流
     if (_cameraController != null &&
+        _cameraController!.value.isInitialized &&
+        _useSampledStreamDetection) {
+      _startSnapshotDetection();
+    } else if (_cameraController != null &&
         _cameraController!.value.isInitialized &&
         !_cameraController!.value.isStreamingImages) {
       _startImageStream();
@@ -896,9 +1058,12 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   @override
   void dispose() {
     _trainingTimer?.cancel();
-    _cameraController?.stopImageStream();
+    _stopImageStreamSafely();
     _cameraController?.dispose();
     _poseDetector?.close();
+    _poseOverlay.dispose();
+    _motionStatus.dispose();
+    _trainingDuration.dispose();
     super.dispose();
   }
 
@@ -979,7 +1144,11 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
       ),
       body: _hasPermission && _isInitialized
           ? _buildCameraView(l10n)
-          : _buildPermissionView(l10n),
+          : _didRequestCamera
+              ? _buildPermissionView(l10n)
+              : const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
+                ),
     );
   }
 
@@ -1033,63 +1202,72 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
 
     return Stack(
       children: [
-        // 摄像头预览
-        Positioned.fill(child: CameraPreview(_cameraController!)),
-        // 姿态检测覆盖层
-        if (_currentPose != null && _imageSize != null && _camera != null)
-          Positioned.fill(
-            child: CustomPaint(
-              painter: PosePainter(
-                pose: _currentPose!,
-                imageSize: _imageSize!,
-                rotation: _imageRotation,
-                cameraLensDirection: _camera!.lensDirection,
-                isActionPerformed: _isActionPerformed,
-                trainingType: _currentTrainingType,
-              ),
+        // 摄像头预览：独立层 + 稳定 Key，避免上层 UI 刷新时拆掉 Texture。
+        Positioned.fill(
+          child: RepaintBoundary(
+            child: CameraPreview(
+              _cameraController!,
+              key: const ValueKey('movement_camera_preview'),
             ),
           ),
+        ),
+        // 姿态检测覆盖层：仅骨架层随检测帧重绘，不触发整页 rebuild。
+        Positioned.fill(
+          child: ValueListenableBuilder<PoseOverlayData?>(
+            valueListenable: _poseOverlay,
+            builder: (context, overlay, _) {
+              if (overlay == null) return const SizedBox.shrink();
+              return CustomPaint(painter: PosePainter(overlay));
+            },
+          ),
+        ),
         // 未检测到人体时的引导提示
-        if (!_personDetected && !_isGoalReached)
-          Positioned(
-            left: 24,
-            right: 24,
-            bottom: 200,
-            child: Center(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 14,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.6),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(
-                      CupertinoIcons.person_crop_circle_badge_exclam,
-                      color: Colors.orangeAccent,
-                      size: 22,
-                    ),
-                    SizedBox(width: 10),
-                    Flexible(
-                      child: Text(
-                        '未检测到人体\n请让上半身完整进入画面，保持光线充足',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          height: 1.4,
+        ValueListenableBuilder<MotionUiStatus>(
+          valueListenable: _motionStatus,
+          builder: (context, status, _) {
+            if (status.personDetected || _isGoalReached) {
+              return const SizedBox.shrink();
+            }
+            return Positioned(
+              left: 24,
+              right: 24,
+              bottom: 200,
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 14,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.person_crop_circle_badge_exclam,
+                        color: Colors.orangeAccent,
+                        size: 22,
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          '未检测到人体\n请让上半身完整进入画面，保持光线充足',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            height: 1.4,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
+        ),
         // 顶部信息栏
         Positioned(
           top: 0,
@@ -1119,49 +1297,59 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                // 显示训练时长
-                Text(
-                  _formatDuration(_trainingDuration),
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                  textAlign: TextAlign.center,
+                // 显示训练时长（局部刷新，不重建相机）
+                ValueListenableBuilder<int>(
+                  valueListenable: _trainingDuration,
+                  builder: (context, seconds, _) {
+                    return Text(
+                      _formatDuration(seconds),
+                      style: const TextStyle(color: Colors.white70, fontSize: 14),
+                      textAlign: TextAlign.center,
+                    );
+                  },
                 ),
                 const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: _isActionPerformed
-                            ? Colors.green.withValues(alpha: 0.8)
-                            : Colors.orange.withValues(alpha: 0.8),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            _isActionPerformed
-                                ? CupertinoIcons.check_mark_circled_solid
-                                : CupertinoIcons.exclamationmark_circle,
-                            color: Colors.white,
-                            size: 20,
+                ValueListenableBuilder<MotionUiStatus>(
+                  valueListenable: _motionStatus,
+                  builder: (context, status, _) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            _getActionStatusText(l10n),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          decoration: BoxDecoration(
+                            color: status.isActionPerformed
+                                ? Colors.green.withValues(alpha: 0.8)
+                                : Colors.orange.withValues(alpha: 0.8),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                        ],
-                      ),
-                    ),
-                  ],
+                          child: Row(
+                            children: [
+                              Icon(
+                                status.isActionPerformed
+                                    ? CupertinoIcons.check_mark_circled_solid
+                                    : CupertinoIcons.exclamationmark_circle,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                _getActionStatusText(l10n, status),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ],
             ),
@@ -1184,81 +1372,87 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
                 ],
               ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.3),
-                      width: 1,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        CupertinoIcons.hand_raised_fill,
-                        color: Colors.white,
-                        size: 24,
+            child: ValueListenableBuilder<MotionUiStatus>(
+              valueListenable: _motionStatus,
+              builder: (context, status, _) {
+                final result = status.latestResult;
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
                       ),
-                      const SizedBox(width: 12),
-                      // 进度指示器和计数器
-                      Stack(
-                        alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            width: 60,
-                            height: 60,
-                            child: CircularProgressIndicator(
-                              value: _targetCount > 0
-                                  ? (_successCount / _targetCount).clamp(
-                                      0.0,
-                                      1.0,
-                                    )
-                                  : 0.0,
-                              strokeWidth: 4,
-                              backgroundColor: Colors.white.withValues(
-                                alpha: 0.3,
-                              ),
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                _isGoalReached ? Colors.green : Colors.white,
-                              ),
-                            ),
+                          const Icon(
+                            CupertinoIcons.hand_raised_fill,
+                            color: Colors.white,
+                            size: 24,
                           ),
-                          Text(
-                            '$_successCount / $_targetCount',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          const SizedBox(width: 12),
+                          // 进度指示器和计数器
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              SizedBox(
+                                width: 60,
+                                height: 60,
+                                child: CircularProgressIndicator(
+                                  value: _targetCount > 0
+                                      ? (status.successCount / _targetCount)
+                                          .clamp(0.0, 1.0)
+                                      : 0.0,
+                                  strokeWidth: 4,
+                                  backgroundColor: Colors.white.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    _isGoalReached
+                                        ? Colors.green
+                                        : Colors.white,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                '${status.successCount} / $_targetCount',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'FSM: ${_phaseLabel(_latestMotionResult.phase)}  '
-                  'Side: ${_sideLabel(_latestMotionResult.activeSide)}  '
-                  'Score: ${(_latestMotionResult.normScore ?? 0).toStringAsFixed(2)}  '
-                  'Δ: ${(_latestMotionResult.deltaDeg ?? 0).toStringAsFixed(1)}°',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.85),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'FSM: ${_phaseLabel(result.phase)}  '
+                      'Side: ${_sideLabel(result.activeSide)}  '
+                      'Score: ${(result.normScore ?? 0).toStringAsFixed(2)}  '
+                      'Δ: ${(result.deltaDeg ?? 0).toStringAsFixed(1)}°',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.85),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ),
@@ -1267,74 +1461,142 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   }
 }
 
-// 姿态绘制器
-class PosePainter extends CustomPainter {
-  final Pose pose;
+/// 骨架叠加层单帧数据（已用显示滤波平滑后的关键点）。
+class PoseOverlayData {
+  final Map<PoseLandmarkType, Offset> points;
   final Size imageSize; // ML Kit 输入帧的原始尺寸（未旋转）
   final InputImageRotation rotation; // 传给 ML Kit 的旋转角度
-  final CameraLensDirection cameraLensDirection; // 摄像头朝向（前置需镜像）
-  final bool isActionPerformed;
-  final TrainingType trainingType; // 训练类型
+  final CameraLensDirection lensDirection; // 前置需镜像
+  final TrainingType trainingType;
 
-  PosePainter({
-    required this.pose,
+  const PoseOverlayData({
+    required this.points,
     required this.imageSize,
     required this.rotation,
-    required this.cameraLensDirection,
-    required this.isActionPerformed,
+    required this.lensDirection,
     required this.trainingType,
   });
+}
+
+/// 顶部状态条 / 底部计数条的 UI 状态（走 ValueNotifier 局部刷新）。
+class MotionUiStatus {
+  final bool personDetected;
+  final bool isActionPerformed;
+  final int actionState;
+  final int successCount;
+  final int targetCount;
+  final MotionDetectionResult latestResult;
+
+  const MotionUiStatus({
+    required this.personDetected,
+    required this.isActionPerformed,
+    required this.actionState,
+    required this.successCount,
+    required this.targetCount,
+    required this.latestResult,
+  });
+
+  const MotionUiStatus.initial()
+      : personDetected = false,
+        isActionPerformed = false,
+        actionState = 0,
+        successCount = 0,
+        targetCount = 10,
+        latestResult = const MotionDetectionResult(
+          phase: MotionFsmPhase.idle,
+          activeSide: null,
+          repCompleted: false,
+        );
+
+  MotionUiStatus copyWith({
+    bool? personDetected,
+    bool? isActionPerformed,
+    int? actionState,
+    int? successCount,
+    int? targetCount,
+    MotionDetectionResult? latestResult,
+  }) {
+    return MotionUiStatus(
+      personDetected: personDetected ?? this.personDetected,
+      isActionPerformed: isActionPerformed ?? this.isActionPerformed,
+      actionState: actionState ?? this.actionState,
+      successCount: successCount ?? this.successCount,
+      targetCount: targetCount ?? this.targetCount,
+      latestResult: latestResult ?? this.latestResult,
+    );
+  }
+}
+
+// 姿态绘制器：绘制显示层平滑后的关键点；坐标映射采用等比 cover（与相机预览一致），
+// 避免旧 stretch 映射在非等比屏幕上的骨架错位。
+class PosePainter extends CustomPainter {
+  final PoseOverlayData data;
+
+  PosePainter(this.data);
+
+  static const _armConnections = [
+    [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
+    [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow],
+    [PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist],
+    [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
+    [PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist],
+  ];
+  static const _armLandmarks = [
+    PoseLandmarkType.leftShoulder,
+    PoseLandmarkType.rightShoulder,
+    PoseLandmarkType.leftElbow,
+    PoseLandmarkType.rightElbow,
+    PoseLandmarkType.leftWrist,
+    PoseLandmarkType.rightWrist,
+  ];
+  static const _legConnections = [
+    [PoseLandmarkType.leftHip, PoseLandmarkType.rightHip],
+    [PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee],
+    [PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle],
+    [PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee],
+    [PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle],
+  ];
+  static const _legLandmarks = [
+    PoseLandmarkType.leftHip,
+    PoseLandmarkType.rightHip,
+    PoseLandmarkType.leftKnee,
+    PoseLandmarkType.rightKnee,
+    PoseLandmarkType.leftAnkle,
+    PoseLandmarkType.rightAnkle,
+  ];
 
   @override
   void paint(Canvas canvas, Size size) {
-    // 根据训练类型定义不同的骨骼连接关系
-    List<List<PoseLandmarkType>> connections = [];
-    List<PoseLandmarkType> relevantLandmarks = [];
+    final connections = data.trainingType == TrainingType.armsRaised
+        ? _armConnections
+        : _legConnections;
+    final relevantLandmarks = data.trainingType == TrainingType.armsRaised
+        ? _armLandmarks
+        : _legLandmarks;
 
-    switch (trainingType) {
-      case TrainingType.armsRaised:
-        // 举手运动：显示手臂
-        connections = [
-          [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
-          [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow],
-          [PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist],
-          [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
-          [PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist],
-        ];
-        relevantLandmarks = [
-          PoseLandmarkType.leftShoulder,
-          PoseLandmarkType.rightShoulder,
-          PoseLandmarkType.leftElbow,
-          PoseLandmarkType.rightElbow,
-          PoseLandmarkType.leftWrist,
-          PoseLandmarkType.rightWrist,
-        ];
+    // 坐标映射保持与旧版（官方示例移植、iOS 真机已验证）一致的 stretch 语义：
+    // 预览层是 Positioned.fill 拉伸显示，骨架必须用同样的拉伸才能对齐。
+    final scaleX = size.width / data.imageSize.width;
+    final scaleY = size.height / data.imageSize.height;
+
+    // 镜像规则与旧版一致：iOS 真机已验证前置方向正确。
+    final bool mirrorX;
+    switch (data.rotation) {
+      case InputImageRotation.rotation90deg:
+        mirrorX = false;
         break;
-      case TrainingType.legLift:
-        // 抬腿运动：显示腿部
-        connections = [
-          [PoseLandmarkType.leftHip, PoseLandmarkType.rightHip],
-          [PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee],
-          [PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle],
-          [PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee],
-          [PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle],
-        ];
-        relevantLandmarks = [
-          PoseLandmarkType.leftHip,
-          PoseLandmarkType.rightHip,
-          PoseLandmarkType.leftKnee,
-          PoseLandmarkType.rightKnee,
-          PoseLandmarkType.leftAnkle,
-          PoseLandmarkType.rightAnkle,
-        ];
+      case InputImageRotation.rotation270deg:
+        mirrorX = true;
+        break;
+      case InputImageRotation.rotation0deg:
+      case InputImageRotation.rotation180deg:
+        mirrorX = data.lensDirection != CameraLensDirection.back;
         break;
     }
 
-    Offset toCanvas(PoseLandmark landmark) {
-      return Offset(
-        _translateX(landmark.x, size, imageSize, rotation, cameraLensDirection),
-        _translateY(landmark.y, size, imageSize, rotation, cameraLensDirection),
-      );
+    Offset toCanvas(Offset p) {
+      final fx = mirrorX ? data.imageSize.width - p.dx : p.dx;
+      return Offset(fx * scaleX, p.dy * scaleY);
     }
 
     // 绘制骨骼连线（白色）
@@ -1344,8 +1606,8 @@ class PosePainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     for (final connection in connections) {
-      final startPoint = pose.landmarks[connection[0]];
-      final endPoint = pose.landmarks[connection[1]];
+      final startPoint = data.points[connection[0]];
+      final endPoint = data.points[connection[1]];
 
       if (startPoint != null && endPoint != null) {
         canvas.drawLine(toCanvas(startPoint), toCanvas(endPoint), linePaint);
@@ -1358,62 +1620,13 @@ class PosePainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     for (final landmarkType in relevantLandmarks) {
-      final landmark = pose.landmarks[landmarkType];
-      if (landmark != null) {
-        canvas.drawCircle(toCanvas(landmark), 5.0, pointPaint);
+      final point = data.points[landmarkType];
+      if (point != null) {
+        canvas.drawCircle(toCanvas(point), 5.0, pointPaint);
       }
     }
   }
 
   @override
-  bool shouldRepaint(PosePainter oldDelegate) {
-    return oldDelegate.pose != pose ||
-        oldDelegate.isActionPerformed != isActionPerformed ||
-        oldDelegate.rotation != rotation ||
-        oldDelegate.cameraLensDirection != cameraLensDirection ||
-        oldDelegate.trainingType != trainingType;
-  }
-}
-
-/// 将 ML Kit 返回的横坐标映射到画布坐标（考虑旋转与前置镜像）。
-/// 移植自 google_mlkit 官方示例的坐标转换逻辑。
-double _translateX(
-  double x,
-  Size canvasSize,
-  Size imageSize,
-  InputImageRotation rotation,
-  CameraLensDirection cameraLensDirection,
-) {
-  switch (rotation) {
-    case InputImageRotation.rotation90deg:
-      return x * canvasSize.width / imageSize.width;
-    case InputImageRotation.rotation270deg:
-      return canvasSize.width - x * canvasSize.width / imageSize.width;
-    case InputImageRotation.rotation0deg:
-    case InputImageRotation.rotation180deg:
-      switch (cameraLensDirection) {
-        case CameraLensDirection.back:
-          return x * canvasSize.width / imageSize.width;
-        default:
-          return canvasSize.width - x * canvasSize.width / imageSize.width;
-      }
-  }
-}
-
-/// 将 ML Kit 返回的纵坐标映射到画布坐标（考虑旋转）。
-double _translateY(
-  double y,
-  Size canvasSize,
-  Size imageSize,
-  InputImageRotation rotation,
-  CameraLensDirection cameraLensDirection,
-) {
-  switch (rotation) {
-    case InputImageRotation.rotation90deg:
-    case InputImageRotation.rotation270deg:
-      return y * canvasSize.height / imageSize.height;
-    case InputImageRotation.rotation0deg:
-    case InputImageRotation.rotation180deg:
-      return y * canvasSize.height / imageSize.height;
-  }
+  bool shouldRepaint(PosePainter oldDelegate) => oldDelegate.data != data;
 }
