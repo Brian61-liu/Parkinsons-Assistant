@@ -61,11 +61,14 @@ service cloud.firestore {
             'timestamp', 'averageFrequency', 'maxAmplitude',
             'averageAmplitude', 'duration', 'accelerometerData', 'localId'
           ])
-          && isValidNumber(request.resource.data.averageFrequency, 0, 30)
-          && isValidNumber(request.resource.data.maxAmplitude, 0, 100)
-          && isValidNumber(request.resource.data.averageAmplitude, 0, 100)
+          // 频率上限放宽：峰值计数噪声常超过 30Hz；振幅放宽以覆盖剧烈抖动
+          && isValidNumber(request.resource.data.averageFrequency, 0, 100)
+          && isValidNumber(request.resource.data.maxAmplitude, 0, 500)
+          && isValidNumber(request.resource.data.averageAmplitude, 0, 500)
           && request.resource.data.duration is number
-          && request.resource.data.localId is number;
+          && request.resource.data.duration >= 0
+          && request.resource.data.localId is number
+          && request.resource.data.accelerometerData is list;
         
         // 允许所有者更新（满足 set(merge:true) 的幂等同步语义）
         allow update: if isOwner(userId);
