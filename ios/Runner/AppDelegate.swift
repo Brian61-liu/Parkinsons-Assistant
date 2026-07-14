@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import FirebaseCore
+import UserNotifications
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
@@ -10,6 +11,12 @@ import FirebaseCore
   ) -> Bool {
     // 必须在 Flutter 引擎/插件注册之前配置 Firebase，否则会出现 [I-COR000005] No app has been configured yet
     FirebaseApp.configure()
+
+    // 用药本地通知：前台也能展示（flutter_local_notifications）
+    if #available(iOS 10.0, *) {
+      UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
+    }
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 

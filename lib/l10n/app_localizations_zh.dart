@@ -784,6 +784,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get medicationStatusPending => '待打卡';
 
   @override
+  String medicationNotificationBody(String label) {
+    return '该服药了：$label';
+  }
+
+  @override
+  String get medicationNotificationPermissionNote =>
+      '可选：允许通知后，Amplio 会在您设定的时间于本机提醒。通知不会上传云端。';
+
+  @override
   String get recentActivity => '最近活动';
 
   @override
@@ -1637,6 +1646,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get medicationStatusPending => '待打卡';
+
+  @override
+  String medicationNotificationBody(String label) {
+    return '該服藥了：$label';
+  }
+
+  @override
+  String get medicationNotificationPermissionNote =>
+      '可選：允許通知後，Amplio 會在您設定的時間於本機提醒。通知不會上傳雲端。';
 
   @override
   String get recentActivity => '最近活動';

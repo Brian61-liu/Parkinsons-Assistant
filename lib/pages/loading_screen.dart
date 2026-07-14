@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/gentle_page_route.dart';
 import '../main.dart';
+import '../services/medication_notification_service.dart';
+import '../services/medication_reminder_service.dart';
 
 class LoadingScreen extends StatefulWidget {
   final Function(Locale) onLanguageChange;
@@ -28,6 +30,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
         Firebase.initializeApp(),
         Future<void>.delayed(const Duration(seconds: 2)),
       ]);
+      await MedicationNotificationService.instance.init();
+      await MedicationReminderService().rescheduleNotifications();
     } catch (e, s) {
       debugPrint('=== Boot FAILED: $e ===');
       debugPrint('$s');

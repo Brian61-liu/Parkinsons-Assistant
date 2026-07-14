@@ -427,6 +427,11 @@
   },
   "medicationStatusUpcoming": "即將到",
   "medicationStatusPending": "待打卡",
+  "medicationNotificationBody": "該服藥了：{label}",
+  "@medicationNotificationBody": {
+    "placeholders": { "label": { "type": "String" } }
+  },
+  "medicationNotificationPermissionNote": "可選：允許通知後，Amplio 會在您設定的時間於本機提醒。通知不會上傳雲端。",
 
   "recentActivity": "最近活動",
   "nonMedicalDisclaimerTitle": "僅供參考",

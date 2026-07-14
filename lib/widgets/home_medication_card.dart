@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/medication_check_in.dart';
 import '../services/medication_reminder_service.dart';
+import '../services/medication_notification_service.dart';
 import '../utils/gentle_page_route.dart';
 import '../utils/medication_disclaimer.dart';
 import '../pages/medication_reminders_page.dart';
@@ -38,6 +39,8 @@ class _HomeMedicationCardState extends State<HomeMedicationCard> {
     final collapsed = await _service.isCardCollapsed();
     List<MedicationTodayItem> items = [];
     if (enabled) {
+      // 旧版本已开启功能、尚未拿过通知权限：进首页再请求一次
+      await MedicationNotificationService.instance.requestPermission();
       items = await _service.getTodayItems();
     }
     if (mounted) {
@@ -353,8 +356,8 @@ class _HomeMedicationCardState extends State<HomeMedicationCard> {
   Widget _buildShell({required Widget child}) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 24),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),

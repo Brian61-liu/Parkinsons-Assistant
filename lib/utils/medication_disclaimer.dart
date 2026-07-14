@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import '../l10n/app_localizations.dart';
 import '../services/medication_reminder_service.dart';
 
-/// 展示用药清单免责声明；接受则启用功能并返回 true。
+/// 用药清单免责声明弹窗；接受后启用功能并请求本地通知权限。
 Future<bool> showMedicationDisclaimerDialog(
   BuildContext context,
   MedicationReminderService service,
@@ -14,7 +14,10 @@ Future<bool> showMedicationDisclaimerDialog(
       title: Text(l10n.medicationList),
       content: Padding(
         padding: const EdgeInsets.only(top: 12),
-        child: Text(l10n.medicationDisclaimer),
+        child: Text(
+          '${l10n.medicationDisclaimer}\n\n'
+          '${l10n.medicationNotificationPermissionNote}',
+        ),
       ),
       actions: [
         CupertinoDialogAction(

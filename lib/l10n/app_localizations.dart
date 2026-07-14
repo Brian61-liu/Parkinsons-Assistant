@@ -1563,6 +1563,18 @@ abstract class AppLocalizations {
   /// **'Pending'**
   String get medicationStatusPending;
 
+  /// No description provided for @medicationNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Time for: {label}'**
+  String medicationNotificationBody(String label);
+
+  /// No description provided for @medicationNotificationPermissionNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional: allow notifications so Amplio can remind you at the times you set. Notifications stay on this device.'**
+  String get medicationNotificationPermissionNote;
+
   /// No description provided for @recentActivity.
   ///
   /// In en, this message translates to:

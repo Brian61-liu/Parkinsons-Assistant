@@ -3,19 +3,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/medication_reminder.dart';
 import '../models/medication_check_in.dart';
 import 'database_service.dart';
+import 'medication_notification_service.dart';
 
 const String _kFeatureEnabled = 'medication_feature_enabled';
 const String _kDisclaimerAcceptedAt = 'medication_disclaimer_accepted_at';
 const String _kCardCollapsed = 'medication_card_collapsed';
 const String _kAutoPurgeCheckins = 'medication_auto_purge_checkins';
 
-/// 用药清单：仅本机 SQLite + 非敏感 UI 状态存 SharedPreferences。
+/// 用药清单：本机 SQLite + SharedPreferences UI 状态 + 本地到点通知。
 class MedicationReminderService {
   final DatabaseService _db;
+  final MedicationNotificationService _notifications;
   SharedPreferences? _prefs;
 
-  MedicationReminderService({DatabaseService? databaseService})
-      : _db = databaseService ?? DatabaseService();
+  MedicationReminderService({
+    DatabaseService? databaseService,
+    MedicationNotificationService? notificationService,
+  })  : _db = databaseService ?? DatabaseService(),
+        _notifications =
+            notificationService ?? MedicationNotificationService.instance;
 
   Future<SharedPreferences> get _store async {
     _prefs ??= await SharedPreferences.getInstance();
@@ -39,6 +45,8 @@ class MedicationReminderService {
       DateTime.now().toIso8601String(),
     );
     await prefs.setBool(_kFeatureEnabled, true);
+    await _notifications.requestPermission();
+    await rescheduleNotifications();
     debugPrint('MedicationReminderService: feature enabled');
   }
 
@@ -46,6 +54,7 @@ class MedicationReminderService {
     final prefs = await _store;
     await prefs.setBool(_kFeatureEnabled, false);
     await prefs.setBool(_kCardCollapsed, false);
+    await _notifications.cancelAll();
     if (deleteAllData) {
       await _db.deleteAllMedicationData();
       debugPrint('MedicationReminderService: all medication data deleted');
@@ -96,17 +105,27 @@ class MedicationReminderService {
       timeHhmm: timeHhmm,
     );
     final id = await _db.insertMedicationReminder(reminder);
+    final saved = reminder.copyWith(id: id);
+    if (await isFeatureEnabled()) {
+      await _notifications.scheduleDaily(saved);
+    }
     debugPrint('MedicationReminderService: added reminder id=$id');
     return id;
   }
 
   Future<void> updateReminder(MedicationReminder reminder) async {
     await _db.updateMedicationReminder(reminder);
+    if (await isFeatureEnabled()) {
+      await _notifications.scheduleDaily(reminder);
+    } else if (reminder.id != null) {
+      await _notifications.cancelReminder(reminder.id!);
+    }
     debugPrint('MedicationReminderService: updated reminder id=${reminder.id}');
   }
 
   Future<void> deleteReminder(int id) async {
     await _db.deleteMedicationReminder(id);
+    await _notifications.cancelReminder(id);
     debugPrint('MedicationReminderService: deleted reminder id=$id');
   }
 
@@ -114,7 +133,11 @@ class MedicationReminderService {
     final all = await _db.getAllMedicationReminders();
     final match = all.where((r) => r.id == id).firstOrNull;
     if (match == null) return;
-    await _db.updateMedicationReminder(match.copyWith(enabled: enabled));
+    final updated = match.copyWith(enabled: enabled);
+    await _db.updateMedicationReminder(updated);
+    if (await isFeatureEnabled()) {
+      await _notifications.scheduleDaily(updated);
+    }
   }
 
   Future<void> checkIn(MedicationReminder reminder) async {
@@ -142,8 +165,16 @@ class MedicationReminderService {
   }
 
   Future<void> deleteAllMedicationData() async {
+    await _notifications.cancelAll();
     await _db.deleteAllMedicationData();
     debugPrint('MedicationReminderService: deleteAllMedicationData');
+  }
+
+  /// 启动或文案变更后，按当前数据重建通知队列。
+  Future<void> rescheduleNotifications() async {
+    final enabled = await isFeatureEnabled();
+    final all = await getAllReminders();
+    await _notifications.syncAll(all, featureEnabled: enabled);
   }
 
   static String _todayKey() {

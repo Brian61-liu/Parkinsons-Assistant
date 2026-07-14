@@ -17,6 +17,8 @@ import '../models/home_dashboard_snapshot.dart';
 import '../utils/gentle_page_route.dart';
 import '../pages/rehab_report_page.dart';
 import '../services/medication_reminder_service.dart';
+import '../services/medication_notification_service.dart';
+import '../widgets/home_medication_card.dart';
 import 'medication_reminders_page.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
@@ -47,6 +49,7 @@ class _HomePageState extends State<HomePage> {
 
   HomeDashboardSnapshot _snapshot = HomeDashboardSnapshot.empty;
   bool _snapshotLoading = true;
+  int _medicationCardEpoch = 0;
 
   @override
   void initState() {
@@ -56,6 +59,16 @@ class _HomePageState extends State<HomePage> {
     _loadDashboard();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final l10n = AppLocalizations.of(context)!;
+    MedicationNotificationService.instance.setCopy(
+      title: l10n.medicationReminder,
+      bodyFor: l10n.medicationNotificationBody,
+    );
+  }
+
   Future<void> _loadDashboard() async {
     final snap = await _dashboardService.load();
     if (mounted) {
@@ -63,6 +76,13 @@ class _HomePageState extends State<HomePage> {
         _snapshot = snap;
         _snapshotLoading = false;
       });
+    }
+  }
+
+  Future<void> _refreshMedicationAndDashboard() async {
+    await _loadDashboard();
+    if (mounted) {
+      setState(() => _medicationCardEpoch++);
     }
   }
 
@@ -316,7 +336,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     Navigator.pop(ctx);
                     pushGentle(context, const MedicationRemindersPage())
-                        .then((_) => _loadDashboard());
+                        .then((_) => _refreshMedicationAndDashboard());
                   },
                 ),
               _buildSettingsItem(
@@ -703,55 +723,65 @@ class _HomePageState extends State<HomePage> {
 
                   SizedBox(height: metrics.sectionGap),
 
-                  // ── 2×2 卡片网格（占剩余高度的大头） ────────
+                  // ── 用药清单 + 网格 + 最近活动（可滚动，避免小屏被清单挤爆）─
                   Expanded(
-                    flex: metrics.gridFlex,
                     child: LayoutBuilder(
-                      builder: (context, gridConstraints) {
+                      builder: (context, bodyConstraints) {
                         final gap = AppSpacing.cardGap;
-                        final cellW =
-                            (gridConstraints.maxWidth - gap) / 2;
-                        final cellH =
-                            (gridConstraints.maxHeight - gap) / 2;
-                        final aspectRatio =
-                            cellW / cellH.clamp(1, double.infinity);
+                        final gridH = ((bodyConstraints.maxWidth - gap) / 2) * 2 +
+                            gap;
+                        // 最近活动给一块最低可视高度；内容再高则整页滚动
+                        final activityMinH =
+                            (bodyConstraints.maxHeight * 0.28).clamp(120.0, 220.0);
 
-                        return GridView.count(
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisCount: 2,
-                          mainAxisSpacing: gap,
-                          crossAxisSpacing: gap,
-                          childAspectRatio: aspectRatio,
+                        return ListView(
+                          padding: EdgeInsets.only(bottom: metrics.sectionGap),
                           children: [
-                            _buildVoiceCard(context, l10n, metrics),
-                            _buildHandCard(context, l10n, metrics),
-                            _buildMotionCard(context, l10n, metrics),
-                            _buildMedicationCard(context, l10n, metrics),
+                            HomeMedicationCard(
+                              key: ValueKey(_medicationCardEpoch),
+                              onStateChanged: _refreshMedicationAndDashboard,
+                            ),
+                            SizedBox(height: metrics.sectionGap),
+                            SizedBox(
+                              height: gridH,
+                              child: GridView.count(
+                                physics: const NeverScrollableScrollPhysics(),
+                                crossAxisCount: 2,
+                                mainAxisSpacing: gap,
+                                crossAxisSpacing: gap,
+                                childAspectRatio: 1,
+                                children: [
+                                  _buildVoiceCard(context, l10n, metrics),
+                                  _buildHandCard(context, l10n, metrics),
+                                  _buildMotionCard(context, l10n, metrics),
+                                  _buildMedicationCard(context, l10n, metrics),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: metrics.sectionGap),
+                            Text(
+                              l10n.recentActivity,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    fontSize: metrics.labelFontSize + 2,
+                                  ),
+                            ),
+                            SizedBox(height: metrics.sectionGap / 2),
+                            SizedBox(
+                              height: activityMinH,
+                              child: _buildRecentActivityList(
+                                context,
+                                l10n,
+                                metrics,
+                              ),
+                            ),
                           ],
                         );
                       },
                     ),
                   ),
-
-                  SizedBox(height: metrics.sectionGap),
-
-                  // ── 最近活动标题 ─────────────────────────
-                  Text(
-                    l10n.recentActivity,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontSize: metrics.labelFontSize + 2,
-                        ),
-                  ),
-
-                  SizedBox(height: metrics.sectionGap / 2),
-
-                  // ── 最近活动列表（填满剩余高度） ───────────
-                  Expanded(
-                    flex: metrics.activityFlex,
-                    child: _buildRecentActivityList(context, l10n, metrics),
-                  ),
-
-                  SizedBox(height: metrics.sectionGap),
                 ],
               ),
             );
@@ -1054,7 +1084,7 @@ class _HomePageState extends State<HomePage> {
       metrics: metrics,
       onTap: () {
         pushGentle(context, const MedicationRemindersPage())
-            .then((_) => _loadDashboard());
+            .then((_) => _refreshMedicationAndDashboard());
       },
       content: _snapshotLoading
           ? _loadingIndicator()
@@ -1083,47 +1113,55 @@ class _HomePageState extends State<HomePage> {
 
     final formatted = TimeOfDay(hour: h, minute: m).format(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          l10n.medicationNextDoseLabel,
-          style: TextStyle(
-            fontSize: metrics.bodyFontSize,
-            color: AppColors.textTertiary,
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          formatted,
-          style: TextStyle(
-            fontSize: metrics.labelFontSize + 6,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-          decoration: BoxDecoration(
-            color: isPast
-                ? AppColors.warningAmberLight
-                : AppColors.successGreenLight,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Text(
-            isPast
-                ? l10n.medicationStatusPending
-                : l10n.medicationStatusUpcoming,
+    // 2×2 网格内容区高度很紧（小屏约 67px），三行文案易溢出；压间距并用
+    // FittedBox 兜底，避免 Debug 黄黑条。
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.centerLeft,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.medicationNextDoseLabel,
             style: TextStyle(
               fontSize: metrics.bodyFontSize,
-              fontWeight: FontWeight.w600,
-              color: isPast ? AppColors.warningAmber : AppColors.successGreen,
+              height: 1.1,
+              color: AppColors.textTertiary,
             ),
           ),
-        ),
-      ],
+          Text(
+            formatted,
+            style: TextStyle(
+              fontSize: metrics.labelFontSize + 4,
+              height: 1.15,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+            decoration: BoxDecoration(
+              color: isPast
+                  ? AppColors.warningAmberLight
+                  : AppColors.successGreenLight,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              isPast
+                  ? l10n.medicationStatusPending
+                  : l10n.medicationStatusUpcoming,
+              style: TextStyle(
+                fontSize: metrics.bodyFontSize,
+                height: 1.1,
+                fontWeight: FontWeight.w600,
+                color: isPast ? AppColors.warningAmber : AppColors.successGreen,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

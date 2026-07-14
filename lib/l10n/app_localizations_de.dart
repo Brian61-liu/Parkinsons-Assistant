@@ -812,6 +812,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get medicationStatusPending => 'Pending';
 
   @override
+  String medicationNotificationBody(String label) {
+    return 'Time for: $label';
+  }
+
+  @override
+  String get medicationNotificationPermissionNote =>
+      'Optional: allow notifications so Amplio can remind you at the times you set. Notifications stay on this device.';
+
+  @override
   String get recentActivity => 'Recent Activity';
 
   @override

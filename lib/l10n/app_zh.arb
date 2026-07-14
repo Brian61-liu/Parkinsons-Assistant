@@ -408,6 +408,11 @@
   },
   "medicationStatusUpcoming": "即将到",
   "medicationStatusPending": "待打卡",
+  "medicationNotificationBody": "该服药了：{label}",
+  "@medicationNotificationBody": {
+    "placeholders": { "label": { "type": "String" } }
+  },
+  "medicationNotificationPermissionNote": "可选：允许通知后，Amplio 会在您设定的时间于本机提醒。通知不会上传云端。",
 
   "recentActivity": "最近活动",
   "nonMedicalDisclaimerTitle": "仅供参考",

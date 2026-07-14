@@ -670,6 +670,11 @@
   },
   "medicationStatusUpcoming": "Upcoming",
   "medicationStatusPending": "Pending",
+  "medicationNotificationBody": "Time for: {label}",
+  "@medicationNotificationBody": {
+    "placeholders": { "label": { "type": "String" } }
+  },
+  "medicationNotificationPermissionNote": "Optional: allow notifications so Amplio can remind you at the times you set. Notifications stay on this device.",
 
   "recentActivity": "Recent Activity",
   "nonMedicalDisclaimerTitle": "For reference only",
