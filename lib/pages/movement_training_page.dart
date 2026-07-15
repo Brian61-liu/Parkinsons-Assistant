@@ -23,7 +23,8 @@ class MovementTrainingPage extends StatefulWidget {
   State<MovementTrainingPage> createState() => _MovementTrainingPageState();
 }
 
-class _MovementTrainingPageState extends State<MovementTrainingPage> {
+class _MovementTrainingPageState extends State<MovementTrainingPage>
+    with WidgetsBindingObserver {
   CameraController? _cameraController;
   CameraDescription? _camera; // 当前使用的摄像头描述（含 sensorOrientation/lensDirection）
   PoseDetector? _poseDetector;
@@ -64,6 +65,9 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   // 用户点过演示「确定」后才真正请求相机；此前不展示「权限被拒」占位，避免误导。
   bool _didRequestCamera = false;
 
+  /// 前后台切换：进后台时暂停预览/检测，回前台再恢复，避免 iOS 回收会话后界面假死。
+  bool _lifecyclePaused = false;
+
   // 临时隔离开关：真机已确认纯 CameraPreview + image stream 不黑屏。
   // 现在恢复 ML Kit，但延迟初始化并低频处理。
   static const bool _imageStreamProbeMode = false;
@@ -97,7 +101,71 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _showTrainingTypeSelection();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden) {
+      unawaited(_pauseForBackground());
+    } else if (state == AppLifecycleState.resumed) {
+      unawaited(_resumeFromBackground());
+    }
+  }
+
+  Future<void> _pauseForBackground() async {
+    if (_lifecyclePaused) return;
+    if (_cameraController == null && _snapshotDetectionTimer == null) return;
+    _lifecyclePaused = true;
+    _snapshotDetectionTimer?.cancel();
+    _snapshotDetectionTimer = null;
+    _trainingTimer?.cancel();
+    _stopImageStreamSafely();
+    try {
+      final c = _cameraController;
+      if (c != null && c.value.isInitialized && c.value.isPreviewPaused != true) {
+        await c.pausePreview();
+      }
+    } catch (e) {
+      debugPrint('MovementTraining: pausePreview failed: $e');
+    }
+  }
+
+  Future<void> _resumeFromBackground() async {
+    if (!_lifecyclePaused) return;
+    _lifecyclePaused = false;
+    if (!mounted || _isGoalReached) return;
+
+    final c = _cameraController;
+    if (c == null) return;
+
+    try {
+      if (!c.value.isInitialized) {
+        await _initializeCamera();
+        return;
+      }
+      if (c.value.isPreviewPaused) {
+        await c.resumePreview();
+      }
+      if (_useSampledStreamDetection) {
+        _startSnapshotDetection();
+      } else if (!c.value.isStreamingImages) {
+        _startImageStream();
+      }
+      if (_trainingStartTime != null && !_isGoalReached) {
+        _startTrainingTimer();
+      }
+    } catch (e) {
+      debugPrint('MovementTraining: resume failed, re-init camera: $e');
+      try {
+        await _initializeCamera();
+      } catch (e2) {
+        debugPrint('MovementTraining: re-init camera failed: $e2');
+      }
+    }
   }
 
   // 启动训练计时器
@@ -1057,6 +1125,7 @@ class _MovementTrainingPageState extends State<MovementTrainingPage> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _trainingTimer?.cancel();
     _stopImageStreamSafely();
     _cameraController?.dispose();

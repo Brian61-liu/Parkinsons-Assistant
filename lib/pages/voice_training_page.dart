@@ -21,7 +21,8 @@ class VoiceTrainingPage extends StatefulWidget {
   State<VoiceTrainingPage> createState() => _VoiceTrainingPageState();
 }
 
-class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
+class _VoiceTrainingPageState extends State<VoiceTrainingPage>
+    with WidgetsBindingObserver {
   NoiseReading? _latestReading;
   StreamSubscription<NoiseReading>? _noiseSubscription;
   bool _isListening = false;
@@ -83,14 +84,73 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage> {
   int? _lastSessionDurationSeconds;
   int? _lastSessionTargetSeconds;
 
+  /// 进后台时暂停麦流；回前台后回到准备态，避免 audio_streamer 假死。
+  bool _pausedByLifecycle = false;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _checkMicrophonePermission();
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden) {
+      _pauseMicForBackground();
+    } else if (state == AppLifecycleState.resumed) {
+      _resumeAfterBackground();
+    }
+  }
+
+  void _pauseMicForBackground() {
+    if (_noiseSubscription == null &&
+        _updateTimer == null &&
+        !_isListening &&
+        !_isCalibrating) {
+      return;
+    }
+    _pausedByLifecycle = true;
+    _updateTimer?.cancel();
+    _updateTimer = null;
+    _secondTicker?.cancel();
+    _secondTicker = null;
+    _noiseSubscription?.cancel();
+    _noiseSubscription = null;
+    _latestReading = null;
+  }
+
+  void _resumeAfterBackground() {
+    if (!_pausedByLifecycle) return;
+    _pausedByLifecycle = false;
+    if (!mounted) return;
+    // 不自动重开麦流（插件线程问题 + iOS 音频会话）；请用户再点开始。
+    if (_stage == _Stage.calibrating || _stage == _Stage.practicing) {
+      setState(() {
+        _isListening = false;
+        _isCalibrating = false;
+        _stage = _Stage.preparation;
+        _baselineDb = 0.0;
+        _calibrationSamples.clear();
+        _sessionRawSamples.clear();
+        _sessionStartedAt = null;
+        _targetZoneAccumSeconds = 0.0;
+        _displayedDb = 0.0;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('已从后台返回，请重新点击开始练习'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     // 若用户在练习中直接返回，仍尝试保存本次记录（内部已做 mounted 保护）。
     _stopListening();
     super.dispose();

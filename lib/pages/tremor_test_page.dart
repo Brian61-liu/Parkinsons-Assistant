@@ -16,7 +16,8 @@ class TremorTestPage extends StatefulWidget {
   State<TremorTestPage> createState() => _TremorTestPageState();
 }
 
-class _TremorTestPageState extends State<TremorTestPage> {
+class _TremorTestPageState extends State<TremorTestPage>
+    with WidgetsBindingObserver {
   final SensorService _sensorService = SensorService();
   final DatabaseService _databaseService = DatabaseService();
 
@@ -37,7 +38,28 @@ class _TremorTestPageState extends State<TremorTestPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _checkPermission();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden) {
+      if (_isRecording) {
+        // 未跑满时长：走取消不保存；避免后台传感器会话挂死后回前台卡死。
+        unawaited(_stopTest());
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _timer?.cancel();
+    _sensorService.dispose();
+    super.dispose();
   }
 
   Future<void> _checkPermission() async {
@@ -336,13 +358,6 @@ class _TremorTestPageState extends State<TremorTestPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    _sensorService.dispose();
-    super.dispose();
   }
 
   @override
