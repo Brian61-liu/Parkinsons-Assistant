@@ -288,7 +288,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get exportDataDescription =>
-      '下载您所有数据的完整副本（JSON 格式）。包括您的个人资料和所有震颤测试记录。';
+      '将个人资料与训练记录导出为 CSV 文件，可通过系统分享面板保存到「文件」或发送。用药清单默认不包含在内。';
 
   @override
   String get export => '导出';
@@ -300,7 +300,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportSuccess => '导出成功';
 
   @override
-  String get exportSuccessMessage => '您的数据已复制到剪贴板。您可以将其粘贴到文本文件中保存。';
+  String get exportSuccessMessage =>
+      'CSV 文件已生成。请在分享面板中存储到「文件」或发送给他人；原始传感器采样仅汇总为数量。';
 
   @override
   String get deleteAllRecords => '删除所有测试记录';

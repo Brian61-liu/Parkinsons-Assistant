@@ -294,7 +294,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportDataDescription =>
-      'Download a complete copy of all your data in JSON format. This includes your profile information and all tremor test records.';
+      'Export your profile and training records as a CSV file. You can save or share it from the system share sheet. Medication list is not included by default.';
 
   @override
   String get export => 'Export';
@@ -307,7 +307,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportSuccessMessage =>
-      'Your data has been copied to the clipboard. You can paste it into a text file to save.';
+      'Your CSV file is ready. Use the share sheet to save it to Files or send it. Raw sensor samples are summarized by count only.';
 
   @override
   String get deleteAllRecords => 'Delete All Test Records';

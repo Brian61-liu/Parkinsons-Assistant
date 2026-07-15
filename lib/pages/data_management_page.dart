@@ -1,12 +1,17 @@
-import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import '../services/medication_reminder_service.dart';
+import '../services/native_share_service.dart';
+import '../utils/user_data_export_formatter.dart';
 
 /// 数据管理页面
 /// GDPR 合规：数据可携带权、数据删除权
@@ -31,23 +36,65 @@ class _DataManagementPageState extends State<DataManagementPage> {
 
   Future<void> _exportData() async {
     final l10n = AppLocalizations.of(context)!;
-    
+
     setState(() => _isExporting = true);
-    
+
     try {
-      final data = await _authService.exportUserData().timeout(
-        const Duration(seconds: _operationTimeout),
-        onTimeout: () => throw Exception('操作超时，请检查网络连接'),
+      final localTremor = (await _databaseService.getAllTremorRecords())
+          .map((r) => r.toMap())
+          .toList();
+      final localMovement =
+          (await _databaseService.getAllMovementTrainingRecords())
+              .map((r) => r.toMap())
+              .toList();
+
+      final data = await _authService
+          .exportUserData(
+            localTremorRecords: localTremor,
+            localMovementRecords: localMovement,
+          )
+          .timeout(
+            const Duration(seconds: _operationTimeout),
+            onTimeout: () => throw Exception('操作超时，请检查网络连接'),
+          );
+
+      final csv = UserDataExportFormatter.toCsv(data);
+      final stamp = DateTime.now()
+          .toIso8601String()
+          .replaceAll(':', '-')
+          .split('.')
+          .first
+          .replaceAll('T', '_');
+      final dir = await getTemporaryDirectory();
+      final fileName = 'amplio_export_$stamp.csv';
+      final filePath = p.join(dir.path, fileName);
+      // UTF-8 BOM helps Excel / Numbers detect encoding.
+      final file = File(filePath);
+      await file.writeAsString('\uFEFF$csv', flush: true);
+
+      await NativeShareService.shareFile(
+        path: filePath,
+        subject: 'Amplio data export',
       );
-      final jsonString = const JsonEncoder.withIndent('  ').convert(data);
-      
-      // 复制到剪贴板
-      await Clipboard.setData(ClipboardData(text: jsonString));
-      
+
       if (mounted) {
         _showSuccessDialog(l10n.exportSuccess, l10n.exportSuccessMessage);
       }
+    } on PlatformException catch (e) {
+      debugPrint('导出失败(Platform): $e');
+      if (mounted) {
+        _showErrorDialog(l10n.error, e.message ?? e.toString());
+      }
+    } on MissingPluginException catch (e) {
+      debugPrint('导出失败(MissingPlugin): $e');
+      if (mounted) {
+        _showErrorDialog(
+          l10n.error,
+          '分享通道未加载。请完全退出 App 后重新执行 flutter run（按 q 退出后再启动）。',
+        );
+      }
     } catch (e) {
+      debugPrint('导出失败: $e');
       if (mounted) {
         _showErrorDialog(l10n.error, e.toString());
       }
@@ -213,14 +260,21 @@ class _DataManagementPageState extends State<DataManagementPage> {
       // 1. 删除 Firestore 数据 + Firebase Auth 用户（在 auth_service 内完成）
       await _authService.deleteAccount();
 
-      // 2. 清除本地 SQLite 所有健康数据
+      // 2. 取消用药本地通知并清空用药表（避免删号后仍到点推送）
+      try {
+        await _medicationService.deleteAllMedicationData();
+      } catch (e) {
+        debugPrint('清除用药数据/通知失败: $e');
+      }
+
+      // 3. 清除本地 SQLite 所有健康数据（含震颤/肢体/用药表，幂等）
       try {
         await _databaseService.clearAllLocalData();
       } catch (e) {
         debugPrint('清除本地数据库失败: $e');
       }
 
-      // 3. 清除所有 SharedPreferences（含头像路径、训练缓存、设置等）
+      // 4. 清除所有 SharedPreferences（含用药开关、头像路径、训练缓存等）
       try {
         final prefs = await SharedPreferences.getInstance();
         await prefs.clear();

@@ -1,6 +1,6 @@
+import FirebaseCore
 import Flutter
 import UIKit
-import FirebaseCore
 import UserNotifications
 
 @main
@@ -22,5 +22,103 @@ import UserNotifications
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+
+    let channel = FlutterMethodChannel(
+      name: "com.amplio.app/share",
+      binaryMessenger: engineBridge.applicationRegistrar.messenger()
+    )
+    channel.setMethodCallHandler { [weak self] call, result in
+      guard call.method == "shareFile" else {
+        result(FlutterMethodNotImplemented)
+        return
+      }
+      guard
+        let args = call.arguments as? [String: Any],
+        let path = args["path"] as? String
+      else {
+        result(
+          FlutterError(
+            code: "BAD_ARGS",
+            message: "Expected path argument",
+            details: nil
+          )
+        )
+        return
+      }
+
+      guard FileManager.default.fileExists(atPath: path) else {
+        result(
+          FlutterError(
+            code: "NOT_FOUND",
+            message: "File not found",
+            details: path
+          )
+        )
+        return
+      }
+
+      let url = URL(fileURLWithPath: path)
+
+      DispatchQueue.main.async {
+        guard let presenter = self?.topViewController() else {
+          result(
+            FlutterError(
+              code: "NO_VC",
+              message: "No view controller to present share sheet",
+              details: nil
+            )
+          )
+          return
+        }
+
+        let activity = UIActivityViewController(
+          activityItems: [url],
+          applicationActivities: nil
+        )
+        if let popover = activity.popoverPresentationController {
+          popover.sourceView = presenter.view
+          popover.sourceRect = CGRect(
+            x: presenter.view.bounds.midX,
+            y: presenter.view.bounds.midY,
+            width: 1,
+            height: 1
+          )
+          popover.permittedArrowDirections = []
+        }
+        presenter.present(activity, animated: true) {
+          result(nil)
+        }
+      }
+    }
+  }
+
+  private func topViewController(
+    base: UIViewController? = nil
+  ) -> UIViewController? {
+    let root: UIViewController?
+    if let base {
+      root = base
+    } else {
+      let scenes = UIApplication.shared.connectedScenes.compactMap {
+        $0 as? UIWindowScene
+      }
+      root =
+        scenes
+        .flatMap { $0.windows }
+        .first { $0.isKeyWindow }?
+        .rootViewController
+        ?? scenes.first?.windows.first?.rootViewController
+    }
+
+    if let nav = root as? UINavigationController {
+      return topViewController(base: nav.visibleViewController)
+    }
+    if let tab = root as? UITabBarController {
+      return topViewController(base: tab.selectedViewController)
+    }
+    if let presented = root?.presentedViewController {
+      return topViewController(base: presented)
+    }
+    return root
   }
 }

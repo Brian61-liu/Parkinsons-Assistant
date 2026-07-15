@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
 import 'dart:math';
@@ -426,49 +427,140 @@ class AuthService {
     );
   }
 
+  /// 将 Firestore / Dart 值转为 JSON 可编码结构（Timestamp → ISO8601）。
+  static dynamic jsonSafe(dynamic value) {
+    if (value == null || value is bool || value is num || value is String) {
+      return value;
+    }
+    if (value is Timestamp) {
+      return value.toDate().toIso8601String();
+    }
+    if (value is DateTime) {
+      return value.toIso8601String();
+    }
+    if (value is Map) {
+      return value.map(
+        (key, v) => MapEntry(key.toString(), jsonSafe(v)),
+      );
+    }
+    if (value is Iterable) {
+      return value.map(jsonSafe).toList();
+    }
+    return value.toString();
+  }
+
   /// 导出用户数据（GDPR 合规：数据可携带权）
-  Future<Map<String, dynamic>> exportUserData() async {
+  ///
+  /// 云端拉取与审计写入均为尽力而为：网络差时不阻塞整次导出。
+  /// [localTremorRecords] / [localMovementRecords] 为本地 SQLite 回退数据
+  ///（已是 JSON 友好 Map）；云端为空或失败时使用。
+  Future<Map<String, dynamic>> exportUserData({
+    List<Map<String, dynamic>>? localTremorRecords,
+    List<Map<String, dynamic>>? localMovementRecords,
+  }) async {
     final user = currentUser;
     if (user == null) {
       throw Exception('User not authenticated');
     }
 
-    // 记录数据导出请求
-    await _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('data_export_requests')
-        .add({
-          'requestedAt': FieldValue.serverTimestamp(),
-          'status': 'completed',
-        });
+    // 导出请求 / 审计：短超时，失败不阻断导出（离线时曾整卡 30s）
+    unawaited(() async {
+      try {
+        await _firestore
+            .collection('users')
+            .doc(user.uid)
+            .collection('data_export_requests')
+            .add({
+              'requestedAt': FieldValue.serverTimestamp(),
+              'status': 'completed',
+            })
+            .timeout(const Duration(seconds: 5));
+      } catch (e) {
+        debugPrint('记录导出请求失败（忽略）: $e');
+      }
+      try {
+        await _logAuditEvent(user.uid, 'DATA_EXPORT', 'User data exported')
+            .timeout(const Duration(seconds: 5));
+      } catch (e) {
+        debugPrint('记录导出审计失败（忽略）: $e');
+      }
+    }());
 
-    // 获取用户基本信息
-    final userData = await getUserData();
+    final userRef = _firestore.collection('users').doc(user.uid);
 
-    // 获取所有震颤记录
-    final records = await _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('tremor_records')
-        .orderBy('timestamp', descending: true)
-        .get();
+    Map<String, dynamic>? profile;
+    try {
+      final raw = await getUserData().timeout(const Duration(seconds: 8));
+      profile = jsonSafe(raw) as Map<String, dynamic>?;
+    } catch (e) {
+      debugPrint('读取 profile 失败，使用空档: $e');
+    }
 
-    final exportData = {
+    Future<List<Map<String, dynamic>>> fetchCollection(String name) async {
+      final snap = await userRef
+          .collection(name)
+          .orderBy('timestamp', descending: true)
+          .get()
+          .timeout(const Duration(seconds: 8));
+      return snap.docs.map((doc) {
+        final data = Map<String, dynamic>.from(doc.data());
+        data['id'] = doc.id;
+        return Map<String, dynamic>.from(jsonSafe(data) as Map);
+      }).toList();
+    }
+
+    var tremorSource = 'none';
+    List<Map<String, dynamic>> tremorRecords = const [];
+    try {
+      tremorRecords = await fetchCollection('tremor_records');
+      if (tremorRecords.isNotEmpty) {
+        tremorSource = 'cloud';
+      }
+    } catch (e) {
+      debugPrint('拉取云端震颤记录失败: $e');
+    }
+    if (tremorRecords.isEmpty &&
+        localTremorRecords != null &&
+        localTremorRecords.isNotEmpty) {
+      tremorRecords = localTremorRecords.map((e) {
+        return Map<String, dynamic>.from(jsonSafe(e) as Map);
+      }).toList();
+      tremorSource = 'local';
+    }
+
+    var movementSource = 'none';
+    List<Map<String, dynamic>> movementRecords = const [];
+    try {
+      movementRecords = await fetchCollection('movement_training_records');
+      if (movementRecords.isNotEmpty) {
+        movementSource = 'cloud';
+      }
+    } catch (e) {
+      debugPrint('拉取云端肢体训练记录失败: $e');
+    }
+    if (movementRecords.isEmpty &&
+        localMovementRecords != null &&
+        localMovementRecords.isNotEmpty) {
+      movementRecords = localMovementRecords.map((e) {
+        return Map<String, dynamic>.from(jsonSafe(e) as Map);
+      }).toList();
+      movementSource = 'local';
+    }
+
+    return {
       'exportedAt': DateTime.now().toIso8601String(),
       'userId': user.uid,
       'email': user.email,
-      'profile': userData,
-      'tremorRecords': records.docs.map((doc) {
-        final data = doc.data();
-        data['id'] = doc.id;
-        return data;
-      }).toList(),
+      'profile': profile,
+      'tremorRecords': tremorRecords,
+      'movementTrainingRecords': movementRecords,
+      'sources': {
+        'tremorRecords': tremorSource,
+        'movementTrainingRecords': movementSource,
+      },
+      'note':
+          'Medication list is device-local only and is not included unless separately consented.',
     };
-
-    await _logAuditEvent(user.uid, 'DATA_EXPORT', 'User data exported');
-
-    return exportData;
   }
 
   /// 删除用户账户及所有数据（被遗忘权）

@@ -642,7 +642,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportDataDescription.
   ///
   /// In en, this message translates to:
-  /// **'Download a complete copy of all your data in JSON format. This includes your profile information and all tremor test records.'**
+  /// **'Export your profile and training records as a CSV file. You can save or share it from the system share sheet. Medication list is not included by default.'**
   String get exportDataDescription;
 
   /// No description provided for @export.
@@ -666,7 +666,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportSuccessMessage.
   ///
   /// In en, this message translates to:
-  /// **'Your data has been copied to the clipboard. You can paste it into a text file to save.'**
+  /// **'Your CSV file is ready. Use the share sheet to save it to Files or send it. Raw sensor samples are summarized by count only.'**
   String get exportSuccessMessage;
 
   /// No description provided for @deleteAllRecords.
