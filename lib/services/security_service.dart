@@ -4,6 +4,8 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'secure_storage_service.dart';
+
 /// 安全服务 - 医疗健康数据保护，上线前需完成安全与合规审计
 class SecurityService {
   static const String _encryptionKeyKey = 'encryption_key_v1';
@@ -119,21 +121,30 @@ class SecurityService {
     };
   }
   
-  /// 获取或创建加密密钥
+  /// 获取或创建加密密钥（Keychain；一次性从旧 SharedPreferences 迁移）
   static Future<String> _getOrCreateEncryptionKey() async {
-    final prefs = await SharedPreferences.getInstance();
-    var key = prefs.getString(_encryptionKeyKey);
-    
+    final secure = SecureStorageService.instance;
+    var key = await secure.getSecureString(_encryptionKeyKey);
+
     if (key == null || key.isEmpty) {
-      key = generateSecureKey();
-      await prefs.setString(_encryptionKeyKey, key);
+      final prefs = await SharedPreferences.getInstance();
+      final legacy = prefs.getString(_encryptionKeyKey);
+      if (legacy != null && legacy.isNotEmpty) {
+        key = legacy;
+        await secure.setSecureString(_encryptionKeyKey, key);
+        await prefs.remove(_encryptionKeyKey);
+      } else {
+        key = generateSecureKey();
+        await secure.setSecureString(_encryptionKeyKey, key);
+      }
     }
-    
+
     return key;
   }
-  
+
   /// 安全清除所有本地数据（账户删除时使用）
   static Future<void> secureWipeLocalData() async {
+    await SecureStorageService.instance.clearAllSecure();
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     secureLog('All local data has been securely wiped');
