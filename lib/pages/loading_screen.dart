@@ -51,8 +51,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
     _navigated = true;
 
     Navigator.of(context).pushReplacement(
-      GentlePageRoute(
-        pageBuilder: (context, animation, secondaryAnimation) =>
+      appPageRoute(
+        builder: (context) =>
             AuthGate(onLanguageChange: widget.onLanguageChange),
       ),
     );
