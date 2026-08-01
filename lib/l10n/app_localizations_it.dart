@@ -240,21 +240,21 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get dataUsageText =>
-      'I tuoi dati vengono utilizzati solo per:\n\n• Fornire analisi e tracciamento dei tremori\n• Generare rapporti sulla salute\n• Migliorare gli algoritmi (dati anonimi con consenso)';
+      'Your data is used solely for:\n\n• Providing rehabilitation training features and progress tracking\n• Showing in-app summaries and reports for your personal reference\n• Improving the app only if we use anonymized data with your consent';
 
   @override
   String get dataStorage => 'Archiviazione e Sicurezza';
 
   @override
   String get dataStorageText =>
-      'I tuoi dati sono archiviati in modo sicuro su Google Firebase.\n\n• Crittografia end-to-end\n• TLS 1.3 per tutte le trasmissioni\n• Controlli di accesso rigorosi\n• Audit di sicurezza regolari';
+      'When you sign in, account and synced training data may be stored with Google Firebase. Guest and local-only data stay on your device.\n\n• HTTPS/TLS for network traffic to our cloud services\n• Access limited by your account and Firestore security rules\n• You can export or delete data from the app';
 
   @override
   String get dataSharing => 'Condivisione Dati';
 
   @override
   String get dataSharingText =>
-      'Non vendiamo MAI i tuoi dati sulla salute.\n\nI dati vengono condivisi solo:\n• Con il tuo consenso esplicito\n• Con i fornitori sanitari designati\n• Quando richiesto dalla legge\n\nI dati anonimi possono essere usati per la ricerca.';
+      'We do not sell your personal health data.\n\nData leaves the app only when:\n• You explicitly export or share files yourself\n• The law requires disclosure\n\nThe app does not currently send data directly to healthcare providers.';
 
   @override
   String get userRights => 'I Tuoi Diritti sui Dati';
@@ -268,13 +268,66 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get dataSecurityText =>
-      'Implementiamo più livelli di sicurezza:\n\n• Crittografia AES-256 a riposo\n• TLS 1.3 in transito\n• Autenticazione multifattore\n• Test di penetrazione regolari\n• Log di audit completi\n• Formazione sulla sicurezza dei dipendenti';
+      'We protect your data with the security controls available in our current stack:\n\n• TLS for cloud requests\n• Firebase Authentication for signed-in accounts\n• Firestore rules that restrict access to your own data\n• In-app export and account deletion\n\nStronger protections such as full local database encryption are still being improved and are not claimed as complete.';
 
   @override
   String get contactUs => 'Contattaci';
 
   @override
-  String get contactUsText => 'Domande sulla privacy: privacy@kineo-app.com';
+  String get contactUsText =>
+      'Amplio is operated by an independent individual developer. A public contact email is not available yet and will be published here when ready. After App Store release, you may also use the support information shown on the App Store listing.';
+
+  @override
+  String get termsOfService => 'Terms of Service';
+
+  @override
+  String get termsIntro => 'Introduction';
+
+  @override
+  String get termsIntroText =>
+      'These Terms of Service (\"Terms\") are a draft agreement for using Amplio, an iPhone rehabilitation training assistant for people living with Parkinson\'s disease. Amplio is operated by an independent individual developer. These Terms are not a substitute for professional legal advice.';
+
+  @override
+  String get termsAcceptance => 'Acceptance';
+
+  @override
+  String get termsAcceptanceText =>
+      'By signing in, continuing as a guest, or otherwise using Amplio, you agree to these Terms and to the Privacy Policy. If you do not agree, please do not use the app.';
+
+  @override
+  String get termsUseOfApp => 'Using Amplio';
+
+  @override
+  String get termsUseOfAppText =>
+      'Amplio provides optional training tools such as tremor measurement, voice practice, movement practice, progress summaries, and an optional on-device medication nickname list.\n\nYou agree to use the app only for lawful personal purposes and not to misuse sensors, accounts, or exported data in ways that harm others or violate applicable law.';
+
+  @override
+  String get termsMedicalDisclaimer => 'Not medical advice';
+
+  @override
+  String get termsMedicalDisclaimerText =>
+      'Amplio is a wellness and rehabilitation training aid. It does not diagnose, treat, cure, or prevent Parkinson\'s disease or any other condition.\n\nScores, trends, reports, and reminders are for personal reference only and do not replace advice from a doctor, physical therapist, speech therapist, or other qualified professional. Seek professional care for medical decisions. Stop any exercise that causes pain, dizziness, or unsafe conditions.';
+
+  @override
+  String get termsAccounts => 'Accounts and data';
+
+  @override
+  String get termsAccountsText =>
+      'You may use Amplio with Apple Sign-In, Google Sign-In, or as a guest. You are responsible for activity under your signed-in account.\n\nYou may export or delete certain data in the app. Deleting your account removes associated cloud data we control, subject to technical and legal limits. Guest and local-only data may remain only on your device until you clear them.';
+
+  @override
+  String get termsLimitation => 'Limitation of liability';
+
+  @override
+  String get termsLimitationText =>
+      'To the fullest extent permitted by law, the developer provides Amplio \"as is\" without warranties of uninterrupted or error-free operation.\n\nThe developer is not liable for injuries, losses, or damages arising from reliance on training scores, missed medication reminders, exercise attempts, or inability to access the app, except where liability cannot be limited by law.';
+
+  @override
+  String get termsChanges => 'Changes';
+
+  @override
+  String get termsChangesText =>
+      'We may update these Terms as the app evolves. The \"Last Updated\" date will change when we do. Continued use after an update means you accept the revised Terms. Material changes should be reviewed in the app when available.';
 
   @override
   String get lastUpdated => 'Ultimo aggiornamento';

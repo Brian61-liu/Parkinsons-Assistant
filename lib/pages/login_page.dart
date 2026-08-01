@@ -8,6 +8,7 @@ import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../utils/gentle_page_route.dart';
 import 'privacy_policy_page.dart';
+import 'terms_of_service_page.dart';
 
 class LoginPage extends StatefulWidget {
   final Function(Locale) onLanguageChange;
@@ -540,25 +541,57 @@ class _LoginPageState extends State<LoginPage>
                             ),
                           ),
                         ),
-                        TextButton.icon(
-                          onPressed: () {
-                            pushGentle(context, const PrivacyPolicyPage());
-                          },
-                          icon: Icon(
-                            CupertinoIcons.lock_shield,
-                            size: 16,
-                            color: const Color(
-                              0xFF0EA5E9,
-                            ).withValues(alpha: 0.8),
-                          ),
-                          label: Text(
-                            l10n.privacyPolicy,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFF0EA5E9),
-                              fontWeight: FontWeight.w500,
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 8,
+                          children: [
+                            TextButton.icon(
+                              onPressed: () {
+                                pushGentle(
+                                  context,
+                                  const PrivacyPolicyPage(),
+                                );
+                              },
+                              icon: Icon(
+                                CupertinoIcons.lock_shield,
+                                size: 16,
+                                color: const Color(
+                                  0xFF0EA5E9,
+                                ).withValues(alpha: 0.8),
+                              ),
+                              label: Text(
+                                l10n.privacyPolicy,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF0EA5E9),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
-                          ),
+                            TextButton.icon(
+                              onPressed: () {
+                                pushGentle(
+                                  context,
+                                  const TermsOfServicePage(),
+                                );
+                              },
+                              icon: Icon(
+                                CupertinoIcons.doc_text,
+                                size: 16,
+                                color: const Color(
+                                  0xFF0EA5E9,
+                                ).withValues(alpha: 0.8),
+                              ),
+                              label: Text(
+                                l10n.termsOfService,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF0EA5E9),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     );

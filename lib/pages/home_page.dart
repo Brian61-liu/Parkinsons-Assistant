@@ -9,6 +9,7 @@ import '../pages/voice_training_page.dart';
 import '../pages/movement_training_page.dart';
 import '../pages/data_management_page.dart';
 import '../pages/privacy_policy_page.dart';
+import '../pages/terms_of_service_page.dart';
 import '../services/auth_service.dart';
 import '../services/avatar_service.dart';
 import '../services/database_service.dart';
@@ -358,12 +359,21 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               _buildSettingsItem(
-                icon: CupertinoIcons.doc_text,
+                icon: CupertinoIcons.lock_shield,
                 color: const Color(0xFF8B5CF6),
                 title: l10n.privacyPolicy,
                 onTap: () {
                   Navigator.pop(ctx);
                   pushGentle(context, const PrivacyPolicyPage());
+                },
+              ),
+              _buildSettingsItem(
+                icon: CupertinoIcons.doc_text,
+                color: const Color(0xFF0EA5E9),
+                title: l10n.termsOfService,
+                onTap: () {
+                  Navigator.pop(ctx);
+                  pushGentle(context, const TermsOfServicePage());
                 },
               ),
               const Divider(height: 1),

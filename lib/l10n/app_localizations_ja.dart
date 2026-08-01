@@ -235,21 +235,21 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get dataUsageText =>
-      'お客様のデータは以下の目的でのみ使用されます：\n\n• 振戦分析と追跡の提供\n• 健康レポートの生成\n• アルゴリズムの改善（同意を得た匿名データのみ）';
+      'Your data is used solely for:\n\n• Providing rehabilitation training features and progress tracking\n• Showing in-app summaries and reports for your personal reference\n• Improving the app only if we use anonymized data with your consent';
 
   @override
   String get dataStorage => 'データの保存とセキュリティ';
 
   @override
   String get dataStorageText =>
-      'お客様のデータはGoogle Firebaseに安全に保存されます。\n\n• エンドツーエンド暗号化\n• TLS 1.3によるすべての通信\n• 厳格なアクセス制御\n• 定期的なセキュリティ監査';
+      'When you sign in, account and synced training data may be stored with Google Firebase. Guest and local-only data stay on your device.\n\n• HTTPS/TLS for network traffic to our cloud services\n• Access limited by your account and Firestore security rules\n• You can export or delete data from the app';
 
   @override
   String get dataSharing => 'データの共有';
 
   @override
   String get dataSharingText =>
-      'お客様の健康データを販売することは決してありません。\n\nデータは以下の場合のみ共有されます：\n• お客様の明示的な同意がある場合\n• 指定された医療提供者との共有\n• 法律で要求された場合\n\n匿名化されたデータは研究に使用される場合があります。';
+      'We do not sell your personal health data.\n\nData leaves the app only when:\n• You explicitly export or share files yourself\n• The law requires disclosure\n\nThe app does not currently send data directly to healthcare providers.';
 
   @override
   String get userRights => 'お客様のデータ権利';
@@ -263,13 +263,66 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get dataSecurityText =>
-      '多層的なセキュリティ対策を実施：\n\n• AES-256静的暗号化\n• TLS 1.3転送暗号化\n• 多要素認証\n• 定期的な侵入テスト\n• 包括的な監査ログ\n• 従業員セキュリティ研修';
+      'We protect your data with the security controls available in our current stack:\n\n• TLS for cloud requests\n• Firebase Authentication for signed-in accounts\n• Firestore rules that restrict access to your own data\n• In-app export and account deletion\n\nStronger protections such as full local database encryption are still being improved and are not claimed as complete.';
 
   @override
   String get contactUs => 'お問い合わせ';
 
   @override
-  String get contactUsText => 'プライバシーに関するお問い合わせ：privacy@kineo-app.com';
+  String get contactUsText =>
+      'Amplio is operated by an independent individual developer. A public contact email is not available yet and will be published here when ready. After App Store release, you may also use the support information shown on the App Store listing.';
+
+  @override
+  String get termsOfService => 'Terms of Service';
+
+  @override
+  String get termsIntro => 'Introduction';
+
+  @override
+  String get termsIntroText =>
+      'These Terms of Service (\"Terms\") are a draft agreement for using Amplio, an iPhone rehabilitation training assistant for people living with Parkinson\'s disease. Amplio is operated by an independent individual developer. These Terms are not a substitute for professional legal advice.';
+
+  @override
+  String get termsAcceptance => 'Acceptance';
+
+  @override
+  String get termsAcceptanceText =>
+      'By signing in, continuing as a guest, or otherwise using Amplio, you agree to these Terms and to the Privacy Policy. If you do not agree, please do not use the app.';
+
+  @override
+  String get termsUseOfApp => 'Using Amplio';
+
+  @override
+  String get termsUseOfAppText =>
+      'Amplio provides optional training tools such as tremor measurement, voice practice, movement practice, progress summaries, and an optional on-device medication nickname list.\n\nYou agree to use the app only for lawful personal purposes and not to misuse sensors, accounts, or exported data in ways that harm others or violate applicable law.';
+
+  @override
+  String get termsMedicalDisclaimer => 'Not medical advice';
+
+  @override
+  String get termsMedicalDisclaimerText =>
+      'Amplio is a wellness and rehabilitation training aid. It does not diagnose, treat, cure, or prevent Parkinson\'s disease or any other condition.\n\nScores, trends, reports, and reminders are for personal reference only and do not replace advice from a doctor, physical therapist, speech therapist, or other qualified professional. Seek professional care for medical decisions. Stop any exercise that causes pain, dizziness, or unsafe conditions.';
+
+  @override
+  String get termsAccounts => 'Accounts and data';
+
+  @override
+  String get termsAccountsText =>
+      'You may use Amplio with Apple Sign-In, Google Sign-In, or as a guest. You are responsible for activity under your signed-in account.\n\nYou may export or delete certain data in the app. Deleting your account removes associated cloud data we control, subject to technical and legal limits. Guest and local-only data may remain only on your device until you clear them.';
+
+  @override
+  String get termsLimitation => 'Limitation of liability';
+
+  @override
+  String get termsLimitationText =>
+      'To the fullest extent permitted by law, the developer provides Amplio \"as is\" without warranties of uninterrupted or error-free operation.\n\nThe developer is not liable for injuries, losses, or damages arising from reliance on training scores, missed medication reminders, exercise attempts, or inability to access the app, except where liability cannot be limited by law.';
+
+  @override
+  String get termsChanges => 'Changes';
+
+  @override
+  String get termsChangesText =>
+      'We may update these Terms as the app evolves. The \"Last Updated\" date will change when we do. Continued use after an update means you accept the revised Terms. Material changes should be reviewed in the app when available.';
 
   @override
   String get lastUpdated => '最終更新';

@@ -235,21 +235,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get dataUsageText =>
-      '您的数据仅用于以下目的：\n\n• 提供震颤分析和健康追踪\n• 为您和医疗保健提供者生成健康报告\n• 改进算法（仅在您同意时使用匿名数据）';
+      '您的数据仅用于以下目的：\n\n• 提供康复训练功能与进度追踪\n• 在 App 内向您展示摘要与报告（仅供个人参考）\n• 仅在使用匿名数据且获得您同意时用于改进应用';
 
   @override
   String get dataStorage => '数据存储与安全';
 
   @override
   String get dataStorageText =>
-      '您的数据安全存储在 Google Firebase 服务器上。\n\n• 采用端到端加密\n• 所有传输使用 TLS 1.3 加密\n• 严格的访问控制\n• 定期安全审计';
+      '登录后，账号与已同步的训练数据可能存储在 Google Firebase；游客与仅本地数据保留在您的设备上。\n\n• 与云服务通信使用 HTTPS/TLS\n• 访问受账号身份与 Firestore 安全规则限制\n• 可在 App 内导出或删除数据';
 
   @override
   String get dataSharing => '数据共享';
 
   @override
   String get dataSharingText =>
-      '我们绝不出售您的个人健康数据。\n\n数据仅在以下情况下共享：\n• 经您明确同意\n• 与您指定的医疗保健提供者共享\n• 法律要求时\n\n汇总的匿名数据可能用于研究。';
+      '我们不出售您的个人健康数据。\n\n数据仅在以下情况离开本应用：\n• 您主动导出或分享文件\n• 法律要求披露\n\n本应用目前不会直接向医疗机构发送数据。';
 
   @override
   String get userRights => '您的数据权利';
@@ -263,13 +263,66 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get dataSecurityText =>
-      '我们采取多层安全措施保护您的数据：\n\n• AES-256 静态数据加密\n• TLS 1.3 传输加密\n• 多因素身份验证\n• 定期渗透测试\n• 全面的审计日志\n• 员工安全培训';
+      '我们使用当前技术栈中可用的安全能力保护您的数据：\n\n• 云请求使用 TLS\n• 登录账号使用 Firebase Authentication\n• Firestore 规则限制仅访问您自己的数据\n• App 内提供导出与账户删除\n\n更强的本地数据库加密等能力仍在完善中，本政策不作已完成宣称。';
 
   @override
   String get contactUs => '联系我们';
 
   @override
-  String get contactUsText => '如有隐私咨询或行使数据权利，请联系我们的数据保护官：privacy@kineo-app.com';
+  String get contactUsText =>
+      'Amplio 由个人开发者运营。对外联系邮箱尚未确定，确定后会更新于此。上架 App Store 后，亦可使用商店页面上的支持信息联系。';
+
+  @override
+  String get termsOfService => '服务条款';
+
+  @override
+  String get termsIntro => '简介';
+
+  @override
+  String get termsIntroText =>
+      '本《服务条款》（草稿）说明您如何使用 Amplio——面向帕金森人群的 iPhone 康复训练辅助应用。Amplio 由个人开发者运营。本条款不能替代专业法律意见。';
+
+  @override
+  String get termsAcceptance => '接受条款';
+
+  @override
+  String get termsAcceptanceText =>
+      '登录、以游客身份继续使用，或以其他方式使用 Amplio，即表示您同意本条款及《隐私政策》。若不同意，请勿使用本应用。';
+
+  @override
+  String get termsUseOfApp => '使用说明';
+
+  @override
+  String get termsUseOfAppText =>
+      'Amplio 提供可选的训练工具，例如震颤测量、语音练习、肢体练习、进度摘要，以及可选的本机用药昵称清单。\n\n您仅可将本应用用于合法的个人用途，不得滥用传感器、账号或导出数据，以免损害他人或违反适用法律。';
+
+  @override
+  String get termsMedicalDisclaimer => '非医疗建议';
+
+  @override
+  String get termsMedicalDisclaimerText =>
+      'Amplio 是健康与康复训练辅助工具，不能诊断、治疗、治愈或预防帕金森病或其他疾病。\n\n分数、趋势、报告与提醒仅供个人参考，不能替代医生、物理治疗师、语言治疗师或其他合格专业人员的建议。医疗决策请咨询专业人士。若出现疼痛、眩晕或不安全情况，请立即停止相关练习。';
+
+  @override
+  String get termsAccounts => '账号与数据';
+
+  @override
+  String get termsAccountsText =>
+      '您可通过 Apple 登录、Google 登录或游客模式使用 Amplio。您应对登录账号下的活动负责。\n\n您可在应用内导出或删除部分数据。删除账号将删除我们控制的相关云端数据（受技术与法律限制）。游客与仅本地数据在您清除前可能仅保留在设备上。';
+
+  @override
+  String get termsLimitation => '责任限制';
+
+  @override
+  String get termsLimitationText =>
+      '在法律允许的最大范围内，开发者以「现状」提供 Amplio，不作不间断或无错误运行的保证。\n\n除法律不可排除的责任外，开发者不对因依赖训练分数、错过用药提醒、进行练习或无法使用应用而导致的伤害、损失或损害承担责任。';
+
+  @override
+  String get termsChanges => '条款变更';
+
+  @override
+  String get termsChangesText =>
+      '我们可能随应用演进更新本条款，并更新「最后更新」日期。更新后继续使用即表示您接受修订后的条款。重大变更应在应用内可供查阅时予以审阅。';
 
   @override
   String get lastUpdated => '最后更新';
@@ -1100,21 +1153,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get dataUsageText =>
-      '您的資料僅用於以下目的：\n\n• 提供顫抖分析和健康追蹤\n• 為您和醫療保健提供者生成健康報告\n• 改進演算法（僅在您同意時使用匿名資料）';
+      '您的資料僅用於以下目的：\n\n• 提供復健訓練功能與進度追蹤\n• 在 App 內向您顯示摘要與報告（僅供個人參考）\n• 僅在使用匿名資料且取得您同意時用於改進應用';
 
   @override
   String get dataStorage => '資料儲存與安全';
 
   @override
   String get dataStorageText =>
-      '您的資料安全儲存在 Google Firebase 伺服器上。\n\n• 採用端到端加密\n• 所有傳輸使用 TLS 1.3 加密\n• 嚴格的存取控制\n• 定期安全審計';
+      '登入後，帳號與已同步的訓練資料可能儲存在 Google Firebase；訪客與僅本機資料保留在您的裝置上。\n\n• 與雲端服務通訊使用 HTTPS/TLS\n• 存取受帳號身分與 Firestore 安全規則限制\n• 可在 App 內匯出或刪除資料';
 
   @override
   String get dataSharing => '資料共享';
 
   @override
   String get dataSharingText =>
-      '我們絕不出售您的個人健康資料。\n\n資料僅在以下情況下共享：\n• 經您明確同意\n• 與您指定的醫療保健提供者共享\n• 法律要求時\n\n彙總的匿名資料可能用於研究。';
+      '我們不出售您的個人健康資料。\n\n資料僅在以下情況離開本應用：\n• 您主動匯出或分享檔案\n• 法律要求揭露\n\n本應用目前不會直接向醫療機構傳送資料。';
 
   @override
   String get userRights => '您的資料權利';
@@ -1128,13 +1181,66 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get dataSecurityText =>
-      '我們採取多層安全措施保護您的資料：\n\n• AES-256 靜態資料加密\n• TLS 1.3 傳輸加密\n• 多因素身份驗證\n• 定期滲透測試\n• 全面的審計日誌\n• 員工安全培訓';
+      '我們使用目前技術堆疊中可用的安全能力保護您的資料：\n\n• 雲端請求使用 TLS\n• 登入帳號使用 Firebase Authentication\n• Firestore 規則限制僅存取您自己的資料\n• App 內提供匯出與帳號刪除\n\n更強的本機資料庫加密等能力仍在完善中，本政策不作已完成宣稱。';
 
   @override
   String get contactUs => '聯絡我們';
 
   @override
-  String get contactUsText => '隱私諮詢請聯絡：privacy@kineo-app.com';
+  String get contactUsText =>
+      'Amplio 由個人開發者營運。對外聯絡信箱尚未確定，確定後會更新於此。上架 App Store 後，亦可使用商店頁面上的支援資訊聯絡。';
+
+  @override
+  String get termsOfService => '服務條款';
+
+  @override
+  String get termsIntro => '簡介';
+
+  @override
+  String get termsIntroText =>
+      '本《服務條款》（草稿）說明您如何使用 Amplio——面向帕金森族群的 iPhone 復健訓練輔助應用。Amplio 由個人開發者營運。本條款不能替代專業法律意見。';
+
+  @override
+  String get termsAcceptance => '接受條款';
+
+  @override
+  String get termsAcceptanceText =>
+      '登入、以訪客身分繼續使用，或以其他方式使用 Amplio，即表示您同意本條款及《隱私政策》。若不同意，請勿使用本應用。';
+
+  @override
+  String get termsUseOfApp => '使用說明';
+
+  @override
+  String get termsUseOfAppText =>
+      'Amplio 提供可選的訓練工具，例如顫抖測量、語音練習、肢體練習、進度摘要，以及可選的本機用藥暱稱清單。\n\n您僅可將本應用用於合法的個人用途，不得濫用感測器、帳號或匯出資料，以免損害他人或違反適用法律。';
+
+  @override
+  String get termsMedicalDisclaimer => '非醫療建議';
+
+  @override
+  String get termsMedicalDisclaimerText =>
+      'Amplio 是健康與復健訓練輔助工具，不能診斷、治療、治癒或預防帕金森病或其他疾病。\n\n分數、趨勢、報告與提醒僅供個人參考，不能替代醫生、物理治療師、語言治療師或其他合格專業人員的建議。醫療決策請諮詢專業人士。若出現疼痛、眩暈或不安全情況，請立即停止相關練習。';
+
+  @override
+  String get termsAccounts => '帳號與資料';
+
+  @override
+  String get termsAccountsText =>
+      '您可透過 Apple 登入、Google 登入或訪客模式使用 Amplio。您應對登入帳號下的活動負責。\n\n您可在應用內匯出或刪除部分資料。刪除帳號將刪除我們控制的相關雲端資料（受技術與法律限制）。訪客與僅本機資料在您清除前可能僅保留在裝置上。';
+
+  @override
+  String get termsLimitation => '責任限制';
+
+  @override
+  String get termsLimitationText =>
+      '在法律允許的最大範圍內，開發者以「現狀」提供 Amplio，不作不間斷或無錯誤運作的保證。\n\n除法律不可排除的責任外，開發者不對因依賴訓練分數、錯過用藥提醒、進行練習或無法使用應用而導致的傷害、損失或損害承擔責任。';
+
+  @override
+  String get termsChanges => '條款變更';
+
+  @override
+  String get termsChangesText =>
+      '我們可能隨應用演進更新本條款，並更新「最後更新」日期。更新後繼續使用即表示您接受修訂後的條款。重大變更應在應用內可供查閱時予以審閱。';
 
   @override
   String get lastUpdated => '最後更新';
