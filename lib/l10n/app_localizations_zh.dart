@@ -263,7 +263,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get dataSecurityText =>
-      '我们使用当前技术栈中可用的安全能力保护您的数据：\n\n• 云请求使用 TLS\n• 登录账号使用 Firebase Authentication\n• Firestore 规则限制仅访问您自己的数据\n• App 内提供导出与账户删除\n\n更强的本地数据库加密等能力仍在完善中，本政策不作已完成宣称。';
+      '我们使用当前技术栈中可用的安全能力保护您的数据：\n\n• 云请求使用 TLS\n• 登录账号使用 Firebase Authentication\n• Firestore 规则限制仅访问您自己的数据\n• 对本机敏感健康字段（如震颤传感器采样、用药昵称）使用 AES 加密，密钥保存在 iOS Keychain\n• App 内提供导出与账户删除\n\n您主动导出的文件为便于阅读的明文格式。本政策不宣称对整个本地数据库文件做全库加密。';
 
   @override
   String get medicationPrivacy => '可选的用药昵称清单';
@@ -1188,7 +1188,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get dataSecurityText =>
-      '我們使用目前技術堆疊中可用的安全能力保護您的資料：\n\n• 雲端請求使用 TLS\n• 登入帳號使用 Firebase Authentication\n• Firestore 規則限制僅存取您自己的資料\n• App 內提供匯出與帳號刪除\n\n更強的本機資料庫加密等能力仍在完善中，本政策不作已完成宣稱。';
+      '我們使用目前技術堆疊中可用的安全能力保護您的資料：\n\n• 雲端請求使用 TLS\n• 登入帳號使用 Firebase Authentication\n• Firestore 規則限制僅存取您自己的資料\n• 對本機敏感健康欄位（如震顫感測器採樣、用藥暱稱）使用 AES 加密，金鑰保存在 iOS Keychain\n• App 內提供匯出與帳號刪除\n\n您主動匯出的檔案為便於閱讀的明文格式。本政策不宣稱對整個本機資料庫檔案做全庫加密。';
 
   @override
   String get medicationPrivacy => '可選的用藥暱稱清單';

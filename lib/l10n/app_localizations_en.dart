@@ -267,7 +267,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataSecurityText =>
-      'We protect your data with the security controls available in our current stack:\n\n• TLS for cloud requests\n• Firebase Authentication for signed-in accounts\n• Firestore rules that restrict access to your own data\n• In-app export and account deletion\n\nStronger protections such as full local database encryption are still being improved and are not claimed as complete.';
+      'We protect your data with the security controls available in our current stack:\n\n• TLS for cloud requests\n• Firebase Authentication for signed-in accounts\n• Firestore rules that restrict access to your own data\n• On-device AES encryption for sensitive local health fields (such as tremor sensor samples and medication nicknames), with the key stored in the iOS Keychain\n• In-app export and account deletion\n\nFiles you export are written in a readable format for your own use. Full-file encryption of the entire local database is not claimed.';
 
   @override
   String get medicationPrivacy => 'Optional medication nickname list';

@@ -284,7 +284,7 @@
   "userRights": "Your Data Rights",
   "userRightsText": "You have the right to:\n\n• Access: View all your data\n• Portability: Export your data\n• Erasure: Delete your data\n• Withdraw: Revoke consent anytime\n• Contact: For any privacy inquiries",
   "dataSecurity": "Security Measures",
-  "dataSecurityText": "We protect your data with the security controls available in our current stack:\n\n• TLS for cloud requests\n• Firebase Authentication for signed-in accounts\n• Firestore rules that restrict access to your own data\n• In-app export and account deletion\n\nStronger protections such as full local database encryption are still being improved and are not claimed as complete.",
+  "dataSecurityText": "We protect your data with the security controls available in our current stack:\n\n• TLS for cloud requests\n• Firebase Authentication for signed-in accounts\n• Firestore rules that restrict access to your own data\n• On-device AES encryption for sensitive local health fields (such as tremor sensor samples and medication nicknames), with the key stored in the iOS Keychain\n• In-app export and account deletion\n\nFiles you export are written in a readable format for your own use. Full-file encryption of the entire local database is not claimed.",
   "medicationPrivacy": "Optional medication nickname list",
   "medicationPrivacyText": "If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored only on this device. Optional local notifications may fire on this device only if you allow notification permission; they are not sent to our servers. You can delete this data in the app. This feature is not medical advice and is not included in data export by default.",
   "contactUs": "Contact Us",
