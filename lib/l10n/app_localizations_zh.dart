@@ -270,7 +270,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get contactUsText =>
-      'Amplio 由个人开发者运营。对外联系邮箱尚未确定，确定后会更新于此。上架 App Store 后，亦可使用商店页面上的支持信息联系。';
+      'Amplio 由个人开发者运营（域名：ampliocare.com）。\n\n• 隐私与数据请求：privacy@ampliocare.com\n• 用户支持：support@ampliocare.com\n• 医生/医院合作：clinical@ampliocare.com\n• 商务联系：hello@ampliocare.com';
 
   @override
   String get termsOfService => '服务条款';
@@ -1188,7 +1188,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get contactUsText =>
-      'Amplio 由個人開發者營運。對外聯絡信箱尚未確定，確定後會更新於此。上架 App Store 後，亦可使用商店頁面上的支援資訊聯絡。';
+      'Amplio 由個人開發者營運（域名：ampliocare.com）。\n\n• 隱私與資料請求：privacy@ampliocare.com\n• 使用者支援：support@ampliocare.com\n• 醫師/醫院合作：clinical@ampliocare.com\n• 商務聯絡：hello@ampliocare.com';
 
   @override
   String get termsOfService => '服務條款';

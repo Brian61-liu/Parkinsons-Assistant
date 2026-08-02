@@ -116,7 +116,7 @@
   "dataSecurity": "安全措施",
   "dataSecurityText": "我们使用当前技术栈中可用的安全能力保护您的数据：\n\n• 云请求使用 TLS\n• 登录账号使用 Firebase Authentication\n• Firestore 规则限制仅访问您自己的数据\n• App 内提供导出与账户删除\n\n更强的本地数据库加密等能力仍在完善中，本政策不作已完成宣称。",
   "contactUs": "联系我们",
-  "contactUsText": "Amplio 由个人开发者运营。对外联系邮箱尚未确定，确定后会更新于此。上架 App Store 后，亦可使用商店页面上的支持信息联系。",
+  "contactUsText": "Amplio 由个人开发者运营（域名：ampliocare.com）。\n\n• 隐私与数据请求：privacy@ampliocare.com\n• 用户支持：support@ampliocare.com\n• 医生/医院合作：clinical@ampliocare.com\n• 商务联系：hello@ampliocare.com",
   "termsOfService": "服务条款",
   "termsIntro": "简介",
   "termsIntroText": "本《服务条款》（草稿）说明您如何使用 Amplio——面向帕金森人群的 iPhone 康复训练辅助应用。Amplio 由个人开发者运营。本条款不能替代专业法律意见。",

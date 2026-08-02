@@ -116,7 +116,7 @@
   "dataSecurity": "Меры Безопасности",
   "dataSecurityText": "We protect your data with the security controls available in our current stack:\n\n• TLS for cloud requests\n• Firebase Authentication for signed-in accounts\n• Firestore rules that restrict access to your own data\n• In-app export and account deletion\n\nStronger protections such as full local database encryption are still being improved and are not claimed as complete.",
   "contactUs": "Связаться с Нами",
-  "contactUsText": "Amplio is operated by an independent individual developer. A public contact email is not available yet and will be published here when ready. After App Store release, you may also use the support information shown on the App Store listing.",
+  "contactUsText": "Amplio is operated by an independent individual developer (domain: ampliocare.com).\n\n• Privacy / data requests: privacy@ampliocare.com\n• User support: support@ampliocare.com\n• Clinical partnerships: clinical@ampliocare.com\n• Business: hello@ampliocare.com",
   "termsOfService": "Terms of Service",
   "termsIntro": "Introduction",
   "termsIntroText": "These Terms of Service (\"Terms\") are a draft agreement for using Amplio, an iPhone rehabilitation training assistant for people living with Parkinson's disease. Amplio is operated by an independent individual developer. These Terms are not a substitute for professional legal advice.",

@@ -277,7 +277,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get contactUsText =>
-      'Amplio is operated by an independent individual developer. A public contact email is not available yet and will be published here when ready. After App Store release, you may also use the support information shown on the App Store listing.';
+      'Amplio is operated by an independent individual developer (domain: ampliocare.com).\n\n• Privacy / data requests: privacy@ampliocare.com\n• User support: support@ampliocare.com\n• Clinical partnerships: clinical@ampliocare.com\n• Business: hello@ampliocare.com';
 
   @override
   String get termsOfService => 'Terms of Service';
