@@ -597,6 +597,18 @@ abstract class AppLocalizations {
   /// **'We protect your data with the security controls available in our current stack:\n\n• TLS for cloud requests\n• Firebase Authentication for signed-in accounts\n• Firestore rules that restrict access to your own data\n• In-app export and account deletion\n\nStronger protections such as full local database encryption are still being improved and are not claimed as complete.'**
   String get dataSecurityText;
 
+  /// No description provided for @medicationPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional medication nickname list'**
+  String get medicationPrivacy;
+
+  /// No description provided for @medicationPrivacyText.
+  ///
+  /// In en, this message translates to:
+  /// **'If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored only on this device. Optional local notifications may fire on this device only if you allow notification permission; they are not sent to our servers. You can delete this data in the app. This feature is not medical advice and is not included in data export by default.'**
+  String get medicationPrivacyText;
+
   /// No description provided for @contactUs.
   ///
   /// In en, this message translates to:

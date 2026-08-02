@@ -266,6 +266,13 @@ class AppLocalizationsZh extends AppLocalizations {
       '我们使用当前技术栈中可用的安全能力保护您的数据：\n\n• 云请求使用 TLS\n• 登录账号使用 Firebase Authentication\n• Firestore 规则限制仅访问您自己的数据\n• App 内提供导出与账户删除\n\n更强的本地数据库加密等能力仍在完善中，本政策不作已完成宣称。';
 
   @override
+  String get medicationPrivacy => '可选的用药昵称清单';
+
+  @override
+  String get medicationPrivacyText =>
+      '若您开启可选的用药昵称清单，昵称、提醒时间与打卡记录仅保存在本设备。若您允许通知权限，可选的本地通知仅在本机触发，不会上传至我们的服务器。您可在应用内删除这些数据。该功能不是医疗建议，且默认不包含在数据导出中。';
+
+  @override
   String get contactUs => '联系我们';
 
   @override
@@ -1182,6 +1189,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String get dataSecurityText =>
       '我們使用目前技術堆疊中可用的安全能力保護您的資料：\n\n• 雲端請求使用 TLS\n• 登入帳號使用 Firebase Authentication\n• Firestore 規則限制僅存取您自己的資料\n• App 內提供匯出與帳號刪除\n\n更強的本機資料庫加密等能力仍在完善中，本政策不作已完成宣稱。';
+
+  @override
+  String get medicationPrivacy => '可選的用藥暱稱清單';
+
+  @override
+  String get medicationPrivacyText =>
+      '若您開啟可選的用藥暱稱清單，暱稱、提醒時間與打卡紀錄僅保存在本裝置。若您允許通知權限，可選的本機通知僅在本機觸發，不會上傳至我們的伺服器。您可在應用內刪除這些資料。此功能不是醫療建議，且預設不包含在資料匯出中。';
 
   @override
   String get contactUs => '聯絡我們';

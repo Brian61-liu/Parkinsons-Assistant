@@ -106,32 +106,34 @@
   "dataCollection": "収集するデータ",
   "dataCollectionText": "以下のデータを収集します：\n\n• アカウント情報：メール、名前（認証用）\n• センサーデータ：振戦テスト中の動きデータ\n• テスト結果：周波数、振幅、重症度\n\nデータ最小化の原則に従います。",
   "dataUsage": "データの使用目的",
-  "dataUsageText": "Your data is used solely for:\n\n• Providing rehabilitation training features and progress tracking\n• Showing in-app summaries and reports for your personal reference\n• Improving the app only if we use anonymized data with your consent",
+  "dataUsageText": "お客様のデータは以下の目的にのみ使用されます：\n\n• リハビリテーション訓練機能と進捗の提供\n• 個人参照用のアプリ内要約とレポートの表示\n• 匿名データと同意がある場合のみ、アプリ改善への利用",
   "dataStorage": "データの保存とセキュリティ",
-  "dataStorageText": "When you sign in, account and synced training data may be stored with Google Firebase. Guest and local-only data stay on your device.\n\n• HTTPS/TLS for network traffic to our cloud services\n• Access limited by your account and Firestore security rules\n• You can export or delete data from the app",
+  "dataStorageText": "サインインすると、アカウントと同期済みの訓練データは Google Firebase に保存される場合があります。ゲストおよび端末のみのデータは端末に残ります。\n\n• クラウド通信には HTTPS/TLS を使用\n• アクセスはアカウントと Firestore セキュリティルールで制限\n• アプリ内でデータの書き出しまたは削除が可能",
   "dataSharing": "データの共有",
-  "dataSharingText": "We do not sell your personal health data.\n\nData leaves the app only when:\n• You explicitly export or share files yourself\n• The law requires disclosure\n\nThe app does not currently send data directly to healthcare providers.",
+  "dataSharingText": "個人の健康データを販売しません。\n\nデータがアプリ外に出るのは次の場合のみです：\n• お客様が明示的にファイルを書き出しまたは共有した場合\n• 法令により開示が求められる場合\n\n現時点で医療機関へ直接データを送信しません。",
   "userRights": "お客様のデータ権利",
   "userRightsText": "以下の権利があります：\n\n• アクセス権：すべてのデータを閲覧\n• ポータビリティ：データをエクスポート\n• 削除権：データを削除\n• 撤回権：いつでも同意を撤回\n• お問い合わせ：プライバシーに関するご質問はこちら",
   "dataSecurity": "セキュリティ対策",
-  "dataSecurityText": "We protect your data with the security controls available in our current stack:\n\n• TLS for cloud requests\n• Firebase Authentication for signed-in accounts\n• Firestore rules that restrict access to your own data\n• In-app export and account deletion\n\nStronger protections such as full local database encryption are still being improved and are not claimed as complete.",
+  "dataSecurityText": "現行の技術スタックで利用可能な管理によりデータを保護します：\n\n• クラウド通信の TLS\n• サインインアカウントの Firebase Authentication\n• 自分のデータのみにアクセスを制限する Firestore ルール\n• アプリ内の書き出しとアカウント削除\n\n端末データベースの完全暗号化など、より強い保護は改善中であり、完了済みとは主張しません。",
+  "medicationPrivacy": "任意の服薬ニックネームリスト",
+  "medicationPrivacyText": "任意の服薬ニックネームリストを有効にすると、ニックネーム、リマインダー時刻、チェックインは本端末のみに保存されます。通知を許可した場合、任意のローカル通知はこの端末でのみ表示され、当社サーバーには送信されません。このデータはアプリ内で削除できます。本機能は医療アドバイスではなく、データ書き出しには既定で含まれません。",
   "contactUs": "お問い合わせ",
-  "contactUsText": "Amplio is operated by an independent individual developer (domain: ampliocare.com).\n\n• Privacy / data requests: privacy@ampliocare.com\n• User support: support@ampliocare.com\n• Clinical partnerships: clinical@ampliocare.com\n• Business: hello@ampliocare.com",
-  "termsOfService": "Terms of Service",
-  "termsIntro": "Introduction",
-  "termsIntroText": "These Terms of Service (\"Terms\") are a draft agreement for using Amplio, an iPhone rehabilitation training assistant for people living with Parkinson's disease. Amplio is operated by an independent individual developer. These Terms are not a substitute for professional legal advice.",
-  "termsAcceptance": "Acceptance",
-  "termsAcceptanceText": "By signing in, continuing as a guest, or otherwise using Amplio, you agree to these Terms and to the Privacy Policy. If you do not agree, please do not use the app.",
-  "termsUseOfApp": "Using Amplio",
-  "termsUseOfAppText": "Amplio provides optional training tools such as tremor measurement, voice practice, movement practice, progress summaries, and an optional on-device medication nickname list.\n\nYou agree to use the app only for lawful personal purposes and not to misuse sensors, accounts, or exported data in ways that harm others or violate applicable law.",
-  "termsMedicalDisclaimer": "Not medical advice",
-  "termsMedicalDisclaimerText": "Amplio is a wellness and rehabilitation training aid. It does not diagnose, treat, cure, or prevent Parkinson's disease or any other condition.\n\nScores, trends, reports, and reminders are for personal reference only and do not replace advice from a doctor, physical therapist, speech therapist, or other qualified professional. Seek professional care for medical decisions. Stop any exercise that causes pain, dizziness, or unsafe conditions.",
-  "termsAccounts": "Accounts and data",
-  "termsAccountsText": "You may use Amplio with Apple Sign-In, Google Sign-In, or as a guest. You are responsible for activity under your signed-in account.\n\nYou may export or delete certain data in the app. Deleting your account removes associated cloud data we control, subject to technical and legal limits. Guest and local-only data may remain only on your device until you clear them.",
-  "termsLimitation": "Limitation of liability",
-  "termsLimitationText": "To the fullest extent permitted by law, the developer provides Amplio \"as is\" without warranties of uninterrupted or error-free operation.\n\nThe developer is not liable for injuries, losses, or damages arising from reliance on training scores, missed medication reminders, exercise attempts, or inability to access the app, except where liability cannot be limited by law.",
-  "termsChanges": "Changes",
-  "termsChangesText": "We may update these Terms as the app evolves. The \"Last Updated\" date will change when we do. Continued use after an update means you accept the revised Terms. Material changes should be reviewed in the app when available.",
+  "contactUsText": "Amplio は個人の独立開発者により運営されています（ドメイン：ampliocare.com）。\n\n• プライバシー／データ請求：privacy@ampliocare.com\n• ユーザーサポート：support@ampliocare.com\n• 臨床連携：clinical@ampliocare.com\n• ビジネス：hello@ampliocare.com",
+  "termsOfService": "利用規約",
+  "termsIntro": "はじめに",
+  "termsIntroText": "本利用規約（「規約」）は、パーキンソン病とともに生きる方向けの iPhone リハビリテーション訓練アシスタント Amplio を利用するための草案合意です。Amplio は個人の独立開発者により運営されます。本規約は専門的な法律助言の代わりにはなりません。",
+  "termsAcceptance": "同意",
+  "termsAcceptanceText": "サインイン、ゲストとしての継続、またはその他の方法で Amplio を利用することにより、本規約およびプライバシーポリシーに同意したものとみなします。同意しない場合はアプリを使用しないでください。",
+  "termsUseOfApp": "Amplio の利用",
+  "termsUseOfAppText": "Amplio は、振戦測定、音声練習、動作練習、進捗要約、および任意の端末内服薬ニックネームリストなどの任意の訓練ツールを提供します。\n\nお客様は、合法的な個人目的でのみアプリを使用し、他者に害を与えたり適用法に違反したりする形でセンサー、アカウント、書き出しデータを濫用しないことに同意します。",
+  "termsMedicalDisclaimer": "医療アドバイスではありません",
+  "termsMedicalDisclaimerText": "Amplio はウェルネスおよびリハビリテーション訓練の補助です。パーキンソン病やその他の疾患を診断、治療、治癒、予防しません。\n\nスコア、傾向、レポート、リマインダーは個人参照のみであり、医師、理学療法士、言語聴覚士、その他の資格ある専門家の助言に代わるものではありません。医療上の判断は専門家に相談してください。痛み、めまい、または不安全な状態を引き起こす運動は中止してください。",
+  "termsAccounts": "アカウントとデータ",
+  "termsAccountsText": "Amplio は Apple サインイン、Google サインイン、またはゲストとして利用できます。サインインアカウント下の活動についてお客様が責任を負います。\n\nアプリ内で一部データの書き出しまたは削除が可能です。アカウント削除により、技術的・法的制限の範囲で当社が管理する関連クラウドデータは削除されます。ゲストおよび端末のみのデータは、消去するまで端末に残る場合があります。",
+  "termsLimitation": "責任の制限",
+  "termsLimitationText": "法令で認められる最大限の範囲で、開発者は Amplio を「現状有姿」で提供し、中断のない、またはエラーのない動作を保証しません。\n\n訓練スコアへの依拠、服薬リマインダーの見逃し、運動の試み、またはアプリへのアクセス不能から生じる傷害、損失、損害について、法令により制限できない責任を除き、開発者は責任を負いません。",
+  "termsChanges": "変更",
+  "termsChangesText": "アプリの進化に伴い本規約を更新する場合があります。更新時は「最終更新」日が変わります。更新後の継続利用は改訂規約への同意を意味します。重要な変更は、アプリ内で確認できる際に確認してください。",
   "lastUpdated": "最終更新",
   "version": "バージョン",
   "dataManagement": "データ管理",
@@ -376,99 +378,141 @@
   "handTraining": "Hand",
   "voiceTrainingShort": "Voice",
   "motionTrainingShort": "Movement",
-
   "tabHome": "Home",
   "tabPlan": "Plan",
   "tabData": "Data",
   "tabProfile": "Profile",
   "comingSoon": "Coming soon",
-
   "trainingStreak": "{days} days",
   "@trainingStreak": {
-    "placeholders": { "days": { "type": "int" } }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
   "trainingStreakLabel": "Training Streak",
-
   "voiceClarity": "Voice Clarity",
   "handStability": "Hand Stability",
   "movementAbility": "Movement Ability",
   "medicationReminder": "Medication",
-
   "lastTrainingAgo": "Last training · {timeAgo}",
   "@lastTrainingAgo": {
-    "placeholders": { "timeAgo": { "type": "String" } }
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
   },
   "lastMeasurementAgo": "Last measured · {timeAgo}",
   "@lastMeasurementAgo": {
-    "placeholders": { "timeAgo": { "type": "String" } }
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
   },
   "relativeToday": "Today",
   "relativeYesterday": "Yesterday",
   "relativeDaysAgo": "{days} days ago",
   "@relativeDaysAgo": {
-    "placeholders": { "days": { "type": "int" } }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
-
   "noTrainingYet": "No training yet",
   "noMeasurementYet": "No measurement yet",
   "tapToStart": "Tap to start",
-
   "durationSec": "{count}s",
   "@durationSec": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "durationMin": "{count} min",
   "@durationMin": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-
   "voiceSessionCount": "1 session",
   "handMeasurementCount": "1 measurement",
   "motionCompletionCount": "{done}/{total} reps",
   "@motionCompletionCount": {
     "placeholders": {
-      "done": { "type": "int" },
-      "total": { "type": "int" }
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
-
   "medicationSetupPrompt": "Set up medication reminders",
   "medicationSetupSubtitle": "Saved on this device only",
   "medicationNoUpcoming": "No upcoming reminders today",
   "medicationNextDoseLabel": "Next dose",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
-    "placeholders": { "time": { "type": "String" } }
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   },
   "medicationStatusUpcoming": "Upcoming",
   "medicationStatusPending": "Pending",
   "medicationNotificationBody": "Time for: {label}",
   "@medicationNotificationBody": {
-    "placeholders": { "label": { "type": "String" } }
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
   },
   "medicationNotificationPermissionNote": "Optional: allow notifications so Amplio can remind you at the times you set. Notifications stay on this device.",
-
   "recentActivity": "Recent Activity",
   "nonMedicalDisclaimerTitle": "For reference only",
   "nonMedicalDisclaimerBody": "Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.",
-
   "voicePrepHint": "Sit comfortably. Hold your phone about 30 cm from your mouth.",
   "voicePrepDurationHint": "Practice for about {seconds} seconds",
   "@voicePrepDurationHint": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voicePrepEnvironmentHint": "Practice in a quiet room for best results",
   "voiceCalibratingCountdown": "Please stay quiet · {seconds}s",
   "@voiceCalibratingCountdown": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voiceElapsedLabel": "Practiced {seconds}s",
   "@voiceElapsedLabel": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voiceTargetDurationChip": "Goal: {seconds}s",
   "@voiceTargetDurationChip": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voiceLegendTarget": "Target volume",
   "voiceLegendYours": "Your volume",

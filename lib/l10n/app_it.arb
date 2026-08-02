@@ -106,32 +106,34 @@
   "dataCollection": "Dati che Raccogliamo",
   "dataCollectionText": "Raccogliamo i seguenti dati:\n\n• Account: Email, nome (autenticazione)\n• Sensori: Dati di movimento durante i test\n• Risultati: Frequenza, ampiezza, gravità\n\nSeguiamo il principio di minimizzazione dei dati.",
   "dataUsage": "Uso dei Dati",
-  "dataUsageText": "Your data is used solely for:\n\n• Providing rehabilitation training features and progress tracking\n• Showing in-app summaries and reports for your personal reference\n• Improving the app only if we use anonymized data with your consent",
+  "dataUsageText": "I tuoi dati sono usati esclusivamente per:\n\n• Fornire funzionalità di allenamento riabilitativo e monitoraggio dei progressi\n• Mostrare riepiloghi e report in-app per riferimento personale\n• Migliorare l’app solo se usiamo dati anonimizzati con il tuo consenso",
   "dataStorage": "Archiviazione e Sicurezza",
-  "dataStorageText": "When you sign in, account and synced training data may be stored with Google Firebase. Guest and local-only data stay on your device.\n\n• HTTPS/TLS for network traffic to our cloud services\n• Access limited by your account and Firestore security rules\n• You can export or delete data from the app",
+  "dataStorageText": "Quando accedi, i dati dell’account e di allenamento sincronizzati possono essere archiviati con Google Firebase. I dati ospite e solo locali restano sul tuo dispositivo.\n\n• HTTPS/TLS per il traffico di rete verso i nostri servizi cloud\n• Accesso limitato dal tuo account e dalle regole di sicurezza Firestore\n• Puoi esportare o eliminare i dati dall’app",
   "dataSharing": "Condivisione Dati",
-  "dataSharingText": "We do not sell your personal health data.\n\nData leaves the app only when:\n• You explicitly export or share files yourself\n• The law requires disclosure\n\nThe app does not currently send data directly to healthcare providers.",
+  "dataSharingText": "Non vendiamo i tuoi dati personali sulla salute.\n\nI dati lasciano l’app solo quando:\n• Esporti o condividi esplicitamente i file tu stesso\n• La legge richiede la divulgazione\n\nL’app attualmente non invia dati direttamente ai fornitori di assistenza sanitaria.",
   "userRights": "I Tuoi Diritti sui Dati",
   "userRightsText": "Hai il diritto di:\n\n• Accesso: Visualizzare tutti i tuoi dati\n• Portabilità: Esportare i tuoi dati\n• Cancellazione: Eliminare i tuoi dati\n• Revoca: Revocare il consenso\n• Contatto: Per qualsiasi domanda sulla privacy",
   "dataSecurity": "Misure di Sicurezza",
-  "dataSecurityText": "We protect your data with the security controls available in our current stack:\n\n• TLS for cloud requests\n• Firebase Authentication for signed-in accounts\n• Firestore rules that restrict access to your own data\n• In-app export and account deletion\n\nStronger protections such as full local database encryption are still being improved and are not claimed as complete.",
+  "dataSecurityText": "Proteggiamo i tuoi dati con i controlli di sicurezza del nostro stack attuale:\n\n• TLS per le richieste cloud\n• Firebase Authentication per gli account connessi\n• Regole Firestore che limitano l’accesso ai tuoi dati\n• Esportazione ed eliminazione account in-app\n\nProtezioni più forti come la crittografia completa del database locale sono ancora in miglioramento e non sono dichiarate complete.",
+  "medicationPrivacy": "Elenco opzionale di soprannomi farmaci",
+  "medicationPrivacyText": "Se attivi l’elenco opzionale di soprannomi farmaci, soprannomi, orari dei promemoria e check-in restano solo su questo dispositivo. Le notifiche locali opzionali compaiono solo su questo dispositivo se concedi il permesso di notifica; non vengono inviate ai nostri server. Puoi eliminare questi dati nell’app. Questa funzione non è un consiglio medico e non è inclusa per impostazione predefinita nell’esportazione dei dati.",
   "contactUs": "Contattaci",
-  "contactUsText": "Amplio is operated by an independent individual developer (domain: ampliocare.com).\n\n• Privacy / data requests: privacy@ampliocare.com\n• User support: support@ampliocare.com\n• Clinical partnerships: clinical@ampliocare.com\n• Business: hello@ampliocare.com",
-  "termsOfService": "Terms of Service",
-  "termsIntro": "Introduction",
-  "termsIntroText": "These Terms of Service (\"Terms\") are a draft agreement for using Amplio, an iPhone rehabilitation training assistant for people living with Parkinson's disease. Amplio is operated by an independent individual developer. These Terms are not a substitute for professional legal advice.",
-  "termsAcceptance": "Acceptance",
-  "termsAcceptanceText": "By signing in, continuing as a guest, or otherwise using Amplio, you agree to these Terms and to the Privacy Policy. If you do not agree, please do not use the app.",
-  "termsUseOfApp": "Using Amplio",
-  "termsUseOfAppText": "Amplio provides optional training tools such as tremor measurement, voice practice, movement practice, progress summaries, and an optional on-device medication nickname list.\n\nYou agree to use the app only for lawful personal purposes and not to misuse sensors, accounts, or exported data in ways that harm others or violate applicable law.",
-  "termsMedicalDisclaimer": "Not medical advice",
-  "termsMedicalDisclaimerText": "Amplio is a wellness and rehabilitation training aid. It does not diagnose, treat, cure, or prevent Parkinson's disease or any other condition.\n\nScores, trends, reports, and reminders are for personal reference only and do not replace advice from a doctor, physical therapist, speech therapist, or other qualified professional. Seek professional care for medical decisions. Stop any exercise that causes pain, dizziness, or unsafe conditions.",
-  "termsAccounts": "Accounts and data",
-  "termsAccountsText": "You may use Amplio with Apple Sign-In, Google Sign-In, or as a guest. You are responsible for activity under your signed-in account.\n\nYou may export or delete certain data in the app. Deleting your account removes associated cloud data we control, subject to technical and legal limits. Guest and local-only data may remain only on your device until you clear them.",
-  "termsLimitation": "Limitation of liability",
-  "termsLimitationText": "To the fullest extent permitted by law, the developer provides Amplio \"as is\" without warranties of uninterrupted or error-free operation.\n\nThe developer is not liable for injuries, losses, or damages arising from reliance on training scores, missed medication reminders, exercise attempts, or inability to access the app, except where liability cannot be limited by law.",
-  "termsChanges": "Changes",
-  "termsChangesText": "We may update these Terms as the app evolves. The \"Last Updated\" date will change when we do. Continued use after an update means you accept the revised Terms. Material changes should be reviewed in the app when available.",
+  "contactUsText": "Amplio è gestito da uno sviluppatore individuale indipendente (dominio: ampliocare.com).\n\n• Privacy / richieste dati: privacy@ampliocare.com\n• Supporto utente: support@ampliocare.com\n• Partnership cliniche: clinical@ampliocare.com\n• Affari: hello@ampliocare.com",
+  "termsOfService": "Termini di servizio",
+  "termsIntro": "Introduzione",
+  "termsIntroText": "Questi Termini di servizio («Termini») sono una bozza di accordo per l’uso di Amplio, un assistente di allenamento riabilitativo per iPhone per persone che convivono con il Parkinson. Amplio è gestito da uno sviluppatore individuale indipendente. Questi Termini non sostituiscono una consulenza legale professionale.",
+  "termsAcceptance": "Accettazione",
+  "termsAcceptanceText": "Accedendo, continuando come ospite o usando altrimenti Amplio, accetti questi Termini e l’Informativa sulla privacy. Se non sei d’accordo, non usare l’app.",
+  "termsUseOfApp": "Uso di Amplio",
+  "termsUseOfAppText": "Amplio fornisce strumenti di allenamento opzionali come misurazione del tremore, pratica vocale, pratica del movimento, riepiloghi dei progressi e un elenco opzionale di soprannomi farmaci sul dispositivo.\n\nAccetti di usare l’app solo per scopi personali leciti e di non abusare di sensori, account o dati esportati in modi che danneggino altri o violino la legge applicabile.",
+  "termsMedicalDisclaimer": "Non è consiglio medico",
+  "termsMedicalDisclaimerText": "Amplio è un ausilio per il benessere e l’allenamento riabilitativo. Non diagnostica, tratta, cura né previene il Parkinson o qualsiasi altra condizione.\n\nPunteggi, tendenze, report e promemoria sono solo per riferimento personale e non sostituiscono il consiglio di un medico, fisioterapista, logopedista o altro professionista qualificato. Rivolgiti a un professionista per decisioni mediche. Interrompi qualsiasi esercizio che causi dolore, vertigini o condizioni non sicure.",
+  "termsAccounts": "Account e dati",
+  "termsAccountsText": "Puoi usare Amplio con Apple Sign-In, Google Sign-In o come ospite. Sei responsabile dell’attività sotto il tuo account connesso.\n\nPuoi esportare o eliminare alcuni dati nell’app. L’eliminazione dell’account rimuove i dati cloud associati che controlliamo, entro i limiti tecnici e legali. I dati ospite e solo locali possono restare solo sul tuo dispositivo finché non li cancelli.",
+  "termsLimitation": "Limitazione di responsabilità",
+  "termsLimitationText": "Nella misura massima consentita dalla legge, lo sviluppatore fornisce Amplio «così com’è», senza garanzie di funzionamento ininterrotto o senza errori.\n\nLo sviluppatore non è responsabile per lesioni, perdite o danni derivanti dall’affidamento sui punteggi di allenamento, promemoria farmaci mancati, tentativi di esercizio o impossibilità di accedere all’app, salvo dove la responsabilità non possa essere limitata dalla legge.",
+  "termsChanges": "Modifiche",
+  "termsChangesText": "Possiamo aggiornare questi Termini con l’evoluzione dell’app. La data «Ultimo aggiornamento» cambierà allora. L’uso continuato dopo un aggiornamento significa che accetti i Termini rivisti. Le modifiche sostanziali dovrebbero essere riesaminate nell’app quando disponibili.",
   "lastUpdated": "Ultimo aggiornamento",
   "version": "Versione",
   "dataManagement": "Gestione Dati",
@@ -376,99 +378,141 @@
   "handTraining": "Hand",
   "voiceTrainingShort": "Voice",
   "motionTrainingShort": "Movement",
-
   "tabHome": "Home",
   "tabPlan": "Plan",
   "tabData": "Data",
   "tabProfile": "Profile",
   "comingSoon": "Coming soon",
-
   "trainingStreak": "{days} days",
   "@trainingStreak": {
-    "placeholders": { "days": { "type": "int" } }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
   "trainingStreakLabel": "Training Streak",
-
   "voiceClarity": "Voice Clarity",
   "handStability": "Hand Stability",
   "movementAbility": "Movement Ability",
   "medicationReminder": "Medication",
-
   "lastTrainingAgo": "Last training · {timeAgo}",
   "@lastTrainingAgo": {
-    "placeholders": { "timeAgo": { "type": "String" } }
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
   },
   "lastMeasurementAgo": "Last measured · {timeAgo}",
   "@lastMeasurementAgo": {
-    "placeholders": { "timeAgo": { "type": "String" } }
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
   },
   "relativeToday": "Today",
   "relativeYesterday": "Yesterday",
   "relativeDaysAgo": "{days} days ago",
   "@relativeDaysAgo": {
-    "placeholders": { "days": { "type": "int" } }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
-
   "noTrainingYet": "No training yet",
   "noMeasurementYet": "No measurement yet",
   "tapToStart": "Tap to start",
-
   "durationSec": "{count}s",
   "@durationSec": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "durationMin": "{count} min",
   "@durationMin": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-
   "voiceSessionCount": "1 session",
   "handMeasurementCount": "1 measurement",
   "motionCompletionCount": "{done}/{total} reps",
   "@motionCompletionCount": {
     "placeholders": {
-      "done": { "type": "int" },
-      "total": { "type": "int" }
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
-
   "medicationSetupPrompt": "Set up medication reminders",
   "medicationSetupSubtitle": "Saved on this device only",
   "medicationNoUpcoming": "No upcoming reminders today",
   "medicationNextDoseLabel": "Next dose",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
-    "placeholders": { "time": { "type": "String" } }
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   },
   "medicationStatusUpcoming": "Upcoming",
   "medicationStatusPending": "Pending",
   "medicationNotificationBody": "Time for: {label}",
   "@medicationNotificationBody": {
-    "placeholders": { "label": { "type": "String" } }
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
   },
   "medicationNotificationPermissionNote": "Optional: allow notifications so Amplio can remind you at the times you set. Notifications stay on this device.",
-
   "recentActivity": "Recent Activity",
   "nonMedicalDisclaimerTitle": "For reference only",
   "nonMedicalDisclaimerBody": "Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.",
-
   "voicePrepHint": "Sit comfortably. Hold your phone about 30 cm from your mouth.",
   "voicePrepDurationHint": "Practice for about {seconds} seconds",
   "@voicePrepDurationHint": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voicePrepEnvironmentHint": "Practice in a quiet room for best results",
   "voiceCalibratingCountdown": "Please stay quiet · {seconds}s",
   "@voiceCalibratingCountdown": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voiceElapsedLabel": "Practiced {seconds}s",
   "@voiceElapsedLabel": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voiceTargetDurationChip": "Goal: {seconds}s",
   "@voiceTargetDurationChip": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voiceLegendTarget": "Target volume",
   "voiceLegendYours": "Your volume",

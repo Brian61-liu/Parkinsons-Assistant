@@ -285,6 +285,8 @@
   "userRightsText": "You have the right to:\n\n• Access: View all your data\n• Portability: Export your data\n• Erasure: Delete your data\n• Withdraw: Revoke consent anytime\n• Contact: For any privacy inquiries",
   "dataSecurity": "Security Measures",
   "dataSecurityText": "We protect your data with the security controls available in our current stack:\n\n• TLS for cloud requests\n• Firebase Authentication for signed-in accounts\n• Firestore rules that restrict access to your own data\n• In-app export and account deletion\n\nStronger protections such as full local database encryption are still being improved and are not claimed as complete.",
+  "medicationPrivacy": "Optional medication nickname list",
+  "medicationPrivacyText": "If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored only on this device. Optional local notifications may fire on this device only if you allow notification permission; they are not sent to our servers. You can delete this data in the app. This feature is not medical advice and is not included in data export by default.",
   "contactUs": "Contact Us",
   "contactUsText": "Amplio is operated by an independent individual developer (domain: ampliocare.com).\n\n• Privacy / data requests: privacy@ampliocare.com\n• User support: support@ampliocare.com\n• Clinical partnerships: clinical@ampliocare.com\n• Business: hello@ampliocare.com",
   "termsOfService": "Terms of Service",
@@ -566,8 +568,12 @@
   "medicationTodayProgress": "Today {done}/{total}",
   "@medicationTodayProgress": {
     "placeholders": {
-      "done": {"type": "int"},
-      "total": {"type": "int"}
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "medicationManage": "Manage",
@@ -586,7 +592,9 @@
   "medicationCompletedAt": "Done at {time}",
   "@medicationCompletedAt": {
     "placeholders": {
-      "time": {"type": "String"}
+      "time": {
+        "type": "String"
+      }
     }
   },
   "medicationSave": "Save",
@@ -600,118 +608,166 @@
   "reportDailyProgress": "Today's goals: {percent}%",
   "@reportDailyProgress": {
     "placeholders": {
-      "percent": {"type": "int"}
+      "percent": {
+        "type": "int"
+      }
     }
   },
   "reportWeeklyProgress": "This week: {percent}%",
   "@reportWeeklyProgress": {
     "placeholders": {
-      "percent": {"type": "int"}
+      "percent": {
+        "type": "int"
+      }
     }
   },
   "reportStreak": "Streak: {days} days",
   "@reportStreak": {
     "placeholders": {
-      "days": {"type": "int"}
+      "days": {
+        "type": "int"
+      }
     }
   },
   "reportNoData": "Not enough training data yet",
   "handTraining": "Hand",
   "voiceTrainingShort": "Voice",
   "motionTrainingShort": "Movement",
-
   "tabHome": "Home",
   "tabPlan": "Plan",
   "tabData": "Data",
   "tabProfile": "Profile",
   "comingSoon": "Coming soon",
-
   "trainingStreak": "{days} days",
   "@trainingStreak": {
-    "placeholders": { "days": { "type": "int" } }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
   "trainingStreakLabel": "Training Streak",
-
   "voiceClarity": "Voice Clarity",
   "handStability": "Hand Stability",
   "movementAbility": "Movement Ability",
   "medicationReminder": "Medication",
-
   "lastTrainingAgo": "Last training · {timeAgo}",
   "@lastTrainingAgo": {
-    "placeholders": { "timeAgo": { "type": "String" } }
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
   },
   "lastMeasurementAgo": "Last measured · {timeAgo}",
   "@lastMeasurementAgo": {
-    "placeholders": { "timeAgo": { "type": "String" } }
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
   },
   "relativeToday": "Today",
   "relativeYesterday": "Yesterday",
   "relativeDaysAgo": "{days} days ago",
   "@relativeDaysAgo": {
-    "placeholders": { "days": { "type": "int" } }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
-
   "noTrainingYet": "No training yet",
   "noMeasurementYet": "No measurement yet",
   "tapToStart": "Tap to start",
-
   "durationSec": "{count}s",
   "@durationSec": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "durationMin": "{count} min",
   "@durationMin": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-
   "voiceSessionCount": "1 session",
   "handMeasurementCount": "1 measurement",
   "motionCompletionCount": "{done}/{total} reps",
   "@motionCompletionCount": {
     "placeholders": {
-      "done": { "type": "int" },
-      "total": { "type": "int" }
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
-
   "medicationSetupPrompt": "Set up medication reminders",
   "medicationSetupSubtitle": "Saved on this device only",
   "medicationNoUpcoming": "No upcoming reminders today",
   "medicationNextDoseLabel": "Next dose",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
-    "placeholders": { "time": { "type": "String" } }
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   },
   "medicationStatusUpcoming": "Upcoming",
   "medicationStatusPending": "Pending",
   "medicationNotificationBody": "Time for: {label}",
   "@medicationNotificationBody": {
-    "placeholders": { "label": { "type": "String" } }
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
   },
   "medicationNotificationPermissionNote": "Optional: allow notifications so Amplio can remind you at the times you set. Notifications stay on this device.",
-
   "recentActivity": "Recent Activity",
   "nonMedicalDisclaimerTitle": "For reference only",
   "nonMedicalDisclaimerBody": "Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.",
-
   "voicePrepHint": "Sit comfortably. Hold your phone about 30 cm from your mouth.",
   "voicePrepDurationHint": "Practice for about {seconds} seconds",
   "@voicePrepDurationHint": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voicePrepEnvironmentHint": "Practice in a quiet room for best results",
   "voiceCalibratingCountdown": "Please stay quiet · {seconds}s",
   "@voiceCalibratingCountdown": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voiceElapsedLabel": "Practiced {seconds}s",
   "@voiceElapsedLabel": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voiceTargetDurationChip": "Goal: {seconds}s",
   "@voiceTargetDurationChip": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voiceLegendTarget": "Target volume",
   "voiceLegendYours": "Your volume",

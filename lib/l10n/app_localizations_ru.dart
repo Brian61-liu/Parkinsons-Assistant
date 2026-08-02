@@ -240,21 +240,21 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get dataUsageText =>
-      'Your data is used solely for:\n\n• Providing rehabilitation training features and progress tracking\n• Showing in-app summaries and reports for your personal reference\n• Improving the app only if we use anonymized data with your consent';
+      'Ваши данные используются исключительно для:\n\n• Предоставления функций реабилитационных тренировок и отслеживания прогресса\n• Показа сводок и отчётов в приложении для личного ознакомления\n• Улучшения приложения только при использовании обезличенных данных с вашего согласия';
 
   @override
   String get dataStorage => 'Хранение и Безопасность';
 
   @override
   String get dataStorageText =>
-      'When you sign in, account and synced training data may be stored with Google Firebase. Guest and local-only data stay on your device.\n\n• HTTPS/TLS for network traffic to our cloud services\n• Access limited by your account and Firestore security rules\n• You can export or delete data from the app';
+      'При входе данные аккаунта и синхронизированные тренировочные данные могут храниться в Google Firebase. Гостевые и только локальные данные остаются на устройстве.\n\n• HTTPS/TLS для сетевого трафика к облачным сервисам\n• Доступ ограничен вашим аккаунтом и правилами безопасности Firestore\n• Вы можете экспортировать или удалить данные в приложении';
 
   @override
   String get dataSharing => 'Обмен Данными';
 
   @override
   String get dataSharingText =>
-      'We do not sell your personal health data.\n\nData leaves the app only when:\n• You explicitly export or share files yourself\n• The law requires disclosure\n\nThe app does not currently send data directly to healthcare providers.';
+      'Мы не продаём ваши персональные данные о здоровье.\n\nДанные покидают приложение только когда:\n• Вы явно экспортируете или делитесь файлами сами\n• Закон требует раскрытия\n\nПриложение сейчас не отправляет данные напрямую поставщикам медицинских услуг.';
 
   @override
   String get userRights => 'Ваши Права на Данные';
@@ -268,66 +268,73 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get dataSecurityText =>
-      'We protect your data with the security controls available in our current stack:\n\n• TLS for cloud requests\n• Firebase Authentication for signed-in accounts\n• Firestore rules that restrict access to your own data\n• In-app export and account deletion\n\nStronger protections such as full local database encryption are still being improved and are not claimed as complete.';
+      'Мы защищаем ваши данные средствами безопасности текущего стека:\n\n• TLS для облачных запросов\n• Firebase Authentication для вошедших аккаунтов\n• Правила Firestore, ограничивающие доступ вашими данными\n• Экспорт и удаление аккаунта в приложении\n\nБолее сильные меры, такие как полное шифрование локальной базы, всё ещё улучшаются и не заявляются как завершённые.';
+
+  @override
+  String get medicationPrivacy => 'Необязательный список прозвищ лекарств';
+
+  @override
+  String get medicationPrivacyText =>
+      'Если вы включите необязательный список прозвищ лекарств, прозвища, время напоминаний и отметки хранятся только на этом устройстве. Необязательные локальные уведомления могут появляться только на этом устройстве при разрешении уведомлений; они не отправляются на наши серверы. Эти данные можно удалить в приложении. Функция не является медицинской рекомендацией и по умолчанию не включается в экспорт данных.';
 
   @override
   String get contactUs => 'Связаться с Нами';
 
   @override
   String get contactUsText =>
-      'Amplio is operated by an independent individual developer (domain: ampliocare.com).\n\n• Privacy / data requests: privacy@ampliocare.com\n• User support: support@ampliocare.com\n• Clinical partnerships: clinical@ampliocare.com\n• Business: hello@ampliocare.com';
+      'Amplio управляется независимым индивидуальным разработчиком (домен: ampliocare.com).\n\n• Конфиденциальность / запросы данных: privacy@ampliocare.com\n• Поддержка пользователей: support@ampliocare.com\n• Клинические партнёрства: clinical@ampliocare.com\n• Бизнес: hello@ampliocare.com';
 
   @override
-  String get termsOfService => 'Terms of Service';
+  String get termsOfService => 'Условия использования';
 
   @override
-  String get termsIntro => 'Introduction';
+  String get termsIntro => 'Введение';
 
   @override
   String get termsIntroText =>
-      'These Terms of Service (\"Terms\") are a draft agreement for using Amplio, an iPhone rehabilitation training assistant for people living with Parkinson\'s disease. Amplio is operated by an independent individual developer. These Terms are not a substitute for professional legal advice.';
+      'Настоящие Условия использования («Условия») — черновик соглашения об использовании Amplio, iPhone-помощника реабилитационных тренировок для людей с болезнью Паркинсона. Amplio управляется независимым индивидуальным разработчиком. Эти Условия не заменяют профессиональную юридическую консультацию.';
 
   @override
-  String get termsAcceptance => 'Acceptance';
+  String get termsAcceptance => 'Принятие';
 
   @override
   String get termsAcceptanceText =>
-      'By signing in, continuing as a guest, or otherwise using Amplio, you agree to these Terms and to the Privacy Policy. If you do not agree, please do not use the app.';
+      'Входя в аккаунт, продолжая как гость или иным образом используя Amplio, вы соглашаетесь с этими Условиями и Политикой конфиденциальности. Если вы не согласны, не используйте приложение.';
 
   @override
-  String get termsUseOfApp => 'Using Amplio';
+  String get termsUseOfApp => 'Использование Amplio';
 
   @override
   String get termsUseOfAppText =>
-      'Amplio provides optional training tools such as tremor measurement, voice practice, movement practice, progress summaries, and an optional on-device medication nickname list.\n\nYou agree to use the app only for lawful personal purposes and not to misuse sensors, accounts, or exported data in ways that harm others or violate applicable law.';
+      'Amplio предоставляет необязательные инструменты тренировки, такие как измерение тремора, голосовые упражнения, упражнения на движение, сводки прогресса и необязательный список прозвищ лекарств на устройстве.\n\nВы соглашаетесь использовать приложение только в законных личных целях и не злоупотреблять датчиками, аккаунтами или экспортированными данными способами, вредящими другим или нарушающими применимое право.';
 
   @override
-  String get termsMedicalDisclaimer => 'Not medical advice';
+  String get termsMedicalDisclaimer => 'Не медицинская рекомендация';
 
   @override
   String get termsMedicalDisclaimerText =>
-      'Amplio is a wellness and rehabilitation training aid. It does not diagnose, treat, cure, or prevent Parkinson\'s disease or any other condition.\n\nScores, trends, reports, and reminders are for personal reference only and do not replace advice from a doctor, physical therapist, speech therapist, or other qualified professional. Seek professional care for medical decisions. Stop any exercise that causes pain, dizziness, or unsafe conditions.';
+      'Amplio — вспомогательное средство для оздоровления и реабилитационных тренировок. Оно не диагностирует, не лечит, не излечивает и не предотвращает болезнь Паркинсона или любое другое состояние.\n\nОценки, тенденции, отчёты и напоминания предназначены только для личного ознакомления и не заменяют совет врача, физиотерапевта, логопеда или другого квалифицированного специалиста. За медицинскими решениями обращайтесь к специалистам. Прекратите упражнение при боли, головокружении или небезопасных условиях.';
 
   @override
-  String get termsAccounts => 'Accounts and data';
+  String get termsAccounts => 'Аккаунты и данные';
 
   @override
   String get termsAccountsText =>
-      'You may use Amplio with Apple Sign-In, Google Sign-In, or as a guest. You are responsible for activity under your signed-in account.\n\nYou may export or delete certain data in the app. Deleting your account removes associated cloud data we control, subject to technical and legal limits. Guest and local-only data may remain only on your device until you clear them.';
+      'Вы можете использовать Amplio через Apple Sign-In, Google Sign-In или как гость. Вы несёте ответственность за активность под своим вошедшим аккаунтом.\n\nВы можете экспортировать или удалить определённые данные в приложении. Удаление аккаунта удаляет связанные облачные данные, которыми мы управляем, с учётом технических и правовых ограничений. Гостевые и только локальные данные могут оставаться только на устройстве, пока вы их не очистите.';
 
   @override
-  String get termsLimitation => 'Limitation of liability';
+  String get termsLimitation => 'Ограничение ответственности';
 
   @override
   String get termsLimitationText =>
-      'To the fullest extent permitted by law, the developer provides Amplio \"as is\" without warranties of uninterrupted or error-free operation.\n\nThe developer is not liable for injuries, losses, or damages arising from reliance on training scores, missed medication reminders, exercise attempts, or inability to access the app, except where liability cannot be limited by law.';
+      'В максимальной степени, дозволенной законом, разработчик предоставляет Amplio «как есть» без гарантий бесперебойной или безошибочной работы.\n\nРазработчик не несёт ответственности за травмы, убытки или ущерб вследствие доверия к тренировочным оценкам, пропущенных напоминаний о лекарствах, попыток упражнений или невозможности получить доступ к приложению, кроме случаев, когда ответственность не может быть ограничена законом.';
 
   @override
-  String get termsChanges => 'Changes';
+  String get termsChanges => 'Изменения';
 
   @override
   String get termsChangesText =>
-      'We may update these Terms as the app evolves. The \"Last Updated\" date will change when we do. Continued use after an update means you accept the revised Terms. Material changes should be reviewed in the app when available.';
+      'Мы можем обновлять эти Условия по мере развития приложения. Дата «Последнее обновление» при этом изменится. Продолжение использования после обновления означает принятие пересмотренных Условий. Существенные изменения следует просматривать в приложении, когда они доступны.';
 
   @override
   String get lastUpdated => 'Последнее обновление';

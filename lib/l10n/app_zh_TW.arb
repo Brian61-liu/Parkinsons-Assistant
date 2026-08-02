@@ -115,6 +115,8 @@
   "userRightsText": "您享有以下權利：\n\n• 存取權：查看您的所有資料\n• 可攜權：匯出您的資料\n• 刪除權：刪除您的資料（被遺忘權）\n• 撤回權：隨時撤回同意\n• 聯絡我們：如有隱私疑問請聯絡我們",
   "dataSecurity": "安全措施",
   "dataSecurityText": "我們使用目前技術堆疊中可用的安全能力保護您的資料：\n\n• 雲端請求使用 TLS\n• 登入帳號使用 Firebase Authentication\n• Firestore 規則限制僅存取您自己的資料\n• App 內提供匯出與帳號刪除\n\n更強的本機資料庫加密等能力仍在完善中，本政策不作已完成宣稱。",
+  "medicationPrivacy": "可選的用藥暱稱清單",
+  "medicationPrivacyText": "若您開啟可選的用藥暱稱清單，暱稱、提醒時間與打卡紀錄僅保存在本裝置。若您允許通知權限，可選的本機通知僅在本機觸發，不會上傳至我們的伺服器。您可在應用內刪除這些資料。此功能不是醫療建議，且預設不包含在資料匯出中。",
   "contactUs": "聯絡我們",
   "contactUsText": "Amplio 由個人開發者營運（域名：ampliocare.com）。\n\n• 隱私與資料請求：privacy@ampliocare.com\n• 使用者支援：support@ampliocare.com\n• 醫師/醫院合作：clinical@ampliocare.com\n• 商務聯絡：hello@ampliocare.com",
   "termsOfService": "服務條款",
@@ -376,99 +378,141 @@
   "handTraining": "Hand",
   "voiceTrainingShort": "Voice",
   "motionTrainingShort": "Movement",
-
   "tabHome": "首頁",
   "tabPlan": "計畫",
   "tabData": "數據",
   "tabProfile": "我的",
   "comingSoon": "即將推出",
-
   "trainingStreak": "{days} 天",
   "@trainingStreak": {
-    "placeholders": { "days": { "type": "int" } }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
   "trainingStreakLabel": "連續訓練",
-
   "voiceClarity": "語音訓練",
   "handStability": "手部測量",
   "movementAbility": "肢體訓練",
   "medicationReminder": "用藥提醒",
-
   "lastTrainingAgo": "Last training · {timeAgo}",
   "@lastTrainingAgo": {
-    "placeholders": { "timeAgo": { "type": "String" } }
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
   },
   "lastMeasurementAgo": "Last measured · {timeAgo}",
   "@lastMeasurementAgo": {
-    "placeholders": { "timeAgo": { "type": "String" } }
+    "placeholders": {
+      "timeAgo": {
+        "type": "String"
+      }
+    }
   },
   "relativeToday": "今天",
   "relativeYesterday": "昨天",
   "relativeDaysAgo": "{days} days ago",
   "@relativeDaysAgo": {
-    "placeholders": { "days": { "type": "int" } }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
-
   "noTrainingYet": "尚未訓練",
   "noMeasurementYet": "尚未測量",
   "tapToStart": "點擊開始",
-
   "durationSec": "{count}s",
   "@durationSec": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "durationMin": "{count} min",
   "@durationMin": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-
   "voiceSessionCount": "1 次訓練",
   "handMeasurementCount": "1 次測量",
   "motionCompletionCount": "{done}/{total} reps",
   "@motionCompletionCount": {
     "placeholders": {
-      "done": { "type": "int" },
-      "total": { "type": "int" }
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
-
   "medicationSetupPrompt": "設定用藥提醒",
   "medicationSetupSubtitle": "僅保存在本機",
   "medicationNoUpcoming": "今日暫無待打卡提醒",
   "medicationNextDoseLabel": "下次",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
-    "placeholders": { "time": { "type": "String" } }
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   },
   "medicationStatusUpcoming": "即將到",
   "medicationStatusPending": "待打卡",
   "medicationNotificationBody": "該服藥了：{label}",
   "@medicationNotificationBody": {
-    "placeholders": { "label": { "type": "String" } }
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
   },
   "medicationNotificationPermissionNote": "可選：允許通知後，Amplio 會在您設定的時間於本機提醒。通知不會上傳雲端。",
-
   "recentActivity": "最近活動",
   "nonMedicalDisclaimerTitle": "僅供參考",
   "nonMedicalDisclaimerBody": "Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.",
-
   "voicePrepHint": "請坐穩，將手機舉到嘴邊，距離大約 30 公分",
   "voicePrepDurationHint": "本次練習大約 {seconds} 秒",
   "@voicePrepDurationHint": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voicePrepEnvironmentHint": "建議在安靜的房間練習，效果更好",
   "voiceCalibratingCountdown": "請保持安靜 · 還剩 {seconds} 秒",
   "@voiceCalibratingCountdown": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voiceElapsedLabel": "已練習 {seconds} 秒",
   "@voiceElapsedLabel": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voiceTargetDurationChip": "目標：{seconds} 秒",
   "@voiceTargetDurationChip": {
-    "placeholders": { "seconds": { "type": "int" } }
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
   },
   "voiceLegendTarget": "目標音量",
   "voiceLegendYours": "你的音量",

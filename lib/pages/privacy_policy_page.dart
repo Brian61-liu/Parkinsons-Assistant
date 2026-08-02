@@ -104,6 +104,12 @@ class PrivacyPolicyPage extends StatelessWidget {
                 color: _secondaryColor,
               ),
               _buildSection(
+                icon: CupertinoIcons.bell_fill,
+                title: l10n.medicationPrivacy,
+                content: l10n.medicationPrivacyText,
+                color: const Color(0xFF0D9488),
+              ),
+              _buildSection(
                 icon: CupertinoIcons.mail_solid,
                 title: l10n.contactUs,
                 content: l10n.contactUsText,
@@ -267,7 +273,7 @@ class PrivacyPolicyPage extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                '${l10n.lastUpdated}: 2026-08-02',
+                '${l10n.lastUpdated}: 2026-08-03',
                 style: TextStyle(
                   color: const Color(0xFF64748B).withValues(alpha: 0.7),
                   fontSize: 12,
@@ -286,7 +292,7 @@ class PrivacyPolicyPage extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                '${l10n.version}: 1.0.0',
+                '${l10n.version}: 1.0.1',
                 style: TextStyle(
                   color: const Color(0xFF64748B).withValues(alpha: 0.7),
                   fontSize: 12,
