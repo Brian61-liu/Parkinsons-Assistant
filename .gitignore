@@ -41,5 +41,5 @@ app.*.map.json
 
 # Local AI / project workflow docs (not for GitHub)
 docs/AMPLIO_PROJECT_CONTEXT.md
-.cursor/rules/amplio-workflow.mdc
+.cursor/
 
