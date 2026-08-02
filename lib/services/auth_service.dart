@@ -221,7 +221,7 @@ class AuthService {
           ? user.displayName![0]
           : '?',
       'lastLoginAt': FieldValue.serverTimestamp(),
-      'dataEncryptionVersion': 1, // 用于将来的加密升级
+      'dataEncryptionVersion': 2, // 本地字段级 AES-GCM（DEK 在 Keychain）
     };
 
     // 检查用户是否已存在
@@ -297,10 +297,8 @@ class AuthService {
         });
       }
 
-      // 清除本地安全存储的数据
-      _secureStorage.clearAllSecure().catchError((e) {
-        debugPrint('清除本地存储失败: $e');
-      });
+      // 登出保留设备级 DEK（Keychain），否则本地加密健康数据将无法解密。
+      // DEK 仅在 deleteAccount / secureWipeLocalData 时清除。
     } catch (e) {
       debugPrint('登出错误: $e');
       // 即使出错也尝试强制登出

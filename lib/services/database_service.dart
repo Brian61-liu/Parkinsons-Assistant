@@ -7,12 +7,14 @@ import '../models/training_record.dart';
 import '../models/medication_reminder.dart';
 import '../models/medication_check_in.dart';
 import 'cloud_sync_service.dart';
+import 'security_service.dart';
 
 // 数据库服务类
 class DatabaseService {
   static Database? _database;
   static const String _dbName = 'parkinson_rehab.db';
-  static const int _dbVersion = 7; // v7：移除 assessment_results
+  // v8：敏感 TEXT 字段 AES-GCM 落盘（accelerometerData、medication label）
+  static const int _dbVersion = 8;
 
   final CloudSyncService _cloudSyncService = CloudSyncService();
 
@@ -161,6 +163,78 @@ class DatabaseService {
     if (oldVersion < 7) {
       await db.execute('DROP TABLE IF EXISTS assessment_results');
     }
+    if (oldVersion < 8) {
+      await _migrateSensitiveFieldsToEncrypted(db);
+    }
+  }
+
+  /// Encrypt sensitive TEXT columns that were stored as plaintext before v8.
+  Future<void> _migrateSensitiveFieldsToEncrypted(Database db) async {
+    final tremorRows = await db.query('tremor_records');
+    for (final row in tremorRows) {
+      final id = row['id'] as int?;
+      if (id == null) continue;
+      final raw = row['accelerometerData'] as String? ?? '';
+      if (SecurityService.isEncryptedField(raw)) continue;
+      final encrypted = await SecurityService.encryptField(raw);
+      await db.update(
+        'tremor_records',
+        {'accelerometerData': encrypted},
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    }
+
+    final reminderRows = await db.query('medication_reminders');
+    for (final row in reminderRows) {
+      final id = row['id'] as int?;
+      if (id == null) continue;
+      final raw = row['label'] as String? ?? '';
+      if (SecurityService.isEncryptedField(raw)) continue;
+      final encrypted = await SecurityService.encryptField(raw);
+      await db.update(
+        'medication_reminders',
+        {'label': encrypted},
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    }
+  }
+
+  Future<Map<String, dynamic>> _encryptTremorStorageMap(
+    Map<String, dynamic> map,
+  ) async {
+    final copy = Map<String, dynamic>.from(map);
+    final raw = copy['accelerometerData'] as String? ?? '';
+    copy['accelerometerData'] = await SecurityService.encryptField(raw);
+    return copy;
+  }
+
+  Future<Map<String, dynamic>> _decryptTremorStorageMap(
+    Map<String, dynamic> map,
+  ) async {
+    final copy = Map<String, dynamic>.from(map);
+    final stored = copy['accelerometerData'] as String? ?? '';
+    copy['accelerometerData'] = await SecurityService.decryptField(stored);
+    return copy;
+  }
+
+  Future<Map<String, dynamic>> _encryptMedicationStorageMap(
+    Map<String, dynamic> map,
+  ) async {
+    final copy = Map<String, dynamic>.from(map);
+    final raw = copy['label'] as String? ?? '';
+    copy['label'] = await SecurityService.encryptField(raw);
+    return copy;
+  }
+
+  Future<Map<String, dynamic>> _decryptMedicationStorageMap(
+    Map<String, dynamic> map,
+  ) async {
+    final copy = Map<String, dynamic>.from(map);
+    final stored = copy['label'] as String? ?? '';
+    copy['label'] = await SecurityService.decryptField(stored);
+    return copy;
   }
 
   // ========== 震颤测试记录操作 ==========
@@ -168,9 +242,10 @@ class DatabaseService {
   // 插入震颤测试记录（同时同步到云端）
   Future<int> insertTremorRecord(TremorRecord record) async {
     final db = await database;
-    final localId = await db.insert('tremor_records', record.toMap());
+    final storageMap = await _encryptTremorStorageMap(record.toMap());
+    final localId = await db.insert('tremor_records', storageMap);
 
-    // 同步到云端（异步，不阻塞本地存储）
+    // 同步到云端（异步，不阻塞本地存储）；云端保持明文载荷
     final recordWithId = TremorRecord(
       id: localId,
       timestamp: record.timestamp,
@@ -192,7 +267,12 @@ class DatabaseService {
       'tremor_records',
       orderBy: 'timestamp DESC',
     );
-    return List.generate(maps.length, (i) => TremorRecord.fromMap(maps[i]));
+    final records = <TremorRecord>[];
+    for (final map in maps) {
+      final decrypted = await _decryptTremorStorageMap(map);
+      records.add(TremorRecord.fromMap(decrypted));
+    }
+    return records;
   }
 
   // 删除震颤测试记录（同时从云端删除，仅登录用户）
@@ -306,7 +386,8 @@ class DatabaseService {
 
   Future<int> insertMedicationReminder(MedicationReminder reminder) async {
     final db = await database;
-    return await db.insert('medication_reminders', reminder.toMap());
+    final storageMap = await _encryptMedicationStorageMap(reminder.toMap());
+    return await db.insert('medication_reminders', storageMap);
   }
 
   Future<int> updateMedicationReminder(MedicationReminder reminder) async {
@@ -314,9 +395,10 @@ class DatabaseService {
     if (reminder.id == null) {
       throw ArgumentError('reminder.id is required for update');
     }
+    final storageMap = await _encryptMedicationStorageMap(reminder.toMap());
     return await db.update(
       'medication_reminders',
-      reminder.toMap(),
+      storageMap,
       where: 'id = ?',
       whereArgs: [reminder.id],
     );
@@ -337,7 +419,12 @@ class DatabaseService {
       'medication_reminders',
       orderBy: 'sort_order ASC, time_hhmm ASC',
     );
-    return maps.map(MedicationReminder.fromMap).toList();
+    final reminders = <MedicationReminder>[];
+    for (final map in maps) {
+      final decrypted = await _decryptMedicationStorageMap(map);
+      reminders.add(MedicationReminder.fromMap(decrypted));
+    }
+    return reminders;
   }
 
   Future<List<MedicationReminder>> getEnabledMedicationReminders() async {
@@ -348,7 +435,12 @@ class DatabaseService {
       whereArgs: [1],
       orderBy: 'time_hhmm ASC, sort_order ASC',
     );
-    return maps.map(MedicationReminder.fromMap).toList();
+    final reminders = <MedicationReminder>[];
+    for (final map in maps) {
+      final decrypted = await _decryptMedicationStorageMap(map);
+      reminders.add(MedicationReminder.fromMap(decrypted));
+    }
+    return reminders;
   }
 
   Future<List<MedicationTodayItem>> getTodayMedicationItems({
@@ -464,8 +556,10 @@ class DatabaseService {
       for (final cloudRecord in cloudTremorRecords) {
         final timestampStr = cloudRecord.timestamp.toIso8601String();
         if (!localTimestamps.contains(timestampStr)) {
-          // 云端有但本地没有，插入本地
-          await db.insert('tremor_records', cloudRecord.toMap());
+          // 云端有但本地没有，插入本地（落盘前加密）
+          final storageMap =
+              await _encryptTremorStorageMap(cloudRecord.toMap());
+          await db.insert('tremor_records', storageMap);
         }
       }
 
