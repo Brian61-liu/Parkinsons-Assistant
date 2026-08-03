@@ -17,7 +17,26 @@ class DatabaseService {
   // v8：敏感 TEXT 字段 AES-GCM 落盘（accelerometerData、medication label）
   static const int _dbVersion = 8;
 
-  final CloudSyncService _cloudSyncService = CloudSyncService();
+  @visibleForTesting
+  static int get schemaVersion => _dbVersion;
+
+  CloudSyncService? _cloudSync;
+  CloudSyncService get _cloudSyncService =>
+      _cloudSync ??= CloudSyncService();
+
+  /// 测试用：在给定库上执行与生产相同的 onCreate。
+  @visibleForTesting
+  Future<void> createSchemaForTest(Database db, int version) =>
+      _onCreate(db, version);
+
+  /// 测试用：在给定库上执行与生产相同的 onUpgrade。
+  @visibleForTesting
+  Future<void> applyUpgradeForTest(
+    Database db,
+    int oldVersion,
+    int newVersion,
+  ) =>
+      _onUpgrade(db, oldVersion, newVersion);
 
   // 获取数据库实例（单例模式）
   Future<Database> get database async {

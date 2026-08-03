@@ -95,6 +95,9 @@ dev_dependencies:
   # 启动画面生成器
   flutter_native_splash: ^2.4.4
 
+  # SQLite 单元测试（migration / schema）
+  sqflite_common_ffi: ^2.3.4
+
 # 启动画面配置：白底 + 居中 logo（建议使用带柔和边缘的 splash 图）
 flutter_native_splash:
   color: "#FFFFFF"

@@ -22,7 +22,8 @@ class CloudSyncService {
   bool get isUserLoggedIn => _userId != null;
 
   /// 钳制到 Firestore rules 允许范围，避免峰值噪声导致 permission-denied。
-  static double _clampFinite(double value, double min, double max) {
+  @visibleForTesting
+  static double clampFinite(double value, double min, double max) {
     if (value.isNaN || value.isInfinite) return min;
     if (value < min) return min;
     if (value > max) return max;
@@ -30,7 +31,8 @@ class CloudSyncService {
   }
 
   /// Firestore 拒绝 NaN/Infinity；清掉非法采样点。
-  static List<double> _sanitizeAccelerometerData(List<double> raw) {
+  @visibleForTesting
+  static List<double> sanitizeAccelerometerData(List<double> raw) {
     return [
       for (final v in raw)
         if (v.isFinite) v,
@@ -113,9 +115,9 @@ class CloudSyncService {
       final rawMaxAmp = record.maxAmplitude;
       final rawAvgAmp = record.averageAmplitude;
       // 与当前线上 rules 兼容（frequency≤30、amplitude≤100）
-      final frequency = _clampFinite(rawFreq, 0, 30);
-      final maxAmplitude = _clampFinite(rawMaxAmp, 0, 100);
-      final averageAmplitude = _clampFinite(rawAvgAmp, 0, 100);
+      final frequency = clampFinite(rawFreq, 0, 30);
+      final maxAmplitude = clampFinite(rawMaxAmp, 0, 100);
+      final averageAmplitude = clampFinite(rawAvgAmp, 0, 100);
       if (frequency != rawFreq ||
           maxAmplitude != rawMaxAmp ||
           averageAmplitude != rawAvgAmp) {
@@ -127,7 +129,7 @@ class CloudSyncService {
         );
       }
 
-      final accelerometerData = _sanitizeAccelerometerData(
+      final accelerometerData = sanitizeAccelerometerData(
         record.accelerometerData,
       );
       if (accelerometerData.isEmpty) {
