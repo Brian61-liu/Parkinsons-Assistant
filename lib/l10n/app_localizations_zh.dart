@@ -214,6 +214,26 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dataSynced => '数据同步成功';
 
   @override
+  String get syncing => '同步中…';
+
+  @override
+  String get syncFailed => '同步失败，请检查网络后重试。';
+
+  @override
+  String get syncFailedHint => '同步失败 — 点按重试';
+
+  @override
+  String get syncRetry => '重试';
+
+  @override
+  String get loginRequiredForSync => '请先登录以使用云端同步';
+
+  @override
+  String lastSyncedAt(String time) {
+    return '上次同步：$time';
+  }
+
+  @override
   String get privacyPolicy => '隐私政策';
 
   @override
@@ -1137,6 +1157,26 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get dataSynced => '資料同步成功';
+
+  @override
+  String get syncing => '同步中…';
+
+  @override
+  String get syncFailed => '同步失敗，請檢查網路後重試。';
+
+  @override
+  String get syncFailedHint => '同步失敗 — 點按重試';
+
+  @override
+  String get syncRetry => '重試';
+
+  @override
+  String get loginRequiredForSync => '請先登入以使用雲端同步';
+
+  @override
+  String lastSyncedAt(String time) {
+    return '上次同步：$time';
+  }
 
   @override
   String get privacyPolicy => '隱私政策';

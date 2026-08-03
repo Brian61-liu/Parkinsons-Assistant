@@ -7,6 +7,7 @@ import '../models/training_record.dart';
 import '../models/medication_reminder.dart';
 import '../models/medication_check_in.dart';
 import 'cloud_sync_service.dart';
+import 'cloud_sync_status_service.dart';
 import 'security_service.dart';
 
 // 数据库服务类
@@ -255,7 +256,15 @@ class DatabaseService {
       duration: record.duration,
       accelerometerData: record.accelerometerData,
     );
-    _cloudSyncService.syncTremorRecordToCloud(recordWithId);
+    // ignore: discarded_futures
+    _cloudSyncService.syncTremorRecordToCloud(recordWithId).then((ok) {
+      if (!ok) {
+        // ignore: discarded_futures
+        CloudSyncStatusService.instance.markBackgroundFailure(
+          'tremor record sync failed',
+        );
+      }
+    });
 
     return localId;
   }
@@ -323,7 +332,15 @@ class DatabaseService {
       targetCount: record.targetCount,
       goalReached: record.goalReached,
     );
-    _cloudSyncService.syncMovementTrainingRecordToCloud(recordWithId);
+    // ignore: discarded_futures
+    _cloudSyncService.syncMovementTrainingRecordToCloud(recordWithId).then((ok) {
+      if (!ok) {
+        // ignore: discarded_futures
+        CloudSyncStatusService.instance.markBackgroundFailure(
+          'movement record sync failed',
+        );
+      }
+    });
 
     return localId;
   }
@@ -528,81 +545,73 @@ class DatabaseService {
 
   // ========== 云端同步操作 ==========
 
-  /// 从云端拉取数据并合并到本地（去重）
+  /// 从云端拉取数据并合并到本地（去重）。失败时抛出，由 UI 展示。
   Future<void> syncFromCloud() async {
     if (!_cloudSyncService.isUserLoggedIn) {
       return;
     }
 
-    try {
-      // 获取云端数据
-      final cloudData = await _cloudSyncService.pullAllDataFromCloud();
-      final cloudTremorRecords =
-          cloudData['tremorRecords'] as List<TremorRecord>;
-      final cloudMovementRecords =
-          cloudData['movementRecords'] as List<MovementTrainingRecord>;
+    // 获取云端数据
+    final cloudData = await _cloudSyncService.pullAllDataFromCloud();
+    final cloudTremorRecords =
+        cloudData['tremorRecords'] as List<TremorRecord>;
+    final cloudMovementRecords =
+        cloudData['movementRecords'] as List<MovementTrainingRecord>;
 
-      final db = await database;
+    final db = await database;
 
-      // 获取本地数据
-      final localTremorRecords = await getAllTremorRecords();
-      final localMovementRecords = await getAllMovementTrainingRecords();
+    // 获取本地数据
+    final localTremorRecords = await getAllTremorRecords();
+    final localMovementRecords = await getAllMovementTrainingRecords();
 
-      // 合并震颤测试记录（使用时间戳去重）
-      final localTimestamps = localTremorRecords
-          .map((r) => r.timestamp.toIso8601String())
-          .toSet();
+    // 合并震颤测试记录（使用时间戳去重）
+    final localTimestamps = localTremorRecords
+        .map((r) => r.timestamp.toIso8601String())
+        .toSet();
 
-      for (final cloudRecord in cloudTremorRecords) {
-        final timestampStr = cloudRecord.timestamp.toIso8601String();
-        if (!localTimestamps.contains(timestampStr)) {
-          // 云端有但本地没有，插入本地（落盘前加密）
-          final storageMap =
-              await _encryptTremorStorageMap(cloudRecord.toMap());
-          await db.insert('tremor_records', storageMap);
-        }
+    for (final cloudRecord in cloudTremorRecords) {
+      final timestampStr = cloudRecord.timestamp.toIso8601String();
+      if (!localTimestamps.contains(timestampStr)) {
+        // 云端有但本地没有，插入本地（落盘前加密）
+        final storageMap =
+            await _encryptTremorStorageMap(cloudRecord.toMap());
+        await db.insert('tremor_records', storageMap);
       }
-
-      // 合并肢体动作训练记录（使用时间戳去重）
-      final localMovementTimestamps = localMovementRecords
-          .map((r) => r.timestamp.toIso8601String())
-          .toSet();
-
-      for (final cloudRecord in cloudMovementRecords) {
-        final timestampStr = cloudRecord.timestamp.toIso8601String();
-        if (!localMovementTimestamps.contains(timestampStr)) {
-          // 云端有但本地没有，插入本地
-          await db.insert('movement_training_records', cloudRecord.toMap());
-        }
-      }
-
-      // 同步本地数据到云端（确保云端有最新的本地数据）
-      await _cloudSyncService.syncAllDataToCloud(
-        tremorRecords: localTremorRecords,
-        movementRecords: localMovementRecords,
-      );
-    } catch (e) {
-      debugPrint('从云端同步数据失败: $e');
     }
+
+    // 合并肢体动作训练记录（使用时间戳去重）
+    final localMovementTimestamps = localMovementRecords
+        .map((r) => r.timestamp.toIso8601String())
+        .toSet();
+
+    for (final cloudRecord in cloudMovementRecords) {
+      final timestampStr = cloudRecord.timestamp.toIso8601String();
+      if (!localMovementTimestamps.contains(timestampStr)) {
+        // 云端有但本地没有，插入本地
+        await db.insert('movement_training_records', cloudRecord.toMap());
+      }
+    }
+
+    // 同步本地数据到云端（确保云端有最新的本地数据）
+    await _cloudSyncService.syncAllDataToCloud(
+      tremorRecords: localTremorRecords,
+      movementRecords: localMovementRecords,
+    );
   }
 
-  /// 同步所有本地数据到云端
+  /// 同步所有本地数据到云端。失败时抛出，由 UI 展示。
   Future<void> syncToCloud() async {
     if (!_cloudSyncService.isUserLoggedIn) {
       return;
     }
 
-    try {
-      final tremorRecords = await getAllTremorRecords();
-      final movementRecords = await getAllMovementTrainingRecords();
+    final tremorRecords = await getAllTremorRecords();
+    final movementRecords = await getAllMovementTrainingRecords();
 
-      await _cloudSyncService.syncAllDataToCloud(
-        tremorRecords: tremorRecords,
-        movementRecords: movementRecords,
-      );
-    } catch (e) {
-      debugPrint('同步到云端失败: $e');
-    }
+    await _cloudSyncService.syncAllDataToCloud(
+      tremorRecords: tremorRecords,
+      movementRecords: movementRecords,
+    );
   }
 
   // ========== 训练记录操作（趋势分析用）==========

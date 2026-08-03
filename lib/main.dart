@@ -9,6 +9,7 @@ import 'pages/main_shell.dart';
 import 'pages/login_page.dart';
 import 'pages/loading_screen.dart';
 import 'services/user_settings_service.dart';
+import 'services/cloud_sync_status_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +32,8 @@ void main() async {
   // 异步加载，不阻塞首帧
   // ignore: discarded_futures
   userSettings.load();
+  // ignore: discarded_futures
+  CloudSyncStatusService.instance.load();
 
   runApp(
     ChangeNotifierProvider<UserSettingsService>.value(

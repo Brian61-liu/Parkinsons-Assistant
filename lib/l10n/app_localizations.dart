@@ -507,6 +507,42 @@ abstract class AppLocalizations {
   /// **'Data synced successfully'**
   String get dataSynced;
 
+  /// Cloud sync in progress label
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing…'**
+  String get syncing;
+
+  /// Cloud sync failure snackbar message
+  ///
+  /// In en, this message translates to:
+  /// **'Sync failed. Check your network and try again.'**
+  String get syncFailed;
+
+  /// Cloud sync failure subtitle in settings
+  ///
+  /// In en, this message translates to:
+  /// **'Sync failed — tap to retry'**
+  String get syncFailedHint;
+
+  /// Retry action on sync failure snackbar
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get syncRetry;
+
+  /// Shown when guest tries to sync
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in to use cloud sync'**
+  String get loginRequiredForSync;
+
+  /// Settings subtitle after successful sync
+  ///
+  /// In en, this message translates to:
+  /// **'Last synced: {time}'**
+  String lastSyncedAt(String time);
+
   /// No description provided for @privacyPolicy.
   ///
   /// In en, this message translates to:

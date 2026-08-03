@@ -270,6 +270,35 @@
   "@dataSynced": {
     "description": "Data sync success message"
   },
+  "syncing": "Syncing…",
+  "@syncing": {
+    "description": "Cloud sync in progress label"
+  },
+  "syncFailed": "Sync failed. Check your network and try again.",
+  "@syncFailed": {
+    "description": "Cloud sync failure snackbar message"
+  },
+  "syncFailedHint": "Sync failed — tap to retry",
+  "@syncFailedHint": {
+    "description": "Cloud sync failure subtitle in settings"
+  },
+  "syncRetry": "Retry",
+  "@syncRetry": {
+    "description": "Retry action on sync failure snackbar"
+  },
+  "loginRequiredForSync": "Please sign in to use cloud sync",
+  "@loginRequiredForSync": {
+    "description": "Shown when guest tries to sync"
+  },
+  "lastSyncedAt": "Last synced: {time}",
+  "@lastSyncedAt": {
+    "description": "Settings subtitle after successful sync",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "privacyPolicy": "Privacy Policy",
   "privacyPolicyIntro": "Introduction",
   "privacyPolicyIntroText": "Amplio is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information.",

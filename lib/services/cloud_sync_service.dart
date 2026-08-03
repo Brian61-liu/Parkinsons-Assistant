@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -9,6 +11,9 @@ import '../models/movement_training_record.dart';
 class CloudSyncService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  /// 单次网络操作上限（断网/飞行模式时避免永久挂起）。
+  static const Duration networkTimeout = Duration(seconds: 20);
 
   /// 获取当前用户 ID
   String? get _userId => _auth.currentUser?.uid;
@@ -37,26 +42,30 @@ class CloudSyncService {
       't_${timestamp.toUtc().millisecondsSinceEpoch}';
 
   /// 确保写入到达服务端（避免离线缓存「假成功」）。
+  /// 整体限时，防止飞行模式下 enableNetwork / set / get 永久挂起。
   Future<void> _commitToServer({
     required DocumentReference<Map<String, dynamic>> docRef,
     required Map<String, dynamic> data,
     required String label,
   }) async {
-    await _firestore.enableNetwork();
-    await docRef.set(data, SetOptions(merge: true));
     try {
-      await _firestore.waitForPendingWrites().timeout(
-        const Duration(seconds: 25),
-      );
-    } catch (e) {
-      throw StateError('等待服务端确认超时（可能仍离线）: $e');
-    }
+      await Future(() async {
+        await _firestore.enableNetwork();
+        await docRef.set(data, SetOptions(merge: true));
+        await _firestore.waitForPendingWrites();
 
-    final snap = await docRef.get(const GetOptions(source: Source.server));
-    if (!snap.exists) {
-      throw StateError('服务端回读不到文档: ${docRef.path}');
+        final snap = await docRef.get(const GetOptions(source: Source.server));
+        if (!snap.exists) {
+          throw StateError('服务端回读不到文档: ${docRef.path}');
+        }
+        debugPrint('$label（已确认服务端）: ${docRef.path}');
+      }).timeout(networkTimeout);
+    } on TimeoutException {
+      throw TimeoutException(
+        '同步超时（可能离线）: ${docRef.path}',
+        networkTimeout,
+      );
     }
-    debugPrint('$label（已确认服务端）: ${docRef.path}');
   }
 
   /// 从服务端列出子集合文档 ID，便于对照 Console。
@@ -70,7 +79,8 @@ class CloudSyncService {
           .doc(uid)
           .collection(collectionId)
           .limit(20)
-          .get(const GetOptions(source: Source.server));
+          .get(const GetOptions(source: Source.server))
+          .timeout(networkTimeout);
       final ids = snap.docs.map((d) => d.id).join(', ');
       debugPrint(
         '服务端 $collectionId 共 ${snap.docs.length} 条'
@@ -83,17 +93,18 @@ class CloudSyncService {
 
   // ========== 震颤测试记录同步 ==========
 
-  /// 上传震颤测试记录到云端
-  Future<void> syncTremorRecordToCloud(TremorRecord record) async {
+  /// 上传震颤测试记录到云端。
+  /// 返回 `true` 表示成功或主动跳过；`false` 表示网络/权限等失败。
+  Future<bool> syncTremorRecordToCloud(TremorRecord record) async {
     if (!isUserLoggedIn) {
       debugPrint('用户未登录，跳过云端同步');
-      return;
+      return true;
     }
 
     final localId = record.id;
     if (localId == null) {
       debugPrint('同步震颤测试记录跳过: localId 为空');
-      return;
+      return true;
     }
 
     final uid = _userId!;
@@ -121,7 +132,7 @@ class CloudSyncService {
       );
       if (accelerometerData.isEmpty) {
         debugPrint('同步震颤测试记录跳过: accelerometerData 为空/非法');
-        return;
+        return true;
       }
 
       final recordData = {
@@ -148,44 +159,43 @@ class CloudSyncService {
         data: recordData,
         label: '震颤测试记录已同步到云端',
       );
+      return true;
     } catch (e) {
       debugPrint('同步震颤测试记录失败 (uid=$uid): $e');
-      // 不抛出异常，允许本地存储继续工作
+      // 不抛出：本地存储仍可用；调用方根据 false 展示失败状态。
+      return false;
     }
   }
 
-  /// 从云端获取所有震颤测试记录
+  /// 从云端获取所有震颤测试记录（失败时抛出，便于上层展示）。
   Future<List<TremorRecord>> getTremorRecordsFromCloud() async {
     if (!isUserLoggedIn) {
       return [];
     }
 
-    try {
-      final snapshot = await _firestore
-          .collection('users')
-          .doc(_userId)
-          .collection('tremor_records')
-          .orderBy('timestamp', descending: true)
-          .get();
+    // Source.server：离线时尽快失败，避免默认 get 在无网时长时间挂起。
+    final snapshot = await _firestore
+        .collection('users')
+        .doc(_userId)
+        .collection('tremor_records')
+        .orderBy('timestamp', descending: true)
+        .get(const GetOptions(source: Source.server))
+        .timeout(networkTimeout);
 
-      return snapshot.docs.map((doc) {
-        final data = doc.data();
-        return TremorRecord(
-          id: data['localId'] as int?,
-          timestamp: (data['timestamp'] as Timestamp).toDate(),
-          averageFrequency: (data['averageFrequency'] as num).toDouble(),
-          maxAmplitude: (data['maxAmplitude'] as num).toDouble(),
-          averageAmplitude: (data['averageAmplitude'] as num).toDouble(),
-          duration: data['duration'] as int,
-          accelerometerData: (data['accelerometerData'] as List)
-              .map((e) => (e as num).toDouble())
-              .toList(),
-        );
-      }).toList();
-    } catch (e) {
-      debugPrint('从云端获取震颤测试记录失败: $e');
-      return [];
-    }
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      return TremorRecord(
+        id: data['localId'] as int?,
+        timestamp: (data['timestamp'] as Timestamp).toDate(),
+        averageFrequency: (data['averageFrequency'] as num).toDouble(),
+        maxAmplitude: (data['maxAmplitude'] as num).toDouble(),
+        averageAmplitude: (data['averageAmplitude'] as num).toDouble(),
+        duration: data['duration'] as int,
+        accelerometerData: (data['accelerometerData'] as List)
+            .map((e) => (e as num).toDouble())
+            .toList(),
+      );
+    }).toList();
   }
 
   /// 删除云端震颤测试记录
@@ -212,19 +222,20 @@ class CloudSyncService {
 
   // ========== 肢体动作训练记录同步 ==========
 
-  /// 上传肢体动作训练记录到云端
-  Future<void> syncMovementTrainingRecordToCloud(
+  /// 上传肢体动作训练记录到云端。
+  /// 返回 `true` 表示成功或主动跳过；`false` 表示失败。
+  Future<bool> syncMovementTrainingRecordToCloud(
     MovementTrainingRecord record,
   ) async {
     if (!isUserLoggedIn) {
       debugPrint('用户未登录，跳过云端同步');
-      return;
+      return true;
     }
 
     final localId = record.id;
     if (localId == null) {
       debugPrint('同步肢体动作训练记录跳过: localId 为空');
-      return;
+      return true;
     }
 
     final uid = _userId!;
@@ -251,42 +262,39 @@ class CloudSyncService {
         data: recordData,
         label: '肢体动作训练记录已同步到云端',
       );
+      return true;
     } catch (e) {
       debugPrint('同步肢体动作训练记录失败 (uid=$uid): $e');
-      // 不抛出异常，允许本地存储继续工作
+      return false;
     }
   }
 
-  /// 从云端获取所有肢体动作训练记录
+  /// 从云端获取所有肢体动作训练记录（失败时抛出）。
   Future<List<MovementTrainingRecord>>
   getMovementTrainingRecordsFromCloud() async {
     if (!isUserLoggedIn) {
       return [];
     }
 
-    try {
-      final snapshot = await _firestore
-          .collection('users')
-          .doc(_userId)
-          .collection('movement_training_records')
-          .orderBy('timestamp', descending: true)
-          .get();
+    final snapshot = await _firestore
+        .collection('users')
+        .doc(_userId)
+        .collection('movement_training_records')
+        .orderBy('timestamp', descending: true)
+        .get(const GetOptions(source: Source.server))
+        .timeout(networkTimeout);
 
-      return snapshot.docs.map((doc) {
-        final data = doc.data();
-        return MovementTrainingRecord(
-          id: data['localId'] as int?,
-          timestamp: (data['timestamp'] as Timestamp).toDate(),
-          duration: data['duration'] as int,
-          successCount: data['successCount'] as int,
-          targetCount: data['targetCount'] as int,
-          goalReached: data['goalReached'] as bool,
-        );
-      }).toList();
-    } catch (e) {
-      debugPrint('从云端获取肢体动作训练记录失败: $e');
-      return [];
-    }
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      return MovementTrainingRecord(
+        id: data['localId'] as int?,
+        timestamp: (data['timestamp'] as Timestamp).toDate(),
+        duration: data['duration'] as int,
+        successCount: data['successCount'] as int,
+        targetCount: data['targetCount'] as int,
+        goalReached: data['goalReached'] as bool,
+      );
+    }).toList();
   }
 
   /// 删除云端肢体动作训练记录
@@ -313,7 +321,7 @@ class CloudSyncService {
 
   // ========== 批量同步操作 ==========
 
-  /// 同步所有本地数据到云端
+  /// 同步所有本地数据到云端。任一条失败则抛出 [StateError]。
   Future<void> syncAllDataToCloud({
     required List<TremorRecord> tremorRecords,
     required List<MovementTrainingRecord> movementRecords,
@@ -325,12 +333,13 @@ class CloudSyncService {
 
     debugPrint('开始批量同步数据到云端... uid=$_userId');
 
+    var failed = 0;
     for (final record in tremorRecords) {
-      await syncTremorRecordToCloud(record);
+      if (!await syncTremorRecordToCloud(record)) failed++;
     }
 
     for (final record in movementRecords) {
-      await syncMovementTrainingRecordToCloud(record);
+      if (!await syncMovementTrainingRecordToCloud(record)) failed++;
     }
 
     final uid = _userId;
@@ -342,26 +351,25 @@ class CloudSyncService {
       );
     }
 
+    if (failed > 0) {
+      throw StateError('有 $failed 条记录未能同步到云端');
+    }
+
     debugPrint('批量同步完成');
   }
 
-  /// 从云端拉取所有数据并合并到本地
+  /// 从云端拉取所有数据（失败时抛出）。
   Future<Map<String, List>> pullAllDataFromCloud() async {
     if (!isUserLoggedIn) {
       return {'tremorRecords': [], 'movementRecords': []};
     }
 
-    try {
-      final tremorRecords = await getTremorRecordsFromCloud();
-      final movementRecords = await getMovementTrainingRecordsFromCloud();
+    final tremorRecords = await getTremorRecordsFromCloud();
+    final movementRecords = await getMovementTrainingRecordsFromCloud();
 
-      return {
-        'tremorRecords': tremorRecords,
-        'movementRecords': movementRecords,
-      };
-    } catch (e) {
-      debugPrint('从云端拉取数据失败: $e');
-      return {'tremorRecords': [], 'movementRecords': []};
-    }
+    return {
+      'tremorRecords': tremorRecords,
+      'movementRecords': movementRecords,
+    };
   }
 }

@@ -214,6 +214,26 @@ class AppLocalizationsKo extends AppLocalizations {
   String get dataSynced => '데이터가 성공적으로 동기화되었습니다';
 
   @override
+  String get syncing => 'Syncing…';
+
+  @override
+  String get syncFailed => 'Sync failed. Check your network and try again.';
+
+  @override
+  String get syncFailedHint => 'Sync failed — tap to retry';
+
+  @override
+  String get syncRetry => 'Retry';
+
+  @override
+  String get loginRequiredForSync => 'Please sign in to use cloud sync';
+
+  @override
+  String lastSyncedAt(String time) {
+    return 'Last synced: $time';
+  }
+
+  @override
   String get privacyPolicy => '개인정보 보호정책';
 
   @override

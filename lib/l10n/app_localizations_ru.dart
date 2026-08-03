@@ -219,6 +219,26 @@ class AppLocalizationsRu extends AppLocalizations {
   String get dataSynced => 'Данные успешно синхронизированы';
 
   @override
+  String get syncing => 'Syncing…';
+
+  @override
+  String get syncFailed => 'Sync failed. Check your network and try again.';
+
+  @override
+  String get syncFailedHint => 'Sync failed — tap to retry';
+
+  @override
+  String get syncRetry => 'Retry';
+
+  @override
+  String get loginRequiredForSync => 'Please sign in to use cloud sync';
+
+  @override
+  String lastSyncedAt(String time) {
+    return 'Last synced: $time';
+  }
+
+  @override
   String get privacyPolicy => 'Политика Конфиденциальности';
 
   @override

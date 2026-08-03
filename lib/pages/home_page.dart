@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import '../l10n/app_localizations.dart';
 import '../pages/tremor_test_page.dart';
 import '../pages/voice_training_page.dart';
@@ -12,6 +14,8 @@ import '../pages/privacy_policy_page.dart';
 import '../pages/terms_of_service_page.dart';
 import '../services/auth_service.dart';
 import '../services/avatar_service.dart';
+import '../services/cloud_sync_service.dart';
+import '../services/cloud_sync_status_service.dart';
 import '../services/database_service.dart';
 import '../services/home_dashboard_service.dart';
 import '../models/home_dashboard_snapshot.dart';
@@ -46,7 +50,7 @@ class _HomePageState extends State<HomePage> {
 
   bool _isUploadingAvatar = false;
   String? _localAvatarPath;
-  bool _isSyncing = false;
+  final CloudSyncStatusService _syncStatus = CloudSyncStatusService.instance;
 
   HomeDashboardSnapshot _snapshot = HomeDashboardSnapshot.empty;
   bool _snapshotLoading = true;
@@ -56,8 +60,21 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadLocalAvatar();
+    _syncStatus.addListener(_onSyncStatusChanged);
+    // ignore: discarded_futures
+    _syncStatus.load();
     _syncDataOnLogin();
     _loadDashboard();
+  }
+
+  @override
+  void dispose() {
+    _syncStatus.removeListener(_onSyncStatusChanged);
+    super.dispose();
+  }
+
+  void _onSyncStatusChanged() {
+    if (mounted) setState(() {});
   }
 
   @override
@@ -91,46 +108,79 @@ class _HomePageState extends State<HomePage> {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       Future.delayed(const Duration(seconds: 1), () async {
+        // 登录后静默成功；失败仍提示，便于离线时重试。
         await _syncData(showMessage: false);
       });
     }
   }
 
   Future<void> _syncData({bool showMessage = true}) async {
+    final l10n = AppLocalizations.of(context)!;
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       if (showMessage && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('请先登录以使用云端同步功能')),
+          SnackBar(content: Text(l10n.loginRequiredForSync)),
         );
       }
       return;
     }
-    if (_isSyncing) return;
-    setState(() => _isSyncing = true);
+    if (_syncStatus.isSyncing) return;
+
+    _syncStatus.beginSync();
     try {
-      await _databaseService.syncFromCloud();
+      // 总超时：飞行模式下 Firestore 可能永不返回，避免永久「同步中…」
+      await _databaseService.syncFromCloud().timeout(
+        CloudSyncService.networkTimeout + const Duration(seconds: 10),
+        onTimeout: () => throw TimeoutException(
+          'cloud sync timed out',
+          CloudSyncService.networkTimeout + const Duration(seconds: 10),
+        ),
+      );
+      await _syncStatus.endSuccess();
       if (showMessage && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('数据同步完成'),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(l10n.dataSynced),
+            duration: const Duration(seconds: 2),
           ),
         );
       }
       await _loadDashboard();
     } catch (e) {
-      if (showMessage && mounted) {
+      await _syncStatus.endFailure(e);
+      if (mounted) {
+        // 失败始终提示（含登录后静默同步），并提供重试。
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('同步失败: $e'),
-            duration: const Duration(seconds: 3),
+            content: Text(l10n.syncFailed),
+            duration: const Duration(seconds: 5),
+            action: SnackBarAction(
+              label: l10n.syncRetry,
+              onPressed: () {
+                // ignore: discarded_futures
+                _syncData();
+              },
+            ),
           ),
         );
       }
-    } finally {
-      if (mounted) setState(() => _isSyncing = false);
     }
+  }
+
+  String _syncSettingsTitle(AppLocalizations l10n) {
+    if (_syncStatus.isSyncing) return l10n.syncing;
+    return l10n.syncToCloud;
+  }
+
+  String? _syncSettingsSubtitle(AppLocalizations l10n) {
+    if (_syncStatus.isSyncing) return null;
+    if (_syncStatus.lastFailed) return l10n.syncFailedHint;
+    final at = _syncStatus.lastSuccessAt;
+    if (at == null) return null;
+    final locale = Localizations.localeOf(context).toString();
+    final formatted = DateFormat.yMd(locale).add_Hm().format(at.toLocal());
+    return l10n.lastSyncedAt(formatted);
   }
 
   Future<void> _loadLocalAvatar() async {
@@ -284,113 +334,121 @@ class _HomePageState extends State<HomePage> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (ctx) => SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 16),
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(2),
+      builder: (ctx) => ListenableBuilder(
+        listenable: _syncStatus,
+        builder: (context, child) => SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 16),
+                Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                l10n.settings,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1E3A5F),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.settings,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1E3A5F),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              _buildSettingsItem(
-                icon: CupertinoIcons.globe,
-                color: AppColors.primary,
-                title: l10n.selectLanguage,
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _showLanguageDialog(context);
-                },
-              ),
-              if (FirebaseAuth.instance.currentUser != null)
+                const SizedBox(height: 8),
                 _buildSettingsItem(
-                  icon: CupertinoIcons.cloud_upload,
-                  color: const Color(0xFF8B5CF6),
-                  title: _isSyncing ? '同步中...' : '同步数据',
-                  onTap: () {
-                    if (!_isSyncing) {
-                      Navigator.pop(ctx);
-                      _syncData();
-                    }
-                  },
-                ),
-              if (_snapshot.medicationEnabled)
-                _buildSettingsItem(
-                  icon: Icons.medication_outlined,
-                  color: AppColors.warningAmber,
-                  title: l10n.medicationList,
+                  icon: CupertinoIcons.globe,
+                  color: AppColors.primary,
+                  title: l10n.selectLanguage,
                   onTap: () {
                     Navigator.pop(ctx);
-                    pushGentle(context, const MedicationRemindersPage())
-                        .then((_) => _refreshMedicationAndDashboard());
+                    _showLanguageDialog(context);
                   },
                 ),
-              _buildSettingsItem(
-                icon: CupertinoIcons.chart_bar_alt_fill,
-                color: const Color(0xFF6366F1),
-                title: l10n.rehabReport,
-                onTap: () {
-                  Navigator.pop(ctx);
-                  pushGentle(context, const RehabReportPage());
-                },
-              ),
-              _buildSettingsItem(
-                icon: CupertinoIcons.shield_lefthalf_fill,
-                color: AppColors.successGreen,
-                title: l10n.dataManagement,
-                onTap: () {
-                  Navigator.pop(ctx);
-                  pushGentle(context, const DataManagementPage());
-                },
-              ),
-              _buildSettingsItem(
-                icon: CupertinoIcons.lock_shield,
-                color: const Color(0xFF8B5CF6),
-                title: l10n.privacyPolicy,
-                onTap: () {
-                  Navigator.pop(ctx);
-                  pushGentle(context, const PrivacyPolicyPage());
-                },
-              ),
-              _buildSettingsItem(
-                icon: CupertinoIcons.doc_text,
-                color: const Color(0xFF0EA5E9),
-                title: l10n.termsOfService,
-                onTap: () {
-                  Navigator.pop(ctx);
-                  pushGentle(context, const TermsOfServicePage());
-                },
-              ),
-              const Divider(height: 1),
-              _buildSettingsItem(
-                icon: CupertinoIcons.square_arrow_left,
-                color: Colors.red,
-                title: FirebaseAuth.instance.currentUser == null
-                    ? '退出游客模式'
-                    : l10n.logout,
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _showLogoutDialog(context);
-                },
-                isDestructive: true,
-              ),
-              const SizedBox(height: 16),
-            ],
+                if (FirebaseAuth.instance.currentUser != null)
+                  _buildSettingsItem(
+                    icon: _syncStatus.lastFailed && !_syncStatus.isSyncing
+                        ? CupertinoIcons.exclamationmark_circle
+                        : CupertinoIcons.cloud_upload,
+                    color: _syncStatus.lastFailed && !_syncStatus.isSyncing
+                        ? const Color(0xFFDC2626)
+                        : const Color(0xFF8B5CF6),
+                    title: _syncSettingsTitle(l10n),
+                    subtitle: _syncSettingsSubtitle(l10n),
+                    onTap: () {
+                      if (!_syncStatus.isSyncing) {
+                        Navigator.pop(ctx);
+                        _syncData();
+                      }
+                    },
+                  ),
+                if (_snapshot.medicationEnabled)
+                  _buildSettingsItem(
+                    icon: Icons.medication_outlined,
+                    color: AppColors.warningAmber,
+                    title: l10n.medicationList,
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      pushGentle(context, const MedicationRemindersPage())
+                          .then((_) => _refreshMedicationAndDashboard());
+                    },
+                  ),
+                _buildSettingsItem(
+                  icon: CupertinoIcons.chart_bar_alt_fill,
+                  color: const Color(0xFF6366F1),
+                  title: l10n.rehabReport,
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    pushGentle(context, const RehabReportPage());
+                  },
+                ),
+                _buildSettingsItem(
+                  icon: CupertinoIcons.shield_lefthalf_fill,
+                  color: AppColors.successGreen,
+                  title: l10n.dataManagement,
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    pushGentle(context, const DataManagementPage());
+                  },
+                ),
+                _buildSettingsItem(
+                  icon: CupertinoIcons.lock_shield,
+                  color: const Color(0xFF8B5CF6),
+                  title: l10n.privacyPolicy,
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    pushGentle(context, const PrivacyPolicyPage());
+                  },
+                ),
+                _buildSettingsItem(
+                  icon: CupertinoIcons.doc_text,
+                  color: const Color(0xFF0EA5E9),
+                  title: l10n.termsOfService,
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    pushGentle(context, const TermsOfServicePage());
+                  },
+                ),
+                const Divider(height: 1),
+                _buildSettingsItem(
+                  icon: CupertinoIcons.square_arrow_left,
+                  color: Colors.red,
+                  title: FirebaseAuth.instance.currentUser == null
+                      ? '退出游客模式'
+                      : l10n.logout,
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _showLogoutDialog(context);
+                  },
+                  isDestructive: true,
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
           ),
         ),
       ),
@@ -402,6 +460,7 @@ class _HomePageState extends State<HomePage> {
     required Color color,
     required String title,
     required VoidCallback onTap,
+    String? subtitle,
     bool isDestructive = false,
   }) {
     return ListTile(
@@ -425,6 +484,17 @@ class _HomePageState extends State<HomePage> {
           color: isDestructive ? Colors.red : const Color(0xFF334155),
         ),
       ),
+      subtitle: subtitle == null
+          ? null
+          : Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 13,
+                color: _syncStatus.lastFailed
+                    ? const Color(0xFFDC2626)
+                    : Colors.grey[600],
+              ),
+            ),
       trailing: Icon(CupertinoIcons.chevron_right, color: Colors.grey[400], size: 18),
       onTap: onTap,
     );
