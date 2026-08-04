@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/gentle_page_route.dart';
 import '../main.dart';
+import '../services/app_check_bootstrap.dart';
 import '../services/medication_notification_service.dart';
 import '../services/medication_reminder_service.dart';
 
@@ -30,6 +31,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
         Firebase.initializeApp(),
         Future<void>.delayed(const Duration(seconds: 2)),
       ]);
+      try {
+        await activateAmplioAppCheck();
+      } catch (e, s) {
+        // App Check 失败不应阻断启动；Monitor 阶段可稍后在 Console 补齐。
+        debugPrint('App Check activate failed: $e');
+        debugPrint('$s');
+      }
       await MedicationNotificationService.instance.init();
       await MedicationReminderService().rescheduleNotifications();
     } catch (e, s) {
