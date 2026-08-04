@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -10,7 +11,14 @@ import '../models/tremor_record.dart';
 import '../utils/constants.dart';
 
 class TremorTestPage extends StatefulWidget {
-  const TremorTestPage({super.key});
+  const TremorTestPage({
+    super.key,
+    @visibleForTesting this.forcePermissionDenied = false,
+  });
+
+  /// 测试专用：跳过默认「视为已授权」，以便验证拒绝时的 SnackBar。
+  @visibleForTesting
+  final bool forcePermissionDenied;
 
   @override
   State<TremorTestPage> createState() => _TremorTestPageState();
@@ -63,7 +71,9 @@ class _TremorTestPageState extends State<TremorTestPage>
   }
 
   Future<void> _checkPermission() async {
-    setState(() => _hasPermission = true);
+    // iOS 运动传感器无运行时权限弹窗；生产路径视为可用。
+    // 测试可通过 [TremorTestPage.forcePermissionDenied] 走拒绝 UI。
+    setState(() => _hasPermission = !widget.forcePermissionDenied);
   }
 
   Future<void> _startTest() async {

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +18,14 @@ import '../utils/gentle_page_route.dart';
 import 'movement_training_history_page.dart';
 
 class MovementTrainingPage extends StatefulWidget {
-  const MovementTrainingPage({super.key});
+  const MovementTrainingPage({
+    super.key,
+    @visibleForTesting this.requestCameraOnStart = false,
+  });
+
+  /// 测试专用：跳过类型选择/演示，进页后直接请求相机权限。
+  @visibleForTesting
+  final bool requestCameraOnStart;
 
   @override
   State<MovementTrainingPage> createState() => _MovementTrainingPageState();
@@ -102,7 +110,15 @@ class _MovementTrainingPageState extends State<MovementTrainingPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _showTrainingTypeSelection();
+    if (widget.requestCameraOnStart) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        setState(() => _didRequestCamera = true);
+        _initializeCamera();
+      });
+    } else {
+      _showTrainingTypeSelection();
+    }
   }
 
   @override

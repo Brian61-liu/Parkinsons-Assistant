@@ -151,8 +151,8 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    // 若用户在练习中直接返回，仍尝试保存本次记录（内部已做 mounted 保护）。
-    _stopListening();
+    // dispose 阶段不可 setState；只取消订阅并尽力落盘（无 UI 更新）。
+    unawaited(_stopListening(updateUi: false));
     super.dispose();
   }
 
@@ -396,7 +396,9 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
   }
 
   /// 停止监听：保存记录（若有效），并切换到对应阶段。
-  Future<void> _stopListening() async {
+  ///
+  /// [updateUi] 为 false 时（如 [dispose]）只取消订阅并落盘，不调用 setState。
+  Future<void> _stopListening({bool updateUi = true}) async {
     final wasPracticing = _stage == _Stage.practicing;
     final baseline = _baselineDb;
     final samples = List<double>.from(_sessionRawSamples);
@@ -416,7 +418,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
         ? DateTime.now().difference(startedAt).inSeconds
         : 0;
 
-    if (mounted) {
+    if (updateUi && mounted) {
       setState(() {
         _isListening = false;
         _isCalibrating = false;
