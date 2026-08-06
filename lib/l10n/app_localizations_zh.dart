@@ -1660,35 +1660,34 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get medicationNoReminders => '暫無提醒';
 
   @override
-  String get medicationDeleteSuccess => 'Medication list data deleted';
+  String get medicationDeleteSuccess => '用藥清單資料已刪除';
 
   @override
   String get rehabReport => 'Rehab report';
 
   @override
-  String get rehabReportDisclaimer =>
-      'For rehabilitation reference only. Not a medical diagnosis and does not replace advice from your care team.';
+  String get rehabReportDisclaimer => '僅供參考，不構成醫學診斷，也不替代醫師或治療師建議。';
 
   @override
   String get reportOverallScore => 'Overall score';
 
   @override
   String reportDailyProgress(int percent) {
-    return 'Today\'s goals: $percent%';
+    return '今日目標：$percent%';
   }
 
   @override
   String reportWeeklyProgress(int percent) {
-    return 'This week: $percent%';
+    return '本週目標：$percent%';
   }
 
   @override
   String reportStreak(int days) {
-    return 'Streak: $days days';
+    return '連續訓練 $days 天';
   }
 
   @override
-  String get reportNoData => 'Not enough training data yet';
+  String get reportNoData => '訓練資料尚不足';
 
   @override
   String get handTraining => 'Hand';
@@ -1736,12 +1735,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String lastTrainingAgo(String timeAgo) {
-    return 'Last training · $timeAgo';
+    return '上次訓練 · $timeAgo';
   }
 
   @override
   String lastMeasurementAgo(String timeAgo) {
-    return 'Last measured · $timeAgo';
+    return '上次測量 · $timeAgo';
   }
 
   @override
@@ -1782,7 +1781,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String motionCompletionCount(int done, int total) {
-    return '$done/$total reps';
+    return '$done/$total 次';
   }
 
   @override
@@ -1825,7 +1824,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get nonMedicalDisclaimerBody =>
-      'Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.';
+      '所展示的測量結果僅供復健訓練參考，不能用於醫學診斷，也不能替代醫師或治療師的建議。';
 
   @override
   String get voicePrepHint => '請坐穩，將手機舉到嘴邊，距離大約 30 公分';

@@ -101,11 +101,11 @@
   "syncToCloud": "In Cloud synchronisieren",
   "dataSynced": "Daten erfolgreich synchronisiert",
   "syncing": "Syncing…",
-  "syncFailed": "Sync failed. Check your network and try again.",
-  "syncFailedHint": "Sync failed — tap to retry",
+  "syncFailed": "Synchronisierung fehlgeschlagen. Prüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut.",
+  "syncFailedHint": "Synchronisierung fehlgeschlagen — tippen zum erneuten Versuch",
   "syncRetry": "Retry",
-  "loginRequiredForSync": "Please sign in to use cloud sync",
-  "lastSyncedAt": "Last synced: {time}",
+  "loginRequiredForSync": "Bitte melden Sie sich an, um die Cloud-Synchronisierung zu nutzen",
+  "lastSyncedAt": "Zuletzt synchronisiert: {time}",
   "privacyPolicy": "Datenschutzrichtlinie",
   "privacyPolicyIntro": "Einführung",
   "privacyPolicyIntroText": "Amplio verpflichtet sich, Ihre Privatsphäre und Gesundheitsdaten zu schützen. Diese Richtlinie erklärt, wie wir Ihre Daten erfassen, verwenden, speichern und schützen.",
@@ -345,42 +345,42 @@
     "description": "Training type label"
   },
   "medicationList": "Medication list",
-  "medicationListEnable": "Set up medication list",
-  "medicationDisclaimer": "Amplio's medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. All data stays on this device only.",
-  "medicationDisclaimerAccept": "I understand and enable",
+  "medicationListEnable": "Medikamentenliste einrichten",
+  "medicationDisclaimer": "Die Medikamentenliste von Amplio hilft Ihnen nur, Zeiten selbst zu erfassen. Sie ist keine medizinische Beratung und gibt keine Dosierungshinweise. Alle Daten bleiben nur auf diesem Gerät.",
+  "medicationDisclaimerAccept": "Ich verstehe und aktiviere",
   "medicationLabel": "Label",
-  "medicationLabelHint": "e.g. After breakfast (nickname is fine)",
+  "medicationLabelHint": "z. B. Nach dem Frühstück (Spitzname ist in Ordnung)",
   "medicationTime": "Time",
   "medicationTaken": "Taken",
   "medicationUndo": "Undo",
-  "medicationUndoConfirm": "Remove today's check-in for this item?",
-  "medicationTodayProgress": "Today {done}/{total}",
+  "medicationUndoConfirm": "Heutigen Check-in für diesen Eintrag entfernen?",
+  "medicationTodayProgress": "Heute {done}/{total}",
   "medicationManage": "Manage",
   "medicationAdd": "Add reminder",
   "medicationEdit": "Edit reminder",
-  "medicationClose": "Turn off medication list",
-  "medicationCloseConfirm": "You can hide the list or also delete all medication data on this device.",
+  "medicationClose": "Medikamentenliste ausschalten",
+  "medicationCloseConfirm": "Sie können die Liste ausblenden oder auch alle Medikamentendaten auf diesem Gerät löschen.",
   "medicationCloseHideOnly": "Hide only",
-  "medicationCloseAndDelete": "Hide and delete all data",
-  "medicationDeleteAllData": "Delete medication list data",
-  "medicationDeleteAllDataDescription": "Permanently delete all medication reminders and check-ins on this device.",
-  "medicationDeleteAllDataConfirm": "Delete all medication list data on this device? This cannot be undone.",
+  "medicationCloseAndDelete": "Ausblenden und alle Daten löschen",
+  "medicationDeleteAllData": "Medikamentenlistendaten löschen",
+  "medicationDeleteAllDataDescription": "Alle Medikamentenerinnerungen und Check-ins auf diesem Gerät dauerhaft löschen.",
+  "medicationDeleteAllDataConfirm": "Alle Medikamentenlistendaten auf diesem Gerät löschen? Dies kann nicht rückgängig gemacht werden.",
   "medicationCollapse": "Collapse",
   "medicationExpand": "Expand",
-  "medicationEmptyToday": "No reminders for today. Add one in Manage.",
+  "medicationEmptyToday": "Keine Erinnerungen für heute. Fügen Sie eine unter Verwalten hinzu.",
   "medicationCompletedAt": "Done at {time}",
   "medicationSave": "Save",
   "medicationDeleteReminder": "Delete reminder",
-  "medicationDeleteReminderConfirm": "Delete this reminder?",
-  "medicationNoReminders": "No reminders yet",
-  "medicationDeleteSuccess": "Medication list data deleted",
+  "medicationDeleteReminderConfirm": "Diese Erinnerung löschen?",
+  "medicationNoReminders": "Noch keine Erinnerungen",
+  "medicationDeleteSuccess": "Medikamentenlistendaten gelöscht",
   "rehabReport": "Rehab report",
-  "rehabReportDisclaimer": "For rehabilitation reference only. Not a medical diagnosis and does not replace advice from your care team.",
+  "rehabReportDisclaimer": "Nur zur Rehabilitationsreferenz. Keine medizinische Diagnose und kein Ersatz für den Rat Ihres Behandlungsteams.",
   "reportOverallScore": "Overall score",
-  "reportDailyProgress": "Today's goals: {percent}%",
-  "reportWeeklyProgress": "This week: {percent}%",
-  "reportStreak": "Streak: {days} days",
-  "reportNoData": "Not enough training data yet",
+  "reportDailyProgress": "Heutige Ziele: {percent}%",
+  "reportWeeklyProgress": "Diese Woche: {percent}%",
+  "reportStreak": "Serie: {days} Tage",
+  "reportNoData": "Noch nicht genug Trainingsdaten",
   "handTraining": "Hand",
   "voiceTrainingShort": "Voice",
   "motionTrainingShort": "Movement",
@@ -400,9 +400,9 @@
   "trainingStreakLabel": "Training Streak",
   "voiceClarity": "Voice Clarity",
   "handStability": "Hand Stability",
-  "movementAbility": "Movement Ability",
+  "movementAbility": "Bewegungstraining",
   "medicationReminder": "Medication",
-  "lastTrainingAgo": "Last training · {timeAgo}",
+  "lastTrainingAgo": "Letztes Training · {timeAgo}",
   "@lastTrainingAgo": {
     "placeholders": {
       "timeAgo": {
@@ -410,7 +410,7 @@
       }
     }
   },
-  "lastMeasurementAgo": "Last measured · {timeAgo}",
+  "lastMeasurementAgo": "Zuletzt gemessen · {timeAgo}",
   "@lastMeasurementAgo": {
     "placeholders": {
       "timeAgo": {
@@ -429,7 +429,7 @@
     }
   },
   "noTrainingYet": "No training yet",
-  "noMeasurementYet": "No measurement yet",
+  "noMeasurementYet": "Noch keine Messung",
   "tapToStart": "Tap to start",
   "durationSec": "{count}s",
   "@durationSec": {
@@ -449,7 +449,7 @@
   },
   "voiceSessionCount": "1 session",
   "handMeasurementCount": "1 measurement",
-  "motionCompletionCount": "{done}/{total} reps",
+  "motionCompletionCount": "{done}/{total} Wiederholungen",
   "@motionCompletionCount": {
     "placeholders": {
       "done": {
@@ -460,9 +460,9 @@
       }
     }
   },
-  "medicationSetupPrompt": "Set up medication reminders",
-  "medicationSetupSubtitle": "Saved on this device only",
-  "medicationNoUpcoming": "No upcoming reminders today",
+  "medicationSetupPrompt": "Medikamentenerinnerungen einrichten",
+  "medicationSetupSubtitle": "Nur auf diesem Gerät gespeichert",
+  "medicationNoUpcoming": "Heute keine anstehenden Erinnerungen",
   "medicationNextDoseLabel": "Next dose",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
@@ -474,7 +474,7 @@
   },
   "medicationStatusUpcoming": "Upcoming",
   "medicationStatusPending": "Pending",
-  "medicationNotificationBody": "Time for: {label}",
+  "medicationNotificationBody": "Zeit für: {label}",
   "@medicationNotificationBody": {
     "placeholders": {
       "label": {
@@ -482,12 +482,12 @@
       }
     }
   },
-  "medicationNotificationPermissionNote": "Optional: allow notifications so Amplio can remind you at the times you set. Notifications stay on this device.",
+  "medicationNotificationPermissionNote": "Optional: Benachrichtigungen erlauben, damit Amplio Sie zu den von Ihnen festgelegten Zeiten erinnert. Benachrichtigungen bleiben auf diesem Gerät.",
   "recentActivity": "Recent Activity",
-  "nonMedicalDisclaimerTitle": "For reference only",
-  "nonMedicalDisclaimerBody": "Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.",
-  "voicePrepHint": "Sit comfortably. Hold your phone about 30 cm from your mouth.",
-  "voicePrepDurationHint": "Practice for about {seconds} seconds",
+  "nonMedicalDisclaimerTitle": "Nur zur Referenz",
+  "nonMedicalDisclaimerBody": "Angezeigte Messwerte dienen nur der Rehabilitationsreferenz. Sie sind keine medizinische Diagnose und ersetzen nicht den Rat Ihres Gesundheitsteams.",
+  "voicePrepHint": "Sitzen Sie bequem. Halten Sie das Telefon etwa 30 cm vom Mund entfernt.",
+  "voicePrepDurationHint": "Üben Sie etwa {seconds} Sekunden",
   "@voicePrepDurationHint": {
     "placeholders": {
       "seconds": {
@@ -495,8 +495,8 @@
       }
     }
   },
-  "voicePrepEnvironmentHint": "Practice in a quiet room for best results",
-  "voiceCalibratingCountdown": "Please stay quiet · {seconds}s",
+  "voicePrepEnvironmentHint": "Üben Sie in einem ruhigen Raum für beste Ergebnisse",
+  "voiceCalibratingCountdown": "Bitte ruhig bleiben · {seconds}s",
   "@voiceCalibratingCountdown": {
     "placeholders": {
       "seconds": {
@@ -504,7 +504,7 @@
       }
     }
   },
-  "voiceElapsedLabel": "Practiced {seconds}s",
+  "voiceElapsedLabel": "Geübt {seconds}s",
   "@voiceElapsedLabel": {
     "placeholders": {
       "seconds": {
@@ -512,7 +512,7 @@
       }
     }
   },
-  "voiceTargetDurationChip": "Goal: {seconds}s",
+  "voiceTargetDurationChip": "Ziel: {seconds}s",
   "@voiceTargetDurationChip": {
     "placeholders": {
       "seconds": {
@@ -524,13 +524,13 @@
   "voiceLegendYours": "Your volume",
   "voiceShowDetail": "Show number",
   "voiceHideDetail": "Hide number",
-  "voiceCompletedTitle": "Practice Complete",
+  "voiceCompletedTitle": "Übung abgeschlossen",
   "voiceCompletedDurationLabel": "This session",
-  "voiceCompletedTargetLabel": "Time at target volume",
-  "voiceCompletedEncourageGood": "Great job! Keep up the habit of speaking loudly.",
-  "voiceCompletedEncourageTryMore": "Good try. Aim to speak a bit louder next time.",
+  "voiceCompletedTargetLabel": "Zeit bei Ziellautstärke",
+  "voiceCompletedEncourageGood": "Sehr gut! Behalten Sie die Gewohnheit, laut zu sprechen.",
+  "voiceCompletedEncourageTryMore": "Guter Versuch. Versuchen Sie beim nächsten Mal etwas lauter zu sprechen.",
   "voiceRetryButton": "Practice Again",
   "voiceFinishButton": "Done",
-  "voicePracticeFooterHint": "This exercise encourages speaking loudly for voice training. For reference only, not a medical diagnosis.",
-  "voiceSessionTooShort": "Session was too short and was not saved"
+  "voicePracticeFooterHint": "Diese Übung fördert lautes Sprechen für das Stimmtraining. Nur zur Referenz, keine medizinische Diagnose.",
+  "voiceSessionTooShort": "Die Sitzung war zu kurz und wurde nicht gespeichert"
 }

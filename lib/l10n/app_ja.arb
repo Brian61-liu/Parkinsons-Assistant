@@ -101,11 +101,11 @@
   "syncToCloud": "クラウドに同期",
   "dataSynced": "データが正常に同期されました",
   "syncing": "Syncing…",
-  "syncFailed": "Sync failed. Check your network and try again.",
-  "syncFailedHint": "Sync failed — tap to retry",
+  "syncFailed": "同期に失敗しました。ネットワークを確認して再試行してください。",
+  "syncFailedHint": "同期失敗 — タップして再試行",
   "syncRetry": "Retry",
-  "loginRequiredForSync": "Please sign in to use cloud sync",
-  "lastSyncedAt": "Last synced: {time}",
+  "loginRequiredForSync": "クラウド同期を使うにはサインインしてください",
+  "lastSyncedAt": "最終同期：{time}",
   "privacyPolicy": "プライバシーポリシー",
   "privacyPolicyIntro": "はじめに",
   "privacyPolicyIntroText": "Amplioはお客様のプライバシーと健康データの保護に努めています。本ポリシーでは、情報の収集、使用、保存、保護について説明します。",
@@ -345,42 +345,42 @@
     "description": "Training type label"
   },
   "medicationList": "Medication list",
-  "medicationListEnable": "Set up medication list",
-  "medicationDisclaimer": "Amplio's medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. All data stays on this device only.",
-  "medicationDisclaimerAccept": "I understand and enable",
+  "medicationListEnable": "服薬リストを設定",
+  "medicationDisclaimer": "Amplio の服薬リストは、ご自身で時間を記録するためのものです。医学的助言ではなく、用量の案内も行いません。すべてのデータはこの端末のみに保存されます。",
+  "medicationDisclaimerAccept": "理解して有効にする",
   "medicationLabel": "Label",
-  "medicationLabelHint": "e.g. After breakfast (nickname is fine)",
+  "medicationLabelHint": "例：朝食後（ニックネーム可）",
   "medicationTime": "Time",
   "medicationTaken": "Taken",
   "medicationUndo": "Undo",
-  "medicationUndoConfirm": "Remove today's check-in for this item?",
-  "medicationTodayProgress": "Today {done}/{total}",
+  "medicationUndoConfirm": "この項目の本日のチェックインを削除しますか？",
+  "medicationTodayProgress": "本日 {done}/{total}",
   "medicationManage": "Manage",
   "medicationAdd": "Add reminder",
   "medicationEdit": "Edit reminder",
-  "medicationClose": "Turn off medication list",
-  "medicationCloseConfirm": "You can hide the list or also delete all medication data on this device.",
+  "medicationClose": "服薬リストをオフにする",
+  "medicationCloseConfirm": "リストを非表示にするか、この端末の服薬データをすべて削除することもできます。",
   "medicationCloseHideOnly": "Hide only",
-  "medicationCloseAndDelete": "Hide and delete all data",
-  "medicationDeleteAllData": "Delete medication list data",
-  "medicationDeleteAllDataDescription": "Permanently delete all medication reminders and check-ins on this device.",
-  "medicationDeleteAllDataConfirm": "Delete all medication list data on this device? This cannot be undone.",
+  "medicationCloseAndDelete": "非表示にしてすべてのデータを削除",
+  "medicationDeleteAllData": "服薬リストのデータを削除",
+  "medicationDeleteAllDataDescription": "この端末上の服薬リマインダーとチェックインをすべて完全に削除します。",
+  "medicationDeleteAllDataConfirm": "この端末の服薬リストデータをすべて削除しますか？この操作は元に戻せません。",
   "medicationCollapse": "Collapse",
   "medicationExpand": "Expand",
-  "medicationEmptyToday": "No reminders for today. Add one in Manage.",
+  "medicationEmptyToday": "本日のリマインダーはありません。管理で追加してください。",
   "medicationCompletedAt": "Done at {time}",
   "medicationSave": "Save",
   "medicationDeleteReminder": "Delete reminder",
-  "medicationDeleteReminderConfirm": "Delete this reminder?",
-  "medicationNoReminders": "No reminders yet",
-  "medicationDeleteSuccess": "Medication list data deleted",
+  "medicationDeleteReminderConfirm": "このリマインダーを削除しますか？",
+  "medicationNoReminders": "まだリマインダーがありません",
+  "medicationDeleteSuccess": "服薬リストのデータを削除しました",
   "rehabReport": "Rehab report",
-  "rehabReportDisclaimer": "For rehabilitation reference only. Not a medical diagnosis and does not replace advice from your care team.",
+  "rehabReportDisclaimer": "リハビリテーションの参考用です。医学的診断ではなく、ケアチームの助言の代わりにはなりません。",
   "reportOverallScore": "Overall score",
-  "reportDailyProgress": "Today's goals: {percent}%",
-  "reportWeeklyProgress": "This week: {percent}%",
-  "reportStreak": "Streak: {days} days",
-  "reportNoData": "Not enough training data yet",
+  "reportDailyProgress": "本日の目標：{percent}%",
+  "reportWeeklyProgress": "今週：{percent}%",
+  "reportStreak": "連続：{days}日",
+  "reportNoData": "まだ十分なトレーニングデータがありません",
   "handTraining": "Hand",
   "voiceTrainingShort": "Voice",
   "motionTrainingShort": "Movement",
@@ -400,9 +400,9 @@
   "trainingStreakLabel": "Training Streak",
   "voiceClarity": "Voice Clarity",
   "handStability": "Hand Stability",
-  "movementAbility": "Movement Ability",
+  "movementAbility": "動作トレーニング",
   "medicationReminder": "Medication",
-  "lastTrainingAgo": "Last training · {timeAgo}",
+  "lastTrainingAgo": "前回のトレーニング · {timeAgo}",
   "@lastTrainingAgo": {
     "placeholders": {
       "timeAgo": {
@@ -410,7 +410,7 @@
       }
     }
   },
-  "lastMeasurementAgo": "Last measured · {timeAgo}",
+  "lastMeasurementAgo": "前回の測定 · {timeAgo}",
   "@lastMeasurementAgo": {
     "placeholders": {
       "timeAgo": {
@@ -429,7 +429,7 @@
     }
   },
   "noTrainingYet": "No training yet",
-  "noMeasurementYet": "No measurement yet",
+  "noMeasurementYet": "まだ測定がありません",
   "tapToStart": "Tap to start",
   "durationSec": "{count}s",
   "@durationSec": {
@@ -449,7 +449,7 @@
   },
   "voiceSessionCount": "1 session",
   "handMeasurementCount": "1 measurement",
-  "motionCompletionCount": "{done}/{total} reps",
+  "motionCompletionCount": "{done}/{total} 回",
   "@motionCompletionCount": {
     "placeholders": {
       "done": {
@@ -460,9 +460,9 @@
       }
     }
   },
-  "medicationSetupPrompt": "Set up medication reminders",
-  "medicationSetupSubtitle": "Saved on this device only",
-  "medicationNoUpcoming": "No upcoming reminders today",
+  "medicationSetupPrompt": "服薬リマインダーを設定",
+  "medicationSetupSubtitle": "この端末のみに保存",
+  "medicationNoUpcoming": "本日の予定リマインダーはありません",
   "medicationNextDoseLabel": "Next dose",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
@@ -474,7 +474,7 @@
   },
   "medicationStatusUpcoming": "Upcoming",
   "medicationStatusPending": "Pending",
-  "medicationNotificationBody": "Time for: {label}",
+  "medicationNotificationBody": "時間です：{label}",
   "@medicationNotificationBody": {
     "placeholders": {
       "label": {
@@ -482,12 +482,12 @@
       }
     }
   },
-  "medicationNotificationPermissionNote": "Optional: allow notifications so Amplio can remind you at the times you set. Notifications stay on this device.",
+  "medicationNotificationPermissionNote": "任意：通知を許可すると、Amplio が設定した時刻に本機でリマインドします。通知はこの端末に留まります。",
   "recentActivity": "Recent Activity",
-  "nonMedicalDisclaimerTitle": "For reference only",
-  "nonMedicalDisclaimerBody": "Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.",
-  "voicePrepHint": "Sit comfortably. Hold your phone about 30 cm from your mouth.",
-  "voicePrepDurationHint": "Practice for about {seconds} seconds",
+  "nonMedicalDisclaimerTitle": "参考情報のみ",
+  "nonMedicalDisclaimerBody": "表示される測定値はリハビリテーション訓練の参考用です。医学的診断ではなく、医療チームの助言の代わりにはなりません。",
+  "voicePrepHint": "楽な姿勢で座ってください。スマホを口から約30cm離して持ってください。",
+  "voicePrepDurationHint": "約{seconds}秒練習します",
   "@voicePrepDurationHint": {
     "placeholders": {
       "seconds": {
@@ -495,8 +495,8 @@
       }
     }
   },
-  "voicePrepEnvironmentHint": "Practice in a quiet room for best results",
-  "voiceCalibratingCountdown": "Please stay quiet · {seconds}s",
+  "voicePrepEnvironmentHint": "静かな部屋で練習すると効果的です",
+  "voiceCalibratingCountdown": "静かにしてください · 残り{seconds}秒",
   "@voiceCalibratingCountdown": {
     "placeholders": {
       "seconds": {
@@ -504,7 +504,7 @@
       }
     }
   },
-  "voiceElapsedLabel": "Practiced {seconds}s",
+  "voiceElapsedLabel": "練習済み {seconds}秒",
   "@voiceElapsedLabel": {
     "placeholders": {
       "seconds": {
@@ -512,7 +512,7 @@
       }
     }
   },
-  "voiceTargetDurationChip": "Goal: {seconds}s",
+  "voiceTargetDurationChip": "目標：{seconds}秒",
   "@voiceTargetDurationChip": {
     "placeholders": {
       "seconds": {
@@ -524,13 +524,13 @@
   "voiceLegendYours": "Your volume",
   "voiceShowDetail": "Show number",
   "voiceHideDetail": "Hide number",
-  "voiceCompletedTitle": "Practice Complete",
+  "voiceCompletedTitle": "練習完了",
   "voiceCompletedDurationLabel": "This session",
-  "voiceCompletedTargetLabel": "Time at target volume",
-  "voiceCompletedEncourageGood": "Great job! Keep up the habit of speaking loudly.",
-  "voiceCompletedEncourageTryMore": "Good try. Aim to speak a bit louder next time.",
+  "voiceCompletedTargetLabel": "目標音量に達した時間",
+  "voiceCompletedEncourageGood": "よくできました！大きな声で話す習慣を続けましょう。",
+  "voiceCompletedEncourageTryMore": "いい練習です。次回はもう少し大きな声を目指しましょう。",
   "voiceRetryButton": "Practice Again",
   "voiceFinishButton": "Done",
-  "voicePracticeFooterHint": "This exercise encourages speaking loudly for voice training. For reference only, not a medical diagnosis.",
-  "voiceSessionTooShort": "Session was too short and was not saved"
+  "voicePracticeFooterHint": "このエクササイズは音声トレーニングのため大きな声で話すことを促します。参考用であり、医学的診断ではありません。",
+  "voiceSessionTooShort": "セッションが短すぎたため保存されませんでした"
 }

@@ -373,14 +373,14 @@
   "medicationDeleteReminder": "刪除提醒",
   "medicationDeleteReminderConfirm": "確定刪除該提醒？",
   "medicationNoReminders": "暫無提醒",
-  "medicationDeleteSuccess": "Medication list data deleted",
+  "medicationDeleteSuccess": "用藥清單資料已刪除",
   "rehabReport": "Rehab report",
-  "rehabReportDisclaimer": "For rehabilitation reference only. Not a medical diagnosis and does not replace advice from your care team.",
+  "rehabReportDisclaimer": "僅供參考，不構成醫學診斷，也不替代醫師或治療師建議。",
   "reportOverallScore": "Overall score",
-  "reportDailyProgress": "Today's goals: {percent}%",
-  "reportWeeklyProgress": "This week: {percent}%",
-  "reportStreak": "Streak: {days} days",
-  "reportNoData": "Not enough training data yet",
+  "reportDailyProgress": "今日目標：{percent}%",
+  "reportWeeklyProgress": "本週目標：{percent}%",
+  "reportStreak": "連續訓練 {days} 天",
+  "reportNoData": "訓練資料尚不足",
   "handTraining": "Hand",
   "voiceTrainingShort": "Voice",
   "motionTrainingShort": "Movement",
@@ -402,7 +402,7 @@
   "handStability": "手部測量",
   "movementAbility": "肢體訓練",
   "medicationReminder": "用藥提醒",
-  "lastTrainingAgo": "Last training · {timeAgo}",
+  "lastTrainingAgo": "上次訓練 · {timeAgo}",
   "@lastTrainingAgo": {
     "placeholders": {
       "timeAgo": {
@@ -410,7 +410,7 @@
       }
     }
   },
-  "lastMeasurementAgo": "Last measured · {timeAgo}",
+  "lastMeasurementAgo": "上次測量 · {timeAgo}",
   "@lastMeasurementAgo": {
     "placeholders": {
       "timeAgo": {
@@ -449,7 +449,7 @@
   },
   "voiceSessionCount": "1 次訓練",
   "handMeasurementCount": "1 次測量",
-  "motionCompletionCount": "{done}/{total} reps",
+  "motionCompletionCount": "{done}/{total} 次",
   "@motionCompletionCount": {
     "placeholders": {
       "done": {
@@ -485,7 +485,7 @@
   "medicationNotificationPermissionNote": "可選：允許通知後，Amplio 會在您設定的時間於本機提醒。通知不會上傳雲端。",
   "recentActivity": "最近活動",
   "nonMedicalDisclaimerTitle": "僅供參考",
-  "nonMedicalDisclaimerBody": "Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.",
+  "nonMedicalDisclaimerBody": "所展示的測量結果僅供復健訓練參考，不能用於醫學診斷，也不能替代醫師或治療師的建議。",
   "voicePrepHint": "請坐穩，將手機舉到嘴邊，距離大約 30 公分",
   "voicePrepDurationHint": "本次練習大約 {seconds} 秒",
   "@voicePrepDurationHint": {

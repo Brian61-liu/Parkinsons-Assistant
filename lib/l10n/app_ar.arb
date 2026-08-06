@@ -101,11 +101,11 @@
   "syncToCloud": "مزامنة مع السحابة",
   "dataSynced": "تمت مزامنة البيانات بنجاح",
   "syncing": "Syncing…",
-  "syncFailed": "Sync failed. Check your network and try again.",
-  "syncFailedHint": "Sync failed — tap to retry",
+  "syncFailed": "فشلت المزامنة. تحقق من الشبكة وحاول مرة أخرى.",
+  "syncFailedHint": "فشلت المزامنة — اضغط لإعادة المحاولة",
   "syncRetry": "Retry",
-  "loginRequiredForSync": "Please sign in to use cloud sync",
-  "lastSyncedAt": "Last synced: {time}",
+  "loginRequiredForSync": "يرجى تسجيل الدخول لاستخدام المزامنة السحابية",
+  "lastSyncedAt": "آخر مزامنة: {time}",
   "privacyPolicy": "سياسة الخصوصية",
   "privacyPolicyIntro": "مقدمة",
   "privacyPolicyIntroText": "تلتزم Amplio بحماية خصوصيتك وبياناتك الصحية. توضح هذه السياسة كيفية جمع واستخدام وتخزين وحماية معلوماتك.",
@@ -345,42 +345,42 @@
     "description": "Training type label"
   },
   "medicationList": "Medication list",
-  "medicationListEnable": "Set up medication list",
-  "medicationDisclaimer": "Amplio's medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. All data stays on this device only.",
-  "medicationDisclaimerAccept": "I understand and enable",
+  "medicationListEnable": "إعداد قائمة الأدوية",
+  "medicationDisclaimer": "تساعد قائمة أدوية Amplio فقط على تتبع الأوقات بنفسك. وهي ليست نصيحة طبية ولا تقدّم إرشادات للجرعات. تبقى جميع البيانات على هذا الجهاز فقط.",
+  "medicationDisclaimerAccept": "أفهم وأفعّل",
   "medicationLabel": "Label",
-  "medicationLabelHint": "e.g. After breakfast (nickname is fine)",
+  "medicationLabelHint": "مثل: بعد الإفطار (يمكن استخدام لقب)",
   "medicationTime": "Time",
   "medicationTaken": "Taken",
   "medicationUndo": "Undo",
-  "medicationUndoConfirm": "Remove today's check-in for this item?",
-  "medicationTodayProgress": "Today {done}/{total}",
+  "medicationUndoConfirm": "إزالة تسجيل اليوم لهذا العنصر؟",
+  "medicationTodayProgress": "اليوم {done}/{total}",
   "medicationManage": "Manage",
   "medicationAdd": "Add reminder",
   "medicationEdit": "Edit reminder",
-  "medicationClose": "Turn off medication list",
-  "medicationCloseConfirm": "You can hide the list or also delete all medication data on this device.",
+  "medicationClose": "إيقاف قائمة الأدوية",
+  "medicationCloseConfirm": "يمكنك إخفاء القائمة أو حذف جميع بيانات الأدوية على هذا الجهاز أيضًا.",
   "medicationCloseHideOnly": "Hide only",
-  "medicationCloseAndDelete": "Hide and delete all data",
-  "medicationDeleteAllData": "Delete medication list data",
-  "medicationDeleteAllDataDescription": "Permanently delete all medication reminders and check-ins on this device.",
-  "medicationDeleteAllDataConfirm": "Delete all medication list data on this device? This cannot be undone.",
+  "medicationCloseAndDelete": "إخفاء وحذف جميع البيانات",
+  "medicationDeleteAllData": "حذف بيانات قائمة الأدوية",
+  "medicationDeleteAllDataDescription": "حذف جميع تذكيرات الأدوية وتسجيلات التحقق على هذا الجهاز نهائيًا.",
+  "medicationDeleteAllDataConfirm": "حذف جميع بيانات قائمة الأدوية على هذا الجهاز؟ لا يمكن التراجع عن ذلك.",
   "medicationCollapse": "Collapse",
   "medicationExpand": "Expand",
-  "medicationEmptyToday": "No reminders for today. Add one in Manage.",
+  "medicationEmptyToday": "لا تذكيرات لليوم. أضف واحدًا من الإدارة.",
   "medicationCompletedAt": "Done at {time}",
   "medicationSave": "Save",
   "medicationDeleteReminder": "Delete reminder",
-  "medicationDeleteReminderConfirm": "Delete this reminder?",
-  "medicationNoReminders": "No reminders yet",
-  "medicationDeleteSuccess": "Medication list data deleted",
+  "medicationDeleteReminderConfirm": "حذف هذا التذكير؟",
+  "medicationNoReminders": "لا تذكيرات بعد",
+  "medicationDeleteSuccess": "تم حذف بيانات قائمة الأدوية",
   "rehabReport": "Rehab report",
-  "rehabReportDisclaimer": "For rehabilitation reference only. Not a medical diagnosis and does not replace advice from your care team.",
+  "rehabReportDisclaimer": "للمرجع التأهيلي فقط. ليس تشخيصًا طبيًا ولا يحل محل نصيحة فريق الرعاية.",
   "reportOverallScore": "Overall score",
-  "reportDailyProgress": "Today's goals: {percent}%",
-  "reportWeeklyProgress": "This week: {percent}%",
-  "reportStreak": "Streak: {days} days",
-  "reportNoData": "Not enough training data yet",
+  "reportDailyProgress": "أهداف اليوم: {percent}%",
+  "reportWeeklyProgress": "هذا الأسبوع: {percent}%",
+  "reportStreak": "سلسلة: {days} أيام",
+  "reportNoData": "لا توجد بيانات تدريب كافية بعد",
   "handTraining": "Hand",
   "voiceTrainingShort": "Voice",
   "motionTrainingShort": "Movement",
@@ -400,9 +400,9 @@
   "trainingStreakLabel": "Training Streak",
   "voiceClarity": "Voice Clarity",
   "handStability": "Hand Stability",
-  "movementAbility": "Movement Ability",
+  "movementAbility": "تدريب الحركة",
   "medicationReminder": "Medication",
-  "lastTrainingAgo": "Last training · {timeAgo}",
+  "lastTrainingAgo": "آخر تدريب · {timeAgo}",
   "@lastTrainingAgo": {
     "placeholders": {
       "timeAgo": {
@@ -410,7 +410,7 @@
       }
     }
   },
-  "lastMeasurementAgo": "Last measured · {timeAgo}",
+  "lastMeasurementAgo": "آخر قياس · {timeAgo}",
   "@lastMeasurementAgo": {
     "placeholders": {
       "timeAgo": {
@@ -429,7 +429,7 @@
     }
   },
   "noTrainingYet": "No training yet",
-  "noMeasurementYet": "No measurement yet",
+  "noMeasurementYet": "لا قياس بعد",
   "tapToStart": "Tap to start",
   "durationSec": "{count}s",
   "@durationSec": {
@@ -449,7 +449,7 @@
   },
   "voiceSessionCount": "1 session",
   "handMeasurementCount": "1 measurement",
-  "motionCompletionCount": "{done}/{total} reps",
+  "motionCompletionCount": "{done}/{total} تكرار",
   "@motionCompletionCount": {
     "placeholders": {
       "done": {
@@ -460,9 +460,9 @@
       }
     }
   },
-  "medicationSetupPrompt": "Set up medication reminders",
-  "medicationSetupSubtitle": "Saved on this device only",
-  "medicationNoUpcoming": "No upcoming reminders today",
+  "medicationSetupPrompt": "إعداد تذكيرات الأدوية",
+  "medicationSetupSubtitle": "يُحفظ على هذا الجهاز فقط",
+  "medicationNoUpcoming": "لا تذكيرات قادمة اليوم",
   "medicationNextDoseLabel": "Next dose",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
@@ -474,7 +474,7 @@
   },
   "medicationStatusUpcoming": "Upcoming",
   "medicationStatusPending": "Pending",
-  "medicationNotificationBody": "Time for: {label}",
+  "medicationNotificationBody": "حان وقت: {label}",
   "@medicationNotificationBody": {
     "placeholders": {
       "label": {
@@ -482,12 +482,12 @@
       }
     }
   },
-  "medicationNotificationPermissionNote": "Optional: allow notifications so Amplio can remind you at the times you set. Notifications stay on this device.",
+  "medicationNotificationPermissionNote": "اختياري: اسمح بالإشعارات ليذكّرك Amplio في الأوقات التي تحددها. تبقى الإشعارات على هذا الجهاز.",
   "recentActivity": "Recent Activity",
-  "nonMedicalDisclaimerTitle": "For reference only",
-  "nonMedicalDisclaimerBody": "Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.",
-  "voicePrepHint": "Sit comfortably. Hold your phone about 30 cm from your mouth.",
-  "voicePrepDurationHint": "Practice for about {seconds} seconds",
+  "nonMedicalDisclaimerTitle": "للمرجع فقط",
+  "nonMedicalDisclaimerBody": "القياسات المعروضة هي مرجع لتدريب التأهيل فقط. وهي ليست تشخيصًا طبيًا ولا تحل محل نصيحة فريقك الصحي.",
+  "voicePrepHint": "اجلس براحة. أمسك الهاتف على بعد حوالي 30 سم من فمك.",
+  "voicePrepDurationHint": "تمرّن لمدة حوالي {seconds} ثانية",
   "@voicePrepDurationHint": {
     "placeholders": {
       "seconds": {
@@ -495,8 +495,8 @@
       }
     }
   },
-  "voicePrepEnvironmentHint": "Practice in a quiet room for best results",
-  "voiceCalibratingCountdown": "Please stay quiet · {seconds}s",
+  "voicePrepEnvironmentHint": "تمرّن في غرفة هادئة لأفضل نتيجة",
+  "voiceCalibratingCountdown": "يرجى البقاء هادئًا · {seconds}ث",
   "@voiceCalibratingCountdown": {
     "placeholders": {
       "seconds": {
@@ -504,7 +504,7 @@
       }
     }
   },
-  "voiceElapsedLabel": "Practiced {seconds}s",
+  "voiceElapsedLabel": "تم التمرين {seconds}ث",
   "@voiceElapsedLabel": {
     "placeholders": {
       "seconds": {
@@ -512,7 +512,7 @@
       }
     }
   },
-  "voiceTargetDurationChip": "Goal: {seconds}s",
+  "voiceTargetDurationChip": "الهدف: {seconds}ث",
   "@voiceTargetDurationChip": {
     "placeholders": {
       "seconds": {
@@ -524,13 +524,13 @@
   "voiceLegendYours": "Your volume",
   "voiceShowDetail": "Show number",
   "voiceHideDetail": "Hide number",
-  "voiceCompletedTitle": "Practice Complete",
+  "voiceCompletedTitle": "اكتمل التمرين",
   "voiceCompletedDurationLabel": "This session",
-  "voiceCompletedTargetLabel": "Time at target volume",
-  "voiceCompletedEncourageGood": "Great job! Keep up the habit of speaking loudly.",
-  "voiceCompletedEncourageTryMore": "Good try. Aim to speak a bit louder next time.",
+  "voiceCompletedTargetLabel": "الوقت عند مستوى الصوت المستهدف",
+  "voiceCompletedEncourageGood": "أحسنت! واصل عادة التحدث بصوت عالٍ.",
+  "voiceCompletedEncourageTryMore": "محاولة جيدة. حاول التحدث بصوت أعلى قليلًا في المرة القادمة.",
   "voiceRetryButton": "Practice Again",
   "voiceFinishButton": "Done",
-  "voicePracticeFooterHint": "This exercise encourages speaking loudly for voice training. For reference only, not a medical diagnosis.",
-  "voiceSessionTooShort": "Session was too short and was not saved"
+  "voicePracticeFooterHint": "يشجّع هذا التمرين على التحدث بصوت عالٍ لتدريب الصوت. للمرجع فقط، وليس تشخيصًا طبيًا.",
+  "voiceSessionTooShort": "كانت الجلسة قصيرة جدًا ولم تُحفظ"
 }

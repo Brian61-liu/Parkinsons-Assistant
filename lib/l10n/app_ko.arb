@@ -101,11 +101,11 @@
   "syncToCloud": "클라우드에 동기화",
   "dataSynced": "데이터가 성공적으로 동기화되었습니다",
   "syncing": "Syncing…",
-  "syncFailed": "Sync failed. Check your network and try again.",
-  "syncFailedHint": "Sync failed — tap to retry",
+  "syncFailed": "동기화에 실패했습니다. 네트워크를 확인한 후 다시 시도하세요.",
+  "syncFailedHint": "동기화 실패 — 탭하여 다시 시도",
   "syncRetry": "Retry",
-  "loginRequiredForSync": "Please sign in to use cloud sync",
-  "lastSyncedAt": "Last synced: {time}",
+  "loginRequiredForSync": "클라우드 동기화를 사용하려면 로그인하세요",
+  "lastSyncedAt": "마지막 동기화: {time}",
   "privacyPolicy": "개인정보 보호정책",
   "privacyPolicyIntro": "소개",
   "privacyPolicyIntroText": "Amplio는 귀하의 개인정보와 건강 데이터 보호에 최선을 다합니다. 본 정책은 정보 수집, 사용, 저장, 보호에 대해 설명합니다.",
@@ -345,42 +345,42 @@
     "description": "Training type label"
   },
   "medicationList": "Medication list",
-  "medicationListEnable": "Set up medication list",
-  "medicationDisclaimer": "Amplio's medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. All data stays on this device only.",
-  "medicationDisclaimerAccept": "I understand and enable",
+  "medicationListEnable": "복약 목록 설정",
+  "medicationDisclaimer": "Amplio 복약 목록은 직접 시간을 기록하도록 돕습니다. 의학적 조언이 아니며 용량 안내를 제공하지 않습니다. 모든 데이터는 이 기기에만 저장됩니다.",
+  "medicationDisclaimerAccept": "이해했으며 활성화합니다",
   "medicationLabel": "Label",
-  "medicationLabelHint": "e.g. After breakfast (nickname is fine)",
+  "medicationLabelHint": "예: 아침 식사 후(별명 사용 가능)",
   "medicationTime": "Time",
   "medicationTaken": "Taken",
   "medicationUndo": "Undo",
-  "medicationUndoConfirm": "Remove today's check-in for this item?",
-  "medicationTodayProgress": "Today {done}/{total}",
+  "medicationUndoConfirm": "이 항목의 오늘 체크인을 삭제할까요?",
+  "medicationTodayProgress": "오늘 {done}/{total}",
   "medicationManage": "Manage",
   "medicationAdd": "Add reminder",
   "medicationEdit": "Edit reminder",
-  "medicationClose": "Turn off medication list",
-  "medicationCloseConfirm": "You can hide the list or also delete all medication data on this device.",
+  "medicationClose": "복약 목록 끄기",
+  "medicationCloseConfirm": "목록을 숨기거나 이 기기의 모든 복약 데이터를 삭제할 수도 있습니다.",
   "medicationCloseHideOnly": "Hide only",
-  "medicationCloseAndDelete": "Hide and delete all data",
-  "medicationDeleteAllData": "Delete medication list data",
-  "medicationDeleteAllDataDescription": "Permanently delete all medication reminders and check-ins on this device.",
-  "medicationDeleteAllDataConfirm": "Delete all medication list data on this device? This cannot be undone.",
+  "medicationCloseAndDelete": "숨기고 모든 데이터 삭제",
+  "medicationDeleteAllData": "복약 목록 데이터 삭제",
+  "medicationDeleteAllDataDescription": "이 기기의 모든 복약 알림과 체크인을 영구 삭제합니다.",
+  "medicationDeleteAllDataConfirm": "이 기기의 복약 목록 데이터를 모두 삭제할까요? 이 작업은 되돌릴 수 없습니다.",
   "medicationCollapse": "Collapse",
   "medicationExpand": "Expand",
-  "medicationEmptyToday": "No reminders for today. Add one in Manage.",
+  "medicationEmptyToday": "오늘 알림이 없습니다. 관리에서 추가하세요.",
   "medicationCompletedAt": "Done at {time}",
   "medicationSave": "Save",
   "medicationDeleteReminder": "Delete reminder",
-  "medicationDeleteReminderConfirm": "Delete this reminder?",
-  "medicationNoReminders": "No reminders yet",
-  "medicationDeleteSuccess": "Medication list data deleted",
+  "medicationDeleteReminderConfirm": "이 알림을 삭제할까요?",
+  "medicationNoReminders": "아직 알림이 없습니다",
+  "medicationDeleteSuccess": "복약 목록 데이터가 삭제되었습니다",
   "rehabReport": "Rehab report",
-  "rehabReportDisclaimer": "For rehabilitation reference only. Not a medical diagnosis and does not replace advice from your care team.",
+  "rehabReportDisclaimer": "재활 참고용입니다. 의학적 진단이 아니며 케어팀의 조언을 대체하지 않습니다.",
   "reportOverallScore": "Overall score",
-  "reportDailyProgress": "Today's goals: {percent}%",
-  "reportWeeklyProgress": "This week: {percent}%",
-  "reportStreak": "Streak: {days} days",
-  "reportNoData": "Not enough training data yet",
+  "reportDailyProgress": "오늘 목표: {percent}%",
+  "reportWeeklyProgress": "이번 주: {percent}%",
+  "reportStreak": "연속: {days}일",
+  "reportNoData": "아직 훈련 데이터가 부족합니다",
   "handTraining": "Hand",
   "voiceTrainingShort": "Voice",
   "motionTrainingShort": "Movement",
@@ -400,9 +400,9 @@
   "trainingStreakLabel": "Training Streak",
   "voiceClarity": "Voice Clarity",
   "handStability": "Hand Stability",
-  "movementAbility": "Movement Ability",
+  "movementAbility": "동작 훈련",
   "medicationReminder": "Medication",
-  "lastTrainingAgo": "Last training · {timeAgo}",
+  "lastTrainingAgo": "마지막 훈련 · {timeAgo}",
   "@lastTrainingAgo": {
     "placeholders": {
       "timeAgo": {
@@ -410,7 +410,7 @@
       }
     }
   },
-  "lastMeasurementAgo": "Last measured · {timeAgo}",
+  "lastMeasurementAgo": "마지막 측정 · {timeAgo}",
   "@lastMeasurementAgo": {
     "placeholders": {
       "timeAgo": {
@@ -429,7 +429,7 @@
     }
   },
   "noTrainingYet": "No training yet",
-  "noMeasurementYet": "No measurement yet",
+  "noMeasurementYet": "아직 측정 없음",
   "tapToStart": "Tap to start",
   "durationSec": "{count}s",
   "@durationSec": {
@@ -449,7 +449,7 @@
   },
   "voiceSessionCount": "1 session",
   "handMeasurementCount": "1 measurement",
-  "motionCompletionCount": "{done}/{total} reps",
+  "motionCompletionCount": "{done}/{total}회",
   "@motionCompletionCount": {
     "placeholders": {
       "done": {
@@ -460,9 +460,9 @@
       }
     }
   },
-  "medicationSetupPrompt": "Set up medication reminders",
-  "medicationSetupSubtitle": "Saved on this device only",
-  "medicationNoUpcoming": "No upcoming reminders today",
+  "medicationSetupPrompt": "복약 알림 설정",
+  "medicationSetupSubtitle": "이 기기에만 저장",
+  "medicationNoUpcoming": "오늘 예정된 알림 없음",
   "medicationNextDoseLabel": "Next dose",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
@@ -474,7 +474,7 @@
   },
   "medicationStatusUpcoming": "Upcoming",
   "medicationStatusPending": "Pending",
-  "medicationNotificationBody": "Time for: {label}",
+  "medicationNotificationBody": "복약 시간: {label}",
   "@medicationNotificationBody": {
     "placeholders": {
       "label": {
@@ -482,12 +482,12 @@
       }
     }
   },
-  "medicationNotificationPermissionNote": "Optional: allow notifications so Amplio can remind you at the times you set. Notifications stay on this device.",
+  "medicationNotificationPermissionNote": "선택 사항: 알림을 허용하면 Amplio가 설정한 시간에 이 기기에서 알려 줍니다. 알림은 이 기기에만 유지됩니다.",
   "recentActivity": "Recent Activity",
-  "nonMedicalDisclaimerTitle": "For reference only",
-  "nonMedicalDisclaimerBody": "Measurements shown are for rehabilitation training reference only. They are not a medical diagnosis and do not replace advice from your healthcare team.",
-  "voicePrepHint": "Sit comfortably. Hold your phone about 30 cm from your mouth.",
-  "voicePrepDurationHint": "Practice for about {seconds} seconds",
+  "nonMedicalDisclaimerTitle": "참고용입니다",
+  "nonMedicalDisclaimerBody": "표시된 측정값은 재활 훈련 참고용입니다. 의학적 진단이 아니며 의료팀의 조언을 대체하지 않습니다.",
+  "voicePrepHint": "편하게 앉으세요. 휴대폰을 입에서 약 30cm 떨어뜨려 드세요.",
+  "voicePrepDurationHint": "약 {seconds}초 동안 연습합니다",
   "@voicePrepDurationHint": {
     "placeholders": {
       "seconds": {
@@ -495,8 +495,8 @@
       }
     }
   },
-  "voicePrepEnvironmentHint": "Practice in a quiet room for best results",
-  "voiceCalibratingCountdown": "Please stay quiet · {seconds}s",
+  "voicePrepEnvironmentHint": "조용한 방에서 연습하면 더 좋습니다",
+  "voiceCalibratingCountdown": "조용히 해주세요 · {seconds}초",
   "@voiceCalibratingCountdown": {
     "placeholders": {
       "seconds": {
@@ -504,7 +504,7 @@
       }
     }
   },
-  "voiceElapsedLabel": "Practiced {seconds}s",
+  "voiceElapsedLabel": "연습 {seconds}초",
   "@voiceElapsedLabel": {
     "placeholders": {
       "seconds": {
@@ -512,7 +512,7 @@
       }
     }
   },
-  "voiceTargetDurationChip": "Goal: {seconds}s",
+  "voiceTargetDurationChip": "목표: {seconds}초",
   "@voiceTargetDurationChip": {
     "placeholders": {
       "seconds": {
@@ -524,13 +524,13 @@
   "voiceLegendYours": "Your volume",
   "voiceShowDetail": "Show number",
   "voiceHideDetail": "Hide number",
-  "voiceCompletedTitle": "Practice Complete",
+  "voiceCompletedTitle": "연습 완료",
   "voiceCompletedDurationLabel": "This session",
-  "voiceCompletedTargetLabel": "Time at target volume",
-  "voiceCompletedEncourageGood": "Great job! Keep up the habit of speaking loudly.",
-  "voiceCompletedEncourageTryMore": "Good try. Aim to speak a bit louder next time.",
+  "voiceCompletedTargetLabel": "목표 음량 도달 시간",
+  "voiceCompletedEncourageGood": "잘하셨어요! 크게 말하는 습관을 이어가세요.",
+  "voiceCompletedEncourageTryMore": "좋은 시도예요. 다음에는 조금 더 크게 말해 보세요.",
   "voiceRetryButton": "Practice Again",
   "voiceFinishButton": "Done",
-  "voicePracticeFooterHint": "This exercise encourages speaking loudly for voice training. For reference only, not a medical diagnosis.",
-  "voiceSessionTooShort": "Session was too short and was not saved"
+  "voicePracticeFooterHint": "이 연습은 음성 훈련을 위해 크게 말하기를 권장합니다. 참고용이며 의학적 진단이 아닙니다.",
+  "voiceSessionTooShort": "세션이 너무 짧아 저장되지 않았습니다"
 }
