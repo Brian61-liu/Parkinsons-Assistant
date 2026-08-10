@@ -1,8 +1,10 @@
 /// 本地用药提醒项（非处方；用户自定义短标签 + 时间点）。
+/// [cloudId] 跨设备稳定键；登录后同步到 Firestore。
 class MedicationReminder {
   static const int maxLabelLength = 32;
 
   final int? id;
+  final String? cloudId;
   final String label;
   final String timeHhmm;
   final bool enabled;
@@ -11,6 +13,7 @@ class MedicationReminder {
 
   const MedicationReminder({
     this.id,
+    this.cloudId,
     required this.label,
     required this.timeHhmm,
     this.enabled = true,
@@ -23,8 +26,10 @@ class MedicationReminder {
     required String timeHhmm,
     bool enabled = true,
     int sortOrder = 0,
+    String? cloudId,
   }) {
     return MedicationReminder(
+      cloudId: cloudId,
       label: label.trim().length > maxLabelLength
           ? label.trim().substring(0, maxLabelLength)
           : label.trim(),
@@ -37,6 +42,7 @@ class MedicationReminder {
 
   Map<String, dynamic> toMap() => {
         if (id != null) 'id': id,
+        if (cloudId != null) 'cloud_id': cloudId,
         'label': label,
         'time_hhmm': timeHhmm,
         'enabled': enabled ? 1 : 0,
@@ -47,6 +53,7 @@ class MedicationReminder {
   factory MedicationReminder.fromMap(Map<String, dynamic> map) {
     return MedicationReminder(
       id: map['id'] as int?,
+      cloudId: map['cloud_id'] as String?,
       label: map['label'] as String,
       timeHhmm: map['time_hhmm'] as String,
       enabled: (map['enabled'] as int) != 0,
@@ -57,6 +64,7 @@ class MedicationReminder {
 
   MedicationReminder copyWith({
     int? id,
+    String? cloudId,
     String? label,
     String? timeHhmm,
     bool? enabled,
@@ -65,6 +73,7 @@ class MedicationReminder {
   }) {
     return MedicationReminder(
       id: id ?? this.id,
+      cloudId: cloudId ?? this.cloudId,
       label: label ?? this.label,
       timeHhmm: timeHhmm ?? this.timeHhmm,
       enabled: enabled ?? this.enabled,

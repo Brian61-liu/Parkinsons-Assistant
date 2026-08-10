@@ -146,6 +146,11 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       }
+      // 云端可能刚拉回用药提醒/开启了功能开关，强制用药卡片重新挂载读取最新状态
+      // （否则它在 initState 时已读过一次旧状态，之后不会自己再刷新）。
+      if (mounted) {
+        setState(() => _medicationCardEpoch++);
+      }
       await _loadDashboard();
     } catch (e) {
       await _syncStatus.endFailure(e);

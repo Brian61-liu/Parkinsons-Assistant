@@ -22,6 +22,26 @@ void main() {
     });
   });
 
+  group('CloudSyncService.medicationCheckInDocId', () {
+    test('avoids colon and includes reminder id + date + time', () {
+      final id = CloudSyncService.medicationCheckInDocId(
+        reminderCloudId: 'abc123',
+        scheduledDate: '2026-08-07',
+        scheduledTime: '08:30',
+      );
+      expect(id, 'abc123_2026-08-07_0830');
+      expect(id, isNot(contains(':')));
+    });
+  });
+
+  group('CloudSyncService.newMedicationCloudId', () {
+    test('returns 32 hex chars', () {
+      final id = CloudSyncService.newMedicationCloudId();
+      expect(id.length, 32);
+      expect(RegExp(r'^[0-9a-f]+$').hasMatch(id), isTrue);
+    });
+  });
+
   group('CloudSyncService.clampFinite', () {
     test('clamps to min/max', () {
       expect(CloudSyncService.clampFinite(-1, 0, 30), 0);

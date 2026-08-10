@@ -1,6 +1,6 @@
 import 'medication_reminder.dart';
 
-/// 手动服药打卡记录（仅本机；MVP 状态为 taken）。
+/// 手动服药打卡记录（MVP 状态为 taken；登录用户可同步云端）。
 class MedicationCheckIn {
   final int? id;
   final int reminderId;
@@ -37,6 +37,23 @@ class MedicationCheckIn {
       status: map['status'] as String? ?? 'taken',
     );
   }
+}
+
+/// 云端拉取用的打卡（按 reminder [cloudId] 关联，不依赖本机自增 id）。
+class MedicationCheckInCloud {
+  final String reminderCloudId;
+  final String scheduledDate;
+  final String scheduledTime;
+  final DateTime checkedAt;
+  final String status;
+
+  const MedicationCheckInCloud({
+    required this.reminderCloudId,
+    required this.scheduledDate,
+    required this.scheduledTime,
+    required this.checkedAt,
+    this.status = 'taken',
+  });
 }
 
 /// 今日清单行：提醒 + 是否已打卡。

@@ -61,6 +61,10 @@ void main() {
     expect(names, contains('medication_check_ins'));
     expect(names, isNot(contains('assessment_results')));
 
+    final medCols = await db.rawQuery('PRAGMA table_info(medication_reminders)');
+    final medColNames = medCols.map((r) => r['name'] as String).toSet();
+    expect(medColNames, contains('cloud_id'));
+
     final rows = await db.query('tremor_records');
     expect(rows, hasLength(1));
     final accel = rows.first['accelerometerData'] as String;

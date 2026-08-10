@@ -8,6 +8,7 @@ import '../models/medication_reminder.dart';
 import '../models/medication_check_in.dart';
 import 'cloud_sync_service.dart';
 import 'cloud_sync_status_service.dart';
+import 'medication_reminder_service.dart';
 import 'security_service.dart';
 
 // 数据库服务类
@@ -15,7 +16,8 @@ class DatabaseService {
   static Database? _database;
   static const String _dbName = 'parkinson_rehab.db';
   // v8：敏感 TEXT 字段 AES-GCM 落盘（accelerometerData、medication label）
-  static const int _dbVersion = 8;
+  // v9：medication_reminders.cloud_id（跨设备同步键）
+  static const int _dbVersion = 9;
 
   @visibleForTesting
   static int get schemaVersion => _dbVersion;
@@ -109,12 +111,18 @@ class DatabaseService {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS medication_reminders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        cloud_id TEXT,
         label TEXT NOT NULL,
         time_hhmm TEXT NOT NULL,
         enabled INTEGER NOT NULL DEFAULT 1,
         sort_order INTEGER NOT NULL DEFAULT 0,
         created_at TEXT NOT NULL
       )
+    ''');
+    await db.execute('''
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_med_reminder_cloud_id
+        ON medication_reminders(cloud_id)
+        WHERE cloud_id IS NOT NULL
     ''');
     await db.execute('''
       CREATE TABLE IF NOT EXISTS medication_check_ins (
@@ -186,6 +194,38 @@ class DatabaseService {
     if (oldVersion < 8) {
       await _migrateSensitiveFieldsToEncrypted(db);
     }
+    if (oldVersion < 9) {
+      await _migrateMedicationCloudIds(db);
+    }
+  }
+
+  /// Add stable [cloud_id] for medication reminders (Firestore sync key).
+  Future<void> _migrateMedicationCloudIds(Database db) async {
+    try {
+      await db.execute(
+        'ALTER TABLE medication_reminders ADD COLUMN cloud_id TEXT',
+      );
+    } catch (e) {
+      debugPrint('medication cloud_id column may already exist: $e');
+    }
+    final rows = await db.query('medication_reminders');
+    for (final row in rows) {
+      final id = row['id'] as int?;
+      if (id == null) continue;
+      final existing = row['cloud_id'] as String?;
+      if (existing != null && existing.isNotEmpty) continue;
+      await db.update(
+        'medication_reminders',
+        {'cloud_id': CloudSyncService.newMedicationCloudId()},
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    }
+    await db.execute('''
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_med_reminder_cloud_id
+        ON medication_reminders(cloud_id)
+        WHERE cloud_id IS NOT NULL
+    ''');
   }
 
   /// Encrypt sensitive TEXT columns that were stored as plaintext before v8.
@@ -418,12 +458,26 @@ class DatabaseService {
     await db.delete('medication_reminders');
   }
 
-  // ========== 用药清单（仅本地，不同步云端）==========
+  // ========== 用药清单（登录用户可同步 Firestore）==========
 
   Future<int> insertMedicationReminder(MedicationReminder reminder) async {
     final db = await database;
-    final storageMap = await _encryptMedicationStorageMap(reminder.toMap());
-    return await db.insert('medication_reminders', storageMap);
+    final withCloudId = reminder.cloudId == null || reminder.cloudId!.isEmpty
+        ? reminder.copyWith(cloudId: CloudSyncService.newMedicationCloudId())
+        : reminder;
+    final storageMap = await _encryptMedicationStorageMap(withCloudId.toMap());
+    final localId = await db.insert('medication_reminders', storageMap);
+    final saved = withCloudId.copyWith(id: localId);
+    // ignore: discarded_futures
+    _cloudSyncService.syncMedicationReminderToCloud(saved).then((ok) {
+      if (!ok) {
+        // ignore: discarded_futures
+        CloudSyncStatusService.instance.markBackgroundFailure(
+          'medication reminder sync failed',
+        );
+      }
+    });
+    return localId;
   }
 
   Future<int> updateMedicationReminder(MedicationReminder reminder) async {
@@ -431,22 +485,51 @@ class DatabaseService {
     if (reminder.id == null) {
       throw ArgumentError('reminder.id is required for update');
     }
-    final storageMap = await _encryptMedicationStorageMap(reminder.toMap());
-    return await db.update(
+    var toSave = reminder;
+    if (toSave.cloudId == null || toSave.cloudId!.isEmpty) {
+      toSave = toSave.copyWith(cloudId: CloudSyncService.newMedicationCloudId());
+    }
+    final storageMap = await _encryptMedicationStorageMap(toSave.toMap());
+    final n = await db.update(
       'medication_reminders',
       storageMap,
       where: 'id = ?',
-      whereArgs: [reminder.id],
+      whereArgs: [toSave.id],
     );
+    // ignore: discarded_futures
+    _cloudSyncService.syncMedicationReminderToCloud(toSave).then((ok) {
+      if (!ok) {
+        // ignore: discarded_futures
+        CloudSyncStatusService.instance.markBackgroundFailure(
+          'medication reminder sync failed',
+        );
+      }
+    });
+    return n;
   }
 
   Future<int> deleteMedicationReminder(int id) async {
     final db = await database;
-    return await db.delete(
+    String? cloudId;
+    final rows = await db.query(
+      'medication_reminders',
+      columns: ['cloud_id'],
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (rows.isNotEmpty) {
+      cloudId = rows.first['cloud_id'] as String?;
+    }
+    final n = await db.delete(
       'medication_reminders',
       where: 'id = ?',
       whereArgs: [id],
     );
+    if (cloudId != null && cloudId.isNotEmpty) {
+      // ignore: discarded_futures
+      _cloudSyncService.deleteMedicationReminderFromCloud(cloudId);
+    }
+    return n;
   }
 
   Future<List<MedicationReminder>> getAllMedicationReminders() async {
@@ -477,6 +560,12 @@ class DatabaseService {
       reminders.add(MedicationReminder.fromMap(decrypted));
     }
     return reminders;
+  }
+
+  Future<List<MedicationCheckIn>> getAllMedicationCheckIns() async {
+    final db = await database;
+    final maps = await db.query('medication_check_ins');
+    return maps.map(MedicationCheckIn.fromMap).toList();
   }
 
   Future<List<MedicationTodayItem>> getTodayMedicationItems({
@@ -515,16 +604,39 @@ class DatabaseService {
     required String scheduledTime,
   }) async {
     final db = await database;
+    final checkedAt = DateTime.now();
     await db.insert(
       'medication_check_ins',
       MedicationCheckIn(
         reminderId: reminderId,
         scheduledDate: scheduledDate,
         scheduledTime: scheduledTime,
-        checkedAt: DateTime.now(),
+        checkedAt: checkedAt,
       ).toMap(),
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
+
+    final reminders = await getAllMedicationReminders();
+    final match = reminders.where((r) => r.id == reminderId).firstOrNull;
+    final cloudId = match?.cloudId;
+    if (cloudId != null && cloudId.isNotEmpty) {
+      // ignore: discarded_futures
+      _cloudSyncService
+          .syncMedicationCheckInToCloud(
+            reminderCloudId: cloudId,
+            scheduledDate: scheduledDate,
+            scheduledTime: scheduledTime,
+            checkedAt: checkedAt,
+          )
+          .then((ok) {
+        if (!ok) {
+          // ignore: discarded_futures
+          CloudSyncStatusService.instance.markBackgroundFailure(
+            'medication check-in sync failed',
+          );
+        }
+      });
+    }
   }
 
   Future<int> undoMedicationCheckIn({
@@ -533,18 +645,33 @@ class DatabaseService {
     required String scheduledTime,
   }) async {
     final db = await database;
-    return await db.delete(
+    final reminders = await getAllMedicationReminders();
+    final match = reminders.where((r) => r.id == reminderId).firstOrNull;
+    final cloudId = match?.cloudId;
+
+    final n = await db.delete(
       'medication_check_ins',
       where:
           'reminder_id = ? AND scheduled_date = ? AND scheduled_time = ?',
       whereArgs: [reminderId, scheduledDate, scheduledTime],
     );
+    if (cloudId != null && cloudId.isNotEmpty) {
+      // ignore: discarded_futures
+      _cloudSyncService.deleteMedicationCheckInFromCloud(
+        reminderCloudId: cloudId,
+        scheduledDate: scheduledDate,
+        scheduledTime: scheduledTime,
+      );
+    }
+    return n;
   }
 
   Future<void> deleteAllMedicationData() async {
     final db = await database;
     await db.delete('medication_check_ins');
     await db.delete('medication_reminders');
+    // ignore: discarded_futures
+    _cloudSyncService.deleteAllMedicationDataFromCloud();
   }
 
   Future<int> purgeMedicationCheckInsOlderThan(int days) async {
@@ -576,6 +703,12 @@ class DatabaseService {
         cloudData['tremorRecords'] as List<TremorRecord>;
     final cloudMovementRecords =
         cloudData['movementRecords'] as List<MovementTrainingRecord>;
+    final cloudMedReminders =
+        cloudData['medicationReminders'] as List<MedicationReminder>;
+    final cloudMedCheckIns =
+        cloudData['medicationCheckIns'] as List<MedicationCheckInCloud>;
+    final medSettings =
+        cloudData['medicationSettings'] as Map<String, dynamic>?;
 
     final db = await database;
 
@@ -611,25 +744,101 @@ class DatabaseService {
       }
     }
 
+    await _mergeMedicationFromCloud(
+      cloudReminders: cloudMedReminders,
+      cloudCheckIns: cloudMedCheckIns,
+    );
+
+    final medService = MedicationReminderService(databaseService: this);
+    await medService.applyAfterCloudPull(
+      settings: medSettings,
+      hasCloudMedicationData:
+          cloudMedReminders.isNotEmpty || cloudMedCheckIns.isNotEmpty,
+    );
+
     // 同步本地数据到云端（确保云端有最新的本地数据）
+    final localMedReminders = await getAllMedicationReminders();
+    final localMedCheckIns = await getAllMedicationCheckIns();
+    final localMedSettings = await medService.currentCloudSettingsPayload();
     await _cloudSyncService.syncAllDataToCloud(
       tremorRecords: localTremorRecords,
       movementRecords: localMovementRecords,
+      medicationReminders: localMedReminders,
+      medicationCheckIns: localMedCheckIns,
+      medicationSettings: localMedSettings,
     );
   }
 
+  Future<void> _mergeMedicationFromCloud({
+    required List<MedicationReminder> cloudReminders,
+    required List<MedicationCheckInCloud> cloudCheckIns,
+  }) async {
+    final db = await database;
+    final local = await getAllMedicationReminders();
+    final byCloudId = <String, MedicationReminder>{};
+    for (final r in local) {
+      if (r.cloudId != null && r.cloudId!.isNotEmpty) {
+        byCloudId[r.cloudId!] = r;
+      }
+    }
+
+    for (final cloud in cloudReminders) {
+      final cid = cloud.cloudId;
+      if (cid == null || cid.isEmpty) continue;
+      if (byCloudId.containsKey(cid)) continue;
+      final storageMap = await _encryptMedicationStorageMap(
+        cloud.copyWith(id: null).toMap(),
+      );
+      final localId = await db.insert('medication_reminders', storageMap);
+      byCloudId[cid] = cloud.copyWith(id: localId);
+    }
+
+    // Refresh map after inserts
+    final refreshed = await getAllMedicationReminders();
+    final cloudToLocal = <String, int>{};
+    for (final r in refreshed) {
+      if (r.cloudId != null && r.cloudId!.isNotEmpty && r.id != null) {
+        cloudToLocal[r.cloudId!] = r.id!;
+      }
+    }
+
+    for (final c in cloudCheckIns) {
+      final localReminderId = cloudToLocal[c.reminderCloudId];
+      if (localReminderId == null) continue;
+      await db.insert(
+        'medication_check_ins',
+        MedicationCheckIn(
+          reminderId: localReminderId,
+          scheduledDate: c.scheduledDate,
+          scheduledTime: c.scheduledTime,
+          checkedAt: c.checkedAt,
+          status: c.status,
+        ).toMap(),
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+    }
+  }
+
   /// 同步所有本地数据到云端。失败时抛出，由 UI 展示。
-  Future<void> syncToCloud() async {
+  Future<void> syncToCloud({Map<String, dynamic>? medicationSettings}) async {
     if (!_cloudSyncService.isUserLoggedIn) {
       return;
     }
 
     final tremorRecords = await getAllTremorRecords();
     final movementRecords = await getAllMovementTrainingRecords();
+    final medicationReminders = await getAllMedicationReminders();
+    final medicationCheckIns = await getAllMedicationCheckIns();
+    final settings = medicationSettings ??
+        await MedicationReminderService(databaseService: this)
+            .currentCloudSettingsPayload();
 
     await _cloudSyncService.syncAllDataToCloud(
       tremorRecords: tremorRecords,
       movementRecords: movementRecords,
+      medicationReminders: medicationReminders,
+      medicationCheckIns: medicationCheckIns,
+      medicationSettings: settings,
     );
   }
 

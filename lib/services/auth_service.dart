@@ -557,7 +557,7 @@ class AuthService {
         'movementTrainingRecords': movementSource,
       },
       'note':
-          'Medication list is device-local only and is not included unless separately consented.',
+          'Medication list is not included in export unless separately consented. Signed-in accounts may sync medication reminders to the cloud; export still requires separate consent.',
     };
   }
 
@@ -622,6 +622,8 @@ class AuthService {
     const subcollections = [
       'tremor_records',
       'movement_training_records',
+      'medication_reminders',
+      'medication_check_ins',
       'audit_logs',
       'data_export_requests',
       'settings',

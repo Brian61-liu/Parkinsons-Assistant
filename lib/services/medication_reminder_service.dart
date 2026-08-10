@@ -5,12 +5,13 @@ import '../models/medication_check_in.dart';
 import 'database_service.dart';
 import 'medication_notification_service.dart';
 
-const String _kFeatureEnabled = 'medication_feature_enabled';
-const String _kDisclaimerAcceptedAt = 'medication_disclaimer_accepted_at';
-const String _kCardCollapsed = 'medication_card_collapsed';
-const String _kAutoPurgeCheckins = 'medication_auto_purge_checkins';
+const String kMedicationFeatureEnabled = 'medication_feature_enabled';
+const String kMedicationDisclaimerAcceptedAt = 'medication_disclaimer_accepted_at';
+const String kMedicationCardCollapsed = 'medication_card_collapsed';
+const String kMedicationAutoPurgeCheckins = 'medication_auto_purge_checkins';
 
-/// 用药清单：本机 SQLite + SharedPreferences UI 状态 + 本地到点通知。
+/// 用药清单：本机 SQLite + SharedPreferences UI 状态 + 本地到点通知；
+/// 登录用户经 [DatabaseService] / [CloudSyncService] 同步提醒与打卡。
 class MedicationReminderService {
   final DatabaseService _db;
   final MedicationNotificationService _notifications;
@@ -30,51 +31,107 @@ class MedicationReminderService {
 
   Future<bool> isFeatureEnabled() async {
     final prefs = await _store;
-    return prefs.getBool(_kFeatureEnabled) ?? false;
+    return prefs.getBool(kMedicationFeatureEnabled) ?? false;
   }
 
   Future<bool> hasAcceptedDisclaimer() async {
     final prefs = await _store;
-    return prefs.getString(_kDisclaimerAcceptedAt) != null;
+    return prefs.getString(kMedicationDisclaimerAcceptedAt) != null;
+  }
+
+  Future<Map<String, dynamic>> currentCloudSettingsPayload() async {
+    final prefs = await _store;
+    return {
+      'featureEnabled': prefs.getBool(kMedicationFeatureEnabled) ?? false,
+      'disclaimerAcceptedAt':
+          prefs.getString(kMedicationDisclaimerAcceptedAt),
+    };
+  }
+
+  /// 云端拉取后：若账户已开启用药清单或有云端数据，启用本机功能并重建通知。
+  Future<void> applyAfterCloudPull({
+    required Map<String, dynamic>? settings,
+    required bool hasCloudMedicationData,
+  }) async {
+    final prefs = await _store;
+    final cloudEnabled = settings?['featureEnabled'] == true;
+    if (!cloudEnabled && !hasCloudMedicationData) return;
+
+    final acceptedAt = settings?['disclaimerAcceptedAt'];
+    if (acceptedAt is String && acceptedAt.isNotEmpty) {
+      await prefs.setString(kMedicationDisclaimerAcceptedAt, acceptedAt);
+    } else if (prefs.getString(kMedicationDisclaimerAcceptedAt) == null) {
+      await prefs.setString(
+        kMedicationDisclaimerAcceptedAt,
+        DateTime.now().toIso8601String(),
+      );
+    }
+    await prefs.setBool(kMedicationFeatureEnabled, true);
+    await _notifications.requestPermission();
+    await rescheduleNotifications();
+    debugPrint('MedicationReminderService: enabled from cloud pull');
   }
 
   Future<void> acceptDisclaimerAndEnable() async {
     final prefs = await _store;
-    await prefs.setString(
-      _kDisclaimerAcceptedAt,
-      DateTime.now().toIso8601String(),
-    );
-    await prefs.setBool(_kFeatureEnabled, true);
+    final acceptedAt = DateTime.now().toIso8601String();
+    await prefs.setString(kMedicationDisclaimerAcceptedAt, acceptedAt);
+    await prefs.setBool(kMedicationFeatureEnabled, true);
     await _notifications.requestPermission();
     await rescheduleNotifications();
+    // ignore: discarded_futures
+    _db.syncToCloud(
+      medicationSettings: {
+        'featureEnabled': true,
+        'disclaimerAcceptedAt': acceptedAt,
+      },
+    ).then(
+      (_) {},
+      onError: (Object e, StackTrace _) {
+        debugPrint('MedicationReminderService: settings sync failed: $e');
+      },
+    );
     debugPrint('MedicationReminderService: feature enabled');
   }
 
   Future<void> disableFeature({bool deleteAllData = false}) async {
     final prefs = await _store;
-    await prefs.setBool(_kFeatureEnabled, false);
-    await prefs.setBool(_kCardCollapsed, false);
+    await prefs.setBool(kMedicationFeatureEnabled, false);
+    await prefs.setBool(kMedicationCardCollapsed, false);
     await _notifications.cancelAll();
     if (deleteAllData) {
       await _db.deleteAllMedicationData();
       debugPrint('MedicationReminderService: all medication data deleted');
     }
+    // ignore: discarded_futures
+    _db.syncToCloud(
+      medicationSettings: {
+        'featureEnabled': false,
+        'disclaimerAcceptedAt':
+            prefs.getString(kMedicationDisclaimerAcceptedAt),
+      },
+    ).then(
+      (_) {},
+      onError: (Object e, StackTrace _) {
+        debugPrint('MedicationReminderService: settings sync failed: $e');
+      },
+    );
     debugPrint('MedicationReminderService: feature disabled');
   }
 
   Future<bool> isCardCollapsed() async {
     final prefs = await _store;
-    return prefs.getBool(_kCardCollapsed) ?? false;
+    return prefs.getBool(kMedicationCardCollapsed) ?? false;
   }
 
   Future<void> setCardCollapsed(bool collapsed) async {
     final prefs = await _store;
-    await prefs.setBool(_kCardCollapsed, collapsed);
+    await prefs.setBool(kMedicationCardCollapsed, collapsed);
   }
 
   Future<bool> isAutoPurgeEnabled() async {
     final prefs = await _store;
-    return prefs.getBool(_kAutoPurgeCheckins) ?? true;
+    return prefs.getBool(kMedicationAutoPurgeCheckins) ?? true;
   }
 
   Future<void> maybePurgeOldCheckIns() async {

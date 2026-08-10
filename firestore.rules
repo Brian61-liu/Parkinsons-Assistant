@@ -105,6 +105,46 @@ service cloud.firestore {
       }
       
       // ============================================
+      // 用药提醒（登录用户可选同步；标签为用户昵称非处方）
+      // ============================================
+      match /medication_reminders/{reminderId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasAll([
+            'cloudId', 'label', 'timeHhmm', 'enabled',
+            'sortOrder', 'createdAt'
+          ])
+          && isValidString(request.resource.data.cloudId, 64)
+          && request.resource.data.cloudId == reminderId
+          && isValidString(request.resource.data.label, 32)
+          && isValidString(request.resource.data.timeHhmm, 8)
+          && request.resource.data.enabled is bool
+          && request.resource.data.sortOrder is number
+          && request.resource.data.createdAt is string;
+        allow update: if isOwner(userId);
+        allow delete: if isOwner(userId);
+      }
+
+      // ============================================
+      // 用药打卡
+      // ============================================
+      match /medication_check_ins/{checkInId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasAll([
+            'reminderCloudId', 'scheduledDate', 'scheduledTime',
+            'checkedAt', 'status'
+          ])
+          && isValidString(request.resource.data.reminderCloudId, 64)
+          && isValidString(request.resource.data.scheduledDate, 16)
+          && isValidString(request.resource.data.scheduledTime, 8)
+          && request.resource.data.checkedAt is string
+          && isValidString(request.resource.data.status, 32);
+        allow update: if isOwner(userId);
+        allow delete: if isOwner(userId);
+      }
+      
+      // ============================================
       // 审计日志
       // ============================================
       match /audit_logs/{logId} {

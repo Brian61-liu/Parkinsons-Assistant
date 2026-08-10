@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import '../models/tremor_record.dart';
 import '../models/movement_training_record.dart';
+import '../models/medication_reminder.dart';
+import '../models/medication_check_in.dart';
 
 /// 云端同步服务
 /// 负责将本地数据同步到 Firestore，并支持跨设备数据同步
@@ -42,6 +45,24 @@ class CloudSyncService {
   /// Firestore / Console 对文档 ID 中的 `:` 不友好（ISO8601 会踩坑）。
   static String recordDocId(DateTime timestamp) =>
       't_${timestamp.toUtc().millisecondsSinceEpoch}';
+
+  /// 用药提醒跨设备稳定 ID（本地 SQLite + Firestore doc id）。
+  static String newMedicationCloudId() {
+    final r = Random.secure();
+    final bytes = List<int>.generate(16, (_) => r.nextInt(256));
+    return bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+  }
+
+  /// 用药打卡文档 ID（避免 `:`）。
+  @visibleForTesting
+  static String medicationCheckInDocId({
+    required String reminderCloudId,
+    required String scheduledDate,
+    required String scheduledTime,
+  }) {
+    final timeKey = scheduledTime.replaceAll(':', '');
+    return '${reminderCloudId}_${scheduledDate}_$timeKey';
+  }
 
   /// 确保写入到达服务端（避免离线缓存「假成功」）。
   /// 整体限时，防止飞行模式下 enableNetwork / set / get 永久挂起。
@@ -321,12 +342,281 @@ class CloudSyncService {
     }
   }
 
+  // ========== 用药清单同步 ==========
+
+  Future<bool> syncMedicationReminderToCloud(MedicationReminder reminder) async {
+    if (!isUserLoggedIn) return true;
+    final cloudId = reminder.cloudId;
+    if (cloudId == null || cloudId.isEmpty) {
+      debugPrint('同步用药提醒跳过: cloudId 为空');
+      return true;
+    }
+
+    final uid = _userId!;
+    try {
+      final label = reminder.label.length > MedicationReminder.maxLabelLength
+          ? reminder.label.substring(0, MedicationReminder.maxLabelLength)
+          : reminder.label;
+      final data = <String, dynamic>{
+        'cloudId': cloudId,
+        'label': label,
+        'timeHhmm': reminder.timeHhmm,
+        'enabled': reminder.enabled,
+        'sortOrder': reminder.sortOrder,
+        'createdAt': reminder.createdAt.toIso8601String(),
+        'syncedAt': FieldValue.serverTimestamp(),
+        if (reminder.id != null) 'localId': reminder.id,
+      };
+      final docRef = _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('medication_reminders')
+          .doc(cloudId);
+      await _commitToServer(
+        docRef: docRef,
+        data: data,
+        label: '用药提醒已同步到云端',
+      );
+      return true;
+    } catch (e) {
+      debugPrint('同步用药提醒失败 (uid=$uid): $e');
+      return false;
+    }
+  }
+
+  Future<void> deleteMedicationReminderFromCloud(String cloudId) async {
+    if (!isUserLoggedIn || cloudId.isEmpty) return;
+    try {
+      await _firestore
+          .collection('users')
+          .doc(_userId)
+          .collection('medication_reminders')
+          .doc(cloudId)
+          .delete();
+      await _firestore.waitForPendingWrites().timeout(
+        const Duration(seconds: 15),
+      );
+      debugPrint('云端用药提醒已删除: $cloudId');
+    } catch (e) {
+      debugPrint('删除云端用药提醒失败: $e');
+    }
+  }
+
+  Future<bool> syncMedicationCheckInToCloud({
+    required String reminderCloudId,
+    required String scheduledDate,
+    required String scheduledTime,
+    required DateTime checkedAt,
+    String status = 'taken',
+  }) async {
+    if (!isUserLoggedIn) return true;
+    final uid = _userId!;
+    try {
+      final docId = medicationCheckInDocId(
+        reminderCloudId: reminderCloudId,
+        scheduledDate: scheduledDate,
+        scheduledTime: scheduledTime,
+      );
+      final data = <String, dynamic>{
+        'reminderCloudId': reminderCloudId,
+        'scheduledDate': scheduledDate,
+        'scheduledTime': scheduledTime,
+        'checkedAt': checkedAt.toIso8601String(),
+        'status': status,
+        'syncedAt': FieldValue.serverTimestamp(),
+      };
+      final docRef = _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('medication_check_ins')
+          .doc(docId);
+      await _commitToServer(
+        docRef: docRef,
+        data: data,
+        label: '用药打卡已同步到云端',
+      );
+      return true;
+    } catch (e) {
+      debugPrint('同步用药打卡失败 (uid=$uid): $e');
+      return false;
+    }
+  }
+
+  Future<void> deleteMedicationCheckInFromCloud({
+    required String reminderCloudId,
+    required String scheduledDate,
+    required String scheduledTime,
+  }) async {
+    if (!isUserLoggedIn) return;
+    try {
+      final docId = medicationCheckInDocId(
+        reminderCloudId: reminderCloudId,
+        scheduledDate: scheduledDate,
+        scheduledTime: scheduledTime,
+      );
+      await _firestore
+          .collection('users')
+          .doc(_userId)
+          .collection('medication_check_ins')
+          .doc(docId)
+          .delete();
+      await _firestore.waitForPendingWrites().timeout(
+        const Duration(seconds: 15),
+      );
+    } catch (e) {
+      debugPrint('删除云端用药打卡失败: $e');
+    }
+  }
+
+  Future<bool> syncMedicationSettingsToCloud(Map<String, dynamic> settings) async {
+    if (!isUserLoggedIn) return true;
+    final uid = _userId!;
+    try {
+      final data = <String, dynamic>{
+        'featureEnabled': settings['featureEnabled'] == true,
+        if (settings['disclaimerAcceptedAt'] is String)
+          'disclaimerAcceptedAt': settings['disclaimerAcceptedAt'],
+        'syncedAt': FieldValue.serverTimestamp(),
+      };
+      final docRef = _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('settings')
+          .doc('medication');
+      await _commitToServer(
+        docRef: docRef,
+        data: data,
+        label: '用药设置已同步到云端',
+      );
+      return true;
+    } catch (e) {
+      debugPrint('同步用药设置失败 (uid=$uid): $e');
+      return false;
+    }
+  }
+
+  Future<Map<String, dynamic>?> getMedicationSettingsFromCloud() async {
+    if (!isUserLoggedIn) return null;
+    try {
+      final snap = await _firestore
+          .collection('users')
+          .doc(_userId)
+          .collection('settings')
+          .doc('medication')
+          .get(const GetOptions(source: Source.server))
+          .timeout(networkTimeout);
+      if (!snap.exists) return null;
+      return snap.data();
+    } catch (e) {
+      debugPrint('拉取用药设置失败: $e');
+      rethrow;
+    }
+  }
+
+  Future<List<MedicationReminder>> getMedicationRemindersFromCloud() async {
+    if (!isUserLoggedIn) return [];
+    final snapshot = await _firestore
+        .collection('users')
+        .doc(_userId)
+        .collection('medication_reminders')
+        .get(const GetOptions(source: Source.server))
+        .timeout(networkTimeout);
+
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      final createdRaw = data['createdAt'];
+      DateTime createdAt;
+      if (createdRaw is Timestamp) {
+        createdAt = createdRaw.toDate();
+      } else if (createdRaw is String) {
+        createdAt = DateTime.parse(createdRaw);
+      } else {
+        createdAt = DateTime.now();
+      }
+      return MedicationReminder(
+        cloudId: (data['cloudId'] as String?) ?? doc.id,
+        label: data['label'] as String? ?? '',
+        timeHhmm: data['timeHhmm'] as String? ?? '08:00',
+        enabled: data['enabled'] as bool? ?? true,
+        sortOrder: (data['sortOrder'] as num?)?.toInt() ?? 0,
+        createdAt: createdAt,
+      );
+    }).toList();
+  }
+
+  Future<List<MedicationCheckInCloud>> getMedicationCheckInsFromCloud() async {
+    if (!isUserLoggedIn) return [];
+    final snapshot = await _firestore
+        .collection('users')
+        .doc(_userId)
+        .collection('medication_check_ins')
+        .get(const GetOptions(source: Source.server))
+        .timeout(networkTimeout);
+
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      final checkedRaw = data['checkedAt'];
+      DateTime checkedAt;
+      if (checkedRaw is Timestamp) {
+        checkedAt = checkedRaw.toDate();
+      } else if (checkedRaw is String) {
+        checkedAt = DateTime.parse(checkedRaw);
+      } else {
+        checkedAt = DateTime.now();
+      }
+      return MedicationCheckInCloud(
+        reminderCloudId: data['reminderCloudId'] as String? ?? '',
+        scheduledDate: data['scheduledDate'] as String? ?? '',
+        scheduledTime: data['scheduledTime'] as String? ?? '',
+        checkedAt: checkedAt,
+        status: data['status'] as String? ?? 'taken',
+      );
+    }).toList();
+  }
+
+  Future<void> deleteAllMedicationDataFromCloud() async {
+    if (!isUserLoggedIn) return;
+    final uid = _userId!;
+    try {
+      await _deleteCollectionDocs(
+        _firestore.collection('users').doc(uid).collection('medication_reminders'),
+      );
+      await _deleteCollectionDocs(
+        _firestore.collection('users').doc(uid).collection('medication_check_ins'),
+      );
+      await syncMedicationSettingsToCloud({
+        'featureEnabled': false,
+      });
+    } catch (e) {
+      debugPrint('清空云端用药数据失败: $e');
+    }
+  }
+
+  Future<void> _deleteCollectionDocs(
+    CollectionReference<Map<String, dynamic>> col,
+  ) async {
+    const batchSize = 400;
+    QuerySnapshot<Map<String, dynamic>> snapshot;
+    do {
+      snapshot = await col.limit(batchSize).get();
+      if (snapshot.docs.isEmpty) break;
+      final batch = _firestore.batch();
+      for (final doc in snapshot.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    } while (snapshot.docs.length == batchSize);
+  }
+
   // ========== 批量同步操作 ==========
 
   /// 同步所有本地数据到云端。任一条失败则抛出 [StateError]。
   Future<void> syncAllDataToCloud({
     required List<TremorRecord> tremorRecords,
     required List<MovementTrainingRecord> movementRecords,
+    List<MedicationReminder> medicationReminders = const [],
+    List<MedicationCheckIn> medicationCheckIns = const [],
+    Map<String, dynamic>? medicationSettings,
   }) async {
     if (!isUserLoggedIn) {
       debugPrint('用户未登录，跳过批量同步');
@@ -344,12 +634,47 @@ class CloudSyncService {
       if (!await syncMovementTrainingRecordToCloud(record)) failed++;
     }
 
+    final reminderByLocalId = <int, MedicationReminder>{};
+    for (final reminder in medicationReminders) {
+      if (!await syncMedicationReminderToCloud(reminder)) failed++;
+      if (reminder.id != null) {
+        reminderByLocalId[reminder.id!] = reminder;
+      }
+    }
+
+    for (final checkIn in medicationCheckIns) {
+      final reminder = reminderByLocalId[checkIn.reminderId];
+      final cloudId = reminder?.cloudId;
+      if (cloudId == null || cloudId.isEmpty) continue;
+      if (!await syncMedicationCheckInToCloud(
+        reminderCloudId: cloudId,
+        scheduledDate: checkIn.scheduledDate,
+        scheduledTime: checkIn.scheduledTime,
+        checkedAt: checkIn.checkedAt,
+        status: checkIn.status,
+      )) {
+        failed++;
+      }
+    }
+
+    if (medicationSettings != null) {
+      if (!await syncMedicationSettingsToCloud(medicationSettings)) failed++;
+    }
+
     final uid = _userId;
     if (uid != null) {
       await _logServerCollectionDocIds(uid: uid, collectionId: 'tremor_records');
       await _logServerCollectionDocIds(
         uid: uid,
         collectionId: 'movement_training_records',
+      );
+      await _logServerCollectionDocIds(
+        uid: uid,
+        collectionId: 'medication_reminders',
+      );
+      await _logServerCollectionDocIds(
+        uid: uid,
+        collectionId: 'medication_check_ins',
       );
     }
 
@@ -361,17 +686,29 @@ class CloudSyncService {
   }
 
   /// 从云端拉取所有数据（失败时抛出）。
-  Future<Map<String, List>> pullAllDataFromCloud() async {
+  Future<Map<String, dynamic>> pullAllDataFromCloud() async {
     if (!isUserLoggedIn) {
-      return {'tremorRecords': [], 'movementRecords': []};
+      return {
+        'tremorRecords': <TremorRecord>[],
+        'movementRecords': <MovementTrainingRecord>[],
+        'medicationReminders': <MedicationReminder>[],
+        'medicationCheckIns': <MedicationCheckInCloud>[],
+        'medicationSettings': null,
+      };
     }
 
     final tremorRecords = await getTremorRecordsFromCloud();
     final movementRecords = await getMovementTrainingRecordsFromCloud();
+    final medicationReminders = await getMedicationRemindersFromCloud();
+    final medicationCheckIns = await getMedicationCheckInsFromCloud();
+    final medicationSettings = await getMedicationSettingsFromCloud();
 
     return {
       'tremorRecords': tremorRecords,
       'movementRecords': movementRecords,
+      'medicationReminders': medicationReminders,
+      'medicationCheckIns': medicationCheckIns,
+      'medicationSettings': medicationSettings,
     };
   }
 }
