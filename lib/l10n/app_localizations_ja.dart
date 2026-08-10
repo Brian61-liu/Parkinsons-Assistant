@@ -290,7 +290,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      '任意の服薬ニックネームリストを有効にすると、ニックネーム、リマインダー時刻、チェックインは本端末のみに保存されます。通知を許可した場合、任意のローカル通知はこの端末でのみ表示され、当社サーバーには送信されません。このデータはアプリ内で削除できます。本機能は医療アドバイスではなく、データ書き出しには既定で含まれません。';
+      '任意の服薬ニックネームリストを有効にすると、ニックネーム、リマインダー時刻、チェックインはこの端末に保存されます。サインインすると Amplio クラウドアカウントにも同期でき、別の iPhone で復元できます。通知を許可した場合、任意のローカル通知はこの端末でのみ表示されます。このデータはアプリ内で削除できます（アカウント削除を含む）。本機能は医療アドバイスではなく、データ書き出しには既定で含まれません。';
 
   @override
   String get contactUs => 'お問い合わせ';
@@ -321,7 +321,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get termsUseOfAppText =>
-      'Amplio は、振戦測定、音声練習、動作練習、進捗要約、および任意の端末内服薬ニックネームリストなどの任意の訓練ツールを提供します。\n\nお客様は、合法的な個人目的でのみアプリを使用し、他者に害を与えたり適用法に違反したりする形でセンサー、アカウント、書き出しデータを濫用しないことに同意します。';
+      'Amplio は、振戦測定、音声練習、動作練習、進捗要約、および任意の服薬ニックネームリスト（ゲストは端末内；サインイン時は同期可）などの任意の訓練ツールを提供します。\n\nお客様は、合法的な個人目的でのみアプリを使用し、他者に害を与えたり適用法に違反したりする形でセンサー、アカウント、書き出しデータを濫用しないことに同意します。';
 
   @override
   String get termsMedicalDisclaimer => '医療アドバイスではありません';
@@ -632,7 +632,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get medicationDisclaimer =>
-      'Amplio の服薬リストは、ご自身で時間を記録するためのものです。医学的助言ではなく、用量の案内も行いません。すべてのデータはこの端末のみに保存されます。';
+      'Amplio の服薬リストは、ご自身で時間を記録するためのものです。医学的助言ではなく、用量の案内も行いません。ゲストの場合、データはこの端末のみに保存されます。サインインすると、リマインダーとチェックインを Amplio アカウントに同期できます。';
 
   @override
   String get medicationDisclaimerAccept => '理解して有効にする';
@@ -848,7 +848,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get medicationSetupPrompt => '服薬リマインダーを設定';
 
   @override
-  String get medicationSetupSubtitle => 'この端末のみに保存';
+  String get medicationSetupSubtitle => '端末に保存；サインインで同期';
 
   @override
   String get medicationNoUpcoming => '本日の予定リマインダーはありません';

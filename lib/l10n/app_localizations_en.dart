@@ -294,7 +294,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      'If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored only on this device. Optional local notifications may fire on this device only if you allow notification permission; they are not sent to our servers. You can delete this data in the app. This feature is not medical advice and is not included in data export by default.';
+      'If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored on this device. When you are signed in, they can also sync to your Amplio cloud account so you can restore them on another iPhone. Optional local notifications may fire on this device only if you allow notification permission. You can delete this data in the app (including account deletion). This feature is not medical advice and is not included in data export by default.';
 
   @override
   String get contactUs => 'Contact Us';
@@ -325,7 +325,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get termsUseOfAppText =>
-      'Amplio provides optional training tools such as tremor measurement, voice practice, movement practice, progress summaries, and an optional on-device medication nickname list.\n\nYou agree to use the app only for lawful personal purposes and not to misuse sensors, accounts, or exported data in ways that harm others or violate applicable law.';
+      'Amplio provides optional training tools such as tremor measurement, voice practice, movement practice, progress summaries, and an optional medication nickname list (on-device for guests; may sync when signed in).\n\nYou agree to use the app only for lawful personal purposes and not to misuse sensors, accounts, or exported data in ways that harm others or violate applicable law.';
 
   @override
   String get termsMedicalDisclaimer => 'Not medical advice';
@@ -649,7 +649,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get medicationDisclaimer =>
-      'Amplio\'s medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. All data stays on this device only.';
+      'Amplio\'s medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. Guests keep data on this device only. When you are signed in, reminders and check-ins can sync to your Amplio account.';
 
   @override
   String get medicationDisclaimerAccept => 'I understand and enable';
@@ -867,7 +867,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get medicationSetupPrompt => 'Set up medication reminders';
 
   @override
-  String get medicationSetupSubtitle => 'Saved on this device only';
+  String get medicationSetupSubtitle => 'On this device; syncs when signed in';
 
   @override
   String get medicationNoUpcoming => 'No upcoming reminders today';

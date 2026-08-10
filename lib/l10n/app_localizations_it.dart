@@ -298,7 +298,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      'Se attivi l’elenco opzionale di soprannomi farmaci, soprannomi, orari dei promemoria e check-in restano solo su questo dispositivo. Le notifiche locali opzionali compaiono solo su questo dispositivo se concedi il permesso di notifica; non vengono inviate ai nostri server. Puoi eliminare questi dati nell’app. Questa funzione non è un consiglio medico e non è inclusa per impostazione predefinita nell’esportazione dei dati.';
+      'Se attivi l’elenco opzionale di soprannomi farmaci, soprannomi, orari dei promemoria e check-in restano su questo dispositivo. Se accedi, possono anche sincronizzarsi con il tuo account cloud Amplio per ripristinarli su un altro iPhone. Le notifiche locali opzionali compaiono solo su questo dispositivo se concedi il permesso. Puoi eliminare questi dati nell’app (inclusa l’eliminazione dell’account). Questa funzione non è un consiglio medico e non è inclusa per impostazione predefinita nell’esportazione dei dati.';
 
   @override
   String get contactUs => 'Contattaci';
@@ -329,7 +329,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get termsUseOfAppText =>
-      'Amplio fornisce strumenti di allenamento opzionali come misurazione del tremore, pratica vocale, pratica del movimento, riepiloghi dei progressi e un elenco opzionale di soprannomi farmaci sul dispositivo.\n\nAccetti di usare l’app solo per scopi personali leciti e di non abusare di sensori, account o dati esportati in modi che danneggino altri o violino la legge applicabile.';
+      'Amplio fornisce strumenti di allenamento opzionali come misurazione del tremore, pratica vocale, pratica del movimento, riepiloghi dei progressi e un elenco opzionale di soprannomi farmaci (solo sul dispositivo per gli ospiti; sync possibile se accedi).\n\nAccetti di usare l’app solo per scopi personali leciti e di non abusare di sensori, account o dati esportati in modi che danneggino altri o violino la legge applicabile.';
 
   @override
   String get termsMedicalDisclaimer => 'Non è consiglio medico';
@@ -655,7 +655,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get medicationDisclaimer =>
-      'L\'elenco farmaci di Amplio ti aiuta solo a registrare gli orari da solo. Non è un consiglio medico e non fornisce indicazioni sul dosaggio. Tutti i dati restano solo su questo dispositivo.';
+      'L\'elenco farmaci di Amplio ti aiuta solo a registrare gli orari da solo. Non è un consiglio medico e non fornisce indicazioni sul dosaggio. Come ospite i dati restano solo su questo dispositivo. Se accedi, promemoria e check-in possono sincronizzarsi con il tuo account Amplio.';
 
   @override
   String get medicationDisclaimerAccept => 'Ho capito e attivo';
@@ -875,7 +875,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get medicationSetupPrompt => 'Configura promemoria farmaci';
 
   @override
-  String get medicationSetupSubtitle => 'Salvato solo su questo dispositivo';
+  String get medicationSetupSubtitle => 'Su questo dispositivo; sync se accedi';
 
   @override
   String get medicationNoUpcoming => 'Nessun promemoria in arrivo oggi';

@@ -299,7 +299,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      'Si vous activez la liste facultative de surnoms de médicaments, les surnoms, heures de rappel et validations sont stockés uniquement sur cet appareil. Des notifications locales facultatives peuvent s’afficher uniquement sur cet appareil si vous autorisez les notifications ; elles ne sont pas envoyées à nos serveurs. Vous pouvez supprimer ces données dans l’application. Cette fonctionnalité n’est pas un avis médical et n’est pas incluse par défaut dans l’export des données.';
+      'Si vous activez la liste facultative de surnoms de médicaments, les surnoms, heures de rappel et validations sont stockés sur cet appareil. Lorsque vous êtes connecté, ils peuvent aussi se synchroniser avec votre compte cloud Amplio pour restauration sur un autre iPhone. Des notifications locales facultatives peuvent s’afficher uniquement sur cet appareil si vous autorisez les notifications. Vous pouvez supprimer ces données dans l’application (y compris la suppression du compte). Cette fonctionnalité n’est pas un avis médical et n’est pas incluse par défaut dans l’export des données.';
 
   @override
   String get contactUs => 'Nous Contacter';
@@ -330,7 +330,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get termsUseOfAppText =>
-      'Amplio fournit des outils d’entraînement facultatifs tels que la mesure du tremblement, la pratique vocale, la pratique du mouvement, les résumés de progrès et une liste facultative de surnoms de médicaments sur l’appareil.\n\nVous acceptez d’utiliser l’application uniquement à des fins personnelles licites et de ne pas abuser des capteurs, comptes ou données exportées d’une manière nuisible à autrui ou contraire à la loi applicable.';
+      'Amplio fournit des outils d’entraînement facultatifs tels que la mesure du tremblement, la pratique vocale, la pratique du mouvement, les résumés de progrès et une liste facultative de surnoms de médicaments (sur l’appareil pour les invités ; synchronisation possible si connecté).\n\nVous acceptez d’utiliser l’application uniquement à des fins personnelles licites et de ne pas abuser des capteurs, comptes ou données exportées d’une manière nuisible à autrui ou contraire à la loi applicable.';
 
   @override
   String get termsMedicalDisclaimer => 'Pas un avis médical';
@@ -655,7 +655,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get medicationDisclaimer =>
-      'La liste de médicaments d\'Amplio vous aide seulement à suivre les horaires par vous-même. Ce n\'est pas un avis médical et elle ne fournit pas de conseils de dosage. Toutes les données restent uniquement sur cet appareil.';
+      'La liste de médicaments d\'Amplio vous aide seulement à suivre les horaires par vous-même. Ce n\'est pas un avis médical et elle ne fournit pas de conseils de dosage. En mode invité, les données restent uniquement sur cet appareil. Lorsque vous êtes connecté, rappels et validations peuvent se synchroniser avec votre compte Amplio.';
 
   @override
   String get medicationDisclaimerAccept => 'Je comprends et j\'active';
@@ -878,8 +878,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get medicationSetupPrompt => 'Configurer les rappels de médicaments';
 
   @override
-  String get medicationSetupSubtitle =>
-      'Enregistré uniquement sur cet appareil';
+  String get medicationSetupSubtitle => 'Sur cet appareil ; sync si connecté';
 
   @override
   String get medicationNoUpcoming => 'Aucun rappel à venir aujourd\'hui';

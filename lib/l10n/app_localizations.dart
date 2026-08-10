@@ -642,7 +642,7 @@ abstract class AppLocalizations {
   /// No description provided for @medicationPrivacyText.
   ///
   /// In en, this message translates to:
-  /// **'If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored only on this device. Optional local notifications may fire on this device only if you allow notification permission; they are not sent to our servers. You can delete this data in the app. This feature is not medical advice and is not included in data export by default.'**
+  /// **'If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored on this device. When you are signed in, they can also sync to your Amplio cloud account so you can restore them on another iPhone. Optional local notifications may fire on this device only if you allow notification permission. You can delete this data in the app (including account deletion). This feature is not medical advice and is not included in data export by default.'**
   String get medicationPrivacyText;
 
   /// No description provided for @contactUs.
@@ -696,7 +696,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsUseOfAppText.
   ///
   /// In en, this message translates to:
-  /// **'Amplio provides optional training tools such as tremor measurement, voice practice, movement practice, progress summaries, and an optional on-device medication nickname list.\n\nYou agree to use the app only for lawful personal purposes and not to misuse sensors, accounts, or exported data in ways that harm others or violate applicable law.'**
+  /// **'Amplio provides optional training tools such as tremor measurement, voice practice, movement practice, progress summaries, and an optional medication nickname list (on-device for guests; may sync when signed in).\n\nYou agree to use the app only for lawful personal purposes and not to misuse sensors, accounts, or exported data in ways that harm others or violate applicable law.'**
   String get termsUseOfAppText;
 
   /// No description provided for @termsMedicalDisclaimer.
@@ -1290,7 +1290,7 @@ abstract class AppLocalizations {
   /// No description provided for @medicationDisclaimer.
   ///
   /// In en, this message translates to:
-  /// **'Amplio\'s medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. All data stays on this device only.'**
+  /// **'Amplio\'s medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. Guests keep data on this device only. When you are signed in, reminders and check-ins can sync to your Amplio account.'**
   String get medicationDisclaimer;
 
   /// No description provided for @medicationDisclaimerAccept.
@@ -1668,7 +1668,7 @@ abstract class AppLocalizations {
   /// No description provided for @medicationSetupSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Saved on this device only'**
+  /// **'On this device; syncs when signed in'**
   String get medicationSetupSubtitle;
 
   /// No description provided for @medicationNoUpcoming.

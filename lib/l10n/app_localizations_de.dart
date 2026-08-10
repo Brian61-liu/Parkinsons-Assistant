@@ -300,7 +300,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      'Wenn Sie die optionale Medikamenten-Spitznamenliste aktivieren, werden Spitznamen, Erinnerungszeiten und Check-ins nur auf diesem Gerät gespeichert. Optionale lokale Benachrichtigungen erscheinen nur auf diesem Gerät, wenn Sie die Benachrichtigungsberechtigung erteilen; sie werden nicht an unsere Server gesendet. Sie können diese Daten in der App löschen. Diese Funktion ist keine medizinische Beratung und ist standardmäßig nicht im Datenexport enthalten.';
+      'Wenn Sie die optionale Medikamenten-Spitznamenliste aktivieren, werden Spitznamen, Erinnerungszeiten und Check-ins auf diesem Gerät gespeichert. Wenn Sie angemeldet sind, können sie auch mit Ihrem Amplio-Cloud-Konto synchronisiert werden, damit Sie sie auf einem anderen iPhone wiederherstellen können. Optionale lokale Benachrichtigungen erscheinen nur auf diesem Gerät bei erteilter Berechtigung. Sie können diese Daten in der App löschen (einschließlich Kontolöschung). Diese Funktion ist keine medizinische Beratung und ist standardmäßig nicht im Datenexport enthalten.';
 
   @override
   String get contactUs => 'Kontakt';
@@ -331,7 +331,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get termsUseOfAppText =>
-      'Amplio bietet optionale Trainingswerkzeuge wie Tremormessung, Stimmübungen, Bewegungsübungen, Fortschrittsübersichten und eine optionale geräteinterne Medikamenten-Spitznamenliste.\n\nSie verpflichten sich, die App nur für rechtmäßige persönliche Zwecke zu nutzen und Sensoren, Konten oder exportierte Daten nicht so zu missbrauchen, dass andere geschädigt oder geltendes Recht verletzt wird.';
+      'Amplio bietet optionale Trainingstools wie Tremormessung, Stimmübungen, Bewegungsübungen, Fortschrittsübersichten und eine optionale Medikamenten-Spitznamenliste (nur auf dem Gerät für Gäste; Sync möglich bei Anmeldung).\n\nSie stimmen zu, die App nur für rechtmäßige persönliche Zwecke zu nutzen und Sensoren, Konten oder exportierte Daten nicht so zu missbrauchen, dass andere geschädigt oder geltendes Recht verletzt wird.';
 
   @override
   String get termsMedicalDisclaimer => 'Keine medizinische Beratung';
@@ -657,7 +657,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get medicationDisclaimer =>
-      'Die Medikamentenliste von Amplio hilft Ihnen nur, Zeiten selbst zu erfassen. Sie ist keine medizinische Beratung und gibt keine Dosierungshinweise. Alle Daten bleiben nur auf diesem Gerät.';
+      'Die Medikamentenliste von Amplio hilft Ihnen nur, Zeiten selbst zu erfassen. Sie ist keine medizinische Beratung und gibt keine Dosierungshinweise. Als Gast bleiben Daten nur auf diesem Gerät. Wenn Sie angemeldet sind, können Erinnerungen und Check-ins mit Ihrem Amplio-Konto synchronisiert werden.';
 
   @override
   String get medicationDisclaimerAccept => 'Ich verstehe und aktiviere';
@@ -877,7 +877,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get medicationSetupPrompt => 'Medikamentenerinnerungen einrichten';
 
   @override
-  String get medicationSetupSubtitle => 'Nur auf diesem Gerät gespeichert';
+  String get medicationSetupSubtitle => 'Auf diesem Gerät; Sync bei Anmeldung';
 
   @override
   String get medicationNoUpcoming => 'Heute keine anstehenden Erinnerungen';

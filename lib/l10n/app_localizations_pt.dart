@@ -298,7 +298,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      'Se ativar a lista opcional de apelidos de medicação, apelidos, horários de lembrete e check-ins ficam apenas neste dispositivo. Notificações locais opcionais podem aparecer só neste dispositivo se permitir notificações; não são enviadas aos nossos servidores. Pode apagar estes dados na app. Esta funcionalidade não é aconselhamento médico e não é incluída por predefinição na exportação de dados.';
+      'Se ativar a lista opcional de apelidos de medicação, apelidos, horários de lembrete e check-ins ficam neste dispositivo. Quando inicia sessão, também podem sincronizar com a sua conta na nuvem Amplio para os restaurar noutro iPhone. Notificações locais opcionais podem aparecer só neste dispositivo se permitir notificações. Pode apagar estes dados na app (incluindo eliminação de conta). Esta funcionalidade não é aconselhamento médico e não é incluída por predefinição na exportação de dados.';
 
   @override
   String get contactUs => 'Entre em Contato';
@@ -329,7 +329,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get termsUseOfAppText =>
-      'A Amplio fornece ferramentas de treino opcionais como medição do tremor, prática de voz, prática de movimento, resumos de progresso e uma lista opcional de apelidos de medicação no dispositivo.\n\nAceita usar a app apenas para fins pessoais lícitos e não abusar de sensores, contas ou dados exportados de formas que prejudiquem outros ou violem a lei aplicável.';
+      'A Amplio fornece ferramentas de treino opcionais como medição do tremor, prática de voz, prática de movimento, resumos de progresso e uma lista opcional de apelidos de medicação (no dispositivo para convidados; pode sincronizar ao iniciar sessão).\n\nAceita usar a app apenas para fins pessoais lícitos e não abusar de sensores, contas ou dados exportados de formas que prejudiquem outros ou violem a lei aplicável.';
 
   @override
   String get termsMedicalDisclaimer => 'Não é aconselhamento médico';
@@ -654,7 +654,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get medicationDisclaimer =>
-      'A lista de medicação do Amplio só o ajuda a registar horários por conta própria. Não é aconselhamento médico e não fornece orientação de dosagem. Todos os dados ficam apenas neste dispositivo.';
+      'A lista de medicação do Amplio só o ajuda a registar horários por conta própria. Não é aconselhamento médico e não fornece orientação de dosagem. Em modo convidado os dados ficam apenas neste dispositivo. Quando inicia sessão, lembretes e check-ins podem sincronizar com a sua conta Amplio.';
 
   @override
   String get medicationDisclaimerAccept => 'Compreendo e ativo';
@@ -873,7 +873,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get medicationSetupPrompt => 'Configurar lembretes de medicação';
 
   @override
-  String get medicationSetupSubtitle => 'Guardado apenas neste dispositivo';
+  String get medicationSetupSubtitle =>
+      'Neste dispositivo; sincroniza ao iniciar sessão';
 
   @override
   String get medicationNoUpcoming => 'Sem lembretes pendentes hoje';

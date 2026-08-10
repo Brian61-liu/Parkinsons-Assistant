@@ -290,7 +290,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      '선택적 복약 닉네임 목록을 켜면 닉네임, 알림 시간, 체크인은 이 기기에만 저장됩니다. 알림 권한을 허용한 경우 선택적 로컬 알림은 이 기기에서만 울리며 당사 서버로 전송되지 않습니다. 앱에서 이 데이터를 삭제할 수 있습니다. 이 기능은 의료 조언이 아니며 데이터 내보내기에 기본적으로 포함되지 않습니다.';
+      '선택적 복약 닉네임 목록을 켜면 닉네임, 알림 시간, 체크인은 이 기기에 저장됩니다. 로그인하면 Amplio 클라우드 계정에도 동기화되어 다른 iPhone에서 복원할 수 있습니다. 알림 권한을 허용한 경우 선택적 로컬 알림은 이 기기에서만 울립니다. 앱에서 이 데이터를 삭제할 수 있습니다(계정 삭제 포함). 이 기능은 의료 조언이 아니며 데이터 내보내기에 기본적으로 포함되지 않습니다.';
 
   @override
   String get contactUs => '문의하기';
@@ -321,7 +321,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get termsUseOfAppText =>
-      'Amplio는 떨림 측정, 음성 연습, 동작 연습, 진행 요약, 선택적 기기 내 복약 닉네임 목록 등 선택적 훈련 도구를 제공합니다.\n\n합법적인 개인 목적으로만 앱을 사용하고, 타인에게 해를 끼치거나 적용 법률을 위반하는 방식으로 센서, 계정, 내보내기 데이터를 남용하지 않을 것에 동의합니다.';
+      'Amplio는 떨림 측정, 음성 연습, 동작 연습, 진행 요약, 선택적 복약 닉네임 목록(게스트는 기기 내; 로그인 시 동기화 가능) 등 선택적 훈련 도구를 제공합니다.\n\n합법적인 개인 목적으로만 앱을 사용하고, 타인에게 해를 끼치거나 적용 법률을 위반하는 방식으로 센서, 계정, 내보내기 데이터를 남용하지 않을 것에 동의합니다.';
 
   @override
   String get termsMedicalDisclaimer => '의료 조언이 아님';
@@ -632,7 +632,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get medicationDisclaimer =>
-      'Amplio 복약 목록은 직접 시간을 기록하도록 돕습니다. 의학적 조언이 아니며 용량 안내를 제공하지 않습니다. 모든 데이터는 이 기기에만 저장됩니다.';
+      'Amplio 복약 목록은 직접 시간을 기록하도록 돕습니다. 의학적 조언이 아니며 용량 안내를 제공하지 않습니다. 게스트는 데이터가 이 기기에만 저장됩니다. 로그인하면 알림과 체크인을 Amplio 계정에 동기화할 수 있습니다.';
 
   @override
   String get medicationDisclaimerAccept => '이해했으며 활성화합니다';
@@ -848,7 +848,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get medicationSetupPrompt => '복약 알림 설정';
 
   @override
-  String get medicationSetupSubtitle => '이 기기에만 저장';
+  String get medicationSetupSubtitle => '이 기기에 저장; 로그인 시 동기화';
 
   @override
   String get medicationNoUpcoming => '오늘 예정된 알림 없음';

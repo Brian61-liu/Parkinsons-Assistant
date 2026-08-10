@@ -290,7 +290,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      '若您开启可选的用药昵称清单，昵称、提醒时间与打卡记录仅保存在本设备。若您允许通知权限，可选的本地通知仅在本机触发，不会上传至我们的服务器。您可在应用内删除这些数据。该功能不是医疗建议，且默认不包含在数据导出中。';
+      '若您开启可选的用药昵称清单，昵称、提醒时间与打卡记录会保存在本设备。登录后还可同步到 Amplio 云端账户，以便在另一台 iPhone 上恢复。若您允许通知权限，可选的本地通知仅在本机触发。您可在应用内删除这些数据（含删除账户）。该功能不是医疗建议，且默认不包含在数据导出中。';
 
   @override
   String get contactUs => '联系我们';
@@ -321,7 +321,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get termsUseOfAppText =>
-      'Amplio 提供可选的训练工具，例如震颤测量、语音练习、肢体练习、进度摘要，以及可选的本机用药昵称清单。\n\n您仅可将本应用用于合法的个人用途，不得滥用传感器、账号或导出数据，以免损害他人或违反适用法律。';
+      'Amplio 提供可选的训练工具，例如震颤测量、语音练习、肢体练习、进度摘要，以及可选的用药昵称清单（游客仅本机；登录后可同步）。\n\n您仅可将本应用用于合法的个人用途，不得滥用传感器、账户或导出数据，以免损害他人或违反适用法律。';
 
   @override
   String get termsMedicalDisclaimer => '非医疗建议';
@@ -632,7 +632,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get medicationDisclaimer =>
-      'Amplio 用药清单仅帮助您在本机自行记录服药时间，不能替代医生或药师建议，不提供用药或剂量指导。所有数据仅保存在本设备。';
+      'Amplio 用药清单仅帮助您在本机自行记录服药时间，不能替代医生或药师建议，不提供用药或剂量指导。游客模式数据仅保存在本设备；登录后提醒与打卡可同步到您的 Amplio 账户。';
 
   @override
   String get medicationDisclaimerAccept => '我了解并开启';
@@ -845,7 +845,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get medicationSetupPrompt => '设置用药提醒';
 
   @override
-  String get medicationSetupSubtitle => '仅保存在本机';
+  String get medicationSetupSubtitle => '保存在本机；登录后可同步';
 
   @override
   String get medicationNoUpcoming => '今日暂无待打卡提醒';
@@ -1235,7 +1235,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get medicationPrivacyText =>
-      '若您開啟可選的用藥暱稱清單，暱稱、提醒時間與打卡紀錄僅保存在本裝置。若您允許通知權限，可選的本機通知僅在本機觸發，不會上傳至我們的伺服器。您可在應用內刪除這些資料。此功能不是醫療建議，且預設不包含在資料匯出中。';
+      '若您開啟可選的用藥暱稱清單，暱稱、提醒時間與打卡紀錄會保存在本裝置。登入後還可同步到 Amplio 雲端帳戶，以便在另一台 iPhone 上恢復。若您允許通知權限，可選的本機通知僅在本機觸發。您可在應用內刪除這些資料（含刪除帳戶）。此功能不是醫療建議，且預設不包含在資料匯出中。';
 
   @override
   String get contactUs => '聯絡我們';
@@ -1266,7 +1266,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get termsUseOfAppText =>
-      'Amplio 提供可選的訓練工具，例如顫抖測量、語音練習、肢體練習、進度摘要，以及可選的本機用藥暱稱清單。\n\n您僅可將本應用用於合法的個人用途，不得濫用感測器、帳號或匯出資料，以免損害他人或違反適用法律。';
+      'Amplio 提供可選的訓練工具，例如顫抖測量、語音練習、肢體練習、進度摘要，以及可選的用藥暱稱清單（訪客僅本機；登入後可同步）。\n\n您僅可將本應用用於合法的個人用途，不得濫用感測器、帳號或匯出資料，以免損害他人或違反適用法律。';
 
   @override
   String get termsMedicalDisclaimer => '非醫療建議';
@@ -1575,7 +1575,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get medicationDisclaimer =>
-      'Amplio 用藥清單僅幫助您在本機自行記錄服藥時間，不能替代醫師或藥師建議，不提供用藥或劑量指導。所有資料僅保存在本裝置。';
+      'Amplio 用藥清單僅幫助您在本機自行記錄服藥時間，不能替代醫師或藥師建議，不提供用藥或劑量指導。訪客模式資料僅保存在本裝置；登入後提醒與打卡可同步到您的 Amplio 帳戶。';
 
   @override
   String get medicationDisclaimerAccept => '我了解並開啟';
@@ -1788,7 +1788,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get medicationSetupPrompt => '設定用藥提醒';
 
   @override
-  String get medicationSetupSubtitle => '僅保存在本機';
+  String get medicationSetupSubtitle => '保存在本機；登入後可同步';
 
   @override
   String get medicationNoUpcoming => '今日暫無待打卡提醒';
