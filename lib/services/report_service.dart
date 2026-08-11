@@ -51,6 +51,46 @@ class ReportService {
     return report.toJson();
   }
 
+  /// 供医生/家人阅读的纯文本摘要（非诊断）。
+  Future<String> exportReportPlainText({
+    required String title,
+    required String disclaimer,
+    required String handLabel,
+    required String voiceLabel,
+    required String motionLabel,
+    required String overallLabel,
+  }) async {
+    final report = await generateReport();
+    final scores = report.scores;
+    final buf = StringBuffer()
+      ..writeln(title)
+      ..writeln(disclaimer)
+      ..writeln()
+      ..writeln('Generated: ${report.generatedAt.toIso8601String()}')
+      ..writeln()
+      ..writeln(report.summary)
+      ..writeln()
+      ..writeln('$overallLabel: ${scores.overall.toStringAsFixed(0)} (${scores.level})')
+      ..writeln('$handLabel: ${scores.hand.toStringAsFixed(0)}')
+      ..writeln('$voiceLabel: ${scores.voice.toStringAsFixed(0)}')
+      ..writeln('$motionLabel: ${scores.motion.toStringAsFixed(0)}')
+      ..writeln()
+      ..writeln('Trends:');
+    for (final h in report.trends.highlights) {
+      buf.writeln('- $h');
+    }
+    buf
+      ..writeln()
+      ..writeln(
+        'Goals: today ${report.completion.dailyCompleted}/${report.completion.dailyTarget}, '
+        'week ${report.completion.weeklyCompleted}/${report.completion.weeklyTarget}, '
+        'streak ${report.completion.streakDays} days',
+      )
+      ..writeln()
+      ..writeln(disclaimer);
+    return buf.toString();
+  }
+
   /// 示例报告（固定数据，方便开发联调）。
   static RehabReport exampleReport() {
     final trendMap = <String, TrendEntry>{

@@ -1,6 +1,13 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+
 import '../l10n/app_localizations.dart';
 import '../models/report.dart';
+import '../services/native_share_service.dart';
 import '../services/report_service.dart';
 
 class RehabReportPage extends StatefulWidget {
@@ -14,6 +21,7 @@ class _RehabReportPageState extends State<RehabReportPage> {
   final _reportService = ReportService();
   RehabReport? _report;
   bool _loading = true;
+  bool _sharing = false;
 
   @override
   void initState() {
@@ -36,6 +44,68 @@ class _RehabReportPageState extends State<RehabReportPage> {
     }
   }
 
+  Future<void> _confirmAndShare() async {
+    final l10n = AppLocalizations.of(context)!;
+    final agreed = await showCupertinoDialog<bool>(
+      context: context,
+      builder: (ctx) => CupertinoAlertDialog(
+        title: Text(l10n.reportShareConsentTitle),
+        content: Text(l10n.reportShareConsentBody),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l10n.reportShareConsentConfirm),
+          ),
+        ],
+      ),
+    );
+    if (agreed != true || !mounted) return;
+
+    setState(() => _sharing = true);
+    try {
+      final text = await _reportService.exportReportPlainText(
+        title: l10n.reportShareFileTitle,
+        disclaimer: l10n.rehabReportDisclaimer,
+        handLabel: l10n.handTraining,
+        voiceLabel: l10n.voiceTrainingShort,
+        motionLabel: l10n.motionTrainingShort,
+        overallLabel: l10n.reportOverallScore,
+      );
+      final stamp = DateTime.now()
+          .toIso8601String()
+          .replaceAll(':', '-')
+          .split('.')
+          .first
+          .replaceAll('T', '_');
+      final dir = await getTemporaryDirectory();
+      final filePath = p.join(dir.path, 'amplio_rehab_report_$stamp.txt');
+      await File(filePath).writeAsString(text, flush: true);
+      await NativeShareService.shareFile(
+        path: filePath,
+        subject: l10n.reportShareFileTitle,
+      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.reportShareSuccess)),
+        );
+      }
+    } catch (e) {
+      debugPrint('RehabReportPage share: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.reportShareFailed)),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _sharing = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -47,6 +117,20 @@ class _RehabReportPageState extends State<RehabReportPage> {
         backgroundColor: const Color(0xFFF4FBFF),
         foregroundColor: const Color(0xFF1E3A5F),
         elevation: 0,
+        actions: [
+          if (_report != null && !_loading)
+            IconButton(
+              tooltip: l10n.reportShareButton,
+              onPressed: _sharing ? null : _confirmAndShare,
+              icon: _sharing
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(CupertinoIcons.share),
+            ),
+        ],
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
@@ -95,6 +179,33 @@ class _RehabReportPageState extends State<RehabReportPage> {
                         ),
                       const SizedBox(height: 20),
                       _completionSection(l10n, _report!.completion),
+                      const SizedBox(height: 28),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48,
+                        child: OutlinedButton.icon(
+                          onPressed: _sharing ? null : _confirmAndShare,
+                          icon: const Icon(CupertinoIcons.share),
+                          label: Text(l10n.reportShareButton),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: const Color(0xFF6366F1),
+                            side: const BorderSide(color: Color(0xFF6366F1)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        l10n.reportShareFooterNote,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF94A3B8),
+                          height: 1.35,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -199,7 +310,7 @@ class _RehabReportPageState extends State<RehabReportPage> {
         ),
         const SizedBox(height: 8),
         Text(
-          l10n.reportStreak(completion.streakDays),
+          l10n.dataStreakDays(completion.streakDays),
           style: const TextStyle(fontSize: 15, color: Color(0xFF334155)),
         ),
       ],
