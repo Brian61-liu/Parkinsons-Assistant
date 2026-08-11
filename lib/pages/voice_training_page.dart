@@ -6,6 +6,7 @@ import 'package:noise_meter/noise_meter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
+import '../models/voice_protocol.dart';
 import '../services/user_settings_service.dart';
 import '../services/voice_assist_service.dart';
 import '../services/training_score_service.dart';
@@ -14,8 +15,14 @@ import '../services/training_score_service.dart';
 /// 准备 → 校准环境噪音（自动） → 练习中 → 完成总结
 enum _Stage { preparation, calibrating, practicing, completed }
 
+/// 音量阶梯阶段（仅 [VoiceProtocol.ladder]）
+enum _LadderPhase { soft, target, strong, coolDown }
+
 class VoiceTrainingPage extends StatefulWidget {
-  const VoiceTrainingPage({super.key});
+  const VoiceTrainingPage({super.key, this.initialProtocol});
+
+  /// Plan / 深链可指定初始协议；为空则默认持续长音。
+  final VoiceProtocol? initialProtocol;
 
   @override
   State<VoiceTrainingPage> createState() => _VoiceTrainingPageState();
@@ -30,18 +37,37 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
 
   _Stage _stage = _Stage.preparation;
 
-  // 新的阈值设置（基于手机距离嘴巴 30-50cm）
-  static const double _veryLowThreshold = 60.0; // < 60 dB：过低/橙色
-  static const double _lowThreshold = 65.0; // 60-65 dB：过低/橙色
-  static const double _normalThreshold = 75.0; // 65-75 dB：普通/黄色
-  static const double _targetMin = 75.0; // 75-90 dB：目标/绿色（放宽上限以允许稍微超过85dB）
-  static const double _targetMax = 90.0;
+  // 基线阈值（持续长音 / 默认目标区；基于手机距嘴约 30-50cm）
+  static const double _veryLowThreshold = 60.0;
+  static const double _lowThreshold = 65.0;
+  static const double _steadyTargetMin = 75.0;
+  static const double _steadyTargetMax = 90.0;
 
-  // 目标参照圈的半径（固定大小，代表目标值）
   static const double _targetRingRadius = 120.0;
 
-  // 推荐练习时长（仅用于展示进度，不会强制停止）
-  static const int _recommendedDurationSeconds = 15;
+  /// 持续长音：推荐时长（仅展示，不强制结束）
+  static const int _steadyRecommendedSeconds = 15;
+
+  /// 阶梯：每阶段墙钟秒数
+  static const int _ladderPhaseSeconds = 8;
+
+  /// 多组：每组练习 / 休息秒数与组数
+  static const int _setPracticeSeconds = 8;
+  static const int _setRestSeconds = 5;
+  static const int _setCount = 3;
+
+  /// 清晰度短句数量
+  static const int _clarityPhraseCount = 5;
+
+  late VoiceProtocol _protocol;
+  _LadderPhase _ladderPhase = _LadderPhase.soft;
+  int _setIndex = 0; // 0-based，当前组
+  bool _inRest = false;
+  DateTime? _phaseStartedAt;
+  bool _protocolAutoFinished = false;
+  int _clarityPhraseIndex = 0;
+  bool _clarityVoiceHeard = false;
+  double _clarityHeardAccumSeconds = 0.0;
 
   // 性能优化：节流更新，避免过于频繁的 UI 刷新
   Timer? _updateTimer;
@@ -90,8 +116,132 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
   @override
   void initState() {
     super.initState();
+    _protocol = widget.initialProtocol ?? VoiceProtocol.steady;
     WidgetsBinding.instance.addObserver(this);
     _checkMicrophonePermission();
+  }
+
+  int get _recommendedDurationSeconds {
+    switch (_protocol) {
+      case VoiceProtocol.steady:
+        return _steadyRecommendedSeconds;
+      case VoiceProtocol.ladder:
+        return _ladderPhaseSeconds * _LadderPhase.values.length;
+      case VoiceProtocol.multiSet:
+        return _setCount * _setPracticeSeconds +
+            (_setCount - 1) * _setRestSeconds;
+      case VoiceProtocol.clarity:
+        return _clarityPhraseCount * 8;
+    }
+  }
+
+  double get _activeTargetMin {
+    if (_protocol != VoiceProtocol.ladder) return _steadyTargetMin;
+    switch (_ladderPhase) {
+      case _LadderPhase.soft:
+      case _LadderPhase.coolDown:
+        return 65.0;
+      case _LadderPhase.target:
+        return 75.0;
+      case _LadderPhase.strong:
+        return 80.0;
+    }
+  }
+
+  double get _activeTargetMax {
+    if (_protocol != VoiceProtocol.ladder) return _steadyTargetMax;
+    switch (_ladderPhase) {
+      case _LadderPhase.soft:
+      case _LadderPhase.coolDown:
+        return 75.0;
+      case _LadderPhase.target:
+        return 90.0;
+      case _LadderPhase.strong:
+        return 95.0;
+    }
+  }
+
+  void _resetProtocolProgress() {
+    _ladderPhase = _LadderPhase.soft;
+    _setIndex = 0;
+    _inRest = false;
+    _phaseStartedAt = null;
+    _protocolAutoFinished = false;
+    _clarityPhraseIndex = 0;
+    _clarityVoiceHeard = false;
+    _clarityHeardAccumSeconds = 0.0;
+  }
+
+  int _phaseElapsedSeconds() {
+    final started = _phaseStartedAt;
+    if (started == null) return 0;
+    return DateTime.now().difference(started).inSeconds;
+  }
+
+  /// 练习中墙钟推进：阶梯换阶段 / 多组休息与自动结束。
+  void _tickProtocolProgress() {
+    if (_stage != _Stage.practicing || _protocolAutoFinished) return;
+
+    switch (_protocol) {
+      case VoiceProtocol.steady:
+      case VoiceProtocol.clarity:
+        return;
+      case VoiceProtocol.ladder:
+        if (_phaseElapsedSeconds() < _ladderPhaseSeconds) return;
+        final idx = _LadderPhase.values.indexOf(_ladderPhase);
+        if (idx >= _LadderPhase.values.length - 1) {
+          _protocolAutoFinished = true;
+          unawaited(_stopListening());
+          return;
+        }
+        setState(() {
+          _ladderPhase = _LadderPhase.values[idx + 1];
+          _phaseStartedAt = DateTime.now();
+        });
+        _announceLadderPhase();
+        return;
+      case VoiceProtocol.multiSet:
+        if (_inRest) {
+          if (_phaseElapsedSeconds() < _setRestSeconds) return;
+          setState(() {
+            _inRest = false;
+            _setIndex += 1;
+            _phaseStartedAt = DateTime.now();
+          });
+          _voiceAssist().speak('开始第 ${_setIndex + 1} 组');
+          return;
+        }
+        if (_phaseElapsedSeconds() < _setPracticeSeconds) return;
+        if (_setIndex >= _setCount - 1) {
+          _protocolAutoFinished = true;
+          unawaited(_stopListening());
+          return;
+        }
+        setState(() {
+          _inRest = true;
+          _phaseStartedAt = DateTime.now();
+        });
+        _voiceAssist().speak('休息一下');
+    }
+  }
+
+  void _announceLadderPhase() {
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) return;
+    _voiceAssist().speak(_ladderPhaseLabel(l10n));
+  }
+
+  String _ladderPhaseLabel(AppLocalizations l10n) {
+    switch (_ladderPhase) {
+      case _LadderPhase.soft:
+        return l10n.voiceLadderPhaseSoft;
+      case _LadderPhase.target:
+        return l10n.voiceLadderPhaseTarget;
+      case _LadderPhase.strong:
+        return l10n.voiceLadderPhaseStrong;
+      case _LadderPhase.coolDown:
+        return l10n.voiceLadderPhaseCoolDown;
+    }
   }
 
   @override
@@ -138,6 +288,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
         _sessionStartedAt = null;
         _targetZoneAccumSeconds = 0.0;
         _displayedDb = 0.0;
+        _resetProtocolProgress();
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -288,6 +439,8 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
               // 校准完成，开始正常监听
               _sessionRawSamples.clear();
               _sessionStartedAt = DateTime.now();
+              _resetProtocolProgress();
+              _phaseStartedAt = DateTime.now();
               setState(() {
                 _isCalibrating = false;
                 _isListening = true;
@@ -303,8 +456,17 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
 
               _secondTicker?.cancel();
               _secondTicker = Timer.periodic(const Duration(seconds: 1), (_) {
+                if (!mounted) return;
+                _tickProtocolProgress();
                 if (mounted) setState(() {});
               });
+              if (_protocol == VoiceProtocol.ladder) {
+                _announceLadderPhase();
+              } else if (_protocol == VoiceProtocol.multiSet) {
+                _voiceAssist().speak('开始第 1 组');
+              } else if (_protocol == VoiceProtocol.clarity) {
+                _voiceAssist().speak('请朗读屏幕上的短句');
+              }
             } else {
               // 刷新校准倒计时显示
               setState(() {});
@@ -314,6 +476,10 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
 
           // 正常监听阶段：计算有效音量（减去基线）
           if (_isListening) {
+            // 多组休息段：不计入样本与目标区，仍刷新秒表
+            if (_protocol == VoiceProtocol.multiSet && _inRest) {
+              return;
+            }
             _sessionRawSamples.add(rawDb);
             // 计算有效音量差值 = 原始音量 - 基线
             final effectiveDbDiff = rawDb - _baselineDb;
@@ -340,11 +506,21 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
             // 只有当有效音量差值足够大，且总音量在目标范围内时，才认为达标
             final isInTargetZone =
                 effectiveDbDiff >= _minEffectiveVolumeDiff &&
-                rawDb >= _targetMin &&
-                rawDb <= _targetMax;
+                rawDb >= _activeTargetMin &&
+                rawDb <= _activeTargetMax;
             if (isInTargetZone) {
               _targetZoneAccumSeconds +=
                   _updateInterval.inMilliseconds / 1000.0;
+            }
+              if (_protocol == VoiceProtocol.clarity &&
+                effectiveDbDiff >= _minEffectiveVolumeDiff) {
+              _clarityHeardAccumSeconds +=
+                  _updateInterval.inMilliseconds / 1000.0;
+              if (!_clarityVoiceHeard && _clarityHeardAccumSeconds >= 0.8) {
+                _clarityVoiceHeard = true;
+                HapticFeedback.selectionClick();
+                setState(() {});
+              }
             }
             if (isInTargetZone && !_wasInTargetZone) {
               // 刚进入目标区，触发震动反馈
@@ -434,6 +610,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
         _sessionStartedAt = null;
         _targetZoneAccumSeconds = 0.0;
         _showDbDetail = false;
+        _resetProtocolProgress();
 
         if (hadValidSession) {
           _lastSessionDurationSeconds = sessionDuration > 0
@@ -489,7 +666,7 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
       return 0; // 过低（橙色）
     }
 
-    // 优先检查是否达标（在目标区）
+    // 优先检查是否达标（在当前协议目标区）
     if (_isInTargetZone()) {
       return 3; // 目标（绿色）
     }
@@ -499,12 +676,12 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
       return 0; // 过低（橙色）
     } else if (rawDb < _lowThreshold) {
       return 1; // 较低（橙色）
-    } else if (rawDb < _normalThreshold) {
+    } else if (rawDb < _activeTargetMin) {
       return 2; // 普通（黄色）
-    } else if (rawDb <= _targetMax) {
+    } else if (rawDb <= _activeTargetMax) {
       return 3; // 目标（绿色）
     } else {
-      return 4; // 过高（绿色）
+      return 4; // 过高
     }
   }
 
@@ -578,8 +755,8 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
     // 只有当有效音量差值足够大，且总音量在目标范围内时，才认为达标
     // 放宽上限到90dB，允许稍微超过85dB也算达标
     return effectiveDbDiff >= _minEffectiveVolumeDiff &&
-        rawDb >= _targetMin &&
-        rawDb <= _targetMax;
+        rawDb >= _activeTargetMin &&
+        rawDb <= _activeTargetMax;
   }
 
   /// 获取提示语
@@ -720,7 +897,43 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    l10n.voiceProtocolPickerTitle,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF475569),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildProtocolOption(
+                  protocol: VoiceProtocol.steady,
+                  title: l10n.voiceProtocolSteady,
+                  subtitle: l10n.voiceProtocolSteadyDesc,
+                ),
+                const SizedBox(height: 8),
+                _buildProtocolOption(
+                  protocol: VoiceProtocol.ladder,
+                  title: l10n.voiceProtocolLadder,
+                  subtitle: l10n.voiceProtocolLadderDesc,
+                ),
+                const SizedBox(height: 8),
+                _buildProtocolOption(
+                  protocol: VoiceProtocol.multiSet,
+                  title: l10n.voiceProtocolMultiSet,
+                  subtitle: l10n.voiceProtocolMultiSetDesc,
+                ),
+                const SizedBox(height: 8),
+                _buildProtocolOption(
+                  protocol: VoiceProtocol.clarity,
+                  title: l10n.voiceProtocolClarity,
+                  subtitle: l10n.voiceProtocolClarityDesc,
+                ),
+                const SizedBox(height: 16),
                 _buildHintRow(
                   icon: CupertinoIcons.person_crop_circle,
                   text: l10n.voicePrepHint,
@@ -737,6 +950,11 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
                   icon: CupertinoIcons.volume_off,
                   text: l10n.voicePrepEnvironmentHint,
                 ),
+                const SizedBox(height: 12),
+                _buildHintRow(
+                  icon: CupertinoIcons.info,
+                  text: l10n.voiceTrainingReferenceDisclaimer,
+                ),
                 const SizedBox(height: 16),
               ],
             ),
@@ -749,6 +967,73 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
           semanticsHint: '开始准备并校准环境噪音',
         ),
       ],
+    );
+  }
+
+  Widget _buildProtocolOption({
+    required VoiceProtocol protocol,
+    required String title,
+    required String subtitle,
+  }) {
+    final selected = _protocol == protocol;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: () => setState(() => _protocol = protocol),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration: BoxDecoration(
+            color: selected
+                ? _moduleColor.withValues(alpha: 0.10)
+                : Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: selected ? _moduleColor : Colors.grey.shade300,
+              width: selected ? 1.5 : 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                selected
+                    ? CupertinoIcons.checkmark_circle_fill
+                    : CupertinoIcons.circle,
+                color: selected ? _moduleColor : Colors.grey.shade400,
+                size: 22,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: selected
+                            ? const Color(0xFF065F46)
+                            : const Color(0xFF1E3A5F),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF64748B),
+                        height: 1.3,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -835,8 +1120,72 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
   // ── 阶段 3：练习中 ────────────────────────────────────────
 
   Widget _buildPracticingStage(BuildContext context, AppLocalizations l10n) {
+    if (_protocol == VoiceProtocol.clarity) {
+      return _buildClarityPracticingStage(context, l10n);
+    }
+
     final elapsed = _elapsedSeconds();
     final targetReached = elapsed >= _recommendedDurationSeconds;
+    final statusChip = _protocolStatusChip(l10n);
+
+    if (_protocol == VoiceProtocol.multiSet && _inRest) {
+      final restLeft =
+          (_setRestSeconds - _phaseElapsedSeconds()).clamp(0, _setRestSeconds);
+      return Column(
+        key: const ValueKey('voice_rest'),
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+            child: Row(
+              children: [
+                _buildChip(
+                  icon: CupertinoIcons.timer,
+                  label: l10n.voiceElapsedLabel(elapsed),
+                ),
+                const Spacer(),
+                _buildChip(
+                  icon: CupertinoIcons.pause_circle_fill,
+                  label: l10n.voiceRestChip(restLeft),
+                  highlighted: true,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    l10n.voiceRestTitle,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1E3A5F),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    l10n.voiceRestBody(_setIndex + 2, _setCount),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF64748B),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          _buildPrimaryButton(
+            label: l10n.stopListening,
+            color: Colors.red,
+            onPressed: _stopListening,
+            semanticsHint: '停止语音训练',
+          ),
+        ],
+      );
+    }
 
     return Column(
       key: const ValueKey(_Stage.practicing),
@@ -851,17 +1200,28 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
               ),
               const Spacer(),
               _buildChip(
-                icon: targetReached
-                    ? CupertinoIcons.checkmark_alt_circle_fill
-                    : CupertinoIcons.flag_fill,
-                label: l10n.voiceTargetDurationChip(
-                  _recommendedDurationSeconds,
-                ),
-                highlighted: targetReached,
+                icon: statusChip.$1,
+                label: statusChip.$2,
+                highlighted: targetReached ||
+                    _protocol != VoiceProtocol.steady,
               ),
             ],
           ),
         ),
+        if (_protocol == VoiceProtocol.ladder) ...[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
+            child: Text(
+              _ladderPhaseLabel(l10n),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF065F46),
+              ),
+            ),
+          ),
+        ],
         Expanded(
           child: Center(
             child: Column(
@@ -887,9 +1247,10 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
                         ),
                         child: _isInTargetZone()
                             ? const Center(
-                                child: Text(
-                                  '👍',
-                                  style: TextStyle(fontSize: 44),
+                                child: Icon(
+                                  CupertinoIcons.hand_thumbsup_fill,
+                                  size: 40,
+                                  color: Colors.white,
                                 ),
                               )
                             : null,
@@ -972,6 +1333,205 @@ class _VoiceTrainingPageState extends State<VoiceTrainingPage>
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
           child: Text(
             l10n.voicePracticeFooterHint,
+            style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
+  }
+
+  (IconData, String) _protocolStatusChip(AppLocalizations l10n) {
+    switch (_protocol) {
+      case VoiceProtocol.steady:
+        return (
+          CupertinoIcons.flag_fill,
+          l10n.voiceTargetDurationChip(_recommendedDurationSeconds),
+        );
+      case VoiceProtocol.ladder:
+        final left = (_ladderPhaseSeconds - _phaseElapsedSeconds())
+            .clamp(0, _ladderPhaseSeconds);
+        return (CupertinoIcons.chart_bar_alt_fill, l10n.voiceLadderChip(left));
+      case VoiceProtocol.multiSet:
+        final left = (_setPracticeSeconds - _phaseElapsedSeconds())
+            .clamp(0, _setPracticeSeconds);
+        return (
+          CupertinoIcons.square_stack_3d_up_fill,
+          l10n.voiceSetChip(_setIndex + 1, _setCount, left),
+        );
+      case VoiceProtocol.clarity:
+        return (
+          CupertinoIcons.text_quote,
+          l10n.voiceClarityPhraseProgress(
+            _clarityPhraseIndex + 1,
+            _clarityPhraseCount,
+          ),
+        );
+    }
+  }
+
+  List<String> _clarityPhrases(AppLocalizations l10n) => [
+        l10n.voiceClarityPhrase1,
+        l10n.voiceClarityPhrase2,
+        l10n.voiceClarityPhrase3,
+        l10n.voiceClarityPhrase4,
+        l10n.voiceClarityPhrase5,
+      ];
+
+  void _advanceClarityPhrase() {
+    if (_protocolAutoFinished) return;
+    final last = _clarityPhraseIndex >= _clarityPhraseCount - 1;
+    if (last) {
+      _protocolAutoFinished = true;
+      unawaited(_stopListening());
+      return;
+    }
+    setState(() {
+      _clarityPhraseIndex += 1;
+      _clarityVoiceHeard = false;
+      _clarityHeardAccumSeconds = 0.0;
+      _phaseStartedAt = DateTime.now();
+    });
+    _voiceAssist().speak('下一句');
+  }
+
+  Widget _buildClarityPracticingStage(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
+    final phrases = _clarityPhrases(l10n);
+    final phrase = phrases[_clarityPhraseIndex.clamp(0, phrases.length - 1)];
+    final isLast = _clarityPhraseIndex >= _clarityPhraseCount - 1;
+    final elapsed = _elapsedSeconds();
+
+    return Column(
+      key: const ValueKey('voice_clarity'),
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+          child: Row(
+            children: [
+              _buildChip(
+                icon: CupertinoIcons.timer,
+                label: l10n.voiceElapsedLabel(elapsed),
+              ),
+              const Spacer(),
+              _buildChip(
+                icon: CupertinoIcons.text_quote,
+                label: l10n.voiceClarityPhraseProgress(
+                  _clarityPhraseIndex + 1,
+                  _clarityPhraseCount,
+                ),
+                highlighted: true,
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  l10n.voiceClarityHint,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFF64748B),
+                    height: 1.35,
+                  ),
+                ),
+                const SizedBox(height: 28),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 28,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: _clarityVoiceHeard
+                          ? _moduleColor
+                          : Colors.grey.shade300,
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Text(
+                    phrase,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1E3A5F),
+                      height: 1.35,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      _clarityVoiceHeard
+                          ? CupertinoIcons.waveform
+                          : CupertinoIcons.mic,
+                      color: _clarityVoiceHeard
+                          ? _moduleColor
+                          : const Color(0xFFF59E0B),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      _clarityVoiceHeard
+                          ? l10n.voiceClarityVoiceDetected
+                          : l10n.voiceClarityWaitingVoice,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: _clarityVoiceHeard
+                            ? _moduleColor
+                            : const Color(0xFFF59E0B),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+          child: SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: CupertinoButton(
+              color: _moduleColor,
+              borderRadius: BorderRadius.circular(14),
+              onPressed: _advanceClarityPhrase,
+              child: Text(
+                isLast ? l10n.voiceClarityFinish : l10n.voiceClarityNextPhrase,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+        _buildPrimaryButton(
+          label: l10n.stopListening,
+          color: Colors.red,
+          onPressed: _stopListening,
+          semanticsHint: '停止语音训练',
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+          child: Text(
+            l10n.voiceTrainingReferenceDisclaimer,
             style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
             textAlign: TextAlign.center,
           ),

@@ -75,11 +75,11 @@
   "variability": "变异度",
   "sampleRate": "采样率",
   "dataPoints": "数据点",
-  "severityNormal": "正常",
-  "severityMild": "轻度",
-  "severityModerate": "中度",
-  "severityModerateSevere": "中重度",
-  "severitySevere": "重度",
+  "severityNormal": "较低晃动",
+  "severityMild": "轻度晃动",
+  "severityModerate": "中等晃动",
+  "severityModerateSevere": "偏高晃动",
+  "severitySevere": "最高档位",
   "appSubtitle": "您的帕金森运动追踪与分析助手",
   "signInWithGoogle": "使用 Google 登录",
   "signInWithApple": "使用 Apple 登录",
@@ -183,7 +183,7 @@
   "avatarUpdateFailed": "头像更新失败",
   "voiceTraining": "语音训练",
   "voiceTrainingMainInstruction": "请持续发长音 —— 啊 ——",
-  "voiceTrainingInstruction": "基于 LSVT LOUD 疗法理念，请大声说话。圆的大小会根据您的音量实时变化，达到 75-85 dB 时圆会变绿。",
+  "voiceTrainingInstruction": "请用清晰、有力的声音练习。圆的大小会随音量变化，进入目标范围时会变绿。仅供个人练习，不是医学治疗。",
   "voiceTrainingReady": "准备开始",
   "voiceTrainingCalibrating": "正在校准环境噪音...",
   "voiceTrainingTooQuiet": "再大声一点！",
@@ -513,5 +513,135 @@
   "voiceRetryButton": "再练一次",
   "voiceFinishButton": "完成",
   "voicePracticeFooterHint": "此练习通过大声说话帮助语音训练，仅供参考，非医学诊断。",
-  "voiceSessionTooShort": "练习时间过短，未保存本次记录"
+  "voiceSessionTooShort": "练习时间过短，未保存本次记录",
+  "voiceProtocolPickerTitle": "选择练习方式",
+  "voiceProtocolSteady": "持续音量",
+  "voiceProtocolSteadyDesc": "拉长发「啊」，尽量保持在目标音量区。",
+  "voiceProtocolLadder": "音量阶梯",
+  "voiceProtocolLadderDesc": "轻 → 目标 → 稍强 → 再回落。",
+  "voiceProtocolMultiSet": "三组短练",
+  "voiceProtocolMultiSetDesc": "三组短练习，组间短暂休息。",
+  "voiceTrainingReferenceDisclaimer": "仅供个人康复练习参考，不能诊断或治疗疾病。",
+  "voiceLadderPhaseSoft": "阶段 1：轻一点",
+  "voiceLadderPhaseTarget": "阶段 2：目标音量",
+  "voiceLadderPhaseStrong": "阶段 3：再强一点",
+  "voiceLadderPhaseCoolDown": "阶段 4：慢慢回落",
+  "voiceLadderChip": "本阶段剩 {seconds} 秒",
+  "@voiceLadderChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceSetChip": "第 {current}/{total} 组 · {seconds} 秒",
+  "@voiceSetChip": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" },
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestChip": "休息 {seconds} 秒",
+  "@voiceRestChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestTitle": "休息一下",
+  "voiceRestBody": "下一组是第 {next} / {total} 组，放松嗓子。",
+  "@voiceRestBody": {
+    "placeholders": {
+      "next": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "tremorDurationPickerTitle": "练习时长",
+  "tremorDurationSeconds": "{seconds} 秒",
+  "@tremorDurationSeconds": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorTestInstructionDynamic": "请将手机握在手中，保持手臂静止 {seconds} 秒。",
+  "@tremorTestInstructionDynamic": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorMotionBandDisclaimer": "晃动档位仅供个人参考，不是医学评估或诊断。",
+  "planTodayTitle": "今日练习",
+  "planTodaySubtitle": "根据训练模块给出的建议，点按即可开始。",
+  "planEmptyHint": "暂无建议，可先从首页开始一次训练。",
+  "planDomainHand": "手部",
+  "planDomainVoice": "语音",
+  "planDomainMotion": "肢体",
+  "planGoalProgress": "今日进度：{done}/{target} 次",
+  "@planGoalProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "planOpenTask": "开始",
+  "planMotionShelvedNote": "部分机型肢体检测仍不稳定，仍可打开练习页尝试。",
+  "voiceProtocolClarity": "清晰短句",
+  "voiceProtocolClarityDesc": "大声朗读短句。不做发音对错评分。",
+  "voiceClarityHint": "请把句子读清楚。我们只检测你是否出声，不判断读得对不对。",
+  "voiceClarityPhraseProgress": "第 {current} / {total} 句",
+  "@voiceClarityPhraseProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "voiceClarityVoiceDetected": "已检测到声音",
+  "voiceClarityWaitingVoice": "请大声读出这句话",
+  "voiceClarityNextPhrase": "下一句",
+  "voiceClarityFinish": "完成",
+  "voiceClarityPhrase1": "早上好",
+  "voiceClarityPhrase2": "你今天好吗？",
+  "voiceClarityPhrase3": "请把水递给我",
+  "voiceClarityPhrase4": "我感觉不错",
+  "voiceClarityPhrase5": "明天见",
+  "handModePickerTitle": "练习方式",
+  "handModeStillHold": "静止持机",
+  "handModeStillHoldDesc": "握着手机保持静止，用传感器观察晃动。",
+  "handModeObjectHold": "持物稳定",
+  "handModeObjectHoldDesc": "握住杯子或软球保持稳定。引导计时，无物体检测。",
+  "handModeFineMotor": "对指练习",
+  "handModeFineMotorDesc": "拇指依次触碰四指。由你点按计数。",
+  "handGuidedDisclaimer": "引导练习仅供个人康复参考，不是医学评估。",
+  "handObjectHoldInstruction": "请坐稳。单手握住杯子或软球，保持稳定，不必用力捏紧。",
+  "handObjectHoldStart": "开始保持",
+  "handObjectHoldRunning": "请继续保持稳定…",
+  "handObjectHoldDone": "本轮完成",
+  "handFineMotorInstruction": "拇指依次触碰食指、中指、无名指、小指，算作一组。",
+  "handFineMotorMarkCycle": "我完成了一组",
+  "handFineMotorProgress": "已完成 {done}/{target} 组",
+  "@handFineMotorProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "handGuidedCompleteTitle": "练习完成",
+  "handGuidedCompleteBody": "做得很好。本次已保存为个人练习参考。",
+  "dataTabTitle": "我的数据",
+  "dataTabSubtitle": "本周练习分数与趋势，仅供个人参考。",
+  "dataTrendsTitle": "本周 vs 上周",
+  "dataOpenFullReport": "打开完整康复报告",
+  "dataRecentSessions": "最近练习",
+  "dataStreakDays": "连续训练：{days} 天",
+  "@dataStreakDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "reportShareButton": "分享报告",
+  "reportShareConsentTitle": "要分享康复摘要吗？",
+  "reportShareConsentBody": "将生成包含练习分数与趋势的文本文件，并打开系统分享面板（信息、邮件、文件等）。\n\n仅供个人参考，不是医学诊断。\n\n一旦你把文件发出去，Amplio 无法从对方处撤回。现在可以取消；下一屏也可以不选择任何分享目标。",
+  "reportShareConsentConfirm": "我已了解，继续",
+  "reportShareFileTitle": "Amplio Care 康复摘要",
+  "reportShareSuccess": "已打开分享面板",
+  "reportShareFailed": "分享失败，请重试。",
+  "reportShareFooterNote": "每次分享都需要你确认。Amplio 不会自动把报告发给医生。"
 }

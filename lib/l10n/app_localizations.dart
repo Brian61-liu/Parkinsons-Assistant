@@ -399,34 +399,34 @@ abstract class AppLocalizations {
   /// **'Data Points'**
   String get dataPoints;
 
-  /// Normal severity
+  /// Lowest motion band for personal reference (not a diagnosis)
   ///
   /// In en, this message translates to:
-  /// **'Normal'**
+  /// **'Lower motion'**
   String get severityNormal;
 
-  /// Mild severity
+  /// Light motion band for personal reference
   ///
   /// In en, this message translates to:
-  /// **'Mild'**
+  /// **'Light motion'**
   String get severityMild;
 
-  /// Moderate severity
+  /// Moderate motion band for personal reference
   ///
   /// In en, this message translates to:
-  /// **'Moderate'**
+  /// **'Moderate motion'**
   String get severityModerate;
 
-  /// Moderate to severe
+  /// Higher motion band for personal reference
   ///
   /// In en, this message translates to:
-  /// **'Moderate-Severe'**
+  /// **'Higher motion'**
   String get severityModerateSevere;
 
-  /// Severe severity
+  /// Highest motion band for personal reference
   ///
   /// In en, this message translates to:
-  /// **'Severe'**
+  /// **'Highest band'**
   String get severitySevere;
 
   /// App subtitle on login page
@@ -1008,7 +1008,7 @@ abstract class AppLocalizations {
   /// Voice training instruction text
   ///
   /// In en, this message translates to:
-  /// **'Based on LSVT LOUD therapy principles, please speak loudly. The circle size will change in real-time based on your volume. When it reaches 75-85 dB, the circle will turn green.'**
+  /// **'Practice speaking with a clear, strong voice. The circle size changes with your volume. When you reach the target range, the circle turns green. For personal practice only — not medical treatment.'**
   String get voiceTrainingInstruction;
 
   /// Ready state text for voice training
@@ -1844,6 +1844,450 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Session was too short and was not saved'**
   String get voiceSessionTooShort;
+
+  /// No description provided for @voiceProtocolPickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a practice style'**
+  String get voiceProtocolPickerTitle;
+
+  /// No description provided for @voiceProtocolSteady.
+  ///
+  /// In en, this message translates to:
+  /// **'Steady volume'**
+  String get voiceProtocolSteady;
+
+  /// No description provided for @voiceProtocolSteadyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sustain a long “Ah” in the target volume zone.'**
+  String get voiceProtocolSteadyDesc;
+
+  /// No description provided for @voiceProtocolLadder.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume ladder'**
+  String get voiceProtocolLadder;
+
+  /// No description provided for @voiceProtocolLadderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Soft → target → a bit stronger → ease down.'**
+  String get voiceProtocolLadderDesc;
+
+  /// No description provided for @voiceProtocolMultiSet.
+  ///
+  /// In en, this message translates to:
+  /// **'3 short sets'**
+  String get voiceProtocolMultiSet;
+
+  /// No description provided for @voiceProtocolMultiSetDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Three short rounds with a brief rest between.'**
+  String get voiceProtocolMultiSetDesc;
+
+  /// No description provided for @voiceTrainingReferenceDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'For personal rehabilitation practice only. Not a diagnosis or treatment.'**
+  String get voiceTrainingReferenceDisclaimer;
+
+  /// No description provided for @voiceLadderPhaseSoft.
+  ///
+  /// In en, this message translates to:
+  /// **'Phase 1: softer voice'**
+  String get voiceLadderPhaseSoft;
+
+  /// No description provided for @voiceLadderPhaseTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Phase 2: target volume'**
+  String get voiceLadderPhaseTarget;
+
+  /// No description provided for @voiceLadderPhaseStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Phase 3: a bit stronger'**
+  String get voiceLadderPhaseStrong;
+
+  /// No description provided for @voiceLadderPhaseCoolDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Phase 4: ease down'**
+  String get voiceLadderPhaseCoolDown;
+
+  /// No description provided for @voiceLadderChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Phase left: {seconds}s'**
+  String voiceLadderChip(int seconds);
+
+  /// No description provided for @voiceSetChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Set {current}/{total} · {seconds}s'**
+  String voiceSetChip(int current, int total, int seconds);
+
+  /// No description provided for @voiceRestChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest {seconds}s'**
+  String voiceRestChip(int seconds);
+
+  /// No description provided for @voiceRestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest'**
+  String get voiceRestTitle;
+
+  /// No description provided for @voiceRestBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: set {next} of {total}. Relax your voice.'**
+  String voiceRestBody(int next, int total);
+
+  /// No description provided for @tremorDurationPickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Session length'**
+  String get tremorDurationPickerTitle;
+
+  /// No description provided for @tremorDurationSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds}s'**
+  String tremorDurationSeconds(int seconds);
+
+  /// No description provided for @tremorTestInstructionDynamic.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold your phone still for {seconds} seconds. Keep your arm steady.'**
+  String tremorTestInstructionDynamic(int seconds);
+
+  /// No description provided for @tremorMotionBandDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Motion bands are for personal reference only — not a medical assessment.'**
+  String get tremorMotionBandDisclaimer;
+
+  /// No description provided for @planTodayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today’s practice'**
+  String get planTodayTitle;
+
+  /// No description provided for @planTodaySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested from your training modules. Tap to start.'**
+  String get planTodaySubtitle;
+
+  /// No description provided for @planEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'No suggestions yet. Try a training from Home.'**
+  String get planEmptyHint;
+
+  /// No description provided for @planDomainHand.
+  ///
+  /// In en, this message translates to:
+  /// **'Hand'**
+  String get planDomainHand;
+
+  /// No description provided for @planDomainVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get planDomainVoice;
+
+  /// No description provided for @planDomainMotion.
+  ///
+  /// In en, this message translates to:
+  /// **'Movement'**
+  String get planDomainMotion;
+
+  /// No description provided for @planGoalProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Today: {done}/{target} sessions'**
+  String planGoalProgress(int done, int target);
+
+  /// No description provided for @planOpenTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get planOpenTask;
+
+  /// No description provided for @planMotionShelvedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Movement detection is limited on some phones; you can still open the practice screen.'**
+  String get planMotionShelvedNote;
+
+  /// No description provided for @voiceProtocolClarity.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear phrases'**
+  String get voiceProtocolClarity;
+
+  /// No description provided for @voiceProtocolClarityDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Read short phrases aloud. No pronunciation scoring.'**
+  String get voiceProtocolClarityDesc;
+
+  /// No description provided for @voiceClarityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the phrase clearly. We only check that you spoke — not whether it was “correct”.'**
+  String get voiceClarityHint;
+
+  /// No description provided for @voiceClarityPhraseProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Phrase {current} of {total}'**
+  String voiceClarityPhraseProgress(int current, int total);
+
+  /// No description provided for @voiceClarityVoiceDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice detected — nice'**
+  String get voiceClarityVoiceDetected;
+
+  /// No description provided for @voiceClarityWaitingVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak the phrase aloud'**
+  String get voiceClarityWaitingVoice;
+
+  /// No description provided for @voiceClarityNextPhrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Next phrase'**
+  String get voiceClarityNextPhrase;
+
+  /// No description provided for @voiceClarityFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get voiceClarityFinish;
+
+  /// No description provided for @voiceClarityPhrase1.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning'**
+  String get voiceClarityPhrase1;
+
+  /// No description provided for @voiceClarityPhrase2.
+  ///
+  /// In en, this message translates to:
+  /// **'How are you today?'**
+  String get voiceClarityPhrase2;
+
+  /// No description provided for @voiceClarityPhrase3.
+  ///
+  /// In en, this message translates to:
+  /// **'Please pass the water'**
+  String get voiceClarityPhrase3;
+
+  /// No description provided for @voiceClarityPhrase4.
+  ///
+  /// In en, this message translates to:
+  /// **'I am doing well'**
+  String get voiceClarityPhrase4;
+
+  /// No description provided for @voiceClarityPhrase5.
+  ///
+  /// In en, this message translates to:
+  /// **'See you tomorrow'**
+  String get voiceClarityPhrase5;
+
+  /// No description provided for @handModePickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice style'**
+  String get handModePickerTitle;
+
+  /// No description provided for @handModeStillHold.
+  ///
+  /// In en, this message translates to:
+  /// **'Still hold'**
+  String get handModeStillHold;
+
+  /// No description provided for @handModeStillHoldDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the phone still while sensors measure motion.'**
+  String get handModeStillHoldDesc;
+
+  /// No description provided for @handModeObjectHold.
+  ///
+  /// In en, this message translates to:
+  /// **'Object hold'**
+  String get handModeObjectHold;
+
+  /// No description provided for @handModeObjectHoldDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold a cup or soft ball steady. Guided timer — no object detection.'**
+  String get handModeObjectHoldDesc;
+
+  /// No description provided for @handModeFineMotor.
+  ///
+  /// In en, this message translates to:
+  /// **'Finger taps'**
+  String get handModeFineMotor;
+
+  /// No description provided for @handModeFineMotorDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap thumb to each finger. You count the cycles.'**
+  String get handModeFineMotorDesc;
+
+  /// No description provided for @handGuidedDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Guided practice for personal rehab support only. Not a medical assessment.'**
+  String get handGuidedDisclaimer;
+
+  /// No description provided for @handObjectHoldInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sit comfortably. Hold a cup or soft ball in one hand. Keep it steady without squeezing hard.'**
+  String get handObjectHoldInstruction;
+
+  /// No description provided for @handObjectHoldStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start hold'**
+  String get handObjectHoldStart;
+
+  /// No description provided for @handObjectHoldRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep holding steadily…'**
+  String get handObjectHoldRunning;
+
+  /// No description provided for @handObjectHoldDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold complete'**
+  String get handObjectHoldDone;
+
+  /// No description provided for @handFineMotorInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Touch your thumb to index, middle, ring, then pinky. That is one cycle.'**
+  String get handFineMotorInstruction;
+
+  /// No description provided for @handFineMotorMarkCycle.
+  ///
+  /// In en, this message translates to:
+  /// **'I finished one cycle'**
+  String get handFineMotorMarkCycle;
+
+  /// No description provided for @handFineMotorProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Cycles: {done}/{target}'**
+  String handFineMotorProgress(int done, int target);
+
+  /// No description provided for @handGuidedCompleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice complete'**
+  String get handGuidedCompleteTitle;
+
+  /// No description provided for @handGuidedCompleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nice work. This session is saved as personal practice only.'**
+  String get handGuidedCompleteBody;
+
+  /// No description provided for @dataTabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data'**
+  String get dataTabTitle;
+
+  /// No description provided for @dataTabSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly practice scores and trends for personal reference.'**
+  String get dataTabSubtitle;
+
+  /// No description provided for @dataTrendsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This week vs last week'**
+  String get dataTrendsTitle;
+
+  /// No description provided for @dataOpenFullReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Open full rehab report'**
+  String get dataOpenFullReport;
+
+  /// No description provided for @dataRecentSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent sessions'**
+  String get dataRecentSessions;
+
+  /// No description provided for @dataStreakDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Training streak: {days} days'**
+  String dataStreakDays(int days);
+
+  /// No description provided for @reportShareButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Share report'**
+  String get reportShareButton;
+
+  /// No description provided for @reportShareConsentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your rehab summary?'**
+  String get reportShareConsentTitle;
+
+  /// No description provided for @reportShareConsentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This creates a text file with your practice scores and trends, then opens the system share sheet (Messages, Mail, Files, etc.).\n\nFor personal reference only — not a medical diagnosis.\n\nOnce you send the file, Amplio cannot recall it from the recipient. You can cancel now, or decline any share target on the next screen.'**
+  String get reportShareConsentBody;
+
+  /// No description provided for @reportShareConsentConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand — continue'**
+  String get reportShareConsentConfirm;
+
+  /// No description provided for @reportShareFileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Amplio Care rehab summary'**
+  String get reportShareFileTitle;
+
+  /// No description provided for @reportShareSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Share sheet opened'**
+  String get reportShareSuccess;
+
+  /// No description provided for @reportShareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not share the report. Please try again.'**
+  String get reportShareFailed;
+
+  /// No description provided for @reportShareFooterNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing requires your confirmation each time. Amplio does not email doctors automatically.'**
+  String get reportShareFooterNote;
 }
 
 class _AppLocalizationsDelegate

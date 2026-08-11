@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -8,13 +7,20 @@ import '../services/sensor_service.dart';
 import '../services/database_service.dart';
 import '../services/training_score_service.dart';
 import '../models/tremor_record.dart';
+import '../models/hand_practice_mode.dart';
 import '../utils/constants.dart';
+import '../utils/gentle_page_route.dart';
+import 'hand_guided_practice_page.dart';
 
 class TremorTestPage extends StatefulWidget {
   const TremorTestPage({
     super.key,
+    this.initialMode = HandPracticeMode.stillHold,
     @visibleForTesting this.forcePermissionDenied = false,
   });
+
+  /// Plan / 深链可指定练习方式。
+  final HandPracticeMode initialMode;
 
   /// 测试专用：跳过默认「视为已授权」，以便验证拒绝时的 SnackBar。
   @visibleForTesting
@@ -36,6 +42,8 @@ class _TremorTestPageState extends State<TremorTestPage>
   static const Color _textSecondary = Color(0xFF64748B);
 
   bool _isRecording = false;
+  HandPracticeMode _mode = HandPracticeMode.stillHold;
+  int _selectedDuration = AppConstants.tremorTestDuration;
   int _remainingTime = AppConstants.tremorTestDuration;
   Timer? _timer;
   double _currentFrequency = 0.0;
@@ -46,8 +54,29 @@ class _TremorTestPageState extends State<TremorTestPage>
   @override
   void initState() {
     super.initState();
+    _mode = widget.initialMode;
     WidgetsBinding.instance.addObserver(this);
     _checkPermission();
+    if (_mode != HandPracticeMode.stillHold) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(_openGuidedMode(_mode, replaceSelf: true));
+      });
+    }
+  }
+
+  Future<void> _openGuidedMode(
+    HandPracticeMode mode, {
+    bool replaceSelf = false,
+  }) async {
+    if (mode == HandPracticeMode.stillHold) return;
+    final page = HandGuidedPracticePage(mode: mode);
+    if (replaceSelf && mounted) {
+      await Navigator.of(context).pushReplacement(
+        appPageRoute(builder: (_) => page),
+      );
+      return;
+    }
+    await pushGentle(context, page);
   }
 
   @override
@@ -92,7 +121,7 @@ class _TremorTestPageState extends State<TremorTestPage>
 
     setState(() {
       _isRecording = true;
-      _remainingTime = AppConstants.tremorTestDuration;
+      _remainingTime = _selectedDuration;
       _chartData.clear();
       _currentFrequency = 0.0;
       _currentAmplitude = 0.0;
@@ -123,7 +152,7 @@ class _TremorTestPageState extends State<TremorTestPage>
   }
 
   Future<void> _stopTest() async {
-    // 仅当测试跑满 30 秒（_remainingTime 由定时器减到 0）才保存；用户提前点击「停止测试」则不保存
+    // 仅当跑满所选时长（_remainingTime 减到 0）才保存；用户提前停止则不保存
     final completedFullDuration = (_remainingTime <= 0);
 
     _timer?.cancel();
@@ -156,7 +185,7 @@ class _TremorTestPageState extends State<TremorTestPage>
         averageFrequency: frequency,
         maxAmplitude: maxAmplitude,
         averageAmplitude: avgAmplitude,
-        duration: AppConstants.tremorTestDuration,
+        duration: _selectedDuration,
         accelerometerData: _sensorService.getRecordedData(),
       );
 
@@ -164,7 +193,7 @@ class _TremorTestPageState extends State<TremorTestPage>
       await TrainingScoreService().recordHandFromTremor(
         averageAmplitude: avgAmplitude,
         maxAmplitude: maxAmplitude,
-        durationSeconds: AppConstants.tremorTestDuration,
+        durationSeconds: _selectedDuration,
       );
 
       if (mounted) {
@@ -271,6 +300,12 @@ class _TremorTestPageState extends State<TremorTestPage>
               ),
               child: Text('${l10n.tremorSeverity}: $severityText', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: severityColor)),
             ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.tremorMotionBandDisclaimer,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12, color: _textSecondary, height: 1.3),
+            ),
             const SizedBox(height: 16),
             _buildResultRow(Icons.speed, l10n.tremorFrequency, '${frequency.toStringAsFixed(2)} Hz', _primaryColor),
             const SizedBox(height: 10),
@@ -373,6 +408,7 @@ class _TremorTestPageState extends State<TremorTestPage>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final chartHeight = (MediaQuery.sizeOf(context).height * 0.28).clamp(160.0, 240.0);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF0F9FF),
@@ -433,181 +469,315 @@ class _TremorTestPageState extends State<TremorTestPage>
                   ),
                 ],
               ),
-              
-              const SizedBox(height: 16),
 
-              // 说明卡片
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF38BDF8)]),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [BoxShadow(color: _primaryColor.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(10)),
-                      child: const Icon(CupertinoIcons.hand_raised, color: Colors.white, size: 26),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Text(l10n.tremorTestInstruction, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white, height: 1.4)),
-                    ),
-                  ],
-                ),
-              ),
-              
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
 
-              // 状态显示
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: _isRecording ? _primaryColor.withValues(alpha: 0.3) : Colors.grey.withValues(alpha: 0.2), width: 2),
-                ),
-                child: _isRecording
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(CupertinoIcons.timer, color: _primaryColor, size: 20),
-                          const SizedBox(width: 8),
-                          Text(l10n.remainingTime(_remainingTime), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _primaryColor)),
-                        ],
-                      )
-                    : Text(l10n.readyToTest, style: const TextStyle(fontSize: 16, color: _textSecondary, fontWeight: FontWeight.w500)),
-              ),
-              
-              const SizedBox(height: 16),
-
-              // 数据卡片
-              Row(
-                children: [
-                  _buildCompactMetricCard(l10n.frequency, _currentFrequency.toStringAsFixed(2), 'Hz', _primaryColor, CupertinoIcons.waveform),
-                  const SizedBox(width: 12),
-                  _buildCompactMetricCard(l10n.amplitude, _currentAmplitude.toStringAsFixed(3), '', _secondaryColor, CupertinoIcons.chart_bar),
-                ],
-              ),
-              
-              const SizedBox(height: 16),
-
-              // 图表区域
               Expanded(
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [BoxShadow(color: _primaryColor.withValues(alpha: 0.08), blurRadius: 15, offset: const Offset(0, 4))],
-                  ),
+                child: SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF38BDF8)]),
-                              borderRadius: BorderRadius.circular(10),
+                      // 练习方式（紧凑分段，避免小屏溢出）
+                      if (!_isRecording) ...[
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            l10n.handModePickerTitle,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: _textSecondary,
                             ),
-                            child: const Icon(CupertinoIcons.waveform_path, color: Colors.white, size: 18),
-                          ),
-                          const SizedBox(width: 12),
-                          Text(l10n.realtimeWaveform, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: _textPrimary)),
-                          const Spacer(),
-                          if (_isRecording)
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                              decoration: BoxDecoration(color: _secondaryColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(width: 6, height: 6, decoration: const BoxDecoration(color: _secondaryColor, shape: BoxShape.circle)),
-                                  const SizedBox(width: 4),
-                                  const Text('LIVE', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: _secondaryColor)),
-                                ],
-                              ),
-                            ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Expanded(
-                        child: _chartData.isEmpty
-                            ? Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(CupertinoIcons.waveform_path, size: 40, color: _primaryColor.withValues(alpha: 0.3)),
-                                    const SizedBox(height: 8),
-                                    Text(l10n.waitingForData, style: const TextStyle(fontSize: 13, color: _textSecondary)),
-                                  ],
-                                ),
-                              )
-                            : LineChart(
-                                LineChartData(
-                                  gridData: FlGridData(
-                                    show: true,
-                                    horizontalInterval: 2,
-                                    verticalInterval: 20,
-                                    getDrawingHorizontalLine: (value) => FlLine(color: const Color(0xFFE2E8F0), strokeWidth: 1),
-                                    getDrawingVerticalLine: (value) => FlLine(color: const Color(0xFFE2E8F0), strokeWidth: 1),
-                                  ),
-                                  titlesData: _buildWaveformTitlesData(l10n),
-                                  borderData: FlBorderData(show: false),
-                                  minY: _getMinY(),
-                                  maxY: _getMaxY(),
-                                  lineBarsData: [
-                                    LineChartBarData(
-                                      spots: _chartData.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value)).toList(),
-                                      isCurved: true,
-                                      curveSmoothness: 0.25,
-                                      color: _primaryColor,
-                                      barWidth: 2,
-                                      dotData: const FlDotData(show: false),
-                                      belowBarData: BarAreaData(
-                                        show: true,
-                                        gradient: LinearGradient(
-                                          colors: [_primaryColor.withValues(alpha: 0.2), _primaryColor.withValues(alpha: 0.0)],
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                      ),
-                      // 帮助患者理解：波形与手部震颤的关系说明
-                      if (_chartData.isNotEmpty) ...[
-                        const SizedBox(height: 8),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: Row(
-                            children: [
-                              Icon(CupertinoIcons.info_circle, size: 14, color: _primaryColor.withValues(alpha: 0.8)),
-                              const SizedBox(width: 6),
-                              Expanded(
-                                child: Text(
-                                  l10n.waveformHint,
-                                  style: TextStyle(fontSize: 12, color: _textSecondary.withValues(alpha: 0.95), height: 1.35),
-                                ),
-                              ),
-                            ],
                           ),
                         ),
                         const SizedBox(height: 8),
+                        CupertinoSlidingSegmentedControl<HandPracticeMode>(
+                          groupValue: _mode,
+                          backgroundColor: Colors.white,
+                          thumbColor: _primaryColor.withValues(alpha: 0.18),
+                          children: {
+                            HandPracticeMode.stillHold: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                              child: Text(
+                                l10n.handModeStillHold,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: _mode == HandPracticeMode.stillHold
+                                      ? _primaryColor
+                                      : _textSecondary,
+                                ),
+                              ),
+                            ),
+                            HandPracticeMode.objectHold: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                              child: Text(
+                                l10n.handModeObjectHold,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: _mode == HandPracticeMode.objectHold
+                                      ? _primaryColor
+                                      : _textSecondary,
+                                ),
+                              ),
+                            ),
+                            HandPracticeMode.fineMotor: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                              child: Text(
+                                l10n.handModeFineMotor,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: _mode == HandPracticeMode.fineMotor
+                                      ? _primaryColor
+                                      : _textSecondary,
+                                ),
+                              ),
+                            ),
+                          },
+                          onValueChanged: (mode) async {
+                            if (mode == null) return;
+                            setState(() => _mode = mode);
+                            if (mode != HandPracticeMode.stillHold) {
+                              await _openGuidedMode(mode);
+                              if (mounted) {
+                                setState(() => _mode = HandPracticeMode.stillHold);
+                              }
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          _mode == HandPracticeMode.stillHold
+                              ? l10n.handModeStillHoldDesc
+                              : _mode == HandPracticeMode.objectHold
+                                  ? l10n.handModeObjectHoldDesc
+                                  : l10n.handModeFineMotorDesc,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: _textSecondary,
+                            height: 1.3,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
                       ],
+
+                      // 说明卡片
+                      Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF38BDF8)]),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [BoxShadow(color: _primaryColor.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(10)),
+                              child: const Icon(CupertinoIcons.hand_raised, color: Colors.white, size: 26),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Text(
+                                l10n.tremorTestInstructionDynamic(_selectedDuration),
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                  height: 1.4,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // 时长选择（未录制时可改）
+                      if (!_isRecording) ...[
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            l10n.tremorDurationPickerTitle,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: _textSecondary,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            for (final seconds in AppConstants.tremorDurationOptions) ...[
+                              if (seconds != AppConstants.tremorDurationOptions.first)
+                                const SizedBox(width: 8),
+                              Expanded(
+                                child: _buildDurationChip(seconds),
+                              ),
+                            ],
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+
+                      // 状态显示
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: _isRecording ? _primaryColor.withValues(alpha: 0.3) : Colors.grey.withValues(alpha: 0.2), width: 2),
+                        ),
+                        child: _isRecording
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(CupertinoIcons.timer, color: _primaryColor, size: 20),
+                                  const SizedBox(width: 8),
+                                  Text(l10n.remainingTime(_remainingTime), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _primaryColor)),
+                                ],
+                              )
+                            : Text(l10n.readyToTest, style: const TextStyle(fontSize: 16, color: _textSecondary, fontWeight: FontWeight.w500)),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // 数据卡片
+                      Row(
+                        children: [
+                          _buildCompactMetricCard(l10n.frequency, _currentFrequency.toStringAsFixed(2), 'Hz', _primaryColor, CupertinoIcons.waveform),
+                          const SizedBox(width: 12),
+                          _buildCompactMetricCard(l10n.amplitude, _currentAmplitude.toStringAsFixed(3), '', _secondaryColor, CupertinoIcons.chart_bar),
+                        ],
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // 图表区域（固定高度，外层可滚动，避免小屏溢出）
+                      SizedBox(
+                        height: chartHeight,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [BoxShadow(color: _primaryColor.withValues(alpha: 0.08), blurRadius: 15, offset: const Offset(0, 4))],
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF38BDF8)]),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Icon(CupertinoIcons.waveform_path, color: Colors.white, size: 18),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(l10n.realtimeWaveform, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: _textPrimary)),
+                                  const Spacer(),
+                                  if (_isRecording)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                      decoration: BoxDecoration(color: _secondaryColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(width: 6, height: 6, decoration: const BoxDecoration(color: _secondaryColor, shape: BoxShape.circle)),
+                                          const SizedBox(width: 4),
+                                          const Text('LIVE', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: _secondaryColor)),
+                                        ],
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              Expanded(
+                                child: _chartData.isEmpty
+                                    ? Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(CupertinoIcons.waveform_path, size: 40, color: _primaryColor.withValues(alpha: 0.3)),
+                                            const SizedBox(height: 8),
+                                            Text(l10n.waitingForData, style: const TextStyle(fontSize: 13, color: _textSecondary)),
+                                          ],
+                                        ),
+                                      )
+                                    : LineChart(
+                                        LineChartData(
+                                          gridData: FlGridData(
+                                            show: true,
+                                            horizontalInterval: 2,
+                                            verticalInterval: 20,
+                                            getDrawingHorizontalLine: (value) => FlLine(color: const Color(0xFFE2E8F0), strokeWidth: 1),
+                                            getDrawingVerticalLine: (value) => FlLine(color: const Color(0xFFE2E8F0), strokeWidth: 1),
+                                          ),
+                                          titlesData: _buildWaveformTitlesData(l10n),
+                                          borderData: FlBorderData(show: false),
+                                          minY: _getMinY(),
+                                          maxY: _getMaxY(),
+                                          lineBarsData: [
+                                            LineChartBarData(
+                                              spots: _chartData.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value)).toList(),
+                                              isCurved: true,
+                                              curveSmoothness: 0.25,
+                                              color: _primaryColor,
+                                              barWidth: 2,
+                                              dotData: const FlDotData(show: false),
+                                              belowBarData: BarAreaData(
+                                                show: true,
+                                                gradient: LinearGradient(
+                                                  colors: [_primaryColor.withValues(alpha: 0.2), _primaryColor.withValues(alpha: 0.0)],
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                              ),
+                              if (_chartData.isNotEmpty) ...[
+                                const SizedBox(height: 8),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  child: Row(
+                                    children: [
+                                      Icon(CupertinoIcons.info_circle, size: 14, color: _primaryColor.withValues(alpha: 0.8)),
+                                      const SizedBox(width: 6),
+                                      Expanded(
+                                        child: Text(
+                                          l10n.waveformHint,
+                                          style: TextStyle(fontSize: 12, color: _textSecondary.withValues(alpha: 0.95), height: 1.35),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
                     ],
                   ),
                 ),
               ),
-              
-              const SizedBox(height: 16),
+
+              const SizedBox(height: 12),
 
               // 底部按钮
               SizedBox(
@@ -774,7 +944,12 @@ class _TremorTestPageState extends State<TremorTestPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 日期和严重程度
+            Text(
+              l10n.tremorMotionBandDisclaimer,
+              style: const TextStyle(fontSize: 12, color: _textSecondary, height: 1.3),
+            ),
+            const SizedBox(height: 10),
+            // 日期和晃动档位（非诊断）
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -893,6 +1068,38 @@ class _TremorTestPageState extends State<TremorTestPage>
             child: Text(l10n.cancel),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDurationChip(int seconds) {
+    final selected = _selectedDuration == seconds;
+    final l10n = AppLocalizations.of(context)!;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => setState(() => _selectedDuration = seconds),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: selected ? _primaryColor.withValues(alpha: 0.12) : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: selected ? _primaryColor : Colors.grey.shade300,
+              width: selected ? 1.5 : 1,
+            ),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            l10n.tremorDurationSeconds(seconds),
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              color: selected ? _primaryColor : _textSecondary,
+            ),
+          ),
+        ),
       ),
     );
   }

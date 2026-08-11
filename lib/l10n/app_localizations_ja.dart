@@ -951,4 +951,266 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get voiceSessionTooShort => 'セッションが短すぎたため保存されませんでした';
+
+  @override
+  String get voiceProtocolPickerTitle => 'Choose a practice style';
+
+  @override
+  String get voiceProtocolSteady => 'Steady volume';
+
+  @override
+  String get voiceProtocolSteadyDesc =>
+      'Sustain a long “Ah” in the target volume zone.';
+
+  @override
+  String get voiceProtocolLadder => 'Volume ladder';
+
+  @override
+  String get voiceProtocolLadderDesc =>
+      'Soft → target → a bit stronger → ease down.';
+
+  @override
+  String get voiceProtocolMultiSet => '3 short sets';
+
+  @override
+  String get voiceProtocolMultiSetDesc =>
+      'Three short rounds with a brief rest between.';
+
+  @override
+  String get voiceTrainingReferenceDisclaimer =>
+      'For personal rehabilitation practice only. Not a diagnosis or treatment.';
+
+  @override
+  String get voiceLadderPhaseSoft => 'Phase 1: softer voice';
+
+  @override
+  String get voiceLadderPhaseTarget => 'Phase 2: target volume';
+
+  @override
+  String get voiceLadderPhaseStrong => 'Phase 3: a bit stronger';
+
+  @override
+  String get voiceLadderPhaseCoolDown => 'Phase 4: ease down';
+
+  @override
+  String voiceLadderChip(int seconds) {
+    return 'Phase left: ${seconds}s';
+  }
+
+  @override
+  String voiceSetChip(int current, int total, int seconds) {
+    return 'Set $current/$total · ${seconds}s';
+  }
+
+  @override
+  String voiceRestChip(int seconds) {
+    return 'Rest ${seconds}s';
+  }
+
+  @override
+  String get voiceRestTitle => 'Rest';
+
+  @override
+  String voiceRestBody(int next, int total) {
+    return 'Next: set $next of $total. Relax your voice.';
+  }
+
+  @override
+  String get tremorDurationPickerTitle => 'Session length';
+
+  @override
+  String tremorDurationSeconds(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String tremorTestInstructionDynamic(int seconds) {
+    return 'Hold your phone still for $seconds seconds. Keep your arm steady.';
+  }
+
+  @override
+  String get tremorMotionBandDisclaimer =>
+      'Motion bands are for personal reference only — not a medical assessment.';
+
+  @override
+  String get planTodayTitle => 'Today’s practice';
+
+  @override
+  String get planTodaySubtitle =>
+      'Suggested from your training modules. Tap to start.';
+
+  @override
+  String get planEmptyHint => 'No suggestions yet. Try a training from Home.';
+
+  @override
+  String get planDomainHand => 'Hand';
+
+  @override
+  String get planDomainVoice => 'Voice';
+
+  @override
+  String get planDomainMotion => 'Movement';
+
+  @override
+  String planGoalProgress(int done, int target) {
+    return 'Today: $done/$target sessions';
+  }
+
+  @override
+  String get planOpenTask => 'Start';
+
+  @override
+  String get planMotionShelvedNote =>
+      'Movement detection is limited on some phones; you can still open the practice screen.';
+
+  @override
+  String get voiceProtocolClarity => 'Clear phrases';
+
+  @override
+  String get voiceProtocolClarityDesc =>
+      'Read short phrases aloud. No pronunciation scoring.';
+
+  @override
+  String get voiceClarityHint =>
+      'Read the phrase clearly. We only check that you spoke — not whether it was “correct”.';
+
+  @override
+  String voiceClarityPhraseProgress(int current, int total) {
+    return 'Phrase $current of $total';
+  }
+
+  @override
+  String get voiceClarityVoiceDetected => 'Voice detected — nice';
+
+  @override
+  String get voiceClarityWaitingVoice => 'Speak the phrase aloud';
+
+  @override
+  String get voiceClarityNextPhrase => 'Next phrase';
+
+  @override
+  String get voiceClarityFinish => 'Finish';
+
+  @override
+  String get voiceClarityPhrase1 => 'Good morning';
+
+  @override
+  String get voiceClarityPhrase2 => 'How are you today?';
+
+  @override
+  String get voiceClarityPhrase3 => 'Please pass the water';
+
+  @override
+  String get voiceClarityPhrase4 => 'I am doing well';
+
+  @override
+  String get voiceClarityPhrase5 => 'See you tomorrow';
+
+  @override
+  String get handModePickerTitle => 'Practice style';
+
+  @override
+  String get handModeStillHold => 'Still hold';
+
+  @override
+  String get handModeStillHoldDesc =>
+      'Hold the phone still while sensors measure motion.';
+
+  @override
+  String get handModeObjectHold => 'Object hold';
+
+  @override
+  String get handModeObjectHoldDesc =>
+      'Hold a cup or soft ball steady. Guided timer — no object detection.';
+
+  @override
+  String get handModeFineMotor => 'Finger taps';
+
+  @override
+  String get handModeFineMotorDesc =>
+      'Tap thumb to each finger. You count the cycles.';
+
+  @override
+  String get handGuidedDisclaimer =>
+      'Guided practice for personal rehab support only. Not a medical assessment.';
+
+  @override
+  String get handObjectHoldInstruction =>
+      'Sit comfortably. Hold a cup or soft ball in one hand. Keep it steady without squeezing hard.';
+
+  @override
+  String get handObjectHoldStart => 'Start hold';
+
+  @override
+  String get handObjectHoldRunning => 'Keep holding steadily…';
+
+  @override
+  String get handObjectHoldDone => 'Hold complete';
+
+  @override
+  String get handFineMotorInstruction =>
+      'Touch your thumb to index, middle, ring, then pinky. That is one cycle.';
+
+  @override
+  String get handFineMotorMarkCycle => 'I finished one cycle';
+
+  @override
+  String handFineMotorProgress(int done, int target) {
+    return 'Cycles: $done/$target';
+  }
+
+  @override
+  String get handGuidedCompleteTitle => 'Practice complete';
+
+  @override
+  String get handGuidedCompleteBody =>
+      'Nice work. This session is saved as personal practice only.';
+
+  @override
+  String get dataTabTitle => 'Your data';
+
+  @override
+  String get dataTabSubtitle =>
+      'Weekly practice scores and trends for personal reference.';
+
+  @override
+  String get dataTrendsTitle => 'This week vs last week';
+
+  @override
+  String get dataOpenFullReport => 'Open full rehab report';
+
+  @override
+  String get dataRecentSessions => 'Recent sessions';
+
+  @override
+  String dataStreakDays(int days) {
+    return 'Training streak: $days days';
+  }
+
+  @override
+  String get reportShareButton => 'Share report';
+
+  @override
+  String get reportShareConsentTitle => 'Share your rehab summary?';
+
+  @override
+  String get reportShareConsentBody =>
+      'This creates a text file with your practice scores and trends, then opens the system share sheet (Messages, Mail, Files, etc.).\n\nFor personal reference only — not a medical diagnosis.\n\nOnce you send the file, Amplio cannot recall it from the recipient. You can cancel now, or decline any share target on the next screen.';
+
+  @override
+  String get reportShareConsentConfirm => 'I understand — continue';
+
+  @override
+  String get reportShareFileTitle => 'Amplio Care rehab summary';
+
+  @override
+  String get reportShareSuccess => 'Share sheet opened';
+
+  @override
+  String get reportShareFailed =>
+      'Could not share the report. Please try again.';
+
+  @override
+  String get reportShareFooterNote =>
+      'Sharing requires your confirmation each time. Amplio does not email doctors automatically.';
 }

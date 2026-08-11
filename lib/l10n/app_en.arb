@@ -193,25 +193,25 @@
   "@dataPoints": {
     "description": "Data points label"
   },
-  "severityNormal": "Normal",
+  "severityNormal": "Lower motion",
   "@severityNormal": {
-    "description": "Normal severity"
+    "description": "Lowest motion band for personal reference (not a diagnosis)"
   },
-  "severityMild": "Mild",
+  "severityMild": "Light motion",
   "@severityMild": {
-    "description": "Mild severity"
+    "description": "Light motion band for personal reference"
   },
-  "severityModerate": "Moderate",
+  "severityModerate": "Moderate motion",
   "@severityModerate": {
-    "description": "Moderate severity"
+    "description": "Moderate motion band for personal reference"
   },
-  "severityModerateSevere": "Moderate-Severe",
+  "severityModerateSevere": "Higher motion",
   "@severityModerateSevere": {
-    "description": "Moderate to severe"
+    "description": "Higher motion band for personal reference"
   },
-  "severitySevere": "Severe",
+  "severitySevere": "Highest band",
   "@severitySevere": {
-    "description": "Severe severity"
+    "description": "Highest motion band for personal reference"
   },
   "appSubtitle": "Your personal Parkinson's assistant for movement tracking and analysis",
   "@appSubtitle": {
@@ -397,7 +397,7 @@
   "@voiceTrainingMainInstruction": {
     "description": "Main instruction headline for voice training"
   },
-  "voiceTrainingInstruction": "Based on LSVT LOUD therapy principles, please speak loudly. The circle size will change in real-time based on your volume. When it reaches 75-85 dB, the circle will turn green.",
+  "voiceTrainingInstruction": "Practice speaking with a clear, strong voice. The circle size changes with your volume. When you reach the target range, the circle turns green. For personal practice only — not medical treatment.",
   "@voiceTrainingInstruction": {
     "description": "Voice training instruction text"
   },
@@ -810,5 +810,135 @@
   "voiceRetryButton": "Practice Again",
   "voiceFinishButton": "Done",
   "voicePracticeFooterHint": "This exercise encourages speaking loudly for voice training. For reference only, not a medical diagnosis.",
-  "voiceSessionTooShort": "Session was too short and was not saved"
+  "voiceSessionTooShort": "Session was too short and was not saved",
+  "voiceProtocolPickerTitle": "Choose a practice style",
+  "voiceProtocolSteady": "Steady volume",
+  "voiceProtocolSteadyDesc": "Sustain a long “Ah” in the target volume zone.",
+  "voiceProtocolLadder": "Volume ladder",
+  "voiceProtocolLadderDesc": "Soft → target → a bit stronger → ease down.",
+  "voiceProtocolMultiSet": "3 short sets",
+  "voiceProtocolMultiSetDesc": "Three short rounds with a brief rest between.",
+  "voiceTrainingReferenceDisclaimer": "For personal rehabilitation practice only. Not a diagnosis or treatment.",
+  "voiceLadderPhaseSoft": "Phase 1: softer voice",
+  "voiceLadderPhaseTarget": "Phase 2: target volume",
+  "voiceLadderPhaseStrong": "Phase 3: a bit stronger",
+  "voiceLadderPhaseCoolDown": "Phase 4: ease down",
+  "voiceLadderChip": "Phase left: {seconds}s",
+  "@voiceLadderChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceSetChip": "Set {current}/{total} · {seconds}s",
+  "@voiceSetChip": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" },
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestChip": "Rest {seconds}s",
+  "@voiceRestChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestTitle": "Rest",
+  "voiceRestBody": "Next: set {next} of {total}. Relax your voice.",
+  "@voiceRestBody": {
+    "placeholders": {
+      "next": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "tremorDurationPickerTitle": "Session length",
+  "tremorDurationSeconds": "{seconds}s",
+  "@tremorDurationSeconds": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorTestInstructionDynamic": "Hold your phone still for {seconds} seconds. Keep your arm steady.",
+  "@tremorTestInstructionDynamic": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorMotionBandDisclaimer": "Motion bands are for personal reference only — not a medical assessment.",
+  "planTodayTitle": "Today’s practice",
+  "planTodaySubtitle": "Suggested from your training modules. Tap to start.",
+  "planEmptyHint": "No suggestions yet. Try a training from Home.",
+  "planDomainHand": "Hand",
+  "planDomainVoice": "Voice",
+  "planDomainMotion": "Movement",
+  "planGoalProgress": "Today: {done}/{target} sessions",
+  "@planGoalProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "planOpenTask": "Start",
+  "planMotionShelvedNote": "Movement detection is limited on some phones; you can still open the practice screen.",
+  "voiceProtocolClarity": "Clear phrases",
+  "voiceProtocolClarityDesc": "Read short phrases aloud. No pronunciation scoring.",
+  "voiceClarityHint": "Read the phrase clearly. We only check that you spoke — not whether it was “correct”.",
+  "voiceClarityPhraseProgress": "Phrase {current} of {total}",
+  "@voiceClarityPhraseProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "voiceClarityVoiceDetected": "Voice detected — nice",
+  "voiceClarityWaitingVoice": "Speak the phrase aloud",
+  "voiceClarityNextPhrase": "Next phrase",
+  "voiceClarityFinish": "Finish",
+  "voiceClarityPhrase1": "Good morning",
+  "voiceClarityPhrase2": "How are you today?",
+  "voiceClarityPhrase3": "Please pass the water",
+  "voiceClarityPhrase4": "I am doing well",
+  "voiceClarityPhrase5": "See you tomorrow",
+  "handModePickerTitle": "Practice style",
+  "handModeStillHold": "Still hold",
+  "handModeStillHoldDesc": "Hold the phone still while sensors measure motion.",
+  "handModeObjectHold": "Object hold",
+  "handModeObjectHoldDesc": "Hold a cup or soft ball steady. Guided timer — no object detection.",
+  "handModeFineMotor": "Finger taps",
+  "handModeFineMotorDesc": "Tap thumb to each finger. You count the cycles.",
+  "handGuidedDisclaimer": "Guided practice for personal rehab support only. Not a medical assessment.",
+  "handObjectHoldInstruction": "Sit comfortably. Hold a cup or soft ball in one hand. Keep it steady without squeezing hard.",
+  "handObjectHoldStart": "Start hold",
+  "handObjectHoldRunning": "Keep holding steadily…",
+  "handObjectHoldDone": "Hold complete",
+  "handFineMotorInstruction": "Touch your thumb to index, middle, ring, then pinky. That is one cycle.",
+  "handFineMotorMarkCycle": "I finished one cycle",
+  "handFineMotorProgress": "Cycles: {done}/{target}",
+  "@handFineMotorProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "handGuidedCompleteTitle": "Practice complete",
+  "handGuidedCompleteBody": "Nice work. This session is saved as personal practice only.",
+  "dataTabTitle": "Your data",
+  "dataTabSubtitle": "Weekly practice scores and trends for personal reference.",
+  "dataTrendsTitle": "This week vs last week",
+  "dataOpenFullReport": "Open full rehab report",
+  "dataRecentSessions": "Recent sessions",
+  "dataStreakDays": "Training streak: {days} days",
+  "@dataStreakDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "reportShareButton": "Share report",
+  "reportShareConsentTitle": "Share your rehab summary?",
+  "reportShareConsentBody": "This creates a text file with your practice scores and trends, then opens the system share sheet (Messages, Mail, Files, etc.).\n\nFor personal reference only — not a medical diagnosis.\n\nOnce you send the file, Amplio cannot recall it from the recipient. You can cancel now, or decline any share target on the next screen.",
+  "reportShareConsentConfirm": "I understand — continue",
+  "reportShareFileTitle": "Amplio Care rehab summary",
+  "reportShareSuccess": "Share sheet opened",
+  "reportShareFailed": "Could not share the report. Please try again.",
+  "reportShareFooterNote": "Sharing requires your confirmation each time. Amplio does not email doctors automatically."
 }

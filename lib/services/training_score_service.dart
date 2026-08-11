@@ -139,4 +139,20 @@ class TrainingScoreService {
     final score = activeRatio * 60 + volumeFactor * 40;
     return score.clamp(0.0, 100.0);
   }
+
+  /// 引导式手部练习完成后写入参考分（完成度，非传感器评估）。
+  Future<void> recordHandGuided({
+    required int completedSteps,
+    required int targetSteps,
+    required int durationSeconds,
+  }) async {
+    final target = targetSteps > 0 ? targetSteps : 1;
+    final ratio = (completedSteps / target).clamp(0.0, 1.0);
+    final score = (ratio * 80 + 15).clamp(0.0, 100.0);
+    await _analytics.addScore(
+      type: TrainingType.hand,
+      score: score,
+      duration: durationSeconds > 0 ? durationSeconds : 1,
+    );
+  }
 }

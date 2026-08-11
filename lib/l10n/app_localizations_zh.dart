@@ -158,19 +158,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dataPoints => '数据点';
 
   @override
-  String get severityNormal => '正常';
+  String get severityNormal => '较低晃动';
 
   @override
-  String get severityMild => '轻度';
+  String get severityMild => '轻度晃动';
 
   @override
-  String get severityModerate => '中度';
+  String get severityModerate => '中等晃动';
 
   @override
-  String get severityModerateSevere => '中重度';
+  String get severityModerateSevere => '偏高晃动';
 
   @override
-  String get severitySevere => '重度';
+  String get severitySevere => '最高档位';
 
   @override
   String get appSubtitle => '您的帕金森运动追踪与分析助手';
@@ -484,7 +484,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get voiceTrainingInstruction =>
-      '基于 LSVT LOUD 疗法理念，请大声说话。圆的大小会根据您的音量实时变化，达到 75-85 dB 时圆会变绿。';
+      '请用清晰、有力的声音练习。圆的大小会随音量变化，进入目标范围时会变绿。仅供个人练习，不是医学治疗。';
 
   @override
   String get voiceTrainingReady => '准备开始';
@@ -947,6 +947,249 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get voiceSessionTooShort => '练习时间过短，未保存本次记录';
+
+  @override
+  String get voiceProtocolPickerTitle => '选择练习方式';
+
+  @override
+  String get voiceProtocolSteady => '持续音量';
+
+  @override
+  String get voiceProtocolSteadyDesc => '拉长发「啊」，尽量保持在目标音量区。';
+
+  @override
+  String get voiceProtocolLadder => '音量阶梯';
+
+  @override
+  String get voiceProtocolLadderDesc => '轻 → 目标 → 稍强 → 再回落。';
+
+  @override
+  String get voiceProtocolMultiSet => '三组短练';
+
+  @override
+  String get voiceProtocolMultiSetDesc => '三组短练习，组间短暂休息。';
+
+  @override
+  String get voiceTrainingReferenceDisclaimer => '仅供个人康复练习参考，不能诊断或治疗疾病。';
+
+  @override
+  String get voiceLadderPhaseSoft => '阶段 1：轻一点';
+
+  @override
+  String get voiceLadderPhaseTarget => '阶段 2：目标音量';
+
+  @override
+  String get voiceLadderPhaseStrong => '阶段 3：再强一点';
+
+  @override
+  String get voiceLadderPhaseCoolDown => '阶段 4：慢慢回落';
+
+  @override
+  String voiceLadderChip(int seconds) {
+    return '本阶段剩 $seconds 秒';
+  }
+
+  @override
+  String voiceSetChip(int current, int total, int seconds) {
+    return '第 $current/$total 组 · $seconds 秒';
+  }
+
+  @override
+  String voiceRestChip(int seconds) {
+    return '休息 $seconds 秒';
+  }
+
+  @override
+  String get voiceRestTitle => '休息一下';
+
+  @override
+  String voiceRestBody(int next, int total) {
+    return '下一组是第 $next / $total 组，放松嗓子。';
+  }
+
+  @override
+  String get tremorDurationPickerTitle => '练习时长';
+
+  @override
+  String tremorDurationSeconds(int seconds) {
+    return '$seconds 秒';
+  }
+
+  @override
+  String tremorTestInstructionDynamic(int seconds) {
+    return '请将手机握在手中，保持手臂静止 $seconds 秒。';
+  }
+
+  @override
+  String get tremorMotionBandDisclaimer => '晃动档位仅供个人参考，不是医学评估或诊断。';
+
+  @override
+  String get planTodayTitle => '今日练习';
+
+  @override
+  String get planTodaySubtitle => '根据训练模块给出的建议，点按即可开始。';
+
+  @override
+  String get planEmptyHint => '暂无建议，可先从首页开始一次训练。';
+
+  @override
+  String get planDomainHand => '手部';
+
+  @override
+  String get planDomainVoice => '语音';
+
+  @override
+  String get planDomainMotion => '肢体';
+
+  @override
+  String planGoalProgress(int done, int target) {
+    return '今日进度：$done/$target 次';
+  }
+
+  @override
+  String get planOpenTask => '开始';
+
+  @override
+  String get planMotionShelvedNote => '部分机型肢体检测仍不稳定，仍可打开练习页尝试。';
+
+  @override
+  String get voiceProtocolClarity => '清晰短句';
+
+  @override
+  String get voiceProtocolClarityDesc => '大声朗读短句。不做发音对错评分。';
+
+  @override
+  String get voiceClarityHint => '请把句子读清楚。我们只检测你是否出声，不判断读得对不对。';
+
+  @override
+  String voiceClarityPhraseProgress(int current, int total) {
+    return '第 $current / $total 句';
+  }
+
+  @override
+  String get voiceClarityVoiceDetected => '已检测到声音';
+
+  @override
+  String get voiceClarityWaitingVoice => '请大声读出这句话';
+
+  @override
+  String get voiceClarityNextPhrase => '下一句';
+
+  @override
+  String get voiceClarityFinish => '完成';
+
+  @override
+  String get voiceClarityPhrase1 => '早上好';
+
+  @override
+  String get voiceClarityPhrase2 => '你今天好吗？';
+
+  @override
+  String get voiceClarityPhrase3 => '请把水递给我';
+
+  @override
+  String get voiceClarityPhrase4 => '我感觉不错';
+
+  @override
+  String get voiceClarityPhrase5 => '明天见';
+
+  @override
+  String get handModePickerTitle => '练习方式';
+
+  @override
+  String get handModeStillHold => '静止持机';
+
+  @override
+  String get handModeStillHoldDesc => '握着手机保持静止，用传感器观察晃动。';
+
+  @override
+  String get handModeObjectHold => '持物稳定';
+
+  @override
+  String get handModeObjectHoldDesc => '握住杯子或软球保持稳定。引导计时，无物体检测。';
+
+  @override
+  String get handModeFineMotor => '对指练习';
+
+  @override
+  String get handModeFineMotorDesc => '拇指依次触碰四指。由你点按计数。';
+
+  @override
+  String get handGuidedDisclaimer => '引导练习仅供个人康复参考，不是医学评估。';
+
+  @override
+  String get handObjectHoldInstruction => '请坐稳。单手握住杯子或软球，保持稳定，不必用力捏紧。';
+
+  @override
+  String get handObjectHoldStart => '开始保持';
+
+  @override
+  String get handObjectHoldRunning => '请继续保持稳定…';
+
+  @override
+  String get handObjectHoldDone => '本轮完成';
+
+  @override
+  String get handFineMotorInstruction => '拇指依次触碰食指、中指、无名指、小指，算作一组。';
+
+  @override
+  String get handFineMotorMarkCycle => '我完成了一组';
+
+  @override
+  String handFineMotorProgress(int done, int target) {
+    return '已完成 $done/$target 组';
+  }
+
+  @override
+  String get handGuidedCompleteTitle => '练习完成';
+
+  @override
+  String get handGuidedCompleteBody => '做得很好。本次已保存为个人练习参考。';
+
+  @override
+  String get dataTabTitle => '我的数据';
+
+  @override
+  String get dataTabSubtitle => '本周练习分数与趋势，仅供个人参考。';
+
+  @override
+  String get dataTrendsTitle => '本周 vs 上周';
+
+  @override
+  String get dataOpenFullReport => '打开完整康复报告';
+
+  @override
+  String get dataRecentSessions => '最近练习';
+
+  @override
+  String dataStreakDays(int days) {
+    return '连续训练：$days 天';
+  }
+
+  @override
+  String get reportShareButton => '分享报告';
+
+  @override
+  String get reportShareConsentTitle => '要分享康复摘要吗？';
+
+  @override
+  String get reportShareConsentBody =>
+      '将生成包含练习分数与趋势的文本文件，并打开系统分享面板（信息、邮件、文件等）。\n\n仅供个人参考，不是医学诊断。\n\n一旦你把文件发出去，Amplio 无法从对方处撤回。现在可以取消；下一屏也可以不选择任何分享目标。';
+
+  @override
+  String get reportShareConsentConfirm => '我已了解，继续';
+
+  @override
+  String get reportShareFileTitle => 'Amplio Care 康复摘要';
+
+  @override
+  String get reportShareSuccess => '已打开分享面板';
+
+  @override
+  String get reportShareFailed => '分享失败，请重试。';
+
+  @override
+  String get reportShareFooterNote => '每次分享都需要你确认。Amplio 不会自动把报告发给医生。';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

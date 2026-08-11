@@ -1,8 +1,9 @@
 // 应用常量定义
 class AppConstants {
-  // 震颤测试常量
+  // 震颤练习常量
   static const double tremorSampleRate = 50.0; // 采样率：50Hz（低功耗，足够检测3-7Hz）
-  static const int tremorTestDuration = 30; // 测试时长：30秒
+  static const int tremorTestDuration = 30; // 默认练习时长：30秒
+  static const List<int> tremorDurationOptions = [15, 30, 45];
   static const double tremorThreshold = 0.02; // 震颤阈值
   
   // 滤波器常量 - 简化参数
