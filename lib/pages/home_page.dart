@@ -23,6 +23,7 @@ import '../utils/gentle_page_route.dart';
 import '../pages/rehab_report_page.dart';
 import '../services/medication_reminder_service.dart';
 import '../services/medication_notification_service.dart';
+import '../services/training_reminder_service.dart';
 import '../widgets/home_medication_card.dart';
 import 'medication_reminders_page.dart';
 import '../theme/app_colors.dart';
@@ -55,6 +56,7 @@ class _HomePageState extends State<HomePage> {
   HomeDashboardSnapshot _snapshot = HomeDashboardSnapshot.empty;
   bool _snapshotLoading = true;
   int _medicationCardEpoch = 0;
+  bool _trainingCopyApplied = false;
 
   @override
   void initState() {
@@ -85,6 +87,15 @@ class _HomePageState extends State<HomePage> {
       title: l10n.medicationReminder,
       bodyFor: l10n.medicationNotificationBody,
     );
+    TrainingReminderService().setCopy(
+      title: l10n.trainingReminderTitle,
+      body: l10n.trainingReminderBody,
+    );
+    if (!_trainingCopyApplied) {
+      _trainingCopyApplied = true;
+      // ignore: discarded_futures
+      TrainingReminderService().reschedule();
+    }
   }
 
   Future<void> _loadDashboard() async {
@@ -119,9 +130,9 @@ class _HomePageState extends State<HomePage> {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       if (showMessage && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.loginRequiredForSync)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.loginRequiredForSync)));
       }
       return;
     }
@@ -294,8 +305,9 @@ class _HomePageState extends State<HomePage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('退出失败: $e')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('退出失败: $e')));
       }
     }
   }
@@ -308,9 +320,7 @@ class _HomePageState extends State<HomePage> {
       builder: (dialogContext) => CupertinoAlertDialog(
         title: Text(isGuest ? '退出游客模式' : l10n.logout),
         content: Text(
-          isGuest
-              ? '确定要退出游客模式吗？退出后需要重新登录才能使用。'
-              : l10n.logoutConfirm,
+          isGuest ? '确定要退出游客模式吗？退出后需要重新登录才能使用。' : l10n.logoutConfirm,
         ),
         actions: [
           CupertinoDialogAction(
@@ -398,8 +408,10 @@ class _HomePageState extends State<HomePage> {
                     title: l10n.medicationList,
                     onTap: () {
                       Navigator.pop(ctx);
-                      pushGentle(context, const MedicationRemindersPage())
-                          .then((_) => _refreshMedicationAndDashboard());
+                      pushGentle(
+                        context,
+                        const MedicationRemindersPage(),
+                      ).then((_) => _refreshMedicationAndDashboard());
                     },
                   ),
                 _buildSettingsItem(
@@ -500,7 +512,11 @@ class _HomePageState extends State<HomePage> {
                     : Colors.grey[600],
               ),
             ),
-      trailing: Icon(CupertinoIcons.chevron_right, color: Colors.grey[400], size: 18),
+      trailing: Icon(
+        CupertinoIcons.chevron_right,
+        color: Colors.grey[400],
+        size: 18,
+      ),
       onTap: onTap,
     );
   }
@@ -512,9 +528,7 @@ class _HomePageState extends State<HomePage> {
     Widget inner;
 
     if (_isUploadingAvatar) {
-      inner = const Center(
-        child: CircularProgressIndicator(strokeWidth: 2.5),
-      );
+      inner = const Center(child: CircularProgressIndicator(strokeWidth: 2.5));
     } else if (_localAvatarPath != null &&
         File(_localAvatarPath!).existsSync()) {
       inner = ClipOval(
@@ -555,15 +569,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _initialsText(String initials, double avatarSize) => Center(
-        child: Text(
-          initials,
-          style: TextStyle(
-            fontSize: avatarSize * 0.38,
-            fontWeight: FontWeight.w700,
-            color: AppColors.primary,
-          ),
-        ),
-      );
+    child: Text(
+      initials,
+      style: TextStyle(
+        fontSize: avatarSize * 0.38,
+        fontWeight: FontWeight.w700,
+        color: AppColors.primary,
+      ),
+    ),
+  );
 
   String _getInitials(String name) {
     final parts = name.trim().split(RegExp(r'\s+'));
@@ -627,18 +641,22 @@ class _HomePageState extends State<HomePage> {
           _isUploadingAvatar = false;
           _localAvatarPath = localPath;
         });
-        scaffoldMessenger.showSnackBar(SnackBar(
-          content: Text(l10n.avatarUpdated),
-          backgroundColor: Colors.green,
-        ));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text(l10n.avatarUpdated),
+            backgroundColor: Colors.green,
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
         setState(() => _isUploadingAvatar = false);
-        scaffoldMessenger.showSnackBar(SnackBar(
-          content: Text('${l10n.avatarUpdateFailed}: $e'),
-          backgroundColor: Colors.red,
-        ));
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('${l10n.avatarUpdateFailed}: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     }
   }
@@ -746,9 +764,7 @@ class _HomePageState extends State<HomePage> {
                         Expanded(
                           child: Text(
                             l10n.appTitle,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineLarge
+                            style: Theme.of(context).textTheme.headlineLarge
                                 ?.copyWith(fontSize: metrics.appTitleSize),
                           ),
                         ),
@@ -790,9 +806,7 @@ class _HomePageState extends State<HomePage> {
                             user.displayName?.isNotEmpty == true
                                 ? user.displayName!
                                 : 'User',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
+                            style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(
                                   fontWeight: FontWeight.w600,
                                   fontSize: metrics.labelFontSize + 3,
@@ -813,11 +827,11 @@ class _HomePageState extends State<HomePage> {
                     child: LayoutBuilder(
                       builder: (context, bodyConstraints) {
                         final gap = AppSpacing.cardGap;
-                        final gridH = ((bodyConstraints.maxWidth - gap) / 2) * 2 +
-                            gap;
+                        final gridH =
+                            ((bodyConstraints.maxWidth - gap) / 2) * 2 + gap;
                         // 最近活动给一块最低可视高度；内容再高则整页滚动
-                        final activityMinH =
-                            (bodyConstraints.maxHeight * 0.28).clamp(120.0, 220.0);
+                        final activityMinH = (bodyConstraints.maxHeight * 0.28)
+                            .clamp(120.0, 220.0);
 
                         return ListView(
                           padding: EdgeInsets.only(bottom: metrics.sectionGap),
@@ -846,9 +860,7 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(height: metrics.sectionGap),
                             Text(
                               l10n.recentActivity,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
+                              style: Theme.of(context).textTheme.titleMedium
                                   ?.copyWith(
                                     fontSize: metrics.labelFontSize + 2,
                                   ),
@@ -948,7 +960,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     const SizedBox(width: 2),
-                    Text('🔥', style: TextStyle(fontSize: metrics.iconSize - 4)),
+                    Text(
+                      '🔥',
+                      style: TextStyle(fontSize: metrics.iconSize - 4),
+                    ),
                   ],
                 ],
               ),
@@ -1070,22 +1085,25 @@ class _HomePageState extends State<HomePage> {
       icon: CupertinoIcons.mic_fill,
       iconBgColor: AppColors.voiceIconBg,
       metrics: metrics,
-      onTap: () => pushGentle(context, const VoiceTrainingPage())
-          .then((_) => _loadDashboard()),
+      onTap: () => pushGentle(
+        context,
+        const VoiceTrainingPage(),
+      ).then((_) => _loadDashboard()),
       content: _snapshotLoading
           ? _loadingIndicator()
           : item == null
-              ? _emptyState(l10n.noTrainingYet, l10n.tapToStart, metrics)
-              : _trainingInfo(
-                  context,
-                  metrics: metrics,
-                  topLine: l10n.lastTrainingAgo(
-                      _relativeTime(context, item.timestamp)),
-                  details: [
-                    _formatDuration(context, item.durationSeconds),
-                    l10n.voiceSessionCount,
-                  ].where((s) => s.isNotEmpty).join(' · '),
-                ),
+          ? _emptyState(l10n.noTrainingYet, l10n.tapToStart, metrics)
+          : _trainingInfo(
+              context,
+              metrics: metrics,
+              topLine: l10n.lastTrainingAgo(
+                _relativeTime(context, item.timestamp),
+              ),
+              details: [
+                _formatDuration(context, item.durationSeconds),
+                l10n.voiceSessionCount,
+              ].where((s) => s.isNotEmpty).join(' · '),
+            ),
     );
   }
 
@@ -1102,22 +1120,25 @@ class _HomePageState extends State<HomePage> {
       iconBgColor: AppColors.handIconBg,
       metrics: metrics,
       showInfoButton: true,
-      onTap: () => pushGentle(context, const TremorTestPage())
-          .then((_) => _loadDashboard()),
+      onTap: () => pushGentle(
+        context,
+        const TremorTestPage(),
+      ).then((_) => _loadDashboard()),
       content: _snapshotLoading
           ? _loadingIndicator()
           : item == null
-              ? _emptyState(l10n.noMeasurementYet, l10n.tapToStart, metrics)
-              : _trainingInfo(
-                  context,
-                  metrics: metrics,
-                  topLine: l10n.lastMeasurementAgo(
-                      _relativeTime(context, item.timestamp)),
-                  details: [
-                    _formatDuration(context, item.durationSeconds),
-                    l10n.handMeasurementCount,
-                  ].where((s) => s.isNotEmpty).join(' · '),
-                ),
+          ? _emptyState(l10n.noMeasurementYet, l10n.tapToStart, metrics)
+          : _trainingInfo(
+              context,
+              metrics: metrics,
+              topLine: l10n.lastMeasurementAgo(
+                _relativeTime(context, item.timestamp),
+              ),
+              details: [
+                _formatDuration(context, item.durationSeconds),
+                l10n.handMeasurementCount,
+              ].where((s) => s.isNotEmpty).join(' · '),
+            ),
     );
   }
 
@@ -1133,23 +1154,25 @@ class _HomePageState extends State<HomePage> {
       icon: Icons.directions_walk,
       iconBgColor: AppColors.motionIconBg,
       metrics: metrics,
-      onTap: () => pushGentle(context, const MovementTrainingPage())
-          .then((_) => _loadDashboard()),
+      onTap: () => pushGentle(
+        context,
+        const MovementTrainingPage(),
+      ).then((_) => _loadDashboard()),
       content: _snapshotLoading
           ? _loadingIndicator()
           : item == null
-              ? _emptyState(l10n.noTrainingYet, l10n.tapToStart, metrics)
-              : _trainingInfo(
-                  context,
-                  metrics: metrics,
-                  topLine: l10n.lastTrainingAgo(
-                      _relativeTime(context, item.timestamp)),
-                  details: [
-                    _formatDuration(context, item.durationSeconds),
-                    l10n.motionCompletionCount(
-                        item.successCount, item.targetCount),
-                  ].where((s) => s.isNotEmpty).join(' · '),
-                ),
+          ? _emptyState(l10n.noTrainingYet, l10n.tapToStart, metrics)
+          : _trainingInfo(
+              context,
+              metrics: metrics,
+              topLine: l10n.lastTrainingAgo(
+                _relativeTime(context, item.timestamp),
+              ),
+              details: [
+                _formatDuration(context, item.durationSeconds),
+                l10n.motionCompletionCount(item.successCount, item.targetCount),
+              ].where((s) => s.isNotEmpty).join(' · '),
+            ),
     );
   }
 
@@ -1168,20 +1191,22 @@ class _HomePageState extends State<HomePage> {
       iconBgColor: AppColors.medIconBg,
       metrics: metrics,
       onTap: () {
-        pushGentle(context, const MedicationRemindersPage())
-            .then((_) => _refreshMedicationAndDashboard());
+        pushGentle(
+          context,
+          const MedicationRemindersPage(),
+        ).then((_) => _refreshMedicationAndDashboard());
       },
       content: _snapshotLoading
           ? _loadingIndicator()
           : !enabled
-              ? _emptyState(
-                  l10n.medicationSetupPrompt,
-                  l10n.medicationSetupSubtitle,
-                  metrics,
-                )
-              : nextTime == null
-                  ? _emptyState(l10n.medicationNoUpcoming, '', metrics)
-                  : _medicationInfo(context, l10n, nextTime, metrics),
+          ? _emptyState(
+              l10n.medicationSetupPrompt,
+              l10n.medicationSetupSubtitle,
+              metrics,
+            )
+          : nextTime == null
+          ? _emptyState(l10n.medicationNoUpcoming, '', metrics)
+          : _medicationInfo(context, l10n, nextTime, metrics),
     );
   }
 
@@ -1322,12 +1347,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _loadingIndicator() => const Center(
-        child: SizedBox(
-          width: 18,
-          height: 18,
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
-      );
+    child: SizedBox(
+      width: 18,
+      height: 18,
+      child: CircularProgressIndicator(strokeWidth: 2),
+    ),
+  );
 
   // ── 最近活动列表 ─────────────────────────────────────────
 
@@ -1370,12 +1395,7 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   Expanded(
-                    child: _buildActivityTile(
-                      context,
-                      l10n,
-                      items[i],
-                      metrics,
-                    ),
+                    child: _buildActivityTile(context, l10n, items[i], metrics),
                   ),
                   if (i < items.length - 1)
                     const Divider(
@@ -1406,18 +1426,24 @@ class _HomePageState extends State<HomePage> {
       case ActivityType.voice:
         title = l10n.voiceTraining;
         icon = CupertinoIcons.mic_fill;
-        onTap = () => pushGentle(context, const VoiceTrainingPage())
-            .then((_) => _loadDashboard());
+        onTap = () => pushGentle(
+          context,
+          const VoiceTrainingPage(),
+        ).then((_) => _loadDashboard());
       case ActivityType.hand:
         title = l10n.tremorTest;
         icon = CupertinoIcons.hand_raised_fill;
-        onTap = () => pushGentle(context, const TremorTestPage())
-            .then((_) => _loadDashboard());
+        onTap = () => pushGentle(
+          context,
+          const TremorTestPage(),
+        ).then((_) => _loadDashboard());
       case ActivityType.motion:
         title = l10n.movementTraining;
         icon = Icons.directions_walk;
-        onTap = () => pushGentle(context, const MovementTrainingPage())
-            .then((_) => _loadDashboard());
+        onTap = () => pushGentle(
+          context,
+          const MovementTrainingPage(),
+        ).then((_) => _loadDashboard());
     }
 
     final timeLabel = _relativeTime(context, item.timestamp);
@@ -1505,12 +1531,12 @@ class _HomePageState extends State<HomePage> {
   // ── 卡片阴影 ────────────────────────────────────────────
 
   List<BoxShadow> _cardShadow() => [
-        BoxShadow(
-          color: Colors.black.withValues(alpha: 0.06),
-          blurRadius: 12,
-          offset: const Offset(0, 4),
-        ),
-      ];
+    BoxShadow(
+      color: Colors.black.withValues(alpha: 0.06),
+      blurRadius: 12,
+      offset: const Offset(0, 4),
+    ),
+  ];
 }
 
 /// 根据屏幕可用高度动态调整的布局参数，保证一屏内排下所有板块。

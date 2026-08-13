@@ -878,6 +878,14 @@
       "target": { "type": "int" }
     }
   },
+  "planGoalCompleted": "Today’s goal is done. Nice work.",
+  "planWeeklyProgress": "This week: {done}/{target} sessions",
+  "@planWeeklyProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
   "planOpenTask": "Start",
   "planMotionShelvedNote": "Movement detection is limited on some phones; you can still open the practice screen.",
   "voiceProtocolClarity": "Clear phrases",
@@ -940,5 +948,38 @@
   "reportShareFileTitle": "Amplio Care rehab summary",
   "reportShareSuccess": "Share sheet opened",
   "reportShareFailed": "Could not share the report. Please try again.",
-  "reportShareFooterNote": "Sharing requires your confirmation each time. Amplio does not email doctors automatically."
+  "reportShareFooterNote": "Sharing requires your confirmation each time. Amplio does not email doctors automatically.",
+  "profileTabTitle": "Profile",
+  "profileGuestLabel": "Guest",
+  "profileGuestSubtitle": "Signed in locally. Cloud sync is available after you sign in.",
+  "profileSignedInLabel": "Signed in",
+  "profileSectionPreferences": "Preferences",
+  "profileSectionAccount": "Account & data",
+  "profileSectionLegal": "Privacy & terms",
+  "accessibilitySettings": "Accessibility",
+  "exitGuestMode": "Exit guest mode",
+  "exitGuestModeConfirm": "Leave guest mode? You will need to sign in or continue as a guest again.",
+  "trainingReminderPageTitle": "Practice reminders",
+  "trainingReminderTitle": "Amplio",
+  "trainingReminderBody": "A short practice when you can. Missing it is fine.",
+  "trainingReminderDisclaimer": "Optional local reminders, not a treatment schedule. You can turn them off anytime. Missing a reminder does not change your scores.",
+  "trainingReminderEnable": "Remind me to practice",
+  "trainingReminderTimeLabel": "Time {n}",
+  "@trainingReminderTimeLabel": {
+    "placeholders": {
+      "n": { "type": "int" }
+    }
+  },
+  "trainingReminderAddTime": "Add a second time",
+  "trainingReminderRemoveTime": "Remove this time",
+  "trainingReminderQuietWeekends": "Skip weekends",
+  "trainingReminderQuietWeekendsHint": "No reminders on Saturday or Sunday.",
+  "trainingReminderPermissionDenied": "Notifications were not allowed. You can enable them later in iPhone Settings.",
+  "planReminderOff": "Set a practice reminder",
+  "planReminderOn": "Reminders: {times}",
+  "@planReminderOn": {
+    "placeholders": {
+      "times": { "type": "String" }
+    }
+  }
 }

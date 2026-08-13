@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -8,15 +9,20 @@ import '../../models/training_module.dart';
 import '../../models/voice_protocol.dart';
 import '../../services/goal_manager.dart';
 import '../../services/training_module_service.dart';
+import '../../services/training_reminder_service.dart';
 import '../../theme/app_colors.dart';
 import '../../utils/gentle_page_route.dart';
 import '../movement_training_page.dart';
 import '../tremor_test_page.dart';
+import '../training_reminders_page.dart';
 import '../voice_training_page.dart';
 
 /// 计划 Tab：展示今日建议任务，并跳转到已有三大训练页。
 class PlanTabPage extends StatefulWidget {
-  const PlanTabPage({super.key});
+  const PlanTabPage({super.key, this.activeTabIndex, this.tabIndex = 1});
+
+  final ValueListenable<int>? activeTabIndex;
+  final int tabIndex;
 
   @override
   State<PlanTabPage> createState() => _PlanTabPageState();
@@ -25,24 +31,46 @@ class PlanTabPage extends StatefulWidget {
 class _PlanTabPageState extends State<PlanTabPage> {
   final _moduleService = TrainingModuleService();
   final _goalManager = GoalManager();
+  final _reminderService = TrainingReminderService();
 
   List<ModuleTrainingTask> _tasks = const [];
   DailyGoal? _dailyGoal;
+  WeeklyGoal? _weeklyGoal;
+  TrainingReminderSettings? _reminder;
   bool _loading = true;
 
   @override
   void initState() {
     super.initState();
+    widget.activeTabIndex?.addListener(_onTabChanged);
     _load();
+  }
+
+  @override
+  void dispose() {
+    widget.activeTabIndex?.removeListener(_onTabChanged);
+    super.dispose();
+  }
+
+  void _onTabChanged() {
+    if (widget.activeTabIndex?.value == widget.tabIndex) {
+      _load();
+    }
   }
 
   Future<void> _load() async {
     final tasks = _moduleService.todaysSuggestedTasks(count: 3);
-    final daily = await _goalManager.getDailyProgress();
+    final results = await Future.wait([
+      _goalManager.getDailyProgress(),
+      _goalManager.getWeeklyProgress(),
+      _reminderService.load(),
+    ]);
     if (!mounted) return;
     setState(() {
       _tasks = tasks;
-      _dailyGoal = daily;
+      _dailyGoal = results[0] as DailyGoal;
+      _weeklyGoal = results[1] as WeeklyGoal;
+      _reminder = results[2] as TrainingReminderSettings;
       _loading = false;
     });
   }
@@ -108,9 +136,9 @@ class _PlanTabPageState extends State<PlanTabPage> {
         );
       case TrainingDomain.motion:
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(l10n.planMotionShelvedNote)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.planMotionShelvedNote)));
         }
         page = const MovementTrainingPage();
     }
@@ -152,29 +180,10 @@ class _PlanTabPageState extends State<PlanTabPage> {
                     ),
                     if (daily != null) ...[
                       const SizedBox(height: 16),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 14,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: const Color(0xFFE2E8F0)),
-                        ),
-                        child: Text(
-                          l10n.planGoalProgress(
-                            daily.completedCount,
-                            daily.targetCount,
-                          ),
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF1E3A5F),
-                          ),
-                        ),
-                      ),
+                      _goalCard(l10n, daily, _weeklyGoal),
                     ],
+                    const SizedBox(height: 12),
+                    _reminderRow(l10n),
                     const SizedBox(height: 20),
                     if (_tasks.isEmpty)
                       Padding(
@@ -193,6 +202,105 @@ class _PlanTabPageState extends State<PlanTabPage> {
                   ],
                 ),
               ),
+      ),
+    );
+  }
+
+  Widget _goalCard(AppLocalizations l10n, DailyGoal daily, WeeklyGoal? weekly) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            daily.isCompleted
+                ? l10n.planGoalCompleted
+                : l10n.planGoalProgress(
+                    daily.completedCount,
+                    daily.targetCount,
+                  ),
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF1E3A5F),
+            ),
+          ),
+          const SizedBox(height: 10),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: daily.progress,
+              minHeight: 8,
+              backgroundColor: const Color(0xFFE2E8F0),
+              color: daily.isCompleted
+                  ? const Color(0xFF10B981)
+                  : AppColors.primary,
+            ),
+          ),
+          if (weekly != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              l10n.planWeeklyProgress(
+                weekly.completedCount,
+                weekly.targetCount,
+              ),
+              style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _reminderRow(AppLocalizations l10n) {
+    final reminder = _reminder;
+    final subtitle = reminder == null
+        ? l10n.planReminderOff
+        : (reminder.enabled
+              ? l10n.planReminderOn(reminder.timesSummary)
+              : l10n.planReminderOff);
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: () async {
+          await pushGentle(context, const TrainingRemindersPage());
+          if (mounted) await _load();
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              const Icon(
+                CupertinoIcons.bell,
+                color: Color(0xFFF59E0B),
+                size: 22,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1E3A5F),
+                  ),
+                ),
+              ),
+              Icon(
+                CupertinoIcons.chevron_right,
+                size: 16,
+                color: Colors.grey.shade400,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -219,8 +327,10 @@ class _PlanTabPageState extends State<PlanTabPage> {
           Row(
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(20),
@@ -237,10 +347,7 @@ class _PlanTabPageState extends State<PlanTabPage> {
               const Spacer(),
               Text(
                 '${task.duration} min',
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Color(0xFF94A3B8),
-                ),
+                style: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
               ),
             ],
           ),

@@ -581,6 +581,14 @@
       "target": { "type": "int" }
     }
   },
+  "planGoalCompleted": "今日目标已完成，做得很好。",
+  "planWeeklyProgress": "本周进度：{done}/{target} 次",
+  "@planWeeklyProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
   "planOpenTask": "开始",
   "planMotionShelvedNote": "部分机型肢体检测仍不稳定，仍可打开练习页尝试。",
   "voiceProtocolClarity": "清晰短句",
@@ -643,5 +651,38 @@
   "reportShareFileTitle": "Amplio Care 康复摘要",
   "reportShareSuccess": "已打开分享面板",
   "reportShareFailed": "分享失败，请重试。",
-  "reportShareFooterNote": "每次分享都需要你确认。Amplio 不会自动把报告发给医生。"
+  "reportShareFooterNote": "每次分享都需要你确认。Amplio 不会自动把报告发给医生。",
+  "profileTabTitle": "我的",
+  "profileGuestLabel": "游客",
+  "profileGuestSubtitle": "数据保存在本机。登录后可使用云同步。",
+  "profileSignedInLabel": "已登录",
+  "profileSectionPreferences": "偏好设置",
+  "profileSectionAccount": "账号与数据",
+  "profileSectionLegal": "隐私与条款",
+  "accessibilitySettings": "无障碍",
+  "exitGuestMode": "退出游客模式",
+  "exitGuestModeConfirm": "确定要退出游客模式吗？退出后需要重新登录或再次以游客继续。",
+  "trainingReminderPageTitle": "练习提醒",
+  "trainingReminderTitle": "Amplio",
+  "trainingReminderBody": "有空时做一小段练习即可，错过也没关系。",
+  "trainingReminderDisclaimer": "这是可选的本机提醒，不是治疗计划。可随时关闭。错过不会扣分，也不改变训练记录。",
+  "trainingReminderEnable": "提醒我去练习",
+  "trainingReminderTimeLabel": "时刻 {n}",
+  "@trainingReminderTimeLabel": {
+    "placeholders": {
+      "n": { "type": "int" }
+    }
+  },
+  "trainingReminderAddTime": "增加第二个时刻",
+  "trainingReminderRemoveTime": "删除此时刻",
+  "trainingReminderQuietWeekends": "周末不提醒",
+  "trainingReminderQuietWeekendsHint": "周六、周日不发送提醒。",
+  "trainingReminderPermissionDenied": "未允许通知。可稍后在 iPhone 设置中打开。",
+  "planReminderOff": "设置练习提醒",
+  "planReminderOn": "提醒：{times}",
+  "@planReminderOn": {
+    "placeholders": {
+      "times": { "type": "String" }
+    }
+  }
 }

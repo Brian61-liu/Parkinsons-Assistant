@@ -7,7 +7,7 @@ import 'tabs/data_tab_page.dart';
 import 'tabs/profile_tab_page.dart';
 
 /// 底部 Tab 导航容器。
-/// Home tab 承载完整主页；Plan / Data / Profile 暂为占位页。
+/// Home / Plan / Data / Profile 均为可用页。
 class MainShell extends StatefulWidget {
   final Function(Locale) onLanguageChange;
   final Function(bool)? onGuestModeChanged;
@@ -24,6 +24,7 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   int _currentIndex = 0;
+  final _tabIndex = ValueNotifier<int>(0);
 
   late final List<Widget> _pages;
 
@@ -35,10 +36,19 @@ class _MainShellState extends State<MainShell> {
         onLanguageChange: widget.onLanguageChange,
         onGuestModeChanged: widget.onGuestModeChanged,
       ),
-      const PlanTabPage(),
-      const DataTabPage(),
-      const ProfileTabPage(),
+      PlanTabPage(activeTabIndex: _tabIndex),
+      DataTabPage(activeTabIndex: _tabIndex),
+      ProfileTabPage(
+        onLanguageChange: widget.onLanguageChange,
+        onGuestModeChanged: widget.onGuestModeChanged,
+      ),
     ];
+  }
+
+  @override
+  void dispose() {
+    _tabIndex.dispose();
+    super.dispose();
   }
 
   @override
@@ -46,20 +56,18 @@ class _MainShellState extends State<MainShell> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _pages),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: AppColors.tabBarBackground,
-          border: Border(
-            top: BorderSide(color: AppColors.divider, width: 0.5),
-          ),
+          border: Border(top: BorderSide(color: AppColors.divider, width: 0.5)),
         ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
-          onTap: (i) => setState(() => _currentIndex = i),
+          onTap: (i) {
+            _tabIndex.value = i;
+            setState(() => _currentIndex = i);
+          },
           backgroundColor: AppColors.tabBarBackground,
           selectedItemColor: AppColors.primary,
           unselectedItemColor: AppColors.textSecondary,

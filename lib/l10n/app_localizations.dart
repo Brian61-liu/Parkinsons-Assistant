@@ -2013,6 +2013,18 @@ abstract class AppLocalizations {
   /// **'Today: {done}/{target} sessions'**
   String planGoalProgress(int done, int target);
 
+  /// No description provided for @planGoalCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Today’s goal is done. Nice work.'**
+  String get planGoalCompleted;
+
+  /// No description provided for @planWeeklyProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'This week: {done}/{target} sessions'**
+  String planWeeklyProgress(int done, int target);
+
   /// No description provided for @planOpenTask.
   ///
   /// In en, this message translates to:
@@ -2288,6 +2300,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sharing requires your confirmation each time. Amplio does not email doctors automatically.'**
   String get reportShareFooterNote;
+
+  /// No description provided for @profileTabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileTabTitle;
+
+  /// No description provided for @profileGuestLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest'**
+  String get profileGuestLabel;
+
+  /// No description provided for @profileGuestSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in locally. Cloud sync is available after you sign in.'**
+  String get profileGuestSubtitle;
+
+  /// No description provided for @profileSignedInLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in'**
+  String get profileSignedInLabel;
+
+  /// No description provided for @profileSectionPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get profileSectionPreferences;
+
+  /// No description provided for @profileSectionAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account & data'**
+  String get profileSectionAccount;
+
+  /// No description provided for @profileSectionLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & terms'**
+  String get profileSectionLegal;
+
+  /// No description provided for @accessibilitySettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessibility'**
+  String get accessibilitySettings;
+
+  /// No description provided for @exitGuestMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit guest mode'**
+  String get exitGuestMode;
+
+  /// No description provided for @exitGuestModeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave guest mode? You will need to sign in or continue as a guest again.'**
+  String get exitGuestModeConfirm;
+
+  /// No description provided for @trainingReminderPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice reminders'**
+  String get trainingReminderPageTitle;
+
+  /// No description provided for @trainingReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Amplio'**
+  String get trainingReminderTitle;
+
+  /// No description provided for @trainingReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A short practice when you can. Missing it is fine.'**
+  String get trainingReminderBody;
+
+  /// No description provided for @trainingReminderDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional local reminders, not a treatment schedule. You can turn them off anytime. Missing a reminder does not change your scores.'**
+  String get trainingReminderDisclaimer;
+
+  /// No description provided for @trainingReminderEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me to practice'**
+  String get trainingReminderEnable;
+
+  /// No description provided for @trainingReminderTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Time {n}'**
+  String trainingReminderTimeLabel(int n);
+
+  /// No description provided for @trainingReminderAddTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a second time'**
+  String get trainingReminderAddTime;
+
+  /// No description provided for @trainingReminderRemoveTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this time'**
+  String get trainingReminderRemoveTime;
+
+  /// No description provided for @trainingReminderQuietWeekends.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip weekends'**
+  String get trainingReminderQuietWeekends;
+
+  /// No description provided for @trainingReminderQuietWeekendsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminders on Saturday or Sunday.'**
+  String get trainingReminderQuietWeekendsHint;
+
+  /// No description provided for @trainingReminderPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications were not allowed. You can enable them later in iPhone Settings.'**
+  String get trainingReminderPermissionDenied;
+
+  /// No description provided for @planReminderOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a practice reminder'**
+  String get planReminderOff;
+
+  /// No description provided for @planReminderOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders: {times}'**
+  String planReminderOn(String times);
 }
 
 class _AppLocalizationsDelegate

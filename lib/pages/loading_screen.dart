@@ -6,6 +6,7 @@ import '../main.dart';
 import '../services/app_check_bootstrap.dart';
 import '../services/medication_notification_service.dart';
 import '../services/medication_reminder_service.dart';
+import '../services/training_reminder_service.dart';
 
 class LoadingScreen extends StatefulWidget {
   final Function(Locale) onLanguageChange;
@@ -40,6 +41,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       }
       await MedicationNotificationService.instance.init();
       await MedicationReminderService().rescheduleNotifications();
+      await TrainingReminderService().reschedule();
     } catch (e, s) {
       debugPrint('=== Boot FAILED: $e ===');
       debugPrint('$s');
@@ -72,21 +74,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [
-          Color(0xFFF4FBFF),
-          Color(0xFFEAF7FF),
-        ],
+        colors: [Color(0xFFF4FBFF), Color(0xFFEAF7FF)],
       ),
     );
 
     return const Scaffold(
       body: DecoratedBox(
         decoration: background,
-        child: SafeArea(
-          child: Center(
-            child: _BrandLockup(),
-          ),
-        ),
+        child: SafeArea(child: Center(child: _BrandLockup())),
       ),
     );
   }

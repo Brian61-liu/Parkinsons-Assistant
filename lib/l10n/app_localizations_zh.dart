@@ -1047,6 +1047,14 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get planGoalCompleted => '今日目标已完成，做得很好。';
+
+  @override
+  String planWeeklyProgress(int done, int target) {
+    return '本周进度：$done/$target 次';
+  }
+
+  @override
   String get planOpenTask => '开始';
 
   @override
@@ -1190,6 +1198,80 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reportShareFooterNote => '每次分享都需要你确认。Amplio 不会自动把报告发给医生。';
+
+  @override
+  String get profileTabTitle => '我的';
+
+  @override
+  String get profileGuestLabel => '游客';
+
+  @override
+  String get profileGuestSubtitle => '数据保存在本机。登录后可使用云同步。';
+
+  @override
+  String get profileSignedInLabel => '已登录';
+
+  @override
+  String get profileSectionPreferences => '偏好设置';
+
+  @override
+  String get profileSectionAccount => '账号与数据';
+
+  @override
+  String get profileSectionLegal => '隐私与条款';
+
+  @override
+  String get accessibilitySettings => '无障碍';
+
+  @override
+  String get exitGuestMode => '退出游客模式';
+
+  @override
+  String get exitGuestModeConfirm => '确定要退出游客模式吗？退出后需要重新登录或再次以游客继续。';
+
+  @override
+  String get trainingReminderPageTitle => '练习提醒';
+
+  @override
+  String get trainingReminderTitle => 'Amplio';
+
+  @override
+  String get trainingReminderBody => '有空时做一小段练习即可，错过也没关系。';
+
+  @override
+  String get trainingReminderDisclaimer =>
+      '这是可选的本机提醒，不是治疗计划。可随时关闭。错过不会扣分，也不改变训练记录。';
+
+  @override
+  String get trainingReminderEnable => '提醒我去练习';
+
+  @override
+  String trainingReminderTimeLabel(int n) {
+    return '时刻 $n';
+  }
+
+  @override
+  String get trainingReminderAddTime => '增加第二个时刻';
+
+  @override
+  String get trainingReminderRemoveTime => '删除此时刻';
+
+  @override
+  String get trainingReminderQuietWeekends => '周末不提醒';
+
+  @override
+  String get trainingReminderQuietWeekendsHint => '周六、周日不发送提醒。';
+
+  @override
+  String get trainingReminderPermissionDenied => '未允许通知。可稍后在 iPhone 设置中打开。';
+
+  @override
+  String get planReminderOff => '设置练习提醒';
+
+  @override
+  String planReminderOn(String times) {
+    return '提醒：$times';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

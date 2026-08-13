@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -12,7 +13,10 @@ import '../rehab_report_page.dart';
 
 /// 数据 Tab：训练趋势摘要 + 进完整康复报告。
 class DataTabPage extends StatefulWidget {
-  const DataTabPage({super.key});
+  const DataTabPage({super.key, this.activeTabIndex, this.tabIndex = 2});
+
+  final ValueListenable<int>? activeTabIndex;
+  final int tabIndex;
 
   @override
   State<DataTabPage> createState() => _DataTabPageState();
@@ -29,7 +33,20 @@ class _DataTabPageState extends State<DataTabPage> {
   @override
   void initState() {
     super.initState();
+    widget.activeTabIndex?.addListener(_onTabChanged);
     _load();
+  }
+
+  @override
+  void dispose() {
+    widget.activeTabIndex?.removeListener(_onTabChanged);
+    super.dispose();
+  }
+
+  void _onTabChanged() {
+    if (widget.activeTabIndex?.value == widget.tabIndex) {
+      _load();
+    }
   }
 
   Future<void> _load() async {
@@ -188,9 +205,21 @@ class _DataTabPageState extends State<DataTabPage> {
           const SizedBox(height: 12),
           Row(
             children: [
-              _miniScore(l10n.handTraining, scores.hand, const Color(0xFF0EA5E9)),
-              _miniScore(l10n.voiceTrainingShort, scores.voice, const Color(0xFF10B981)),
-              _miniScore(l10n.motionTrainingShort, scores.motion, const Color(0xFFF59E0B)),
+              _miniScore(
+                l10n.handTraining,
+                scores.hand,
+                const Color(0xFF0EA5E9),
+              ),
+              _miniScore(
+                l10n.voiceTrainingShort,
+                scores.voice,
+                const Color(0xFF10B981),
+              ),
+              _miniScore(
+                l10n.motionTrainingShort,
+                scores.motion,
+                const Color(0xFFF59E0B),
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -276,15 +305,25 @@ class _DataTabPageState extends State<DataTabPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            l10n.planGoalProgress(
-              completion.dailyCompleted,
-              completion.dailyTarget,
-            ),
+            completion.dailyDone
+                ? l10n.planGoalCompleted
+                : l10n.planGoalProgress(
+                    completion.dailyCompleted,
+                    completion.dailyTarget,
+                  ),
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Color(0xFF1E3A5F),
             ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            l10n.planWeeklyProgress(
+              completion.weeklyCompleted,
+              completion.weeklyTarget,
+            ),
+            style: const TextStyle(fontSize: 14, color: Color(0xFF64748B)),
           ),
           const SizedBox(height: 8),
           Text(
@@ -327,7 +366,10 @@ class _DataTabPageState extends State<DataTabPage> {
                 ),
                 Text(
                   record.date,
-                  style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF94A3B8),
+                  ),
                 ),
               ],
             ),

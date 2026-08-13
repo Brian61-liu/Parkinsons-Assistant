@@ -1085,6 +1085,14 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get planGoalCompleted => 'Today’s goal is done. Nice work.';
+
+  @override
+  String planWeeklyProgress(int done, int target) {
+    return 'This week: $done/$target sessions';
+  }
+
+  @override
   String get planOpenTask => 'Start';
 
   @override
@@ -1241,4 +1249,83 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get reportShareFooterNote =>
       'Sharing requires your confirmation each time. Amplio does not email doctors automatically.';
+
+  @override
+  String get profileTabTitle => 'Profile';
+
+  @override
+  String get profileGuestLabel => 'Guest';
+
+  @override
+  String get profileGuestSubtitle =>
+      'Signed in locally. Cloud sync is available after you sign in.';
+
+  @override
+  String get profileSignedInLabel => 'Signed in';
+
+  @override
+  String get profileSectionPreferences => 'Preferences';
+
+  @override
+  String get profileSectionAccount => 'Account & data';
+
+  @override
+  String get profileSectionLegal => 'Privacy & terms';
+
+  @override
+  String get accessibilitySettings => 'Accessibility';
+
+  @override
+  String get exitGuestMode => 'Exit guest mode';
+
+  @override
+  String get exitGuestModeConfirm =>
+      'Leave guest mode? You will need to sign in or continue as a guest again.';
+
+  @override
+  String get trainingReminderPageTitle => 'Practice reminders';
+
+  @override
+  String get trainingReminderTitle => 'Amplio';
+
+  @override
+  String get trainingReminderBody =>
+      'A short practice when you can. Missing it is fine.';
+
+  @override
+  String get trainingReminderDisclaimer =>
+      'Optional local reminders, not a treatment schedule. You can turn them off anytime. Missing a reminder does not change your scores.';
+
+  @override
+  String get trainingReminderEnable => 'Remind me to practice';
+
+  @override
+  String trainingReminderTimeLabel(int n) {
+    return 'Time $n';
+  }
+
+  @override
+  String get trainingReminderAddTime => 'Add a second time';
+
+  @override
+  String get trainingReminderRemoveTime => 'Remove this time';
+
+  @override
+  String get trainingReminderQuietWeekends => 'Skip weekends';
+
+  @override
+  String get trainingReminderQuietWeekendsHint =>
+      'No reminders on Saturday or Sunday.';
+
+  @override
+  String get trainingReminderPermissionDenied =>
+      'Notifications were not allowed. You can enable them later in iPhone Settings.';
+
+  @override
+  String get planReminderOff => 'Set a practice reminder';
+
+  @override
+  String planReminderOn(String times) {
+    return 'Reminders: $times';
+  }
 }
