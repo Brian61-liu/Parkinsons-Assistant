@@ -1,14 +1,28 @@
 import '../models/training_item.dart';
 import '../utils/constants.dart';
+import 'goal_manager.dart';
 import 'training_analytics_service.dart';
 
 /// 将单次训练结果映射为 0–100 分并写入 [training_records]。
 /// 分数仅用于康复训练个性化参考，不是医学诊断。
 class TrainingScoreService {
-  TrainingScoreService({TrainingAnalyticsService? analytics})
-      : _analytics = analytics ?? TrainingAnalyticsService();
+  TrainingScoreService({
+    TrainingAnalyticsService? analytics,
+    GoalManager? goals,
+  }) : _analytics = analytics ?? TrainingAnalyticsService(),
+       _goals = goals ?? GoalManager();
 
   final TrainingAnalyticsService _analytics;
+  final GoalManager _goals;
+
+  Future<void> _persistScore({
+    required TrainingType type,
+    required double score,
+    required int duration,
+  }) async {
+    await _analytics.addScore(type: type, score: score, duration: duration);
+    await _goals.completeTraining();
+  }
 
   /// 震颤测试成功后写入手部训练分数。
   Future<void> recordHandFromTremor({
@@ -21,7 +35,7 @@ class TrainingScoreService {
       maxAmplitude: maxAmplitude,
     );
     if (score == null) return;
-    await _analytics.addScore(
+    await _persistScore(
       type: TrainingType.hand,
       score: score,
       duration: durationSeconds,
@@ -40,7 +54,7 @@ class TrainingScoreService {
       targetCount: targetCount,
       goalReached: goalReached,
     );
-    await _analytics.addScore(
+    await _persistScore(
       type: TrainingType.motion,
       score: score,
       duration: durationSeconds,
@@ -58,7 +72,7 @@ class TrainingScoreService {
       rawDbSamples: rawDbSamples,
     );
     if (score == null) return;
-    await _analytics.addScore(
+    await _persistScore(
       type: TrainingType.voice,
       score: score,
       duration: durationSeconds,
@@ -131,10 +145,10 @@ class TrainingScoreService {
     }
 
     final activeRatio = activeCount / rawDbSamples.length;
-    final avgEffective =
-        activeCount > 0 ? sumEffective / activeCount : 0.0;
-    final volumeFactor =
-        (avgEffective / targetEffectiveDiff).clamp(0.0, 1.0).toDouble();
+    final avgEffective = activeCount > 0 ? sumEffective / activeCount : 0.0;
+    final volumeFactor = (avgEffective / targetEffectiveDiff)
+        .clamp(0.0, 1.0)
+        .toDouble();
 
     final score = activeRatio * 60 + volumeFactor * 40;
     return score.clamp(0.0, 100.0);
@@ -149,7 +163,7 @@ class TrainingScoreService {
     final target = targetSteps > 0 ? targetSteps : 1;
     final ratio = (completedSteps / target).clamp(0.0, 1.0);
     final score = (ratio * 80 + 15).clamp(0.0, 100.0);
-    await _analytics.addScore(
+    await _persistScore(
       type: TrainingType.hand,
       score: score,
       duration: durationSeconds > 0 ? durationSeconds : 1,
