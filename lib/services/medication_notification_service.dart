@@ -56,13 +56,12 @@ class MedicationNotificationService {
 
   Future<bool> requestPermission() async {
     await init();
-    final ios = _plugin.resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>();
-    final granted = await ios?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        ) ??
+    final ios = _plugin
+        .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin
+        >();
+    final granted =
+        await ios?.requestPermissions(alert: true, badge: true, sound: true) ??
         false;
     debugPrint('MedicationNotificationService: permission=$granted');
     return granted;
@@ -71,6 +70,71 @@ class MedicationNotificationService {
   Future<void> cancelReminder(int id) async {
     await init();
     await _plugin.cancel(id: id);
+  }
+
+  Future<void> cancelReminders(Iterable<int> ids) async {
+    await init();
+    for (final id in ids) {
+      await _plugin.cancel(id: id);
+    }
+  }
+
+  Future<void> cancelIdRange(int from, int toInclusive) async {
+    await init();
+    for (var id = from; id <= toInclusive; id++) {
+      await _plugin.cancel(id: id);
+    }
+  }
+
+  /// 按本地时区预约每日或每周重复通知。勿调用 [cancelAll]，以免清掉其他功能的通知。
+  Future<void> scheduleZoned({
+    required int id,
+    required String title,
+    required String body,
+    required String payload,
+    required int hour,
+    required int minute,
+    DateTimeComponents match = DateTimeComponents.time,
+    int? weekday,
+  }) async {
+    await init();
+    await _plugin.cancel(id: id);
+
+    final now = tz.TZDateTime.now(tz.local);
+    var scheduled = tz.TZDateTime(
+      tz.local,
+      now.year,
+      now.month,
+      now.day,
+      hour,
+      minute,
+    );
+    if (weekday != null) {
+      while (scheduled.weekday != weekday || !scheduled.isAfter(now)) {
+        scheduled = scheduled.add(const Duration(days: 1));
+      }
+    } else if (!scheduled.isAfter(now)) {
+      scheduled = scheduled.add(const Duration(days: 1));
+    }
+
+    const details = NotificationDetails(
+      iOS: DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      ),
+    );
+
+    await _plugin.zonedSchedule(
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: scheduled,
+      notificationDetails: details,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      matchDateTimeComponents: match,
+      payload: payload,
+    );
   }
 
   Future<void> cancelAll() async {
@@ -86,49 +150,31 @@ class MedicationNotificationService {
     await _plugin.cancel(id: id);
     if (!reminder.enabled) return;
 
-    final (hour, minute) = MedicationReminderService.parseTime(reminder.timeHhmm);
-    final now = tz.TZDateTime.now(tz.local);
-    var scheduled = tz.TZDateTime(
-      tz.local,
-      now.year,
-      now.month,
-      now.day,
-      hour,
-      minute,
+    final (hour, minute) = MedicationReminderService.parseTime(
+      reminder.timeHhmm,
     );
-    if (!scheduled.isAfter(now)) {
-      scheduled = scheduled.add(const Duration(days: 1));
-    }
-
-    const details = NotificationDetails(
-      iOS: DarwinNotificationDetails(
-        presentAlert: true,
-        presentBadge: true,
-        presentSound: true,
-      ),
-    );
-
-    await _plugin.zonedSchedule(
+    await scheduleZoned(
       id: id,
       title: _title,
       body: _bodyFor(reminder.label),
-      scheduledDate: scheduled,
-      notificationDetails: details,
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.time,
       payload: 'medication:$id',
+      hour: hour,
+      minute: minute,
     );
     debugPrint(
       'MedicationNotificationService: scheduled id=$id at '
-      '${reminder.timeHhmm} (next=$scheduled)',
+      '${reminder.timeHhmm}',
     );
   }
 
-  /// 按功能开关与提醒列表全量同步通知。
-  Future<void> syncAll(List<MedicationReminder> reminders,
-      {required bool featureEnabled}) async {
+  /// 按功能开关与提醒列表全量同步通知（只动用药 id，不清训练提醒）。
+  Future<void> syncAll(
+    List<MedicationReminder> reminders, {
+    required bool featureEnabled,
+  }) async {
     await init();
-    await cancelAll();
+    final ids = reminders.map((r) => r.id).whereType<int>();
+    await cancelReminders(ids);
     if (!featureEnabled) return;
     for (final r in reminders) {
       if (r.enabled && r.id != null) {

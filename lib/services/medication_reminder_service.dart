@@ -6,7 +6,8 @@ import 'database_service.dart';
 import 'medication_notification_service.dart';
 
 const String kMedicationFeatureEnabled = 'medication_feature_enabled';
-const String kMedicationDisclaimerAcceptedAt = 'medication_disclaimer_accepted_at';
+const String kMedicationDisclaimerAcceptedAt =
+    'medication_disclaimer_accepted_at';
 const String kMedicationCardCollapsed = 'medication_card_collapsed';
 const String kMedicationAutoPurgeCheckins = 'medication_auto_purge_checkins';
 
@@ -20,9 +21,9 @@ class MedicationReminderService {
   MedicationReminderService({
     DatabaseService? databaseService,
     MedicationNotificationService? notificationService,
-  })  : _db = databaseService ?? DatabaseService(),
-        _notifications =
-            notificationService ?? MedicationNotificationService.instance;
+  }) : _db = databaseService ?? DatabaseService(),
+       _notifications =
+           notificationService ?? MedicationNotificationService.instance;
 
   Future<SharedPreferences> get _store async {
     _prefs ??= await SharedPreferences.getInstance();
@@ -43,8 +44,7 @@ class MedicationReminderService {
     final prefs = await _store;
     return {
       'featureEnabled': prefs.getBool(kMedicationFeatureEnabled) ?? false,
-      'disclaimerAcceptedAt':
-          prefs.getString(kMedicationDisclaimerAcceptedAt),
+      'disclaimerAcceptedAt': prefs.getString(kMedicationDisclaimerAcceptedAt),
     };
   }
 
@@ -80,17 +80,19 @@ class MedicationReminderService {
     await _notifications.requestPermission();
     await rescheduleNotifications();
     // ignore: discarded_futures
-    _db.syncToCloud(
-      medicationSettings: {
-        'featureEnabled': true,
-        'disclaimerAcceptedAt': acceptedAt,
-      },
-    ).then(
-      (_) {},
-      onError: (Object e, StackTrace _) {
-        debugPrint('MedicationReminderService: settings sync failed: $e');
-      },
-    );
+    _db
+        .syncToCloud(
+          medicationSettings: {
+            'featureEnabled': true,
+            'disclaimerAcceptedAt': acceptedAt,
+          },
+        )
+        .then(
+          (_) {},
+          onError: (Object e, StackTrace _) {
+            debugPrint('MedicationReminderService: settings sync failed: $e');
+          },
+        );
     debugPrint('MedicationReminderService: feature enabled');
   }
 
@@ -98,24 +100,28 @@ class MedicationReminderService {
     final prefs = await _store;
     await prefs.setBool(kMedicationFeatureEnabled, false);
     await prefs.setBool(kMedicationCardCollapsed, false);
-    await _notifications.cancelAll();
+    final ids = (await getAllReminders()).map((r) => r.id).whereType<int>();
+    await _notifications.cancelReminders(ids);
     if (deleteAllData) {
       await _db.deleteAllMedicationData();
       debugPrint('MedicationReminderService: all medication data deleted');
     }
     // ignore: discarded_futures
-    _db.syncToCloud(
-      medicationSettings: {
-        'featureEnabled': false,
-        'disclaimerAcceptedAt':
-            prefs.getString(kMedicationDisclaimerAcceptedAt),
-      },
-    ).then(
-      (_) {},
-      onError: (Object e, StackTrace _) {
-        debugPrint('MedicationReminderService: settings sync failed: $e');
-      },
-    );
+    _db
+        .syncToCloud(
+          medicationSettings: {
+            'featureEnabled': false,
+            'disclaimerAcceptedAt': prefs.getString(
+              kMedicationDisclaimerAcceptedAt,
+            ),
+          },
+        )
+        .then(
+          (_) {},
+          onError: (Object e, StackTrace _) {
+            debugPrint('MedicationReminderService: settings sync failed: $e');
+          },
+        );
     debugPrint('MedicationReminderService: feature disabled');
   }
 
@@ -204,9 +210,7 @@ class MedicationReminderService {
       scheduledDate: today,
       scheduledTime: reminder.timeHhmm,
     );
-    debugPrint(
-      'MedicationReminderService: check-in reminderId=${reminder.id}',
-    );
+    debugPrint('MedicationReminderService: check-in reminderId=${reminder.id}');
   }
 
   Future<void> undoCheckIn(MedicationReminder reminder) async {
@@ -222,7 +226,8 @@ class MedicationReminderService {
   }
 
   Future<void> deleteAllMedicationData() async {
-    await _notifications.cancelAll();
+    final ids = (await getAllReminders()).map((r) => r.id).whereType<int>();
+    await _notifications.cancelReminders(ids);
     await _db.deleteAllMedicationData();
     debugPrint('MedicationReminderService: deleteAllMedicationData');
   }
