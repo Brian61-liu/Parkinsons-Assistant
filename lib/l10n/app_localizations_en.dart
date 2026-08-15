@@ -294,7 +294,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      'If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored on this device. When you are signed in, they can also sync to your Amplio cloud account so you can restore them on another iPhone. Optional local notifications may fire on this device only if you allow notification permission. You can delete this data in the app (including account deletion). This feature is not medical advice and is not included in data export by default.';
+      'If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored on this device. When you are signed in, they can also sync to your Amplio cloud account so you can restore them on another iPhone. Optional local notifications may fire on this device only if you allow notification permission. You can delete this data in the app (including account deletion). This feature is not medical advice and is not included in data export unless you separately agree each time you export.';
 
   @override
   String get contactUs => 'Contact Us';
@@ -373,7 +373,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportDataDescription =>
-      'Export your profile and training records as a CSV file. You can save or share it from the system share sheet. Medication list is not included by default.';
+      'Export your profile and training records as a CSV file. You can save or share it from the system share sheet. Medication nicknames are not included unless you agree for that export.';
 
   @override
   String get export => 'Export';
@@ -387,6 +387,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get exportSuccessMessage =>
       'Your CSV file is ready. Use the share sheet to save it to Files or send it. Raw sensor samples are summarized by count only.';
+
+  @override
+  String get exportMedicationConsentTitle => 'Include medication nicknames?';
+
+  @override
+  String get exportMedicationConsentBody =>
+      'Training records will be exported as a CSV file.\n\nMedication nicknames, reminder times, and check-ins are not included unless you choose Include this time. This is not a prescription or medical record.\n\nCancel to stop. You can still export without medication data.';
+
+  @override
+  String get exportMedicationExclude => 'Export without medication';
+
+  @override
+  String get exportMedicationInclude => 'Include medication list';
 
   @override
   String get deleteAllRecords => 'Delete All Test Records';

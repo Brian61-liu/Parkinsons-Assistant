@@ -387,6 +387,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exportSuccessMessage => 'تم نسخ بياناتك إلى الحافظة.';
 
   @override
+  String get exportMedicationConsentTitle => 'Include medication nicknames?';
+
+  @override
+  String get exportMedicationConsentBody =>
+      'Training records will be exported as a CSV file.\n\nMedication nicknames, reminder times, and check-ins are not included unless you choose Include this time. This is not a prescription or medical record.\n\nCancel to stop. You can still export without medication data.';
+
+  @override
+  String get exportMedicationExclude => 'Export without medication';
+
+  @override
+  String get exportMedicationInclude => 'Include medication list';
+
+  @override
   String get deleteAllRecords => 'حذف جميع السجلات';
 
   @override

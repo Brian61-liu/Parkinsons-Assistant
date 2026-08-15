@@ -7,10 +7,7 @@ void main() {
       'exportedAt': '2026-08-04T00:00:00.000Z',
       'userId': 'uid-1',
       'email': 'a@b.com',
-      'sources': {
-        'tremorRecords': 'local',
-        'movementTrainingRecords': 'local',
-      },
+      'sources': {'tremorRecords': 'local', 'movementTrainingRecords': 'local'},
       'note': 'hello, world',
       'profile': {'displayName': 'Ada'},
       'tremorRecords': [
@@ -44,5 +41,57 @@ void main() {
     expect(csv, isNot(contains('1,2,3,4\n'))); // raw series not dumped as data
     expect(csv, contains('Ada'));
     expect(csv, contains('true'));
+    expect(csv, isNot(contains('# Medication Reminders')));
+  });
+
+  test('toCsv omits medication sections unless consented', () {
+    final without = UserDataExportFormatter.toCsv({
+      'exportedAt': '2026-08-15T00:00:00.000Z',
+      'userId': 'uid-1',
+      'email': 'a@b.com',
+      'medicationIncluded': false,
+      'medicationReminders': [
+        {'id': 1, 'label': 'morning pill', 'time': '08:00'},
+      ],
+      'note': 'excluded',
+    });
+    expect(without, contains('medicationIncluded,false'));
+    expect(without, isNot(contains('# Medication Reminders')));
+    expect(without, isNot(contains('morning pill')));
+
+    final withMeds = UserDataExportFormatter.toCsv({
+      'exportedAt': '2026-08-15T00:00:00.000Z',
+      'userId': 'uid-1',
+      'email': 'a@b.com',
+      'medicationIncluded': true,
+      'sources': {'medication': 'local'},
+      'medicationReminders': [
+        {
+          'id': 1,
+          'cloudId': 'c1',
+          'label': 'morning pill',
+          'time': '08:00',
+          'enabled': true,
+          'createdAt': '2026-08-01T00:00:00.000Z',
+        },
+      ],
+      'medicationCheckIns': [
+        {
+          'id': 2,
+          'reminderId': 1,
+          'scheduledDate': '2026-08-15',
+          'scheduledTime': '08:00',
+          'checkedAt': '2026-08-15T08:05:00.000Z',
+          'status': 'taken',
+        },
+      ],
+      'note': 'consented',
+    });
+    expect(withMeds, contains('medicationIncluded,true'));
+    expect(withMeds, contains('# Medication Reminders'));
+    expect(withMeds, contains('morning pill'));
+    expect(withMeds, contains('08:00'));
+    expect(withMeds, contains('# Medication Check-ins'));
+    expect(withMeds, contains('taken'));
   });
 }

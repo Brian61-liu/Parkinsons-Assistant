@@ -437,9 +437,7 @@ class AuthService {
       return value.toIso8601String();
     }
     if (value is Map) {
-      return value.map(
-        (key, v) => MapEntry(key.toString(), jsonSafe(v)),
-      );
+      return value.map((key, v) => MapEntry(key.toString(), jsonSafe(v)));
     }
     if (value is Iterable) {
       return value.map(jsonSafe).toList();
@@ -452,9 +450,13 @@ class AuthService {
   /// 云端拉取与审计写入均为尽力而为：网络差时不阻塞整次导出。
   /// [localTremorRecords] / [localMovementRecords] 为本地 SQLite 回退数据
   ///（已是 JSON 友好 Map）；云端为空或失败时使用。
+  /// [includeMedication] 必须为本次导出单独同意；默认不含用药昵称/时刻/打卡。
   Future<Map<String, dynamic>> exportUserData({
     List<Map<String, dynamic>>? localTremorRecords,
     List<Map<String, dynamic>>? localMovementRecords,
+    bool includeMedication = false,
+    List<Map<String, dynamic>>? localMedicationReminders,
+    List<Map<String, dynamic>>? localMedicationCheckIns,
   }) async {
     final user = currentUser;
     if (user == null) {
@@ -477,8 +479,11 @@ class AuthService {
         debugPrint('记录导出请求失败（忽略）: $e');
       }
       try {
-        await _logAuditEvent(user.uid, 'DATA_EXPORT', 'User data exported')
-            .timeout(const Duration(seconds: 5));
+        await _logAuditEvent(
+          user.uid,
+          'DATA_EXPORT',
+          'User data exported',
+        ).timeout(const Duration(seconds: 5));
       } catch (e) {
         debugPrint('记录导出审计失败（忽略）: $e');
       }
@@ -555,9 +560,20 @@ class AuthService {
       'sources': {
         'tremorRecords': tremorSource,
         'movementTrainingRecords': movementSource,
+        if (includeMedication) 'medication': 'local',
       },
-      'note':
-          'Medication list is not included in export unless separately consented. Signed-in accounts may sync medication reminders to the cloud; export still requires separate consent.',
+      'medicationIncluded': includeMedication,
+      'note': includeMedication
+          ? 'Medication nicknames, reminder times, and check-ins are included because you consented for this export. This is not medical advice or a prescription list.'
+          : 'Medication list is not included in export unless separately consented. Signed-in accounts may sync medication reminders to the cloud; export still requires separate consent.',
+      if (includeMedication) ...{
+        'medicationReminders': (localMedicationReminders ?? const [])
+            .map((e) => Map<String, dynamic>.from(jsonSafe(e) as Map))
+            .toList(),
+        'medicationCheckIns': (localMedicationCheckIns ?? const [])
+            .map((e) => Map<String, dynamic>.from(jsonSafe(e) as Map))
+            .toList(),
+      },
     };
   }
 

@@ -15,16 +15,19 @@ class UserDataExportFormatter {
 
     final sources = data['sources'];
     if (sources is Map) {
+      buf.writeln(_csvRow(['tremorSource', _cell(sources['tremorRecords'])]));
       buf.writeln(
-        _csvRow(['tremorSource', _cell(sources['tremorRecords'])]),
+        _csvRow(['movementSource', _cell(sources['movementTrainingRecords'])]),
       );
-      buf.writeln(
-        _csvRow([
-          'movementSource',
-          _cell(sources['movementTrainingRecords']),
-        ]),
-      );
+      if (sources.containsKey('medication')) {
+        buf.writeln(
+          _csvRow(['medicationSource', _cell(sources['medication'])]),
+        );
+      }
     }
+    buf.writeln(
+      _csvRow(['medicationIncluded', _cell(data['medicationIncluded'])]),
+    );
     buf.writeln(_csvRow(['note', _cell(data['note'])]));
 
     buf.writeln();
@@ -92,6 +95,58 @@ class UserDataExportFormatter {
       );
     }
 
+    if (data['medicationIncluded'] == true) {
+      buf.writeln();
+      buf.writeln('# Medication Reminders');
+      buf.writeln(
+        _csvRow(const [
+          'id',
+          'cloudId',
+          'label',
+          'time',
+          'enabled',
+          'createdAt',
+        ]),
+      );
+      for (final r in _asMapList(data['medicationReminders'])) {
+        buf.writeln(
+          _csvRow([
+            _cell(r['id']),
+            _cell(r['cloudId']),
+            _cell(r['label']),
+            _cell(r['time']),
+            _cell(r['enabled']),
+            _cell(r['createdAt']),
+          ]),
+        );
+      }
+
+      buf.writeln();
+      buf.writeln('# Medication Check-ins');
+      buf.writeln(
+        _csvRow(const [
+          'id',
+          'reminderId',
+          'scheduledDate',
+          'scheduledTime',
+          'checkedAt',
+          'status',
+        ]),
+      );
+      for (final r in _asMapList(data['medicationCheckIns'])) {
+        buf.writeln(
+          _csvRow([
+            _cell(r['id']),
+            _cell(r['reminderId']),
+            _cell(r['scheduledDate']),
+            _cell(r['scheduledTime']),
+            _cell(r['checkedAt']),
+            _cell(r['status']),
+          ]),
+        );
+      }
+    }
+
     return buf.toString();
   }
 
@@ -117,7 +172,8 @@ class UserDataExportFormatter {
   }
 
   static String _escapeCsv(String raw) {
-    final needsQuotes = raw.contains(',') ||
+    final needsQuotes =
+        raw.contains(',') ||
         raw.contains('"') ||
         raw.contains('\n') ||
         raw.contains('\r');

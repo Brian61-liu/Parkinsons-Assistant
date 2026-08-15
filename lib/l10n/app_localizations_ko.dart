@@ -382,6 +382,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get exportSuccessMessage => '데이터가 클립보드에 복사되었습니다.';
 
   @override
+  String get exportMedicationConsentTitle => 'Include medication nicknames?';
+
+  @override
+  String get exportMedicationConsentBody =>
+      'Training records will be exported as a CSV file.\n\nMedication nicknames, reminder times, and check-ins are not included unless you choose Include this time. This is not a prescription or medical record.\n\nCancel to stop. You can still export without medication data.';
+
+  @override
+  String get exportMedicationExclude => 'Export without medication';
+
+  @override
+  String get exportMedicationInclude => 'Include medication list';
+
+  @override
   String get deleteAllRecords => '모든 테스트 기록 삭제';
 
   @override

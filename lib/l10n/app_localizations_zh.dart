@@ -290,7 +290,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      '若您开启可选的用药昵称清单，昵称、提醒时间与打卡记录会保存在本设备。登录后还可同步到 Amplio 云端账户，以便在另一台 iPhone 上恢复。若您允许通知权限，可选的本地通知仅在本机触发。您可在应用内删除这些数据（含删除账户）。该功能不是医疗建议，且默认不包含在数据导出中。';
+      '若您开启可选的用药昵称清单，昵称、提醒时间与打卡记录会保存在本设备。登录后还可同步到 Amplio 云端账户，以便在另一台 iPhone 上恢复。若您允许通知权限，可选的本地通知仅在本机触发。您可在应用内删除这些数据（含删除账户）。该功能不是医疗建议；数据导出默认不含用药，仅在你每次导出时单独同意才会写入文件。';
 
   @override
   String get contactUs => '联系我们';
@@ -368,7 +368,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get exportDataDescription =>
-      '将个人资料与训练记录导出为 CSV 文件，可通过系统分享面板保存到「文件」或发送。用药清单默认不包含在内。';
+      '将个人资料与训练记录导出为 CSV 文件，可通过系统分享面板保存到「文件」或发送。用药昵称仅在你本次导出单独同意后才会写入文件。';
 
   @override
   String get export => '导出';
@@ -382,6 +382,19 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get exportSuccessMessage =>
       'CSV 文件已生成。请在分享面板中存储到「文件」或发送给他人；原始传感器采样仅汇总为数量。';
+
+  @override
+  String get exportMedicationConsentTitle => '要包含用药昵称吗？';
+
+  @override
+  String get exportMedicationConsentBody =>
+      '将导出训练记录为 CSV 文件。\n\n用药昵称、提醒时间与打卡默认不包含。仅当你本次选择「包含用药清单」才会写入。这不是处方或病历。\n\n点取消则停止导出；也可以不含用药继续导出。';
+
+  @override
+  String get exportMedicationExclude => '不含用药，继续导出';
+
+  @override
+  String get exportMedicationInclude => '包含用药清单';
 
   @override
   String get deleteAllRecords => '删除所有测试记录';

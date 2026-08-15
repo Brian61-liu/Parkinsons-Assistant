@@ -642,7 +642,7 @@ abstract class AppLocalizations {
   /// No description provided for @medicationPrivacyText.
   ///
   /// In en, this message translates to:
-  /// **'If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored on this device. When you are signed in, they can also sync to your Amplio cloud account so you can restore them on another iPhone. Optional local notifications may fire on this device only if you allow notification permission. You can delete this data in the app (including account deletion). This feature is not medical advice and is not included in data export by default.'**
+  /// **'If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored on this device. When you are signed in, they can also sync to your Amplio cloud account so you can restore them on another iPhone. Optional local notifications may fire on this device only if you allow notification permission. You can delete this data in the app (including account deletion). This feature is not medical advice and is not included in data export unless you separately agree each time you export.'**
   String get medicationPrivacyText;
 
   /// No description provided for @contactUs.
@@ -780,7 +780,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportDataDescription.
   ///
   /// In en, this message translates to:
-  /// **'Export your profile and training records as a CSV file. You can save or share it from the system share sheet. Medication list is not included by default.'**
+  /// **'Export your profile and training records as a CSV file. You can save or share it from the system share sheet. Medication nicknames are not included unless you agree for that export.'**
   String get exportDataDescription;
 
   /// No description provided for @export.
@@ -806,6 +806,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your CSV file is ready. Use the share sheet to save it to Files or send it. Raw sensor samples are summarized by count only.'**
   String get exportSuccessMessage;
+
+  /// No description provided for @exportMedicationConsentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Include medication nicknames?'**
+  String get exportMedicationConsentTitle;
+
+  /// No description provided for @exportMedicationConsentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Training records will be exported as a CSV file.\n\nMedication nicknames, reminder times, and check-ins are not included unless you choose Include this time. This is not a prescription or medical record.\n\nCancel to stop. You can still export without medication data.'**
+  String get exportMedicationConsentBody;
+
+  /// No description provided for @exportMedicationExclude.
+  ///
+  /// In en, this message translates to:
+  /// **'Export without medication'**
+  String get exportMedicationExclude;
+
+  /// No description provided for @exportMedicationInclude.
+  ///
+  /// In en, this message translates to:
+  /// **'Include medication list'**
+  String get exportMedicationInclude;
 
   /// No description provided for @deleteAllRecords.
   ///

@@ -25,7 +25,8 @@ class DataManagementPage extends StatefulWidget {
 class _DataManagementPageState extends State<DataManagementPage> {
   final AuthService _authService = AuthService();
   final DatabaseService _databaseService = DatabaseService();
-  final MedicationReminderService _medicationService = MedicationReminderService();
+  final MedicationReminderService _medicationService =
+      MedicationReminderService();
   bool _isExporting = false;
   bool _isDeletingRecords = false;
   bool _isDeletingMedication = false;
@@ -36,6 +37,35 @@ class _DataManagementPageState extends State<DataManagementPage> {
 
   Future<void> _exportData() async {
     final l10n = AppLocalizations.of(context)!;
+
+    if (_authService.currentUser == null) {
+      _showErrorDialog(l10n.error, l10n.loginRequiredForSync);
+      return;
+    }
+
+    final includeMedication = await showCupertinoDialog<bool>(
+      context: context,
+      builder: (ctx) => CupertinoAlertDialog(
+        title: Text(l10n.exportMedicationConsentTitle),
+        content: Text(l10n.exportMedicationConsentBody),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.cancel),
+          ),
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(l10n.exportMedicationExclude),
+          ),
+          CupertinoDialogAction(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(l10n.exportMedicationInclude),
+          ),
+        ],
+      ),
+    );
+    if (!mounted || includeMedication == null) return;
 
     setState(() => _isExporting = true);
 
@@ -48,10 +78,20 @@ class _DataManagementPageState extends State<DataManagementPage> {
               .map((r) => r.toMap())
               .toList();
 
+      List<Map<String, dynamic>>? medicationReminders;
+      List<Map<String, dynamic>>? medicationCheckIns;
+      if (includeMedication) {
+        medicationReminders = await _medicationService.exportRemindersAsMaps();
+        medicationCheckIns = await _medicationService.exportCheckInsAsMaps();
+      }
+
       final data = await _authService
           .exportUserData(
             localTremorRecords: localTremor,
             localMovementRecords: localMovement,
+            includeMedication: includeMedication,
+            localMedicationReminders: medicationReminders,
+            localMedicationCheckIns: medicationCheckIns,
           )
           .timeout(
             const Duration(seconds: _operationTimeout),
@@ -107,7 +147,7 @@ class _DataManagementPageState extends State<DataManagementPage> {
 
   Future<void> _deleteAllRecords() async {
     final l10n = AppLocalizations.of(context)!;
-    
+
     final confirmed = await showCupertinoDialog<bool>(
       context: context,
       builder: (context) => CupertinoAlertDialog(
@@ -134,7 +174,7 @@ class _DataManagementPageState extends State<DataManagementPage> {
     try {
       // 删除本地数据库记录
       await _databaseService.deleteAllTremorRecords();
-      
+
       // 尝试删除云端记录（如果失败不影响本地删除）
       try {
         await _authService.deleteAllTremorRecords().timeout(
@@ -145,7 +185,7 @@ class _DataManagementPageState extends State<DataManagementPage> {
         // 云端删除失败，但本地已删除成功
         debugPrint('云端记录删除失败: $e');
       }
-      
+
       if (mounted) {
         _showSuccessDialog(l10n.deleteSuccess, l10n.deleteSuccessMessage);
       }
@@ -190,10 +230,7 @@ class _DataManagementPageState extends State<DataManagementPage> {
       await _medicationService.deleteAllMedicationData();
       await _medicationService.disableFeature(deleteAllData: false);
       if (mounted) {
-        _showSuccessDialog(
-          l10n.deleteSuccess,
-          l10n.medicationDeleteSuccess,
-        );
+        _showSuccessDialog(l10n.deleteSuccess, l10n.medicationDeleteSuccess);
       }
     } catch (e) {
       if (mounted) {
@@ -208,7 +245,7 @@ class _DataManagementPageState extends State<DataManagementPage> {
 
   Future<void> _deleteAccount() async {
     final l10n = AppLocalizations.of(context)!;
-    
+
     // 第一次确认
     final firstConfirm = await showCupertinoDialog<bool>(
       context: context,
@@ -301,8 +338,11 @@ class _DataManagementPageState extends State<DataManagementPage> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(CupertinoIcons.checkmark_circle_fill, 
-                color: Colors.green, size: 24),
+            const Icon(
+              CupertinoIcons.checkmark_circle_fill,
+              color: Colors.green,
+              size: 24,
+            ),
             const SizedBox(width: 8),
             Flexible(child: Text(title)),
           ],
@@ -328,8 +368,11 @@ class _DataManagementPageState extends State<DataManagementPage> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(CupertinoIcons.exclamationmark_circle_fill, 
-                color: Colors.red, size: 24),
+            const Icon(
+              CupertinoIcons.exclamationmark_circle_fill,
+              color: Colors.red,
+              size: 24,
+            ),
             const SizedBox(width: 8),
             Flexible(child: Text(title)),
           ],
@@ -476,9 +519,7 @@ class _DataManagementPageState extends State<DataManagementPage> {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
-        ),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -521,8 +562,8 @@ class _DataManagementPageState extends State<DataManagementPage> {
             child: ElevatedButton(
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
-                backgroundColor: isDestructive 
-                    ? Colors.red.withValues(alpha: 0.8) 
+                backgroundColor: isDestructive
+                    ? Colors.red.withValues(alpha: 0.8)
                     : const Color(0xFF4facfe),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 14),

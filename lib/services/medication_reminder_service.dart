@@ -159,6 +159,40 @@ class MedicationReminderService {
     return _db.getAllMedicationReminders();
   }
 
+  /// 供数据导出：昵称与时刻，不含剂量。须由调用方先取得单独同意。
+  Future<List<Map<String, dynamic>>> exportRemindersAsMaps() async {
+    final list = await getAllReminders();
+    return list
+        .map(
+          (r) => <String, dynamic>{
+            'id': r.id,
+            'cloudId': r.cloudId,
+            'label': r.label,
+            'time': r.timeHhmm,
+            'enabled': r.enabled,
+            'createdAt': r.createdAt.toIso8601String(),
+          },
+        )
+        .toList();
+  }
+
+  /// 供数据导出：打卡记录。须由调用方先取得单独同意。
+  Future<List<Map<String, dynamic>>> exportCheckInsAsMaps() async {
+    final list = await _db.getAllMedicationCheckIns();
+    return list
+        .map(
+          (c) => <String, dynamic>{
+            'id': c.id,
+            'reminderId': c.reminderId,
+            'scheduledDate': c.scheduledDate,
+            'scheduledTime': c.scheduledTime,
+            'checkedAt': c.checkedAt.toIso8601String(),
+            'status': c.status,
+          },
+        )
+        .toList();
+  }
+
   Future<int> addReminder({
     required String label,
     required String timeHhmm,
