@@ -38,7 +38,7 @@ class TrainingReminderService {
   final MedicationNotificationService _notifications;
   SharedPreferences? _prefs;
 
-  static String _title = 'Amplio';
+  static String _title = 'Amplio Care';
   static String _body = 'A short practice when you can. Missing it is fine.';
 
   void setCopy({required String title, required String body}) {

@@ -1,5 +1,5 @@
 name: parkinson_new
-description: "Amplio is an iPhone rehabilitation support app for people living with Parkinson's disease."
+description: "Amplio Care is an iPhone rehabilitation support app for people living with Parkinson's disease."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

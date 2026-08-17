@@ -1,6 +1,6 @@
-# Amplio
+# Amplio Care
 
-Amplio is an iPhone app that supports people living with Parkinson's disease with rehabilitation training, training records, trend review, and privacy-first data management.
+Amplio Care is an iPhone app that supports people living with Parkinson's disease with rehabilitation training, training records, trend review, and privacy-first data management.
 
 The product target is Apple App Store only. It is designed for iPhone users and is not maintained for other client platforms.
 
@@ -14,7 +14,7 @@ The product target is Apple App Store only. It is designed for iPhone users and 
 - Local medication checklist with manual check-ins.
 - Multi-language, large text, and iOS VoiceOver-oriented accessibility support.
 
-Amplio is a rehabilitation support tool. It must not be described as diagnosing, treating, or curing Parkinson's disease, and it must not replace advice from physicians, physical therapists, or speech therapists.
+Amplio Care is a rehabilitation support tool. It must not be described as diagnosing, treating, or curing Parkinson's disease, and it must not replace advice from physicians, physical therapists, or speech therapists.
 
 ## Platform
 

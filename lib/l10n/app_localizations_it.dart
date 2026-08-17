@@ -9,7 +9,7 @@ class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
 
   @override
-  String get appTitle => 'Amplio';
+  String get appTitle => 'Amplio Care';
 
   @override
   String get selectTraining =>
@@ -249,7 +249,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get privacyPolicyIntroText =>
-      'Amplio si impegna a proteggere la tua privacy e i dati sulla salute. Questa politica spiega come raccogliamo, usiamo, archiviamo e proteggiamo le tue informazioni.';
+      'Amplio Care si impegna a proteggere la tua privacy e i dati sulla salute. Questa politica spiega come raccogliamo, usiamo, archiviamo e proteggiamo le tue informazioni.';
 
   @override
   String get dataCollection => 'Dati che Raccogliamo';
@@ -298,14 +298,14 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      'Se attivi l’elenco opzionale di soprannomi dei farmaci, i soprannomi, gli orari dei promemoria e i check-in vengono memorizzati su questo dispositivo. Se accedi, possono anche sincronizzarsi con il tuo account cloud Amplio per essere ripristinati su un altro iPhone. Le notifiche locali opzionali compaiono solo su questo dispositivo se concedi il permesso per le notifiche. Puoi eliminare questi dati nell’app (anche eliminando l’account). Questa funzione non è un consiglio medico e viene inclusa nell’esportazione dei dati solo se dai un consenso separato ogni volta che esporti.';
+      'Se attivi l’elenco opzionale di soprannomi dei farmaci, i soprannomi, gli orari dei promemoria e i check-in vengono memorizzati su questo dispositivo. Se accedi, possono anche sincronizzarsi con il tuo account cloud Amplio Care per essere ripristinati su un altro iPhone. Le notifiche locali opzionali compaiono solo su questo dispositivo se concedi il permesso per le notifiche. Puoi eliminare questi dati nell’app (anche eliminando l’account). Questa funzione non è un consiglio medico e viene inclusa nell’esportazione dei dati solo se dai un consenso separato ogni volta che esporti.';
 
   @override
   String get contactUs => 'Contattaci';
 
   @override
   String get contactUsText =>
-      'Amplio è gestito da uno sviluppatore individuale indipendente (dominio: ampliocare.com).\n\n• Privacy / richieste dati: privacy@ampliocare.com\n• Supporto utente: support@ampliocare.com\n• Partnership cliniche: clinical@ampliocare.com\n• Affari: hello@ampliocare.com';
+      'Amplio Care è gestito da uno sviluppatore individuale indipendente (dominio: ampliocare.com).\n\n• Privacy / richieste dati: privacy@ampliocare.com\n• Supporto utente: support@ampliocare.com\n• Partnership cliniche: clinical@ampliocare.com\n• Affari: hello@ampliocare.com';
 
   @override
   String get termsOfService => 'Termini di servizio';
@@ -315,42 +315,42 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get termsIntroText =>
-      'Questi Termini di servizio («Termini») sono una bozza di accordo per l’uso di Amplio, un assistente di allenamento riabilitativo per iPhone per persone che convivono con il Parkinson. Amplio è gestito da uno sviluppatore individuale indipendente. Questi Termini non sostituiscono una consulenza legale professionale.';
+      'Questi Termini di servizio («Termini») sono una bozza di accordo per l’uso di Amplio Care, un assistente di allenamento riabilitativo per iPhone per persone che convivono con il Parkinson. Amplio Care è gestito da uno sviluppatore individuale indipendente. Questi Termini non sostituiscono una consulenza legale professionale.';
 
   @override
   String get termsAcceptance => 'Accettazione';
 
   @override
   String get termsAcceptanceText =>
-      'Accedendo, continuando come ospite o usando altrimenti Amplio, accetti questi Termini e l’Informativa sulla privacy. Se non sei d’accordo, non usare l’app.';
+      'Accedendo, continuando come ospite o usando altrimenti Amplio Care, accetti questi Termini e l’Informativa sulla privacy. Se non sei d’accordo, non usare l’app.';
 
   @override
-  String get termsUseOfApp => 'Uso di Amplio';
+  String get termsUseOfApp => 'Uso di Amplio Care';
 
   @override
   String get termsUseOfAppText =>
-      'Amplio fornisce strumenti di allenamento opzionali come misurazione del tremore, pratica vocale, pratica del movimento, riepiloghi dei progressi e un elenco opzionale di soprannomi farmaci (solo sul dispositivo per gli ospiti; sync possibile se accedi).\n\nAccetti di usare l’app solo per scopi personali leciti e di non abusare di sensori, account o dati esportati in modi che danneggino altri o violino la legge applicabile.';
+      'Amplio Care fornisce strumenti di allenamento opzionali come misurazione del tremore, pratica vocale, pratica del movimento, riepiloghi dei progressi e un elenco opzionale di soprannomi farmaci (solo sul dispositivo per gli ospiti; sync possibile se accedi).\n\nAccetti di usare l’app solo per scopi personali leciti e di non abusare di sensori, account o dati esportati in modi che danneggino altri o violino la legge applicabile.';
 
   @override
   String get termsMedicalDisclaimer => 'Non è consiglio medico';
 
   @override
   String get termsMedicalDisclaimerText =>
-      'Amplio è un ausilio per il benessere e l’allenamento riabilitativo. Non diagnostica, tratta, cura né previene il Parkinson o qualsiasi altra condizione.\n\nPunteggi, tendenze, report e promemoria sono solo per riferimento personale e non sostituiscono il consiglio di un medico, fisioterapista, logopedista o altro professionista qualificato. Rivolgiti a un professionista per decisioni mediche. Interrompi qualsiasi esercizio che causi dolore, vertigini o condizioni non sicure.';
+      'Amplio Care è un ausilio per il benessere e l’allenamento riabilitativo. Non diagnostica, tratta, cura né previene il Parkinson o qualsiasi altra condizione.\n\nPunteggi, tendenze, report e promemoria sono solo per riferimento personale e non sostituiscono il consiglio di un medico, fisioterapista, logopedista o altro professionista qualificato. Rivolgiti a un professionista per decisioni mediche. Interrompi qualsiasi esercizio che causi dolore, vertigini o condizioni non sicure.';
 
   @override
   String get termsAccounts => 'Account e dati';
 
   @override
   String get termsAccountsText =>
-      'Puoi usare Amplio con Apple Sign-In, Google Sign-In o come ospite. Sei responsabile dell’attività sotto il tuo account connesso.\n\nPuoi esportare o eliminare alcuni dati nell’app. L’eliminazione dell’account rimuove i dati cloud associati che controlliamo, entro i limiti tecnici e legali. I dati ospite e solo locali possono restare solo sul tuo dispositivo finché non li cancelli.';
+      'Puoi usare Amplio Care con Apple Sign-In, Google Sign-In o come ospite. Sei responsabile dell’attività sotto il tuo account connesso.\n\nPuoi esportare o eliminare alcuni dati nell’app. L’eliminazione dell’account rimuove i dati cloud associati che controlliamo, entro i limiti tecnici e legali. I dati ospite e solo locali possono restare solo sul tuo dispositivo finché non li cancelli.';
 
   @override
   String get termsLimitation => 'Limitazione di responsabilità';
 
   @override
   String get termsLimitationText =>
-      'Nella misura massima consentita dalla legge, lo sviluppatore fornisce Amplio «così com’è», senza garanzie di funzionamento ininterrotto o senza errori.\n\nLo sviluppatore non è responsabile per lesioni, perdite o danni derivanti dall’affidamento sui punteggi di allenamento, promemoria farmaci mancati, tentativi di esercizio o impossibilità di accedere all’app, salvo dove la responsabilità non possa essere limitata dalla legge.';
+      'Nella misura massima consentita dalla legge, lo sviluppatore fornisce Amplio Care «così com’è», senza garanzie di funzionamento ininterrotto o senza errori.\n\nLo sviluppatore non è responsabile per lesioni, perdite o danni derivanti dall’affidamento sui punteggi di allenamento, promemoria farmaci mancati, tentativi di esercizio o impossibilità di accedere all’app, salvo dove la responsabilità non possa essere limitata dalla legge.';
 
   @override
   String get termsChanges => 'Modifiche';
@@ -669,7 +669,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get medicationDisclaimer =>
-      'L\'elenco farmaci di Amplio ti aiuta solo a registrare gli orari da solo. Non è un consiglio medico e non fornisce indicazioni sul dosaggio. Come ospite i dati restano solo su questo dispositivo. Se accedi, promemoria e check-in possono sincronizzarsi con il tuo account Amplio.';
+      'L\'elenco farmaci di Amplio Care ti aiuta solo a registrare gli orari da solo. Non è un consiglio medico e non fornisce indicazioni sul dosaggio. Come ospite i dati restano solo su questo dispositivo. Se accedi, promemoria e check-in possono sincronizzarsi con il tuo account Amplio Care.';
 
   @override
   String get medicationDisclaimerAccept => 'Ho capito e attivo';
@@ -915,7 +915,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get medicationNotificationPermissionNote =>
-      'Opzionale: consenti le notifiche così Amplio può ricordarti agli orari impostati. Le notifiche restano su questo dispositivo.';
+      'Opzionale: consenti le notifiche così Amplio Care può ricordarti agli orari impostati. Le notifiche restano su questo dispositivo.';
 
   @override
   String get recentActivity => 'Attività recente';
@@ -1252,7 +1252,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get reportShareConsentBody =>
-      'Questa operazione crea un file di testo con i punteggi e le tendenze degli esercizi, quindi apre il pannello di condivisione del sistema (Messaggi, Mail, File ecc.).\n\nSolo per riferimento personale — non è una diagnosi medica.\n\nDopo l’invio, Amplio non può recuperare il file dal destinatario. Puoi annullare ora oppure non scegliere alcuna destinazione nella schermata successiva.';
+      'Questa operazione crea un file di testo con i punteggi e le tendenze degli esercizi, quindi apre il pannello di condivisione del sistema (Messaggi, Mail, File ecc.).\n\nSolo per riferimento personale — non è una diagnosi medica.\n\nDopo l’invio, Amplio Care non può recuperare il file dal destinatario. Puoi annullare ora oppure non scegliere alcuna destinazione nella schermata successiva.';
 
   @override
   String get reportShareConsentConfirm => 'Ho capito — continua';
@@ -1269,7 +1269,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get reportShareFooterNote =>
-      'È necessaria la tua conferma a ogni condivisione. Amplio non invia automaticamente e-mail ai medici.';
+      'È necessaria la tua conferma a ogni condivisione. Amplio Care non invia automaticamente e-mail ai medici.';
 
   @override
   String get profileTabTitle => 'Profilo';
@@ -1307,7 +1307,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get trainingReminderPageTitle => 'Promemoria per gli esercizi';
 
   @override
-  String get trainingReminderTitle => 'Amplio';
+  String get trainingReminderTitle => 'Amplio Care';
 
   @override
   String get trainingReminderBody =>

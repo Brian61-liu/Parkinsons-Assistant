@@ -7,7 +7,7 @@ class UserDataExportFormatter {
   static String toCsv(Map<String, dynamic> data) {
     final buf = StringBuffer();
 
-    buf.writeln('# Amplio Data Export - Meta');
+    buf.writeln('# Amplio Care Data Export - Meta');
     buf.writeln(_csvRow(['key', 'value']));
     buf.writeln(_csvRow(['exportedAt', _cell(data['exportedAt'])]));
     buf.writeln(_csvRow(['userId', _cell(data['userId'])]));

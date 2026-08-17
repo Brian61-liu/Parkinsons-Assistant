@@ -99,7 +99,7 @@ class _BrandLockup extends StatelessWidget {
           _LogoPlaceholder(),
           SizedBox(height: 18),
           Text(
-            'Amplio',
+            'Amplio Care',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 34,

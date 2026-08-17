@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Amplio 设计系统颜色 Token
+/// Amplio Care 设计系统颜色 Token
 abstract final class AppColors {
   // ── 主色 ──────────────────────────────────────────────────
   static const Color primary = Color(0xFF007AFF); // iOS 蓝

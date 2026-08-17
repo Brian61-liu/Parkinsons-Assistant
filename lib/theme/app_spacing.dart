@@ -1,4 +1,4 @@
-/// Amplio 间距 Token
+/// Amplio Care 间距 Token
 abstract final class AppSpacing {
   static const double xs = 4;
   static const double sm = 8;

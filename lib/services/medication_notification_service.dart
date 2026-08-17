@@ -17,7 +17,7 @@ class MedicationNotificationService {
       FlutterLocalNotificationsPlugin();
 
   bool _initialized = false;
-  String _title = 'Amplio';
+  String _title = 'Amplio Care';
   String Function(String label) _bodyFor = (label) => label;
 
   /// 由 UI 注入本地化文案（可选；未注入时用标签本身）。

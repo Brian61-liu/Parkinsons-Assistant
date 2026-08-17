@@ -9,7 +9,7 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get appTitle => 'Amplio';
+  String get appTitle => 'Amplio Care';
 
   @override
   String get selectTraining => '수행하려는 훈련을 선택하세요';
@@ -241,7 +241,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get privacyPolicyIntroText =>
-      'Amplio는 귀하의 개인정보와 건강 데이터 보호에 최선을 다합니다. 본 정책은 정보 수집, 사용, 저장, 보호에 대해 설명합니다.';
+      'Amplio Care는 귀하의 개인정보와 건강 데이터 보호에 최선을 다합니다. 본 정책은 정보 수집, 사용, 저장, 보호에 대해 설명합니다.';
 
   @override
   String get dataCollection => '수집하는 데이터';
@@ -290,14 +290,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      '선택적 복약 닉네임 목록을 켜면 닉네임, 알림 시간, 체크인은 이 기기에 저장됩니다. 로그인하면 Amplio 클라우드 계정에도 동기화되어 다른 iPhone에서 복원할 수 있습니다. 알림 권한을 허용한 경우 선택적 로컬 알림은 이 기기에서만 울립니다. 앱에서 이 데이터를 삭제할 수 있습니다(계정 삭제 포함). 이 기능은 의료 조언이 아니며, 내보낼 때마다 별도로 동의하지 않는 한 복약 데이터는 내보내기에 포함되지 않습니다.';
+      '선택적 복약 닉네임 목록을 켜면 닉네임, 알림 시간, 체크인은 이 기기에 저장됩니다. 로그인하면 Amplio Care 클라우드 계정에도 동기화되어 다른 iPhone에서 복원할 수 있습니다. 알림 권한을 허용한 경우 선택적 로컬 알림은 이 기기에서만 울립니다. 앱에서 이 데이터를 삭제할 수 있습니다(계정 삭제 포함). 이 기능은 의료 조언이 아니며, 내보낼 때마다 별도로 동의하지 않는 한 복약 데이터는 내보내기에 포함되지 않습니다.';
 
   @override
   String get contactUs => '문의하기';
 
   @override
   String get contactUsText =>
-      'Amplio는 개인 독립 개발자가 운영합니다(도메인: ampliocare.com).\n\n• 개인정보/데이터 요청: privacy@ampliocare.com\n• 사용자 지원: support@ampliocare.com\n• 임상 협력: clinical@ampliocare.com\n• 비즈니스: hello@ampliocare.com';
+      'Amplio Care는 개인 독립 개발자가 운영합니다(도메인: ampliocare.com).\n\n• 개인정보/데이터 요청: privacy@ampliocare.com\n• 사용자 지원: support@ampliocare.com\n• 임상 협력: clinical@ampliocare.com\n• 비즈니스: hello@ampliocare.com';
 
   @override
   String get termsOfService => '서비스 약관';
@@ -307,42 +307,42 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get termsIntroText =>
-      '본 서비스 약관(“약관”)은 파킨슨병과 함께 살아가는 분을 위한 iPhone 재활 훈련 보조 앱 Amplio 이용을 위한 초안 합의입니다. Amplio는 개인 독립 개발자가 운영합니다. 본 약관은 전문 법률 자문을 대체하지 않습니다.';
+      '본 서비스 약관(“약관”)은 파킨슨병과 함께 살아가는 분을 위한 iPhone 재활 훈련 보조 앱 Amplio Care 이용을 위한 초안 합의입니다. Amplio Care는 개인 독립 개발자가 운영합니다. 본 약관은 전문 법률 자문을 대체하지 않습니다.';
 
   @override
   String get termsAcceptance => '동의';
 
   @override
   String get termsAcceptanceText =>
-      '로그인, 게스트로 계속 사용, 또는 그 밖의 방식으로 Amplio를 사용하면 본 약관 및 개인정보 처리방침에 동의한 것으로 간주됩니다. 동의하지 않으면 앱을 사용하지 마세요.';
+      '로그인, 게스트로 계속 사용, 또는 그 밖의 방식으로 Amplio Care를 사용하면 본 약관 및 개인정보 처리방침에 동의한 것으로 간주됩니다. 동의하지 않으면 앱을 사용하지 마세요.';
 
   @override
-  String get termsUseOfApp => 'Amplio 사용';
+  String get termsUseOfApp => 'Amplio Care 사용';
 
   @override
   String get termsUseOfAppText =>
-      'Amplio는 떨림 측정, 음성 연습, 동작 연습, 진행 요약, 선택적 복약 닉네임 목록(게스트는 기기 내; 로그인 시 동기화 가능) 등 선택적 훈련 도구를 제공합니다.\n\n합법적인 개인 목적으로만 앱을 사용하고, 타인에게 해를 끼치거나 적용 법률을 위반하는 방식으로 센서, 계정, 내보내기 데이터를 남용하지 않을 것에 동의합니다.';
+      'Amplio Care는 떨림 측정, 음성 연습, 동작 연습, 진행 요약, 선택적 복약 닉네임 목록(게스트는 기기 내; 로그인 시 동기화 가능) 등 선택적 훈련 도구를 제공합니다.\n\n합법적인 개인 목적으로만 앱을 사용하고, 타인에게 해를 끼치거나 적용 법률을 위반하는 방식으로 센서, 계정, 내보내기 데이터를 남용하지 않을 것에 동의합니다.';
 
   @override
   String get termsMedicalDisclaimer => '의료 조언이 아님';
 
   @override
   String get termsMedicalDisclaimerText =>
-      'Amplio는 웰니스 및 재활 훈련 보조 도구입니다. 파킨슨병이나 다른 질환을 진단, 치료, 치유, 예방하지 않습니다.\n\n점수, 추세, 보고서, 알림은 개인 참고용이며 의사, 물리치료사, 언어치료사 또는 기타 자격 있는 전문가의 조언을 대체하지 않습니다. 의료 결정은 전문가와 상담하세요. 통증이나 어지럼증이 생기거나 안전하게 계속할 수 없는 경우 운동을 중단하세요.';
+      'Amplio Care는 웰니스 및 재활 훈련 보조 도구입니다. 파킨슨병이나 다른 질환을 진단, 치료, 치유, 예방하지 않습니다.\n\n점수, 추세, 보고서, 알림은 개인 참고용이며 의사, 물리치료사, 언어치료사 또는 기타 자격 있는 전문가의 조언을 대체하지 않습니다. 의료 결정은 전문가와 상담하세요. 통증이나 어지럼증이 생기거나 안전하게 계속할 수 없는 경우 운동을 중단하세요.';
 
   @override
   String get termsAccounts => '계정 및 데이터';
 
   @override
   String get termsAccountsText =>
-      'Amplio는 Apple 로그인, Google 로그인 또는 게스트로 사용할 수 있습니다. 로그인 계정에서의 활동에 대한 책임은 사용자에게 있습니다.\n\n앱에서 일부 데이터를 내보내거나 삭제할 수 있습니다. 계정 삭제 시 기술·법적 한도 내에서 당사가 통제하는 관련 클라우드 데이터가 삭제됩니다. 게스트 및 기기 전용 데이터는 삭제할 때까지 기기에만 남을 수 있습니다.';
+      'Amplio Care는 Apple 로그인, Google 로그인 또는 게스트로 사용할 수 있습니다. 로그인 계정에서의 활동에 대한 책임은 사용자에게 있습니다.\n\n앱에서 일부 데이터를 내보내거나 삭제할 수 있습니다. 계정 삭제 시 기술·법적 한도 내에서 당사가 통제하는 관련 클라우드 데이터가 삭제됩니다. 게스트 및 기기 전용 데이터는 삭제할 때까지 기기에만 남을 수 있습니다.';
 
   @override
   String get termsLimitation => '책임의 제한';
 
   @override
   String get termsLimitationText =>
-      '법이 허용하는 최대 범위에서 개발자는 Amplio를 “있는 그대로” 제공하며 중단 없는 또는 오류 없는 작동을 보증하지 않습니다.\n\n훈련 점수 의존, 복약 알림 누락, 운동 시도 또는 앱 접근 불능으로 인한 부상, 손실, 손해에 대해 법으로 제한할 수 없는 책임을 제외하고 개발자는 책임지지 않습니다.';
+      '법이 허용하는 최대 범위에서 개발자는 Amplio Care를 “있는 그대로” 제공하며 중단 없는 또는 오류 없는 작동을 보증하지 않습니다.\n\n훈련 점수 의존, 복약 알림 누락, 운동 시도 또는 앱 접근 불능으로 인한 부상, 손실, 손해에 대해 법으로 제한할 수 없는 책임을 제외하고 개발자는 책임지지 않습니다.';
 
   @override
   String get termsChanges => '변경';
@@ -647,7 +647,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get medicationDisclaimer =>
-      'Amplio 복약 목록은 직접 시간을 기록하도록 돕습니다. 의학적 조언이 아니며 용량 안내를 제공하지 않습니다. 게스트는 데이터가 이 기기에만 저장됩니다. 로그인하면 알림과 체크인을 Amplio 계정에 동기화할 수 있습니다.';
+      'Amplio Care 복약 목록은 직접 시간을 기록하도록 돕습니다. 의학적 조언이 아니며 용량 안내를 제공하지 않습니다. 게스트는 데이터가 이 기기에만 저장됩니다. 로그인하면 알림과 체크인을 Amplio Care 계정에 동기화할 수 있습니다.';
 
   @override
   String get medicationDisclaimerAccept => '이해했으며 활성화합니다';
@@ -889,7 +889,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get medicationNotificationPermissionNote =>
-      '선택 사항: 알림을 허용하면 Amplio가 설정한 시간에 이 기기에서 알려 줍니다. 알림은 이 기기에만 유지됩니다.';
+      '선택 사항: 알림을 허용하면 Amplio Care가 설정한 시간에 이 기기에서 알려 줍니다. 알림은 이 기기에만 유지됩니다.';
 
   @override
   String get recentActivity => '최근 활동';
@@ -1206,7 +1206,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get reportShareConsentBody =>
-      '연습 점수와 추세가 포함된 텍스트 파일을 만든 후 시스템 공유 시트(메시지, Mail, 파일 등)를 엽니다.\n\n개인 참고용이며 의학적 진단이 아닙니다.\n\n파일을 보낸 후에는 Amplio가 수신자에게서 파일을 회수할 수 없습니다. 지금 취소하거나 다음 화면에서 공유 대상을 선택하지 않고 닫을 수 있습니다.';
+      '연습 점수와 추세가 포함된 텍스트 파일을 만든 후 시스템 공유 시트(메시지, Mail, 파일 등)를 엽니다.\n\n개인 참고용이며 의학적 진단이 아닙니다.\n\n파일을 보낸 후에는 Amplio Care가 수신자에게서 파일을 회수할 수 없습니다. 지금 취소하거나 다음 화면에서 공유 대상을 선택하지 않고 닫을 수 있습니다.';
 
   @override
   String get reportShareConsentConfirm => '이해했으며 계속합니다';
@@ -1222,7 +1222,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get reportShareFooterNote =>
-      '공유할 때마다 확인이 필요합니다. Amplio는 의사에게 자동으로 이메일을 보내지 않습니다.';
+      '공유할 때마다 확인이 필요합니다. Amplio Care는 의사에게 자동으로 이메일을 보내지 않습니다.';
 
   @override
   String get profileTabTitle => '프로필';
@@ -1259,7 +1259,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trainingReminderPageTitle => '연습 알림';
 
   @override
-  String get trainingReminderTitle => 'Amplio';
+  String get trainingReminderTitle => 'Amplio Care';
 
   @override
   String get trainingReminderBody => '가능할 때 짧게 연습해 보세요. 놓쳐도 괜찮습니다.';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
-/// Amplio 设计系统主题 Token（供 UserSettingsService 的普通模式使用）。
+/// Amplio Care 设计系统主题 Token（供 UserSettingsService 的普通模式使用）。
 ///
 /// 高对比度主题仍保留在 UserSettingsService.buildTheme() 里，
 /// 此处只覆盖普通主题，通过 [applyTo] 合并进去。

@@ -120,7 +120,7 @@ abstract class AppLocalizations {
   /// Application title
   ///
   /// In en, this message translates to:
-  /// **'Amplio'**
+  /// **'Amplio Care'**
   String get appTitle;
 
   /// Instruction text on home page
@@ -558,7 +558,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyIntroText.
   ///
   /// In en, this message translates to:
-  /// **'Amplio is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information.'**
+  /// **'Amplio Care is committed to protecting your privacy and the security of your personal health data. This policy explains how we collect, use, store, and protect your information.'**
   String get privacyPolicyIntroText;
 
   /// No description provided for @dataCollection.
@@ -642,7 +642,7 @@ abstract class AppLocalizations {
   /// No description provided for @medicationPrivacyText.
   ///
   /// In en, this message translates to:
-  /// **'If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored on this device. When you are signed in, they can also sync to your Amplio cloud account so you can restore them on another iPhone. Optional local notifications may fire on this device only if you allow notification permission. You can delete this data in the app (including account deletion). This feature is not medical advice and is not included in data export unless you separately agree each time you export.'**
+  /// **'If you enable the optional medication nickname list, nicknames, reminder times, and check-ins are stored on this device. When you are signed in, they can also sync to your Amplio Care cloud account so you can restore them on another iPhone. Optional local notifications may fire on this device only if you allow notification permission. You can delete this data in the app (including account deletion). This feature is not medical advice and is not included in data export unless you separately agree each time you export.'**
   String get medicationPrivacyText;
 
   /// No description provided for @contactUs.
@@ -654,7 +654,7 @@ abstract class AppLocalizations {
   /// No description provided for @contactUsText.
   ///
   /// In en, this message translates to:
-  /// **'Amplio is operated by an independent individual developer (domain: ampliocare.com).\n\n• Privacy / data requests: privacy@ampliocare.com\n• User support: support@ampliocare.com\n• Clinical partnerships: clinical@ampliocare.com\n• Business: hello@ampliocare.com'**
+  /// **'Amplio Care is operated by an independent individual developer (domain: ampliocare.com).\n\n• Privacy / data requests: privacy@ampliocare.com\n• User support: support@ampliocare.com\n• Clinical partnerships: clinical@ampliocare.com\n• Business: hello@ampliocare.com'**
   String get contactUsText;
 
   /// No description provided for @termsOfService.
@@ -672,7 +672,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsIntroText.
   ///
   /// In en, this message translates to:
-  /// **'These Terms of Service (\"Terms\") are a draft agreement for using Amplio, an iPhone rehabilitation training assistant for people living with Parkinson\'s disease. Amplio is operated by an independent individual developer. These Terms are not a substitute for professional legal advice.'**
+  /// **'These Terms of Service (\"Terms\") are a draft agreement for using Amplio Care, an iPhone rehabilitation training assistant for people living with Parkinson\'s disease. Amplio Care is operated by an independent individual developer. These Terms are not a substitute for professional legal advice.'**
   String get termsIntroText;
 
   /// No description provided for @termsAcceptance.
@@ -684,19 +684,19 @@ abstract class AppLocalizations {
   /// No description provided for @termsAcceptanceText.
   ///
   /// In en, this message translates to:
-  /// **'By signing in, continuing as a guest, or otherwise using Amplio, you agree to these Terms and to the Privacy Policy. If you do not agree, please do not use the app.'**
+  /// **'By signing in, continuing as a guest, or otherwise using Amplio Care, you agree to these Terms and to the Privacy Policy. If you do not agree, please do not use the app.'**
   String get termsAcceptanceText;
 
   /// No description provided for @termsUseOfApp.
   ///
   /// In en, this message translates to:
-  /// **'Using Amplio'**
+  /// **'Using Amplio Care'**
   String get termsUseOfApp;
 
   /// No description provided for @termsUseOfAppText.
   ///
   /// In en, this message translates to:
-  /// **'Amplio provides optional training tools such as tremor measurement, voice practice, movement practice, progress summaries, and an optional medication nickname list (on-device for guests; may sync when signed in).\n\nYou agree to use the app only for lawful personal purposes and not to misuse sensors, accounts, or exported data in ways that harm others or violate applicable law.'**
+  /// **'Amplio Care provides optional training tools such as tremor measurement, voice practice, movement practice, progress summaries, and an optional medication nickname list (on-device for guests; may sync when signed in).\n\nYou agree to use the app only for lawful personal purposes and not to misuse sensors, accounts, or exported data in ways that harm others or violate applicable law.'**
   String get termsUseOfAppText;
 
   /// No description provided for @termsMedicalDisclaimer.
@@ -708,7 +708,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsMedicalDisclaimerText.
   ///
   /// In en, this message translates to:
-  /// **'Amplio is a wellness and rehabilitation training aid. It does not diagnose, treat, cure, or prevent Parkinson\'s disease or any other condition.\n\nScores, trends, reports, and reminders are for personal reference only and do not replace advice from a doctor, physical therapist, speech therapist, or other qualified professional. Seek professional care for medical decisions. Stop any exercise that causes pain, dizziness, or unsafe conditions.'**
+  /// **'Amplio Care is a wellness and rehabilitation training aid. It does not diagnose, treat, cure, or prevent Parkinson\'s disease or any other condition.\n\nScores, trends, reports, and reminders are for personal reference only and do not replace advice from a doctor, physical therapist, speech therapist, or other qualified professional. Seek professional care for medical decisions. Stop any exercise that causes pain, dizziness, or unsafe conditions.'**
   String get termsMedicalDisclaimerText;
 
   /// No description provided for @termsAccounts.
@@ -720,7 +720,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsAccountsText.
   ///
   /// In en, this message translates to:
-  /// **'You may use Amplio with Apple Sign-In, Google Sign-In, or as a guest. You are responsible for activity under your signed-in account.\n\nYou may export or delete certain data in the app. Deleting your account removes associated cloud data we control, subject to technical and legal limits. Guest and local-only data may remain only on your device until you clear them.'**
+  /// **'You may use Amplio Care with Apple Sign-In, Google Sign-In, or as a guest. You are responsible for activity under your signed-in account.\n\nYou may export or delete certain data in the app. Deleting your account removes associated cloud data we control, subject to technical and legal limits. Guest and local-only data may remain only on your device until you clear them.'**
   String get termsAccountsText;
 
   /// No description provided for @termsLimitation.
@@ -732,7 +732,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsLimitationText.
   ///
   /// In en, this message translates to:
-  /// **'To the fullest extent permitted by law, the developer provides Amplio \"as is\" without warranties of uninterrupted or error-free operation.\n\nThe developer is not liable for injuries, losses, or damages arising from reliance on training scores, missed medication reminders, exercise attempts, or inability to access the app, except where liability cannot be limited by law.'**
+  /// **'To the fullest extent permitted by law, the developer provides Amplio Care \"as is\" without warranties of uninterrupted or error-free operation.\n\nThe developer is not liable for injuries, losses, or damages arising from reliance on training scores, missed medication reminders, exercise attempts, or inability to access the app, except where liability cannot be limited by law.'**
   String get termsLimitationText;
 
   /// No description provided for @termsChanges.
@@ -1314,7 +1314,7 @@ abstract class AppLocalizations {
   /// No description provided for @medicationDisclaimer.
   ///
   /// In en, this message translates to:
-  /// **'Amplio\'s medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. Guests keep data on this device only. When you are signed in, reminders and check-ins can sync to your Amplio account.'**
+  /// **'Amplio Care\'s medication list only helps you track times on your own. It is not medical advice and does not provide dosing guidance. Guests keep data on this device only. When you are signed in, reminders and check-ins can sync to your Amplio Care account.'**
   String get medicationDisclaimer;
 
   /// No description provided for @medicationDisclaimerAccept.
@@ -1734,7 +1734,7 @@ abstract class AppLocalizations {
   /// No description provided for @medicationNotificationPermissionNote.
   ///
   /// In en, this message translates to:
-  /// **'Optional: allow notifications so Amplio can remind you at the times you set. Notifications stay on this device.'**
+  /// **'Optional: allow notifications so Amplio Care can remind you at the times you set. Notifications stay on this device.'**
   String get medicationNotificationPermissionNote;
 
   /// No description provided for @recentActivity.
@@ -2292,7 +2292,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportShareConsentBody.
   ///
   /// In en, this message translates to:
-  /// **'This creates a text file with your practice scores and trends, then opens the system share sheet (Messages, Mail, Files, etc.).\n\nFor personal reference only — not a medical diagnosis.\n\nOnce you send the file, Amplio cannot recall it from the recipient. You can cancel now, or decline any share target on the next screen.'**
+  /// **'This creates a text file with your practice scores and trends, then opens the system share sheet (Messages, Mail, Files, etc.).\n\nFor personal reference only — not a medical diagnosis.\n\nOnce you send the file, Amplio Care cannot recall it from the recipient. You can cancel now, or decline any share target on the next screen.'**
   String get reportShareConsentBody;
 
   /// No description provided for @reportShareConsentConfirm.
@@ -2322,7 +2322,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportShareFooterNote.
   ///
   /// In en, this message translates to:
-  /// **'Sharing requires your confirmation each time. Amplio does not email doctors automatically.'**
+  /// **'Sharing requires your confirmation each time. Amplio Care does not email doctors automatically.'**
   String get reportShareFooterNote;
 
   /// No description provided for @profileTabTitle.
@@ -2394,7 +2394,7 @@ abstract class AppLocalizations {
   /// No description provided for @trainingReminderTitle.
   ///
   /// In en, this message translates to:
-  /// **'Amplio'**
+  /// **'Amplio Care'**
   String get trainingReminderTitle;
 
   /// No description provided for @trainingReminderBody.

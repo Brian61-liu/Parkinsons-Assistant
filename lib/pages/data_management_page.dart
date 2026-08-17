@@ -106,7 +106,7 @@ class _DataManagementPageState extends State<DataManagementPage> {
           .first
           .replaceAll('T', '_');
       final dir = await getTemporaryDirectory();
-      final fileName = 'amplio_export_$stamp.csv';
+      final fileName = 'amplio_care_export_$stamp.csv';
       final filePath = p.join(dir.path, fileName);
       // UTF-8 BOM helps Excel / Numbers detect encoding.
       final file = File(filePath);
@@ -114,7 +114,7 @@ class _DataManagementPageState extends State<DataManagementPage> {
 
       await NativeShareService.shareFile(
         path: filePath,
-        subject: 'Amplio data export',
+        subject: 'Amplio Care data export',
       );
 
       if (mounted) {

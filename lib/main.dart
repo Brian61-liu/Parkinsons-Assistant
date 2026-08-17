@@ -103,7 +103,9 @@ class _AmplioAppState extends State<AmplioApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Amplio',
+      title: 'Amplio Care',
+      onGenerateTitle: (context) =>
+          AppLocalizations.of(context)?.appTitle ?? 'Amplio Care',
       debugShowCheckedModeBanner: false,
       locale: _locale,
       localizationsDelegates: const [

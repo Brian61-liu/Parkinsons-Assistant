@@ -34,7 +34,7 @@ void main() {
       ],
     });
 
-    expect(csv, contains('# Amplio Data Export - Meta'));
+    expect(csv, contains('# Amplio Care Data Export - Meta'));
     expect(csv, contains('"hello, world"'));
     expect(csv, contains('sensorSampleCount'));
     expect(csv, contains(',4')); // sample count for 1,2,3,4

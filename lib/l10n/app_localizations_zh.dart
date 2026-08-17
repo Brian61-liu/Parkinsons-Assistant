@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'Amplio';
+  String get appTitle => 'Amplio Care';
 
   @override
   String get selectTraining => '请选择您要进行的训练';
@@ -241,7 +241,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get privacyPolicyIntroText =>
-      'Amplio 致力于保护您的隐私和个人健康数据的安全。本政策说明我们如何收集、使用、存储和保护您的信息。';
+      'Amplio Care 致力于保护您的隐私和个人健康数据的安全。本政策说明我们如何收集、使用、存储和保护您的信息。';
 
   @override
   String get dataCollection => '我们收集的数据';
@@ -290,14 +290,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get medicationPrivacyText =>
-      '若您开启可选的用药昵称清单，昵称、提醒时间与打卡记录会保存在本设备。登录后还可同步到 Amplio 云端账户，以便在另一台 iPhone 上恢复。若您允许通知权限，可选的本地通知仅在本机触发。您可在应用内删除这些数据（含删除账户）。该功能不是医疗建议；数据导出默认不含用药，仅在你每次导出时单独同意才会写入文件。';
+      '若您开启可选的用药昵称清单，昵称、提醒时间与打卡记录会保存在本设备。登录后还可同步到 Amplio Care 云端账户，以便在另一台 iPhone 上恢复。若您允许通知权限，可选的本地通知仅在本机触发。您可在应用内删除这些数据（含删除账户）。该功能不是医疗建议；数据导出默认不含用药，仅在你每次导出时单独同意才会写入文件。';
 
   @override
   String get contactUs => '联系我们';
 
   @override
   String get contactUsText =>
-      'Amplio 由个人开发者运营（域名：ampliocare.com）。\n\n• 隐私与数据请求：privacy@ampliocare.com\n• 用户支持：support@ampliocare.com\n• 医生/医院合作：clinical@ampliocare.com\n• 商务联系：hello@ampliocare.com';
+      'Amplio Care 由个人开发者运营（域名：ampliocare.com）。\n\n• 隐私与数据请求：privacy@ampliocare.com\n• 用户支持：support@ampliocare.com\n• 医生/医院合作：clinical@ampliocare.com\n• 商务联系：hello@ampliocare.com';
 
   @override
   String get termsOfService => '服务条款';
@@ -307,42 +307,42 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get termsIntroText =>
-      '本《服务条款》（草稿）说明您如何使用 Amplio——面向帕金森人群的 iPhone 康复训练辅助应用。Amplio 由个人开发者运营。本条款不能替代专业法律意见。';
+      '本《服务条款》（草稿）说明您如何使用 Amplio Care——面向帕金森人群的 iPhone 康复训练辅助应用。Amplio Care 由个人开发者运营。本条款不能替代专业法律意见。';
 
   @override
   String get termsAcceptance => '接受条款';
 
   @override
   String get termsAcceptanceText =>
-      '登录、以游客身份继续使用，或以其他方式使用 Amplio，即表示您同意本条款及《隐私政策》。若不同意，请勿使用本应用。';
+      '登录、以游客身份继续使用，或以其他方式使用 Amplio Care，即表示您同意本条款及《隐私政策》。若不同意，请勿使用本应用。';
 
   @override
   String get termsUseOfApp => '使用说明';
 
   @override
   String get termsUseOfAppText =>
-      'Amplio 提供可选的训练工具，例如震颤测量、语音练习、肢体练习、进度摘要，以及可选的用药昵称清单（游客仅本机；登录后可同步）。\n\n您仅可将本应用用于合法的个人用途，不得滥用传感器、账户或导出数据，以免损害他人或违反适用法律。';
+      'Amplio Care 提供可选的训练工具，例如震颤测量、语音练习、肢体练习、进度摘要，以及可选的用药昵称清单（游客仅本机；登录后可同步）。\n\n您仅可将本应用用于合法的个人用途，不得滥用传感器、账户或导出数据，以免损害他人或违反适用法律。';
 
   @override
   String get termsMedicalDisclaimer => '非医疗建议';
 
   @override
   String get termsMedicalDisclaimerText =>
-      'Amplio 是健康与康复训练辅助工具，不能诊断、治疗、治愈或预防帕金森病或其他疾病。\n\n分数、趋势、报告与提醒仅供个人参考，不能替代医生、物理治疗师、语言治疗师或其他合格专业人员的建议。医疗决策请咨询专业人士。若出现疼痛、眩晕或不安全情况，请立即停止相关练习。';
+      'Amplio Care 是健康与康复训练辅助工具，不能诊断、治疗、治愈或预防帕金森病或其他疾病。\n\n分数、趋势、报告与提醒仅供个人参考，不能替代医生、物理治疗师、语言治疗师或其他合格专业人员的建议。医疗决策请咨询专业人士。若出现疼痛、眩晕或不安全情况，请立即停止相关练习。';
 
   @override
   String get termsAccounts => '账号与数据';
 
   @override
   String get termsAccountsText =>
-      '您可通过 Apple 登录、Google 登录或游客模式使用 Amplio。您应对登录账号下的活动负责。\n\n您可在应用内导出或删除部分数据。删除账号将删除我们控制的相关云端数据（受技术与法律限制）。游客与仅本地数据在您清除前可能仅保留在设备上。';
+      '您可通过 Apple 登录、Google 登录或游客模式使用 Amplio Care。您应对登录账号下的活动负责。\n\n您可在应用内导出或删除部分数据。删除账号将删除我们控制的相关云端数据（受技术与法律限制）。游客与仅本地数据在您清除前可能仅保留在设备上。';
 
   @override
   String get termsLimitation => '责任限制';
 
   @override
   String get termsLimitationText =>
-      '在法律允许的最大范围内，开发者以「现状」提供 Amplio，不作不间断或无错误运行的保证。\n\n除法律不可排除的责任外，开发者不对因依赖训练分数、错过用药提醒、进行练习或无法使用应用而导致的伤害、损失或损害承担责任。';
+      '在法律允许的最大范围内，开发者以「现状」提供 Amplio Care，不作不间断或无错误运行的保证。\n\n除法律不可排除的责任外，开发者不对因依赖训练分数、错过用药提醒、进行练习或无法使用应用而导致的伤害、损失或损害承担责任。';
 
   @override
   String get termsChanges => '条款变更';
@@ -645,7 +645,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get medicationDisclaimer =>
-      'Amplio 用药清单仅帮助您在本机自行记录服药时间，不能替代医生或药师建议，不提供用药或剂量指导。游客模式数据仅保存在本设备；登录后提醒与打卡可同步到您的 Amplio 账户。';
+      'Amplio Care 用药清单仅帮助您在本机自行记录服药时间，不能替代医生或药师建议，不提供用药或剂量指导。游客模式数据仅保存在本设备；登录后提醒与打卡可同步到您的 Amplio Care 账户。';
 
   @override
   String get medicationDisclaimerAccept => '我了解并开启';
@@ -884,7 +884,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get medicationNotificationPermissionNote =>
-      '可选：允许通知后，Amplio 会在您设定的时间于本机提醒。通知不会上传云端。';
+      '可选：允许通知后，Amplio Care 会在您设定的时间于本机提醒。通知不会上传云端。';
 
   @override
   String get recentActivity => '最近活动';
@@ -1195,7 +1195,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reportShareConsentBody =>
-      '将生成包含练习分数与趋势的文本文件，并打开系统分享面板（信息、邮件、文件等）。\n\n仅供个人参考，不是医学诊断。\n\n一旦你把文件发出去，Amplio 无法从对方处撤回。现在可以取消；下一屏也可以不选择任何分享目标。';
+      '将生成包含练习分数与趋势的文本文件，并打开系统分享面板（信息、邮件、文件等）。\n\n仅供个人参考，不是医学诊断。\n\n一旦你把文件发出去，Amplio Care 无法从对方处撤回。现在可以取消；下一屏也可以不选择任何分享目标。';
 
   @override
   String get reportShareConsentConfirm => '我已了解，继续';
@@ -1210,7 +1210,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reportShareFailed => '分享失败，请重试。';
 
   @override
-  String get reportShareFooterNote => '每次分享都需要你确认。Amplio 不会自动把报告发给医生。';
+  String get reportShareFooterNote => '每次分享都需要你确认。Amplio Care 不会自动把报告发给医生。';
 
   @override
   String get profileTabTitle => '我的';
@@ -1246,7 +1246,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trainingReminderPageTitle => '练习提醒';
 
   @override
-  String get trainingReminderTitle => 'Amplio';
+  String get trainingReminderTitle => 'Amplio Care';
 
   @override
   String get trainingReminderBody => '有空时做一小段练习即可，错过也没关系。';
@@ -1292,7 +1292,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   AppLocalizationsZhTw() : super('zh_TW');
 
   @override
-  String get appTitle => 'Amplio';
+  String get appTitle => 'Amplio Care';
 
   @override
   String get selectTraining => '請選擇您要進行的訓練';
@@ -1524,7 +1524,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get privacyPolicyIntroText =>
-      'Amplio 致力於保護您的隱私和個人健康資料的安全。本政策說明我們如何收集、使用、儲存和保護您的資訊。';
+      'Amplio Care 致力於保護您的隱私和個人健康資料的安全。本政策說明我們如何收集、使用、儲存和保護您的資訊。';
 
   @override
   String get dataCollection => '我們收集的資料';
@@ -1573,14 +1573,14 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get medicationPrivacyText =>
-      '若您開啟可選的用藥暱稱清單，暱稱、提醒時間與打卡紀錄會儲存在本裝置。登入後也可同步到您的 Amplio 雲端帳戶，以便在另一台 iPhone 上還原。若您允許通知權限，可選的本機通知只會在本裝置觸發。您可在 App 內刪除這些資料（包括刪除帳號）。此功能不是醫療建議；除非您每次匯出時另行同意，否則匯出資料不會包含用藥資訊。';
+      '若您開啟可選的用藥暱稱清單，暱稱、提醒時間與打卡紀錄會儲存在本裝置。登入後也可同步到您的 Amplio Care 雲端帳戶，以便在另一台 iPhone 上還原。若您允許通知權限，可選的本機通知只會在本裝置觸發。您可在 App 內刪除這些資料（包括刪除帳號）。此功能不是醫療建議；除非您每次匯出時另行同意，否則匯出資料不會包含用藥資訊。';
 
   @override
   String get contactUs => '聯絡我們';
 
   @override
   String get contactUsText =>
-      'Amplio 由個人開發者營運（域名：ampliocare.com）。\n\n• 隱私與資料請求：privacy@ampliocare.com\n• 使用者支援：support@ampliocare.com\n• 醫師/醫院合作：clinical@ampliocare.com\n• 商務聯絡：hello@ampliocare.com';
+      'Amplio Care 由個人開發者營運（域名：ampliocare.com）。\n\n• 隱私與資料請求：privacy@ampliocare.com\n• 使用者支援：support@ampliocare.com\n• 醫師/醫院合作：clinical@ampliocare.com\n• 商務聯絡：hello@ampliocare.com';
 
   @override
   String get termsOfService => '服務條款';
@@ -1590,42 +1590,42 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get termsIntroText =>
-      '本《服務條款》（草稿）說明您如何使用 Amplio——面向帕金森族群的 iPhone 復健訓練輔助應用。Amplio 由個人開發者營運。本條款不能替代專業法律意見。';
+      '本《服務條款》（草稿）說明您如何使用 Amplio Care——面向帕金森族群的 iPhone 復健訓練輔助應用。Amplio Care 由個人開發者營運。本條款不能替代專業法律意見。';
 
   @override
   String get termsAcceptance => '接受條款';
 
   @override
   String get termsAcceptanceText =>
-      '登入、以訪客身分繼續使用，或以其他方式使用 Amplio，即表示您同意本條款及《隱私政策》。若不同意，請勿使用本應用。';
+      '登入、以訪客身分繼續使用，或以其他方式使用 Amplio Care，即表示您同意本條款及《隱私政策》。若不同意，請勿使用本應用。';
 
   @override
   String get termsUseOfApp => '使用說明';
 
   @override
   String get termsUseOfAppText =>
-      'Amplio 提供可選的訓練工具，例如顫抖測量、語音練習、肢體練習、進度摘要，以及可選的用藥暱稱清單（訪客僅本機；登入後可同步）。\n\n您僅可將本應用用於合法的個人用途，不得濫用感測器、帳號或匯出資料，以免損害他人或違反適用法律。';
+      'Amplio Care 提供可選的訓練工具，例如顫抖測量、語音練習、肢體練習、進度摘要，以及可選的用藥暱稱清單（訪客僅本機；登入後可同步）。\n\n您僅可將本應用用於合法的個人用途，不得濫用感測器、帳號或匯出資料，以免損害他人或違反適用法律。';
 
   @override
   String get termsMedicalDisclaimer => '非醫療建議';
 
   @override
   String get termsMedicalDisclaimerText =>
-      'Amplio 是健康與復健訓練輔助工具，不能診斷、治療、治癒或預防帕金森病或其他疾病。\n\n分數、趨勢、報告與提醒僅供個人參考，不能替代醫生、物理治療師、語言治療師或其他合格專業人員的建議。醫療決策請諮詢專業人士。若出現疼痛、眩暈或不安全情況，請立即停止相關練習。';
+      'Amplio Care 是健康與復健訓練輔助工具，不能診斷、治療、治癒或預防帕金森病或其他疾病。\n\n分數、趨勢、報告與提醒僅供個人參考，不能替代醫生、物理治療師、語言治療師或其他合格專業人員的建議。醫療決策請諮詢專業人士。若出現疼痛、眩暈或不安全情況，請立即停止相關練習。';
 
   @override
   String get termsAccounts => '帳號與資料';
 
   @override
   String get termsAccountsText =>
-      '您可透過 Apple 登入、Google 登入或訪客模式使用 Amplio。您應對登入帳號下的活動負責。\n\n您可在應用內匯出或刪除部分資料。刪除帳號將刪除我們控制的相關雲端資料（受技術與法律限制）。訪客與僅本機資料在您清除前可能僅保留在裝置上。';
+      '您可透過 Apple 登入、Google 登入或訪客模式使用 Amplio Care。您應對登入帳號下的活動負責。\n\n您可在應用內匯出或刪除部分資料。刪除帳號將刪除我們控制的相關雲端資料（受技術與法律限制）。訪客與僅本機資料在您清除前可能僅保留在裝置上。';
 
   @override
   String get termsLimitation => '責任限制';
 
   @override
   String get termsLimitationText =>
-      '在法律允許的最大範圍內，開發者以「現狀」提供 Amplio，不作不間斷或無錯誤運作的保證。\n\n除法律不可排除的責任外，開發者不對因依賴訓練分數、錯過用藥提醒、進行練習或無法使用應用而導致的傷害、損失或損害承擔責任。';
+      '在法律允許的最大範圍內，開發者以「現狀」提供 Amplio Care，不作不間斷或無錯誤運作的保證。\n\n除法律不可排除的責任外，開發者不對因依賴訓練分數、錯過用藥提醒、進行練習或無法使用應用而導致的傷害、損失或損害承擔責任。';
 
   @override
   String get termsChanges => '條款變更';
@@ -1928,7 +1928,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get medicationDisclaimer =>
-      'Amplio 用藥清單僅幫助您在本機自行記錄服藥時間，不能替代醫師或藥師建議，不提供用藥或劑量指導。訪客模式資料僅保存在本裝置；登入後提醒與打卡可同步到您的 Amplio 帳戶。';
+      'Amplio Care 用藥清單僅幫助您在本機自行記錄服藥時間，不能替代醫師或藥師建議，不提供用藥或劑量指導。訪客模式資料僅保存在本裝置；登入後提醒與打卡可同步到您的 Amplio Care 帳戶。';
 
   @override
   String get medicationDisclaimerAccept => '我了解並開啟';
@@ -2167,7 +2167,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get medicationNotificationPermissionNote =>
-      '可選：允許通知後，Amplio 會在您設定的時間於本機提醒。通知不會上傳雲端。';
+      '可選：允許通知後，Amplio Care 會在您設定的時間於本機提醒。通知不會上傳雲端。';
 
   @override
   String get recentActivity => '最近活動';
@@ -2478,7 +2478,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get reportShareConsentBody =>
-      '這會建立一個包含練習分數與趨勢的文字檔，並開啟系統分享面板（訊息、郵件、「檔案」等）。\n\n僅供個人參考，不是醫療診斷。\n\n檔案一旦傳送，Amplio 無法從收件者處撤回。您可以現在取消，也可以在下一個畫面不選擇任何分享對象。';
+      '這會建立一個包含練習分數與趨勢的文字檔，並開啟系統分享面板（訊息、郵件、「檔案」等）。\n\n僅供個人參考，不是醫療診斷。\n\n檔案一旦傳送，Amplio Care 無法從收件者處撤回。您可以現在取消，也可以在下一個畫面不選擇任何分享對象。';
 
   @override
   String get reportShareConsentConfirm => '我了解，繼續';
@@ -2493,7 +2493,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get reportShareFailed => '無法分享報告，請再試一次。';
 
   @override
-  String get reportShareFooterNote => '每次分享都需要您的確認。Amplio 不會自動以電子郵件傳送給醫師。';
+  String get reportShareFooterNote => '每次分享都需要您的確認。Amplio Care 不會自動以電子郵件傳送給醫師。';
 
   @override
   String get profileTabTitle => '個人資料';
@@ -2529,7 +2529,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get trainingReminderPageTitle => '練習提醒';
 
   @override
-  String get trainingReminderTitle => 'Amplio';
+  String get trainingReminderTitle => 'Amplio Care';
 
   @override
   String get trainingReminderBody => '方便時做一段短練習即可，錯過也沒關係。';
