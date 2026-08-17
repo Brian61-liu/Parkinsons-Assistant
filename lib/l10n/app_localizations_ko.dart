@@ -15,10 +15,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get selectTraining => '수행하려는 훈련을 선택하세요';
 
   @override
-  String get clickToStartTest => '테스트 시작을 클릭하세요';
+  String get clickToStartTest => '탭하여 테스트 시작';
 
   @override
-  String get clickToStartTraining => '훈련 시작을 클릭하세요';
+  String get clickToStartTraining => '탭하여 훈련 시작';
 
   @override
   String get tremorTest => '손 떨림 테스트';
@@ -137,7 +137,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get waveformHint => '파형이 높을수록 손 떨림이 더 뚜렷합니다';
 
   @override
-  String get tremorSeverity => '중증도';
+  String get tremorSeverity => '움직임 정도';
 
   @override
   String get tremorFrequency => '주파수';
@@ -158,19 +158,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get dataPoints => '데이터';
 
   @override
-  String get severityNormal => '정상';
+  String get severityNormal => '움직임이 적음';
 
   @override
-  String get severityMild => '경미';
+  String get severityMild => '가벼운 움직임';
 
   @override
-  String get severityModerate => '중등도';
+  String get severityModerate => '중간 정도의 움직임';
 
   @override
-  String get severityModerateSevere => '중증도';
+  String get severityModerateSevere => '움직임이 큼';
 
   @override
-  String get severitySevere => '심각';
+  String get severitySevere => '가장 높은 구간';
 
   @override
   String get appSubtitle => '움직임 추적 및 분석을 위한 파킨슨 개인 도우미';
@@ -214,7 +214,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get dataSynced => '데이터가 성공적으로 동기화되었습니다';
 
   @override
-  String get syncing => 'Syncing…';
+  String get syncing => '동기화 중…';
 
   @override
   String get syncFailed => '동기화에 실패했습니다. 네트워크를 확인한 후 다시 시도하세요.';
@@ -223,7 +223,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get syncFailedHint => '동기화 실패 — 탭하여 다시 시도';
 
   @override
-  String get syncRetry => 'Retry';
+  String get syncRetry => '다시 시도';
 
   @override
   String get loginRequiredForSync => '클라우드 동기화를 사용하려면 로그인하세요';
@@ -283,14 +283,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get dataSecurityText =>
-      '현재 기술 스택에서 사용 가능한 보안 통제로 데이터를 보호합니다:\n\n• 클라우드 요청용 TLS\n• 로그인 계정의 Firebase Authentication\n• 본인 데이터만 접근하도록 제한하는 Firestore 규칙\n• 앱 내 내보내기 및 계정 삭제\n\n전체 로컬 데이터베이스 암호화 등 더 강한 보호는 개선 중이며 완료되었다고 주장하지 않습니다.';
+      '현재 기술 스택에서 제공하는 보안 조치로 데이터를 보호합니다:\n\n• 클라우드 요청용 TLS\n• 로그인 계정용 Firebase Authentication\n• 본인 데이터에만 접근하도록 제한하는 Firestore 규칙\n• 떨림 센서 샘플과 복약 닉네임 등 민감한 로컬 건강 관련 필드를 기기에서 AES로 암호화하고 키는 iOS 키체인에 저장\n• 앱 내 데이터 내보내기 및 계정 삭제\n\n내보낸 파일은 사용자가 직접 이용할 수 있도록 읽을 수 있는 형식으로 작성됩니다. 로컬 데이터베이스 전체가 파일 단위로 암호화된다고 주장하지 않습니다.';
 
   @override
   String get medicationPrivacy => '선택적 복약 닉네임 목록';
 
   @override
   String get medicationPrivacyText =>
-      '선택적 복약 닉네임 목록을 켜면 닉네임, 알림 시간, 체크인은 이 기기에 저장됩니다. 로그인하면 Amplio 클라우드 계정에도 동기화되어 다른 iPhone에서 복원할 수 있습니다. 알림 권한을 허용한 경우 선택적 로컬 알림은 이 기기에서만 울립니다. 앱에서 이 데이터를 삭제할 수 있습니다(계정 삭제 포함). 이 기능은 의료 조언이 아니며 데이터 내보내기에 기본적으로 포함되지 않습니다.';
+      '선택적 복약 닉네임 목록을 켜면 닉네임, 알림 시간, 체크인은 이 기기에 저장됩니다. 로그인하면 Amplio 클라우드 계정에도 동기화되어 다른 iPhone에서 복원할 수 있습니다. 알림 권한을 허용한 경우 선택적 로컬 알림은 이 기기에서만 울립니다. 앱에서 이 데이터를 삭제할 수 있습니다(계정 삭제 포함). 이 기능은 의료 조언이 아니며, 내보낼 때마다 별도로 동의하지 않는 한 복약 데이터는 내보내기에 포함되지 않습니다.';
 
   @override
   String get contactUs => '문의하기';
@@ -328,7 +328,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get termsMedicalDisclaimerText =>
-      'Amplio는 웰니스 및 재활 훈련 보조 도구입니다. 파킨슨병이나 다른 질환을 진단, 치료, 치유, 예방하지 않습니다.\n\n점수, 추세, 보고서, 알림은 개인 참고용이며 의사, 물리치료사, 언어치료사 또는 기타 자격 있는 전문가의 조언을 대체하지 않습니다. 의료 결정은 전문가와 상담하세요. 통증, 어지럼증 또는 불안전한 상태를 유발하는 운동은 중단하세요.';
+      'Amplio는 웰니스 및 재활 훈련 보조 도구입니다. 파킨슨병이나 다른 질환을 진단, 치료, 치유, 예방하지 않습니다.\n\n점수, 추세, 보고서, 알림은 개인 참고용이며 의사, 물리치료사, 언어치료사 또는 기타 자격 있는 전문가의 조언을 대체하지 않습니다. 의료 결정은 전문가와 상담하세요. 통증이나 어지럼증이 생기거나 안전하게 계속할 수 없는 경우 운동을 중단하세요.';
 
   @override
   String get termsAccounts => '계정 및 데이터';
@@ -367,7 +367,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get exportData => '데이터 내보내기';
 
   @override
-  String get exportDataDescription => '모든 데이터의 완전한 사본을 다운로드합니다 (JSON 형식).';
+  String get exportDataDescription =>
+      '프로필과 훈련 기록을 CSV 파일로 내보냅니다. 시스템 공유 시트에서 저장하거나 공유할 수 있습니다. 해당 내보내기에 동의하지 않는 한 복약 닉네임은 포함되지 않습니다.';
 
   @override
   String get export => '내보내기';
@@ -379,20 +380,21 @@ class AppLocalizationsKo extends AppLocalizations {
   String get exportSuccess => '내보내기 성공';
 
   @override
-  String get exportSuccessMessage => '데이터가 클립보드에 복사되었습니다.';
+  String get exportSuccessMessage =>
+      'CSV 파일이 준비되었습니다. 공유 시트에서 파일 앱에 저장하거나 전송할 수 있습니다. 원시 센서 샘플은 개수만 요약됩니다.';
 
   @override
-  String get exportMedicationConsentTitle => 'Include medication nicknames?';
+  String get exportMedicationConsentTitle => '복약 닉네임을 포함할까요?';
 
   @override
   String get exportMedicationConsentBody =>
-      'Training records will be exported as a CSV file.\n\nMedication nicknames, reminder times, and check-ins are not included unless you choose Include this time. This is not a prescription or medical record.\n\nCancel to stop. You can still export without medication data.';
+      '훈련 기록은 CSV 파일로 내보내집니다.\n\n‘이번에만 포함’을 선택하지 않는 한 복약 닉네임, 알림 시간 및 체크인은 포함되지 않습니다. 이는 처방전이나 의료 기록이 아닙니다.\n\n취소하면 내보내기를 중단합니다. 복약 데이터 없이 내보낼 수도 있습니다.';
 
   @override
-  String get exportMedicationExclude => 'Export without medication';
+  String get exportMedicationExclude => '복약 데이터 없이 내보내기';
 
   @override
-  String get exportMedicationInclude => 'Include medication list';
+  String get exportMedicationInclude => '복약 목록 포함';
 
   @override
   String get deleteAllRecords => '모든 테스트 기록 삭제';
@@ -497,7 +499,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get voiceTrainingInstruction =>
-      'LSVT LOUD 치료 원칙에 따라 큰 소리로 말하세요. 원의 크기는 볼륨에 따라 실시간으로 변경됩니다. 75-85 dB에 도달하면 원이 녹색으로 변합니다.';
+      '또렷하고 힘 있는 목소리로 말하는 연습을 하세요. 원의 크기는 음량에 따라 변하며, 목표 범위에 도달하면 초록색으로 바뀝니다. 개인 연습용이며 의료 치료가 아닙니다.';
 
   @override
   String get voiceTrainingReady => '시작 준비 완료';
@@ -638,7 +640,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trainingType => '훈련 유형';
 
   @override
-  String get medicationList => 'Medication list';
+  String get medicationList => '복약 목록';
 
   @override
   String get medicationListEnable => '복약 목록 설정';
@@ -651,19 +653,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get medicationDisclaimerAccept => '이해했으며 활성화합니다';
 
   @override
-  String get medicationLabel => 'Label';
+  String get medicationLabel => '표시 이름';
 
   @override
   String get medicationLabelHint => '예: 아침 식사 후(별명 사용 가능)';
 
   @override
-  String get medicationTime => 'Time';
+  String get medicationTime => '시간';
 
   @override
-  String get medicationTaken => 'Taken';
+  String get medicationTaken => '복용 완료';
 
   @override
-  String get medicationUndo => 'Undo';
+  String get medicationUndo => '되돌리기';
 
   @override
   String get medicationUndoConfirm => '이 항목의 오늘 체크인을 삭제할까요?';
@@ -674,13 +676,13 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get medicationManage => 'Manage';
+  String get medicationManage => '관리';
 
   @override
-  String get medicationAdd => 'Add reminder';
+  String get medicationAdd => '알림 추가';
 
   @override
-  String get medicationEdit => 'Edit reminder';
+  String get medicationEdit => '알림 수정';
 
   @override
   String get medicationClose => '복약 목록 끄기';
@@ -689,7 +691,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get medicationCloseConfirm => '목록을 숨기거나 이 기기의 모든 복약 데이터를 삭제할 수도 있습니다.';
 
   @override
-  String get medicationCloseHideOnly => 'Hide only';
+  String get medicationCloseHideOnly => '숨기기만';
 
   @override
   String get medicationCloseAndDelete => '숨기고 모든 데이터 삭제';
@@ -706,24 +708,24 @@ class AppLocalizationsKo extends AppLocalizations {
       '이 기기의 복약 목록 데이터를 모두 삭제할까요? 이 작업은 되돌릴 수 없습니다.';
 
   @override
-  String get medicationCollapse => 'Collapse';
+  String get medicationCollapse => '접기';
 
   @override
-  String get medicationExpand => 'Expand';
+  String get medicationExpand => '펼치기';
 
   @override
   String get medicationEmptyToday => '오늘 알림이 없습니다. 관리에서 추가하세요.';
 
   @override
   String medicationCompletedAt(String time) {
-    return 'Done at $time';
+    return '$time에 완료';
   }
 
   @override
-  String get medicationSave => 'Save';
+  String get medicationSave => '저장';
 
   @override
-  String get medicationDeleteReminder => 'Delete reminder';
+  String get medicationDeleteReminder => '알림 삭제';
 
   @override
   String get medicationDeleteReminderConfirm => '이 알림을 삭제할까요?';
@@ -735,14 +737,14 @@ class AppLocalizationsKo extends AppLocalizations {
   String get medicationDeleteSuccess => '복약 목록 데이터가 삭제되었습니다';
 
   @override
-  String get rehabReport => 'Rehab report';
+  String get rehabReport => '재활 보고서';
 
   @override
   String get rehabReportDisclaimer =>
       '재활 참고용입니다. 의학적 진단이 아니며 케어팀의 조언을 대체하지 않습니다.';
 
   @override
-  String get reportOverallScore => 'Overall score';
+  String get reportOverallScore => '종합 점수';
 
   @override
   String reportDailyProgress(int percent) {
@@ -763,48 +765,48 @@ class AppLocalizationsKo extends AppLocalizations {
   String get reportNoData => '아직 훈련 데이터가 부족합니다';
 
   @override
-  String get handTraining => 'Hand';
+  String get handTraining => '손';
 
   @override
-  String get voiceTrainingShort => 'Voice';
+  String get voiceTrainingShort => '음성';
 
   @override
-  String get motionTrainingShort => 'Movement';
+  String get motionTrainingShort => '동작';
 
   @override
-  String get tabHome => 'Home';
+  String get tabHome => '홈';
 
   @override
-  String get tabPlan => 'Plan';
+  String get tabPlan => '계획';
 
   @override
-  String get tabData => 'Data';
+  String get tabData => '데이터';
 
   @override
-  String get tabProfile => 'Profile';
+  String get tabProfile => '프로필';
 
   @override
-  String get comingSoon => 'Coming soon';
+  String get comingSoon => '출시 예정';
 
   @override
   String trainingStreak(int days) {
-    return '$days days';
+    return '$days일';
   }
 
   @override
-  String get trainingStreakLabel => 'Training Streak';
+  String get trainingStreakLabel => '연속 훈련';
 
   @override
-  String get voiceClarity => 'Voice Clarity';
+  String get voiceClarity => '음성 명료도';
 
   @override
-  String get handStability => 'Hand Stability';
+  String get handStability => '손 안정성';
 
   @override
   String get movementAbility => '동작 훈련';
 
   @override
-  String get medicationReminder => 'Medication';
+  String get medicationReminder => '복약';
 
   @override
   String lastTrainingAgo(String timeAgo) {
@@ -817,40 +819,40 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get relativeToday => 'Today';
+  String get relativeToday => '오늘';
 
   @override
-  String get relativeYesterday => 'Yesterday';
+  String get relativeYesterday => '어제';
 
   @override
   String relativeDaysAgo(int days) {
-    return '$days days ago';
+    return '$days일 전';
   }
 
   @override
-  String get noTrainingYet => 'No training yet';
+  String get noTrainingYet => '아직 훈련 기록이 없습니다';
 
   @override
   String get noMeasurementYet => '아직 측정 없음';
 
   @override
-  String get tapToStart => 'Tap to start';
+  String get tapToStart => '탭하여 시작';
 
   @override
   String durationSec(int count) {
-    return '${count}s';
+    return '$count초';
   }
 
   @override
   String durationMin(int count) {
-    return '$count min';
+    return '$count분';
   }
 
   @override
-  String get voiceSessionCount => '1 session';
+  String get voiceSessionCount => '1회 세션';
 
   @override
-  String get handMeasurementCount => '1 measurement';
+  String get handMeasurementCount => '1회 측정';
 
   @override
   String motionCompletionCount(int done, int total) {
@@ -867,7 +869,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get medicationNoUpcoming => '오늘 예정된 알림 없음';
 
   @override
-  String get medicationNextDoseLabel => 'Next dose';
+  String get medicationNextDoseLabel => '다음 복약';
 
   @override
   String medicationNextDoseTime(String time) {
@@ -875,10 +877,10 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get medicationStatusUpcoming => 'Upcoming';
+  String get medicationStatusUpcoming => '예정';
 
   @override
-  String get medicationStatusPending => 'Pending';
+  String get medicationStatusPending => '대기 중';
 
   @override
   String medicationNotificationBody(String label) {
@@ -890,7 +892,7 @@ class AppLocalizationsKo extends AppLocalizations {
       '선택 사항: 알림을 허용하면 Amplio가 설정한 시간에 이 기기에서 알려 줍니다. 알림은 이 기기에만 유지됩니다.';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => '최근 활동';
 
   @override
   String get nonMedicalDisclaimerTitle => '참고용입니다';
@@ -926,22 +928,22 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get voiceLegendTarget => 'Target volume';
+  String get voiceLegendTarget => '목표 음량';
 
   @override
-  String get voiceLegendYours => 'Your volume';
+  String get voiceLegendYours => '내 음량';
 
   @override
-  String get voiceShowDetail => 'Show number';
+  String get voiceShowDetail => '수치 표시';
 
   @override
-  String get voiceHideDetail => 'Hide number';
+  String get voiceHideDetail => '수치 숨기기';
 
   @override
   String get voiceCompletedTitle => '연습 완료';
 
   @override
-  String get voiceCompletedDurationLabel => 'This session';
+  String get voiceCompletedDurationLabel => '이번 세션';
 
   @override
   String get voiceCompletedTargetLabel => '목표 음량 도달 시간';
@@ -953,10 +955,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get voiceCompletedEncourageTryMore => '좋은 시도예요. 다음에는 조금 더 크게 말해 보세요.';
 
   @override
-  String get voiceRetryButton => 'Practice Again';
+  String get voiceRetryButton => '다시 연습';
 
   @override
-  String get voiceFinishButton => 'Done';
+  String get voiceFinishButton => '완료';
 
   @override
   String get voicePracticeFooterHint =>
@@ -966,351 +968,335 @@ class AppLocalizationsKo extends AppLocalizations {
   String get voiceSessionTooShort => '세션이 너무 짧아 저장되지 않았습니다';
 
   @override
-  String get voiceProtocolPickerTitle => 'Choose a practice style';
+  String get voiceProtocolPickerTitle => '연습 방식 선택';
 
   @override
-  String get voiceProtocolSteady => 'Steady volume';
+  String get voiceProtocolSteady => '일정한 음량';
 
   @override
-  String get voiceProtocolSteadyDesc =>
-      'Sustain a long “Ah” in the target volume zone.';
+  String get voiceProtocolSteadyDesc => '목표 음량 구간에서 길게 ‘아’ 소리를 냅니다.';
 
   @override
-  String get voiceProtocolLadder => 'Volume ladder';
+  String get voiceProtocolLadder => '음량 단계';
 
   @override
-  String get voiceProtocolLadderDesc =>
-      'Soft → target → a bit stronger → ease down.';
+  String get voiceProtocolLadderDesc => '작게 → 목표 → 조금 더 크게 → 서서히 줄이기.';
 
   @override
-  String get voiceProtocolMultiSet => '3 short sets';
+  String get voiceProtocolMultiSet => '짧은 3세트';
 
   @override
-  String get voiceProtocolMultiSetDesc =>
-      'Three short rounds with a brief rest between.';
+  String get voiceProtocolMultiSetDesc => '짧게 세 번 연습하고 세트 사이에 잠시 쉽니다.';
 
   @override
-  String get voiceTrainingReferenceDisclaimer =>
-      'For personal rehabilitation practice only. Not a diagnosis or treatment.';
+  String get voiceTrainingReferenceDisclaimer => '개인 재활 연습용이며 진단이나 치료가 아닙니다.';
 
   @override
-  String get voiceLadderPhaseSoft => 'Phase 1: softer voice';
+  String get voiceLadderPhaseSoft => '1단계: 작은 목소리';
 
   @override
-  String get voiceLadderPhaseTarget => 'Phase 2: target volume';
+  String get voiceLadderPhaseTarget => '2단계: 목표 음량';
 
   @override
-  String get voiceLadderPhaseStrong => 'Phase 3: a bit stronger';
+  String get voiceLadderPhaseStrong => '3단계: 조금 더 크게';
 
   @override
-  String get voiceLadderPhaseCoolDown => 'Phase 4: ease down';
+  String get voiceLadderPhaseCoolDown => '4단계: 서서히 줄이기';
 
   @override
   String voiceLadderChip(int seconds) {
-    return 'Phase left: ${seconds}s';
+    return '단계 남은 시간: $seconds초';
   }
 
   @override
   String voiceSetChip(int current, int total, int seconds) {
-    return 'Set $current/$total · ${seconds}s';
+    return '$current/$total세트 · $seconds초';
   }
 
   @override
   String voiceRestChip(int seconds) {
-    return 'Rest ${seconds}s';
+    return '휴식 $seconds초';
   }
 
   @override
-  String get voiceRestTitle => 'Rest';
+  String get voiceRestTitle => '휴식';
 
   @override
   String voiceRestBody(int next, int total) {
-    return 'Next: set $next of $total. Relax your voice.';
+    return '다음은 총 $total세트 중 $next세트입니다. 목소리를 편하게 쉬세요.';
   }
 
   @override
-  String get tremorDurationPickerTitle => 'Session length';
+  String get tremorDurationPickerTitle => '측정 시간';
 
   @override
   String tremorDurationSeconds(int seconds) {
-    return '${seconds}s';
+    return '$seconds초';
   }
 
   @override
   String tremorTestInstructionDynamic(int seconds) {
-    return 'Hold your phone still for $seconds seconds. Keep your arm steady.';
+    return '휴대폰을 $seconds초 동안 움직이지 말고 팔을 안정적으로 유지하세요.';
   }
 
   @override
-  String get tremorMotionBandDisclaimer =>
-      'Motion bands are for personal reference only — not a medical assessment.';
+  String get tremorMotionBandDisclaimer => '움직임 구간은 개인 참고용이며 의학적 평가가 아닙니다.';
 
   @override
-  String get planTodayTitle => 'Today’s practice';
+  String get planTodayTitle => '오늘의 연습';
 
   @override
-  String get planTodaySubtitle =>
-      'Suggested from your training modules. Tap to start.';
+  String get planTodaySubtitle => '훈련 모듈을 바탕으로 한 제안입니다. 탭하여 시작하세요.';
 
   @override
-  String get planEmptyHint => 'No suggestions yet. Try a training from Home.';
+  String get planEmptyHint => '아직 제안이 없습니다. 홈에서 훈련을 시작해 보세요.';
 
   @override
-  String get planDomainHand => 'Hand';
+  String get planDomainHand => '손';
 
   @override
-  String get planDomainVoice => 'Voice';
+  String get planDomainVoice => '음성';
 
   @override
-  String get planDomainMotion => 'Movement';
+  String get planDomainMotion => '동작';
 
   @override
   String planGoalProgress(int done, int target) {
-    return 'Today: $done/$target sessions';
+    return '오늘: $done/$target회';
   }
 
   @override
-  String get planGoalCompleted => 'Today’s goal is done. Nice work.';
+  String get planGoalCompleted => '오늘의 목표를 달성했습니다. 잘하셨어요.';
 
   @override
   String planWeeklyProgress(int done, int target) {
-    return 'This week: $done/$target sessions';
+    return '이번 주: $done/$target회';
   }
 
   @override
-  String get planOpenTask => 'Start';
+  String get planOpenTask => '시작';
 
   @override
   String get planMotionShelvedNote =>
-      'Movement detection is limited on some phones; you can still open the practice screen.';
+      '일부 휴대폰에서는 동작 감지가 제한될 수 있지만 연습 화면은 열 수 있습니다.';
 
   @override
-  String get voiceProtocolClarity => 'Clear phrases';
+  String get voiceProtocolClarity => '명료한 문장';
 
   @override
-  String get voiceProtocolClarityDesc =>
-      'Read short phrases aloud. No pronunciation scoring.';
+  String get voiceProtocolClarityDesc => '짧은 문장을 소리 내어 읽습니다. 발음 점수는 매기지 않습니다.';
 
   @override
   String get voiceClarityHint =>
-      'Read the phrase clearly. We only check that you spoke — not whether it was “correct”.';
+      '문장을 또렷하게 읽어 주세요. 말했는지만 확인하며 ‘정확한’ 발음인지는 판단하지 않습니다.';
 
   @override
   String voiceClarityPhraseProgress(int current, int total) {
-    return 'Phrase $current of $total';
+    return '문장 $current/$total';
   }
 
   @override
-  String get voiceClarityVoiceDetected => 'Voice detected — nice';
+  String get voiceClarityVoiceDetected => '음성이 감지되었습니다';
 
   @override
-  String get voiceClarityWaitingVoice => 'Speak the phrase aloud';
+  String get voiceClarityWaitingVoice => '문장을 소리 내어 읽어 주세요';
 
   @override
-  String get voiceClarityNextPhrase => 'Next phrase';
+  String get voiceClarityNextPhrase => '다음 문장';
 
   @override
-  String get voiceClarityFinish => 'Finish';
+  String get voiceClarityFinish => '마치기';
 
   @override
-  String get voiceClarityPhrase1 => 'Good morning';
+  String get voiceClarityPhrase1 => '좋은 아침이에요';
 
   @override
-  String get voiceClarityPhrase2 => 'How are you today?';
+  String get voiceClarityPhrase2 => '오늘 기분은 어떠세요?';
 
   @override
-  String get voiceClarityPhrase3 => 'Please pass the water';
+  String get voiceClarityPhrase3 => '물 좀 건네주세요';
 
   @override
-  String get voiceClarityPhrase4 => 'I am doing well';
+  String get voiceClarityPhrase4 => '저는 잘 지내고 있어요';
 
   @override
-  String get voiceClarityPhrase5 => 'See you tomorrow';
+  String get voiceClarityPhrase5 => '내일 만나요';
 
   @override
-  String get handModePickerTitle => 'Practice style';
+  String get handModePickerTitle => '연습 방식';
 
   @override
-  String get handModeStillHold => 'Still hold';
+  String get handModeStillHold => '가만히 들기';
 
   @override
-  String get handModeStillHoldDesc =>
-      'Hold the phone still while sensors measure motion.';
+  String get handModeStillHoldDesc => '센서가 움직임을 측정하는 동안 휴대폰을 움직이지 말고 잡으세요.';
 
   @override
-  String get handModeObjectHold => 'Object hold';
+  String get handModeObjectHold => '물건 들기';
 
   @override
   String get handModeObjectHoldDesc =>
-      'Hold a cup or soft ball steady. Guided timer — no object detection.';
+      '컵이나 부드러운 공을 안정적으로 잡으세요. 타이머로만 안내하며 물체를 감지하지 않습니다.';
 
   @override
-  String get handModeFineMotor => 'Finger taps';
+  String get handModeFineMotor => '손가락 맞대기';
 
   @override
-  String get handModeFineMotorDesc =>
-      'Tap thumb to each finger. You count the cycles.';
+  String get handModeFineMotorDesc => '엄지손가락을 다른 손가락에 차례로 맞댑니다. 횟수는 직접 세어 주세요.';
 
   @override
-  String get handGuidedDisclaimer =>
-      'Guided practice for personal rehab support only. Not a medical assessment.';
+  String get handGuidedDisclaimer => '개인 재활 지원을 위한 안내 연습이며 의학적 평가가 아닙니다.';
 
   @override
   String get handObjectHoldInstruction =>
-      'Sit comfortably. Hold a cup or soft ball in one hand. Keep it steady without squeezing hard.';
+      '편하게 앉아 한 손으로 컵이나 부드러운 공을 잡으세요. 세게 쥐지 말고 안정적으로 유지하세요.';
 
   @override
-  String get handObjectHoldStart => 'Start hold';
+  String get handObjectHoldStart => '들기 시작';
 
   @override
-  String get handObjectHoldRunning => 'Keep holding steadily…';
+  String get handObjectHoldRunning => '안정적으로 계속 잡으세요…';
 
   @override
-  String get handObjectHoldDone => 'Hold complete';
+  String get handObjectHoldDone => '들기 완료';
 
   @override
   String get handFineMotorInstruction =>
-      'Touch your thumb to index, middle, ring, then pinky. That is one cycle.';
+      '엄지손가락을 검지, 중지, 약지, 새끼손가락 순서로 맞대세요. 여기까지가 1회입니다.';
 
   @override
-  String get handFineMotorMarkCycle => 'I finished one cycle';
+  String get handFineMotorMarkCycle => '1회 완료';
 
   @override
   String handFineMotorProgress(int done, int target) {
-    return 'Cycles: $done/$target';
+    return '횟수: $done/$target';
   }
 
   @override
-  String get handGuidedCompleteTitle => 'Practice complete';
+  String get handGuidedCompleteTitle => '연습 완료';
 
   @override
-  String get handGuidedCompleteBody =>
-      'Nice work. This session is saved as personal practice only.';
+  String get handGuidedCompleteBody => '잘하셨어요. 이 세션은 개인 연습 기록으로만 저장됩니다.';
 
   @override
-  String get dataTabTitle => 'Your data';
+  String get dataTabTitle => '내 데이터';
 
   @override
-  String get dataTabSubtitle =>
-      'Weekly practice scores and trends for personal reference.';
+  String get dataTabSubtitle => '개인 참고용 주간 연습 점수와 추세입니다.';
 
   @override
-  String get dataTrendsTitle => 'This week vs last week';
+  String get dataTrendsTitle => '이번 주와 지난주 비교';
 
   @override
-  String get dataOpenFullReport => 'Open full rehab report';
+  String get dataOpenFullReport => '전체 재활 보고서 열기';
 
   @override
-  String get dataRecentSessions => 'Recent sessions';
+  String get dataRecentSessions => '최근 세션';
 
   @override
   String dataStreakDays(int days) {
-    return 'Training streak: $days days';
+    return '연속 훈련: $days일';
   }
 
   @override
-  String get reportShareButton => 'Share report';
+  String get reportShareButton => '보고서 공유';
 
   @override
-  String get reportShareConsentTitle => 'Share your rehab summary?';
+  String get reportShareConsentTitle => '재활 요약을 공유할까요?';
 
   @override
   String get reportShareConsentBody =>
-      'This creates a text file with your practice scores and trends, then opens the system share sheet (Messages, Mail, Files, etc.).\n\nFor personal reference only — not a medical diagnosis.\n\nOnce you send the file, Amplio cannot recall it from the recipient. You can cancel now, or decline any share target on the next screen.';
+      '연습 점수와 추세가 포함된 텍스트 파일을 만든 후 시스템 공유 시트(메시지, Mail, 파일 등)를 엽니다.\n\n개인 참고용이며 의학적 진단이 아닙니다.\n\n파일을 보낸 후에는 Amplio가 수신자에게서 파일을 회수할 수 없습니다. 지금 취소하거나 다음 화면에서 공유 대상을 선택하지 않고 닫을 수 있습니다.';
 
   @override
-  String get reportShareConsentConfirm => 'I understand — continue';
+  String get reportShareConsentConfirm => '이해했으며 계속합니다';
 
   @override
-  String get reportShareFileTitle => 'Amplio Care rehab summary';
+  String get reportShareFileTitle => 'Amplio Care 재활 요약';
 
   @override
-  String get reportShareSuccess => 'Share sheet opened';
+  String get reportShareSuccess => '공유 시트를 열었습니다';
 
   @override
-  String get reportShareFailed =>
-      'Could not share the report. Please try again.';
+  String get reportShareFailed => '보고서를 공유하지 못했습니다. 다시 시도해 주세요.';
 
   @override
   String get reportShareFooterNote =>
-      'Sharing requires your confirmation each time. Amplio does not email doctors automatically.';
+      '공유할 때마다 확인이 필요합니다. Amplio는 의사에게 자동으로 이메일을 보내지 않습니다.';
 
   @override
-  String get profileTabTitle => 'Profile';
+  String get profileTabTitle => '프로필';
 
   @override
-  String get profileGuestLabel => 'Guest';
+  String get profileGuestLabel => '게스트';
 
   @override
   String get profileGuestSubtitle =>
-      'Signed in locally. Cloud sync is available after you sign in.';
+      '기기에서 사용 중입니다. 로그인하면 클라우드 동기화를 사용할 수 있습니다.';
 
   @override
-  String get profileSignedInLabel => 'Signed in';
+  String get profileSignedInLabel => '로그인됨';
 
   @override
-  String get profileSectionPreferences => 'Preferences';
+  String get profileSectionPreferences => '환경설정';
 
   @override
-  String get profileSectionAccount => 'Account & data';
+  String get profileSectionAccount => '계정 및 데이터';
 
   @override
-  String get profileSectionLegal => 'Privacy & terms';
+  String get profileSectionLegal => '개인정보 및 약관';
 
   @override
-  String get accessibilitySettings => 'Accessibility';
+  String get accessibilitySettings => '손쉬운 사용';
 
   @override
-  String get exitGuestMode => 'Exit guest mode';
+  String get exitGuestMode => '게스트 모드 종료';
 
   @override
-  String get exitGuestModeConfirm =>
-      'Leave guest mode? You will need to sign in or continue as a guest again.';
+  String get exitGuestModeConfirm => '게스트 모드를 종료할까요? 다시 로그인하거나 게스트로 계속해야 합니다.';
 
   @override
-  String get trainingReminderPageTitle => 'Practice reminders';
+  String get trainingReminderPageTitle => '연습 알림';
 
   @override
   String get trainingReminderTitle => 'Amplio';
 
   @override
-  String get trainingReminderBody =>
-      'A short practice when you can. Missing it is fine.';
+  String get trainingReminderBody => '가능할 때 짧게 연습해 보세요. 놓쳐도 괜찮습니다.';
 
   @override
   String get trainingReminderDisclaimer =>
-      'Optional local reminders, not a treatment schedule. You can turn them off anytime. Missing a reminder does not change your scores.';
+      '선택적 로컬 알림이며 치료 일정이 아닙니다. 언제든 끌 수 있습니다. 알림을 놓쳐도 점수에는 영향을 주지 않습니다.';
 
   @override
-  String get trainingReminderEnable => 'Remind me to practice';
+  String get trainingReminderEnable => '연습 시간 알림';
 
   @override
   String trainingReminderTimeLabel(int n) {
-    return 'Time $n';
+    return '시간 $n';
   }
 
   @override
-  String get trainingReminderAddTime => 'Add a second time';
+  String get trainingReminderAddTime => '두 번째 시간 추가';
 
   @override
-  String get trainingReminderRemoveTime => 'Remove this time';
+  String get trainingReminderRemoveTime => '이 시간 삭제';
 
   @override
-  String get trainingReminderQuietWeekends => 'Skip weekends';
+  String get trainingReminderQuietWeekends => '주말 건너뛰기';
 
   @override
-  String get trainingReminderQuietWeekendsHint =>
-      'No reminders on Saturday or Sunday.';
+  String get trainingReminderQuietWeekendsHint => '토요일과 일요일에는 알림을 보내지 않습니다.';
 
   @override
   String get trainingReminderPermissionDenied =>
-      'Notifications were not allowed. You can enable them later in iPhone Settings.';
+      '알림이 허용되지 않았습니다. 나중에 iPhone 설정에서 활성화할 수 있습니다.';
 
   @override
-  String get planReminderOff => 'Set a practice reminder';
+  String get planReminderOff => '연습 알림 설정';
 
   @override
   String planReminderOn(String times) {
-    return 'Reminders: $times';
+    return '알림: $times';
   }
 }

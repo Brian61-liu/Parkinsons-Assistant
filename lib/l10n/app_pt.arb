@@ -75,11 +75,11 @@
   "variability": "Variabilidade",
   "sampleRate": "Amostra",
   "dataPoints": "Pontos",
-  "severityNormal": "Normal",
-  "severityMild": "Leve",
-  "severityModerate": "Moderado",
-  "severityModerateSevere": "Mod-Grave",
-  "severitySevere": "Grave",
+  "severityNormal": "Movimento reduzido",
+  "severityMild": "Movimento ligeiro",
+  "severityModerate": "Movimento moderado",
+  "severityModerateSevere": "Movimento elevado",
+  "severitySevere": "Nível de movimento mais elevado",
   "appSubtitle": "Seu assistente pessoal de Parkinson para rastreamento e análise de movimentos",
   "signInWithGoogle": "Entrar com Google",
   "signInWithApple": "Entrar com Apple",
@@ -100,10 +100,10 @@
   },
   "syncToCloud": "Sincronizar na Nuvem",
   "dataSynced": "Dados sincronizados com sucesso",
-  "syncing": "Syncing…",
+  "syncing": "A sincronizar…",
   "syncFailed": "Falha na sincronização. Verifique a rede e tente novamente.",
   "syncFailedHint": "Falha na sincronização — toque para tentar de novo",
-  "syncRetry": "Retry",
+  "syncRetry": "Tentar novamente",
   "loginRequiredForSync": "Inicie sessão para usar a sincronização na nuvem",
   "lastSyncedAt": "Última sincronização: {time}",
   "privacyPolicy": "Política de Privacidade",
@@ -120,9 +120,9 @@
   "userRights": "Seus Direitos de Dados",
   "userRightsText": "Você tem direito a:\n\n• Acesso: Ver todos os seus dados\n• Portabilidade: Exportar seus dados\n• Exclusão: Excluir seus dados\n• Revogação: Revogar consentimento\n• Contato: Para consultas sobre privacidade",
   "dataSecurity": "Medidas de Segurança",
-  "dataSecurityText": "Protegemos os seus dados com os controlos de segurança da nossa stack atual:\n\n• TLS para pedidos na nuvem\n• Firebase Authentication para contas com sessão iniciada\n• Regras do Firestore que restringem o acesso aos seus próprios dados\n• Exportação e eliminação de conta na app\n\nProteções mais fortes, como encriptação completa da base de dados local, ainda estão a ser melhoradas e não são apresentadas como concluídas.",
+  "dataSecurityText": "Protegemos os seus dados com os controlos de segurança disponíveis na nossa arquitetura atual:\n\n• TLS para pedidos à nuvem\n• Firebase Authentication para contas com sessão iniciada\n• Regras do Firestore que restringem o acesso aos seus próprios dados\n• Encriptação AES no dispositivo para campos de saúde locais sensíveis (como amostras do sensor de tremor e alcunhas de medicação), com a chave guardada no Porta-chaves do iOS\n• Exportação na app e eliminação da conta\n\nOs ficheiros exportados são guardados num formato legível para utilização própria. Não alegamos que toda a base de dados local esteja encriptada.",
   "medicationPrivacy": "Lista opcional de apelidos de medicação",
-  "medicationPrivacyText": "Se ativar a lista opcional de apelidos de medicação, apelidos, horários de lembrete e check-ins ficam neste dispositivo. Quando inicia sessão, também podem sincronizar com a sua conta na nuvem Amplio para os restaurar noutro iPhone. Notificações locais opcionais podem aparecer só neste dispositivo se permitir notificações. Pode apagar estes dados na app (incluindo eliminação de conta). Esta funcionalidade não é aconselhamento médico e não é incluída por predefinição na exportação de dados.",
+  "medicationPrivacyText": "Se ativar a lista opcional de alcunhas de medicação, as alcunhas, os horários dos lembretes e os registos ficam guardados neste dispositivo. Quando inicia sessão, também podem ser sincronizados com a sua conta Amplio na nuvem, para que os possa restaurar noutro iPhone. As notificações locais opcionais só podem ser apresentadas neste dispositivo se permitir as notificações. Pode apagar estes dados na app, incluindo ao eliminar a conta. Esta funcionalidade não é aconselhamento médico e não é incluída na exportação de dados, a menos que dê consentimento separado sempre que exportar.",
   "contactUs": "Entre em Contato",
   "contactUsText": "A Amplio é operada por um programador individual independente (domínio: ampliocare.com).\n\n• Privacidade / pedidos de dados: privacy@ampliocare.com\n• Apoio ao utilizador: support@ampliocare.com\n• Parcerias clínicas: clinical@ampliocare.com\n• Negócios: hello@ampliocare.com",
   "termsOfService": "Termos de serviço",
@@ -145,11 +145,11 @@
   "dataManagement": "Gestão de Dados",
   "gdprRights": "Você pode acessar, exportar e excluir seus dados de saúde a qualquer momento.",
   "exportData": "Exportar Meus Dados",
-  "exportDataDescription": "Baixe uma cópia completa de todos os seus dados (formato JSON).",
+  "exportDataDescription": "Exporte o seu perfil e os registos de treino como um ficheiro CSV. Pode guardá-lo ou partilhá-lo através da folha de partilha do sistema. As alcunhas de medicação não são incluídas, a menos que dê consentimento para essa exportação.",
   "export": "Exportar",
   "exporting": "Exportando...",
   "exportSuccess": "Exportação Bem-sucedida",
-  "exportSuccessMessage": "Seus dados foram copiados para a área de transferência.",
+  "exportSuccessMessage": "O seu ficheiro CSV está pronto. Utilize a folha de partilha para o guardar em Ficheiros ou enviá-lo. As amostras brutas dos sensores são resumidas apenas pela contagem.",
   "deleteAllRecords": "Excluir Todos os Registros",
   "deleteAllRecordsDescription": "Exclua permanentemente todos os registros de testes. Esta ação não pode ser desfeita.",
   "deleteAllData": "Excluir Todos os Dados",
@@ -198,7 +198,7 @@
   },
   "voiceTraining": "Treinamento de Voz",
   "voiceTrainingMainInstruction": "Por favor, sustenha um som longo — Ah —",
-  "voiceTrainingInstruction": "Com base nos princípios da terapia LSVT LOUD, por favor fale alto. O tamanho do círculo mudará em tempo real com base no seu volume. Quando atingir 75-85 dB, o círculo ficará verde.",
+  "voiceTrainingInstruction": "Pratique falar com uma voz clara e forte. O tamanho do círculo muda com o seu volume. Ao atingir o intervalo-alvo, o círculo fica verde. Apenas para prática pessoal; não é um tratamento médico.",
   "voiceTrainingReady": "Pronto para começar",
   "voiceTrainingCalibrating": "Calibrando ruído ambiental...",
   "voiceTrainingTooQuiet": "Fale mais alto!",
@@ -344,52 +344,52 @@
   "@trainingType": {
     "description": "Training type label"
   },
-  "medicationList": "Medication list",
+  "medicationList": "Lista de medicação",
   "medicationListEnable": "Configurar lista de medicação",
   "medicationDisclaimer": "A lista de medicação do Amplio só o ajuda a registar horários por conta própria. Não é aconselhamento médico e não fornece orientação de dosagem. Em modo convidado os dados ficam apenas neste dispositivo. Quando inicia sessão, lembretes e check-ins podem sincronizar com a sua conta Amplio.",
   "medicationDisclaimerAccept": "Compreendo e ativo",
-  "medicationLabel": "Label",
+  "medicationLabel": "Etiqueta",
   "medicationLabelHint": "ex. Depois do pequeno-almoço (pode usar um alcunha)",
-  "medicationTime": "Time",
-  "medicationTaken": "Taken",
-  "medicationUndo": "Undo",
+  "medicationTime": "Hora",
+  "medicationTaken": "Tomado",
+  "medicationUndo": "Anular",
   "medicationUndoConfirm": "Remover o registo de hoje deste item?",
   "medicationTodayProgress": "Hoje {done}/{total}",
-  "medicationManage": "Manage",
-  "medicationAdd": "Add reminder",
-  "medicationEdit": "Edit reminder",
+  "medicationManage": "Gerir",
+  "medicationAdd": "Adicionar lembrete",
+  "medicationEdit": "Editar lembrete",
   "medicationClose": "Desativar lista de medicação",
   "medicationCloseConfirm": "Pode ocultar a lista ou também apagar todos os dados de medicação neste dispositivo.",
-  "medicationCloseHideOnly": "Hide only",
+  "medicationCloseHideOnly": "Ocultar apenas",
   "medicationCloseAndDelete": "Ocultar e apagar todos os dados",
   "medicationDeleteAllData": "Apagar dados da lista de medicação",
   "medicationDeleteAllDataDescription": "Apagar permanentemente todos os lembretes e registos de medicação neste dispositivo.",
   "medicationDeleteAllDataConfirm": "Apagar todos os dados da lista de medicação neste dispositivo? Esta ação não pode ser anulada.",
-  "medicationCollapse": "Collapse",
-  "medicationExpand": "Expand",
+  "medicationCollapse": "Recolher",
+  "medicationExpand": "Expandir",
   "medicationEmptyToday": "Sem lembretes para hoje. Adicione um em Gerir.",
-  "medicationCompletedAt": "Done at {time}",
-  "medicationSave": "Save",
-  "medicationDeleteReminder": "Delete reminder",
+  "medicationCompletedAt": "Registado às {time}",
+  "medicationSave": "Guardar",
+  "medicationDeleteReminder": "Apagar lembrete",
   "medicationDeleteReminderConfirm": "Apagar este lembrete?",
   "medicationNoReminders": "Ainda sem lembretes",
   "medicationDeleteSuccess": "Dados da lista de medicação apagados",
-  "rehabReport": "Rehab report",
+  "rehabReport": "Relatório de reabilitação",
   "rehabReportDisclaimer": "Apenas referência de reabilitação. Não é um diagnóstico médico e não substitui o aconselhamento da sua equipa de cuidados.",
-  "reportOverallScore": "Overall score",
+  "reportOverallScore": "Pontuação global",
   "reportDailyProgress": "Objetivos de hoje: {percent}%",
   "reportWeeklyProgress": "Esta semana: {percent}%",
   "reportStreak": "Sequência: {days} dias",
   "reportNoData": "Ainda não há dados de treino suficientes",
-  "handTraining": "Hand",
-  "voiceTrainingShort": "Voice",
-  "motionTrainingShort": "Movement",
-  "tabHome": "Home",
-  "tabPlan": "Plan",
-  "tabData": "Data",
-  "tabProfile": "Profile",
-  "comingSoon": "Coming soon",
-  "trainingStreak": "{days} days",
+  "handTraining": "Mão",
+  "voiceTrainingShort": "Voz",
+  "motionTrainingShort": "Movimento",
+  "tabHome": "Início",
+  "tabPlan": "Plano",
+  "tabData": "Dados",
+  "tabProfile": "Perfil",
+  "comingSoon": "Brevemente",
+  "trainingStreak": "{days} dias",
   "@trainingStreak": {
     "placeholders": {
       "days": {
@@ -397,11 +397,11 @@
       }
     }
   },
-  "trainingStreakLabel": "Training Streak",
-  "voiceClarity": "Voice Clarity",
-  "handStability": "Hand Stability",
+  "trainingStreakLabel": "Sequência de treino",
+  "voiceClarity": "Clareza da voz",
+  "handStability": "Estabilidade da mão",
   "movementAbility": "Treino de movimento",
-  "medicationReminder": "Medication",
+  "medicationReminder": "Medicação",
   "lastTrainingAgo": "Último treino · {timeAgo}",
   "@lastTrainingAgo": {
     "placeholders": {
@@ -418,9 +418,9 @@
       }
     }
   },
-  "relativeToday": "Today",
-  "relativeYesterday": "Yesterday",
-  "relativeDaysAgo": "{days} days ago",
+  "relativeToday": "Hoje",
+  "relativeYesterday": "Ontem",
+  "relativeDaysAgo": "Há {days} dias",
   "@relativeDaysAgo": {
     "placeholders": {
       "days": {
@@ -428,9 +428,9 @@
       }
     }
   },
-  "noTrainingYet": "No training yet",
+  "noTrainingYet": "Ainda sem treinos",
   "noMeasurementYet": "Ainda sem medição",
-  "tapToStart": "Tap to start",
+  "tapToStart": "Toque para iniciar",
   "durationSec": "{count}s",
   "@durationSec": {
     "placeholders": {
@@ -447,8 +447,8 @@
       }
     }
   },
-  "voiceSessionCount": "1 session",
-  "handMeasurementCount": "1 measurement",
+  "voiceSessionCount": "1 sessão",
+  "handMeasurementCount": "1 medição",
   "motionCompletionCount": "{done}/{total} repetições",
   "@motionCompletionCount": {
     "placeholders": {
@@ -463,7 +463,7 @@
   "medicationSetupPrompt": "Configurar lembretes de medicação",
   "medicationSetupSubtitle": "Neste dispositivo; sincroniza ao iniciar sessão",
   "medicationNoUpcoming": "Sem lembretes pendentes hoje",
-  "medicationNextDoseLabel": "Next dose",
+  "medicationNextDoseLabel": "Próxima toma",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
     "placeholders": {
@@ -472,8 +472,8 @@
       }
     }
   },
-  "medicationStatusUpcoming": "Upcoming",
-  "medicationStatusPending": "Pending",
+  "medicationStatusUpcoming": "Próximo",
+  "medicationStatusPending": "Pendente",
   "medicationNotificationBody": "Hora de: {label}",
   "@medicationNotificationBody": {
     "placeholders": {
@@ -483,7 +483,7 @@
     }
   },
   "medicationNotificationPermissionNote": "Opcional: permita notificações para o Amplio o lembrar nos horários definidos. As notificações ficam neste dispositivo.",
-  "recentActivity": "Recent Activity",
+  "recentActivity": "Atividade recente",
   "nonMedicalDisclaimerTitle": "Apenas para referência",
   "nonMedicalDisclaimerBody": "As medições mostradas são apenas referência de treino de reabilitação. Não são um diagnóstico médico e não substituem o aconselhamento da sua equipa de saúde.",
   "voicePrepHint": "Sente-se confortavelmente. Segure o telemóvel a cerca de 30 cm da boca.",
@@ -520,17 +520,278 @@
       }
     }
   },
-  "voiceLegendTarget": "Target volume",
-  "voiceLegendYours": "Your volume",
-  "voiceShowDetail": "Show number",
-  "voiceHideDetail": "Hide number",
+  "voiceLegendTarget": "Volume-alvo",
+  "voiceLegendYours": "O seu volume",
+  "voiceShowDetail": "Mostrar valor",
+  "voiceHideDetail": "Ocultar valor",
   "voiceCompletedTitle": "Prática concluída",
-  "voiceCompletedDurationLabel": "This session",
+  "voiceCompletedDurationLabel": "Esta sessão",
   "voiceCompletedTargetLabel": "Tempo no volume alvo",
   "voiceCompletedEncourageGood": "Muito bem! Mantenha o hábito de falar em voz alta.",
   "voiceCompletedEncourageTryMore": "Boa tentativa. Tente falar um pouco mais alto da próxima vez.",
-  "voiceRetryButton": "Practice Again",
-  "voiceFinishButton": "Done",
+  "voiceRetryButton": "Praticar novamente",
+  "voiceFinishButton": "Concluir",
   "voicePracticeFooterHint": "Este exercício incentiva falar em voz alta para treino vocal. Apenas referência, não é um diagnóstico médico.",
-  "voiceSessionTooShort": "A sessão foi demasiado curta e não foi guardada"
+  "voiceSessionTooShort": "A sessão foi demasiado curta e não foi guardada",
+  "exportMedicationConsentTitle": "Incluir alcunhas de medicação?",
+  "exportMedicationConsentBody": "Os registos de treino serão exportados como um ficheiro CSV.\n\nAs alcunhas de medicação, os horários dos lembretes e os registos não são incluídos, a menos que escolha Incluir desta vez. Isto não é uma receita nem um registo médico.\n\nSelecione Cancelar para parar. Também pode exportar sem dados de medicação.",
+  "exportMedicationExclude": "Exportar sem dados de medicação",
+  "exportMedicationInclude": "Incluir lista de medicação",
+  "voiceProtocolPickerTitle": "Escolha um tipo de prática",
+  "voiceProtocolSteady": "Volume constante",
+  "voiceProtocolSteadyDesc": "Mantenha um «Ah» longo dentro do intervalo de volume-alvo.",
+  "voiceProtocolLadder": "Escala de volume",
+  "voiceProtocolLadderDesc": "Suave → alvo → um pouco mais forte → reduza gradualmente.",
+  "voiceProtocolMultiSet": "3 séries curtas",
+  "voiceProtocolMultiSetDesc": "Três rondas curtas com um breve descanso entre elas.",
+  "voiceTrainingReferenceDisclaimer": "Apenas para prática pessoal de reabilitação. Não é um diagnóstico nem um tratamento.",
+  "voiceLadderPhaseSoft": "Fase 1: voz mais suave",
+  "voiceLadderPhaseTarget": "Fase 2: volume-alvo",
+  "voiceLadderPhaseStrong": "Fase 3: um pouco mais forte",
+  "voiceLadderPhaseCoolDown": "Fase 4: reduza gradualmente",
+  "voiceLadderChip": "Tempo restante da fase: {seconds}s",
+  "voiceSetChip": "Série {current}/{total} · {seconds}s",
+  "voiceRestChip": "Descanso {seconds}s",
+  "voiceRestTitle": "Descanso",
+  "voiceRestBody": "A seguir: série {next} de {total}. Relaxe a voz.",
+  "tremorDurationPickerTitle": "Duração da sessão",
+  "tremorDurationSeconds": "{seconds}s",
+  "tremorTestInstructionDynamic": "Mantenha o telemóvel imóvel durante {seconds} segundos. Mantenha o braço estável.",
+  "tremorMotionBandDisclaimer": "Os níveis de movimento destinam-se apenas a referência pessoal — não são uma avaliação médica.",
+  "planTodayTitle": "Prática de hoje",
+  "planTodaySubtitle": "Sugestões dos seus módulos de treino. Toque para iniciar.",
+  "planEmptyHint": "Ainda não há sugestões. Experimente um treino no Início.",
+  "planDomainHand": "Mão",
+  "planDomainVoice": "Voz",
+  "planDomainMotion": "Movimento",
+  "planGoalProgress": "Hoje: {done}/{target} sessões",
+  "planGoalCompleted": "Concluiu o objetivo de hoje. Bom trabalho.",
+  "planWeeklyProgress": "Esta semana: {done}/{target} sessões",
+  "planOpenTask": "Iniciar",
+  "planMotionShelvedNote": "A deteção de movimento é limitada em alguns telemóveis; ainda assim, pode abrir o ecrã de prática.",
+  "voiceProtocolClarity": "Frases claras",
+  "voiceProtocolClarityDesc": "Leia frases curtas em voz alta. A pronúncia não é avaliada.",
+  "voiceClarityHint": "Leia a frase com clareza. Verificamos apenas se falou, não se o fez «corretamente».",
+  "voiceClarityPhraseProgress": "Frase {current} de {total}",
+  "voiceClarityVoiceDetected": "Voz detetada — muito bem",
+  "voiceClarityWaitingVoice": "Leia a frase em voz alta",
+  "voiceClarityNextPhrase": "Frase seguinte",
+  "voiceClarityFinish": "Concluir",
+  "voiceClarityPhrase1": "Bom dia",
+  "voiceClarityPhrase2": "Como está hoje?",
+  "voiceClarityPhrase3": "Passe-me a água, por favor",
+  "voiceClarityPhrase4": "Estou bem",
+  "voiceClarityPhrase5": "Até amanhã",
+  "handModePickerTitle": "Tipo de prática",
+  "handModeStillHold": "Manter imóvel",
+  "handModeStillHoldDesc": "Mantenha o telemóvel imóvel enquanto os sensores medem o movimento.",
+  "handModeObjectHold": "Segurar um objeto",
+  "handModeObjectHoldDesc": "Mantenha uma chávena ou uma bola macia estável. Temporizador guiado; sem deteção do objeto.",
+  "handModeFineMotor": "Toques com os dedos",
+  "handModeFineMotorDesc": "Toque em cada dedo com o polegar. Conte os ciclos.",
+  "handGuidedDisclaimer": "Prática guiada apenas para apoio à reabilitação pessoal. Não é uma avaliação médica.",
+  "handObjectHoldInstruction": "Sente-se confortavelmente. Segure uma chávena ou uma bola macia com uma mão. Mantenha-a estável sem apertar com força.",
+  "handObjectHoldStart": "Começar a segurar",
+  "handObjectHoldRunning": "Continue a manter o objeto estável…",
+  "handObjectHoldDone": "Exercício concluído",
+  "handFineMotorInstruction": "Toque com o polegar no indicador, médio, anelar e depois no mindinho. Isso corresponde a um ciclo.",
+  "handFineMotorMarkCycle": "Concluí um ciclo",
+  "handFineMotorProgress": "Ciclos: {done}/{target}",
+  "handGuidedCompleteTitle": "Prática concluída",
+  "handGuidedCompleteBody": "Bom trabalho. Esta sessão é guardada apenas como prática pessoal.",
+  "dataTabTitle": "Os seus dados",
+  "dataTabSubtitle": "Pontuações e tendências semanais de prática para referência pessoal.",
+  "dataTrendsTitle": "Esta semana em comparação com a anterior",
+  "dataOpenFullReport": "Abrir relatório de reabilitação completo",
+  "dataRecentSessions": "Sessões recentes",
+  "dataStreakDays": "Sequência de treino: {days} dias",
+  "reportShareButton": "Partilhar relatório",
+  "reportShareConsentTitle": "Partilhar o seu resumo de reabilitação?",
+  "reportShareConsentBody": "Isto cria um ficheiro de texto com as suas pontuações e tendências de prática e, em seguida, abre a folha de partilha do sistema (Mensagens, Mail, Ficheiros, etc.).\n\nApenas para referência pessoal — não é um diagnóstico médico.\n\nDepois de enviar o ficheiro, a Amplio não pode recuperá-lo junto do destinatário. Pode cancelar agora ou não selecionar qualquer destino de partilha no ecrã seguinte.",
+  "reportShareConsentConfirm": "Compreendo — continuar",
+  "reportShareFileTitle": "Resumo de reabilitação do Amplio Care",
+  "reportShareSuccess": "Folha de partilha aberta",
+  "reportShareFailed": "Não foi possível partilhar o relatório. Tente novamente.",
+  "reportShareFooterNote": "Cada partilha requer a sua confirmação. A Amplio não envia automaticamente emails a médicos.",
+  "profileTabTitle": "Perfil",
+  "profileGuestLabel": "Convidado",
+  "profileGuestSubtitle": "Sessão iniciada localmente. A sincronização na nuvem fica disponível depois de iniciar sessão.",
+  "profileSignedInLabel": "Sessão iniciada",
+  "profileSectionPreferences": "Preferências",
+  "profileSectionAccount": "Conta e dados",
+  "profileSectionLegal": "Privacidade e termos",
+  "accessibilitySettings": "Acessibilidade",
+  "exitGuestMode": "Sair do modo de convidado",
+  "exitGuestModeConfirm": "Sair do modo de convidado? Terá de iniciar sessão ou continuar novamente como convidado.",
+  "trainingReminderPageTitle": "Lembretes de prática",
+  "trainingReminderTitle": "Amplio",
+  "trainingReminderBody": "Faça uma prática breve quando puder. Não faz mal se não a fizer.",
+  "trainingReminderDisclaimer": "Lembretes locais opcionais, não um horário de tratamento. Pode desativá-los a qualquer momento. Ignorar um lembrete não altera as suas pontuações.",
+  "trainingReminderEnable": "Lembrar-me de praticar",
+  "trainingReminderTimeLabel": "Hora {n}",
+  "trainingReminderAddTime": "Adicionar uma segunda hora",
+  "trainingReminderRemoveTime": "Remover esta hora",
+  "trainingReminderQuietWeekends": "Ignorar fins de semana",
+  "trainingReminderQuietWeekendsHint": "Não haverá lembretes ao sábado nem ao domingo.",
+  "trainingReminderPermissionDenied": "As notificações não foram permitidas. Pode ativá-las mais tarde nas Definições do iPhone.",
+  "planReminderOff": "Configurar um lembrete de prática",
+  "planReminderOn": "Lembretes: {times}",
+  "@voiceLadderChip": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@voiceSetChip": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@voiceRestChip": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@voiceRestBody": {
+    "placeholders": {
+      "next": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@tremorDurationSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@tremorTestInstructionDynamic": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@planGoalProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "@planWeeklyProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "@voiceClarityPhraseProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@handFineMotorProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "@dataStreakDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "@trainingReminderTimeLabel": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "@planReminderOn": {
+    "placeholders": {
+      "times": {
+        "type": "String"
+      }
+    }
+  },
+  "@lastSyncedAt": {
+    "description": "Settings subtitle after successful sync",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@medicationTodayProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@medicationCompletedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@reportDailyProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "@reportWeeklyProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "@reportStreak": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -68,18 +68,18 @@
   "waveformAxisTime": "الوقت",
   "waveformAxisAmplitude": "السعة",
   "waveformHint": "كلما ارتفعت الموجة زاد وضوح رعشة اليد",
-  "tremorSeverity": "الشدة",
+  "tremorSeverity": "نطاق الحركة",
   "tremorFrequency": "التردد",
   "avgAmplitude": "متوسط السعة",
   "maxAmp": "السعة القصوى",
   "variability": "التباين",
-  "sampleRate": "العينة",
-  "dataPoints": "البيانات",
-  "severityNormal": "طبيعي",
-  "severityMild": "خفيف",
-  "severityModerate": "معتدل",
-  "severityModerateSevere": "متوسط-شديد",
-  "severitySevere": "شديد",
+  "sampleRate": "معدل أخذ العينات",
+  "dataPoints": "نقاط البيانات",
+  "severityNormal": "حركة أقل",
+  "severityMild": "حركة خفيفة",
+  "severityModerate": "حركة متوسطة",
+  "severityModerateSevere": "حركة أكبر",
+  "severitySevere": "أعلى نطاق",
   "appSubtitle": "مساعدك الشخصي لمرض باركنسون لتتبع وتحليل الحركة",
   "signInWithGoogle": "تسجيل الدخول بـ Google",
   "signInWithApple": "تسجيل الدخول بـ Apple",
@@ -100,12 +100,19 @@
   },
   "syncToCloud": "مزامنة مع السحابة",
   "dataSynced": "تمت مزامنة البيانات بنجاح",
-  "syncing": "Syncing…",
+  "syncing": "جارٍ المزامنة…",
   "syncFailed": "فشلت المزامنة. تحقق من الشبكة وحاول مرة أخرى.",
   "syncFailedHint": "فشلت المزامنة — اضغط لإعادة المحاولة",
-  "syncRetry": "Retry",
+  "syncRetry": "إعادة المحاولة",
   "loginRequiredForSync": "يرجى تسجيل الدخول لاستخدام المزامنة السحابية",
   "lastSyncedAt": "آخر مزامنة: {time}",
+  "@lastSyncedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "privacyPolicy": "سياسة الخصوصية",
   "privacyPolicyIntro": "مقدمة",
   "privacyPolicyIntroText": "تلتزم Amplio بحماية خصوصيتك وبياناتك الصحية. توضح هذه السياسة كيفية جمع واستخدام وتخزين وحماية معلوماتك.",
@@ -120,9 +127,9 @@
   "userRights": "حقوقك في البيانات",
   "userRightsText": "لديك الحق في:\n\n• الوصول: عرض جميع بياناتك\n• النقل: تصدير بياناتك\n• المحو: حذف بياناتك\n• السحب: سحب الموافقة\n• التواصل: لأي استفسارات تتعلق بالخصوصية",
   "dataSecurity": "إجراءات الأمان",
-  "dataSecurityText": "نحمي بياناتك بضوابط الأمان المتاحة في مجموعتنا التقنية الحالية:\n\n• TLS لطلبات السحابة\n• Firebase Authentication للحسابات المسجّلة الدخول\n• قواعد Firestore التي تقيّد الوصول إلى بياناتك فقط\n• التصدير وحذف الحساب داخل التطبيق\n\nحماية أقوى مثل التشفير الكامل لقاعدة البيانات المحلية ما زالت قيد التحسين ولا تُعرَض على أنها مكتملة.",
-  "medicationPrivacy": "قائمة اختيارية بألقاب الأدوية",
-  "medicationPrivacyText": "إذا فعّلت قائمة ألقاب الأدوية الاختيارية، تُخزَّن الألقاب وأوقات التذكير وعمليات التسجيل على هذا الجهاز. عند تسجيل الدخول يمكن أيضاً مزامنتها مع حساب Amplio السحابي لاستعادتها على iPhone آخر. قد تظهر الإشعارات المحلية الاختيارية على هذا الجهاز فقط إذا سمحت بإذن الإشعارات. يمكنك حذف هذه البيانات من التطبيق (بما في ذلك حذف الحساب). هذه الميزة ليست نصيحة طبية ولا تُدرج افتراضيًا في تصدير البيانات.",
+  "dataSecurityText": "نحمي بياناتك باستخدام ضوابط الأمان المتاحة في بنيتنا التقنية الحالية:\n\n• TLS للطلبات السحابية\n• Firebase Authentication للحسابات المسجّل الدخول إليها\n• قواعد Firestore التي تقصر الوصول على بياناتك\n• تشفير AES على الجهاز للحقول الصحية المحلية الحساسة، مثل عينات مستشعر الرعاش والأسماء المستعارة للأدوية، مع تخزين المفتاح في سلسلة مفاتيح iOS\n• التصدير وحذف الحساب من داخل التطبيق\n\nتُكتب الملفات التي تصدّرها بتنسيق مقروء لاستخدامك الشخصي. ولا ندّعي تشفير ملف قاعدة البيانات المحلية بالكامل.",
+  "medicationPrivacy": "قائمة اختيارية بالأسماء المستعارة للأدوية",
+  "medicationPrivacyText": "إذا فعّلت القائمة الاختيارية للأسماء المستعارة للأدوية، فستُخزَّن الأسماء المستعارة وأوقات التذكير وعمليات التسجيل على هذا الجهاز. وعند تسجيل الدخول، يمكن مزامنتها أيضًا مع حساب Amplio السحابي لاستعادتها على جهاز iPhone آخر. لا تظهر الإشعارات المحلية الاختيارية على هذا الجهاز إلا إذا منحت إذن الإشعارات. ويمكنك حذف هذه البيانات من التطبيق، بما في ذلك عند حذف الحساب. هذه الميزة ليست نصيحة طبية، ولا تُدرج البيانات في التصدير إلا إذا وافقت على ذلك بشكل منفصل في كل مرة تصدّر فيها بياناتك.",
   "contactUs": "اتصل بنا",
   "contactUsText": "تُدار Amplio بواسطة مطوّر فردي مستقل (النطاق: ampliocare.com).\n\n• الخصوصية / طلبات البيانات: privacy@ampliocare.com\n• دعم المستخدم: support@ampliocare.com\n• الشراكات السريرية: clinical@ampliocare.com\n• الأعمال: hello@ampliocare.com",
   "termsOfService": "شروط الخدمة",
@@ -131,9 +138,9 @@
   "termsAcceptance": "القبول",
   "termsAcceptanceText": "بتسجيل الدخول أو المتابعة كضيف أو استخدام Amplio بأي طريقة أخرى، فإنك توافق على هذه الشروط وسياسة الخصوصية. إذا لم توافق، يُرجى عدم استخدام التطبيق.",
   "termsUseOfApp": "استخدام Amplio",
-  "termsUseOfAppText": "توفر Amplio أدوات تدريب اختيارية مثل قياس الرعاش وممارسة الصوت وممارسة الحركة وملخصات التقدم وقائمة اختيارية بألقاب الأدوية (على الجهاز للضيوف؛ وقد تُزامَن عند تسجيل الدخول).\n\nتوافق على استخدام التطبيق فقط لأغراض شخصية مشروعة وعدم إساءة استخدام المستشعرات أو الحسابات أو البيانات المصدّرة بطرق تضر بالآخرين أو تنتهك القانون المعمول به.",
+  "termsUseOfAppText": "توفر Amplio أدوات تدريب اختيارية مثل قياس الرعاش وممارسة الصوت وممارسة الحركة وملخصات التقدم وقائمة اختيارية بالأسماء المستعارة للأدوية (على الجهاز للضيوف؛ وقد تُزامَن عند تسجيل الدخول).\n\nتوافق على استخدام التطبيق فقط لأغراض شخصية مشروعة وعدم إساءة استخدام المستشعرات أو الحسابات أو البيانات المصدّرة بطرق تضر بالآخرين أو تنتهك القانون المعمول به.",
   "termsMedicalDisclaimer": "ليست نصيحة طبية",
-  "termsMedicalDisclaimerText": "Amplio مساعدة للعافية والتدريب التأهيلي. لا تشخّص ولا تعالج ولا تشفي ولا تمنع مرض باركنسون أو أي حالة أخرى.\n\nالدرجات والاتجاهات والتقارير والتذكيرات للمرجع الشخصي فقط ولا تحل محل نصيحة طبيب أو معالج طبيعي أو أخصائي نطق أو أي مهني مؤهل آخر. اطلب الرعاية المهنية للقرارات الطبية. أوقف أي تمرين يسبب ألمًا أو دوارًا أو ظروفًا غير آمنة.",
+  "termsMedicalDisclaimerText": "Amplio أداة مساعدة للعافية والتدريب التأهيلي. وهي لا تشخّص مرض باركنسون أو أي حالة أخرى ولا تعالجها أو تشفيها أو تقي منها.\n\nالدرجات والاتجاهات والتقارير والتذكيرات للمرجع الشخصي فقط، ولا تحل محل نصيحة طبيب أو اختصاصي علاج طبيعي أو اختصاصي نطق أو أي مهني مؤهل آخر. اطلب رعاية متخصصة عند اتخاذ قرارات طبية. وأوقف أي تمرين يسبب ألمًا أو دوارًا أو يجعلك في وضع غير آمن.",
   "termsAccounts": "الحسابات والبيانات",
   "termsAccountsText": "يمكنك استخدام Amplio عبر Apple Sign-In أو Google Sign-In أو كضيف. أنت مسؤول عن النشاط تحت حسابك المسجّل الدخول.\n\nيمكنك تصدير أو حذف بيانات معينة في التطبيق. حذف حسابك يزيل بيانات السحابة المرتبطة التي نتحكم بها، ضمن الحدود التقنية والقانونية. قد تبقى بيانات الضيف والمحلية فقط على جهازك حتى تمسحها.",
   "termsLimitation": "تحديد المسؤولية",
@@ -145,11 +152,15 @@
   "dataManagement": "إدارة البيانات",
   "gdprRights": "يمكنك الوصول إلى بياناتك الصحية وتصديرها وحذفها في أي وقت.",
   "exportData": "تصدير بياناتي",
-  "exportDataDescription": "قم بتنزيل نسخة كاملة من جميع بياناتك (تنسيق JSON).",
+  "exportDataDescription": "صدّر ملفك الشخصي وسجلات التدريب في ملف CSV. يمكنك حفظه أو مشاركته من خلال قائمة المشاركة في النظام. لا تُدرج الأسماء المستعارة للأدوية إلا إذا وافقت على ذلك لهذا التصدير.",
   "export": "تصدير",
   "exporting": "جارٍ التصدير...",
   "exportSuccess": "تم التصدير بنجاح",
-  "exportSuccessMessage": "تم نسخ بياناتك إلى الحافظة.",
+  "exportSuccessMessage": "ملف CSV جاهز. استخدم قائمة المشاركة لحفظه في «الملفات» أو إرساله. تُلخَّص عينات المستشعر الخام بعددها فقط.",
+  "exportMedicationConsentTitle": "هل تريد تضمين الأسماء المستعارة للأدوية؟",
+  "exportMedicationConsentBody": "ستُصدَّر سجلات التدريب في ملف CSV.\n\nلن تُدرج الأسماء المستعارة للأدوية وأوقات التذكير وعمليات التسجيل إلا إذا اخترت «التضمين هذه المرة». هذا ليس وصفة طبية ولا سجلًا طبيًا.\n\nاختر «إلغاء» لإيقاف التصدير. ولا يزال بإمكانك التصدير دون بيانات الأدوية.",
+  "exportMedicationExclude": "التصدير دون بيانات الأدوية",
+  "exportMedicationInclude": "تضمين قائمة الأدوية",
   "deleteAllRecords": "حذف جميع السجلات",
   "deleteAllRecordsDescription": "احذف جميع سجلات الاختبارات نهائياً. لا يمكن التراجع عن هذا الإجراء.",
   "deleteAllData": "حذف جميع البيانات",
@@ -198,7 +209,7 @@
   },
   "voiceTraining": "تدريب الصوت",
   "voiceTrainingMainInstruction": "يرجى الاستمرار في إصدار صوت طويل — آه —",
-  "voiceTrainingInstruction": "بناءً على مبادئ علاج LSVT LOUD، يرجى التحدث بصوت عالٍ. سيتغير حجم الدائرة في الوقت الفعلي بناءً على مستوى الصوت. عندما يصل إلى 75-85 ديسيبل، ستصبح الدائرة خضراء.",
+  "voiceTrainingInstruction": "تدرّب على التحدث بصوت واضح وقوي. يتغير حجم الدائرة بحسب مستوى صوتك، وتتحول إلى اللون الأخضر عند بلوغ النطاق المستهدف. للتدريب الشخصي فقط، وليس علاجًا طبيًا.",
   "voiceTrainingReady": "جاهز للبدء",
   "voiceTrainingCalibrating": "معايرة الضوضاء البيئية...",
   "voiceTrainingTooQuiet": "تحدث بصوت أعلى!",
@@ -344,52 +355,90 @@
   "@trainingType": {
     "description": "Training type label"
   },
-  "medicationList": "Medication list",
+  "medicationList": "قائمة الأدوية",
   "medicationListEnable": "إعداد قائمة الأدوية",
   "medicationDisclaimer": "تساعد قائمة أدوية Amplio فقط على تتبع الأوقات بنفسك. وهي ليست نصيحة طبية ولا تقدّم إرشادات للجرعات. في وضع الضيف تبقى البيانات على هذا الجهاز فقط. عند تسجيل الدخول يمكن مزامنة التذكيرات والتسجيلات مع حساب Amplio.",
   "medicationDisclaimerAccept": "أفهم وأفعّل",
-  "medicationLabel": "Label",
-  "medicationLabelHint": "مثل: بعد الإفطار (يمكن استخدام لقب)",
-  "medicationTime": "Time",
-  "medicationTaken": "Taken",
-  "medicationUndo": "Undo",
+  "medicationLabel": "الاسم",
+  "medicationLabelHint": "مثل: بعد الإفطار (يمكن استخدام اسم مستعار)",
+  "medicationTime": "الوقت",
+  "medicationTaken": "تم التناول",
+  "medicationUndo": "تراجع",
   "medicationUndoConfirm": "إزالة تسجيل اليوم لهذا العنصر؟",
   "medicationTodayProgress": "اليوم {done}/{total}",
-  "medicationManage": "Manage",
-  "medicationAdd": "Add reminder",
-  "medicationEdit": "Edit reminder",
+  "@medicationTodayProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "medicationManage": "إدارة",
+  "medicationAdd": "إضافة تذكير",
+  "medicationEdit": "تعديل التذكير",
   "medicationClose": "إيقاف قائمة الأدوية",
   "medicationCloseConfirm": "يمكنك إخفاء القائمة أو حذف جميع بيانات الأدوية على هذا الجهاز أيضًا.",
-  "medicationCloseHideOnly": "Hide only",
+  "medicationCloseHideOnly": "إخفاء فقط",
   "medicationCloseAndDelete": "إخفاء وحذف جميع البيانات",
   "medicationDeleteAllData": "حذف بيانات قائمة الأدوية",
   "medicationDeleteAllDataDescription": "حذف جميع تذكيرات الأدوية وتسجيلات التحقق على هذا الجهاز نهائيًا.",
   "medicationDeleteAllDataConfirm": "حذف جميع بيانات قائمة الأدوية على هذا الجهاز؟ لا يمكن التراجع عن ذلك.",
-  "medicationCollapse": "Collapse",
-  "medicationExpand": "Expand",
+  "medicationCollapse": "طي",
+  "medicationExpand": "توسيع",
   "medicationEmptyToday": "لا تذكيرات لليوم. أضف واحدًا من الإدارة.",
-  "medicationCompletedAt": "Done at {time}",
-  "medicationSave": "Save",
-  "medicationDeleteReminder": "Delete reminder",
+  "medicationCompletedAt": "تم في {time}",
+  "@medicationCompletedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "medicationSave": "حفظ",
+  "medicationDeleteReminder": "حذف التذكير",
   "medicationDeleteReminderConfirm": "حذف هذا التذكير؟",
   "medicationNoReminders": "لا تذكيرات بعد",
   "medicationDeleteSuccess": "تم حذف بيانات قائمة الأدوية",
-  "rehabReport": "Rehab report",
+  "rehabReport": "تقرير التأهيل",
   "rehabReportDisclaimer": "للمرجع التأهيلي فقط. ليس تشخيصًا طبيًا ولا يحل محل نصيحة فريق الرعاية.",
-  "reportOverallScore": "Overall score",
+  "reportOverallScore": "الدرجة الإجمالية",
   "reportDailyProgress": "أهداف اليوم: {percent}%",
+  "@reportDailyProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "reportWeeklyProgress": "هذا الأسبوع: {percent}%",
+  "@reportWeeklyProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "reportStreak": "سلسلة: {days} أيام",
+  "@reportStreak": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "reportNoData": "لا توجد بيانات تدريب كافية بعد",
-  "handTraining": "Hand",
-  "voiceTrainingShort": "Voice",
-  "motionTrainingShort": "Movement",
-  "tabHome": "Home",
-  "tabPlan": "Plan",
-  "tabData": "Data",
-  "tabProfile": "Profile",
-  "comingSoon": "Coming soon",
-  "trainingStreak": "{days} days",
+  "handTraining": "اليد",
+  "voiceTrainingShort": "الصوت",
+  "motionTrainingShort": "الحركة",
+  "tabHome": "الرئيسية",
+  "tabPlan": "الخطة",
+  "tabData": "البيانات",
+  "tabProfile": "الملف الشخصي",
+  "comingSoon": "قريبًا",
+  "trainingStreak": "{days} يومًا",
   "@trainingStreak": {
     "placeholders": {
       "days": {
@@ -397,11 +446,11 @@
       }
     }
   },
-  "trainingStreakLabel": "Training Streak",
-  "voiceClarity": "Voice Clarity",
-  "handStability": "Hand Stability",
-  "movementAbility": "تدريب الحركة",
-  "medicationReminder": "Medication",
+  "trainingStreakLabel": "سلسلة التدريب",
+  "voiceClarity": "وضوح الصوت",
+  "handStability": "ثبات اليد",
+  "movementAbility": "القدرة الحركية",
+  "medicationReminder": "الأدوية",
   "lastTrainingAgo": "آخر تدريب · {timeAgo}",
   "@lastTrainingAgo": {
     "placeholders": {
@@ -418,9 +467,9 @@
       }
     }
   },
-  "relativeToday": "Today",
-  "relativeYesterday": "Yesterday",
-  "relativeDaysAgo": "{days} days ago",
+  "relativeToday": "اليوم",
+  "relativeYesterday": "أمس",
+  "relativeDaysAgo": "منذ {days} أيام",
   "@relativeDaysAgo": {
     "placeholders": {
       "days": {
@@ -428,10 +477,10 @@
       }
     }
   },
-  "noTrainingYet": "No training yet",
+  "noTrainingYet": "لا يوجد تدريب بعد",
   "noMeasurementYet": "لا قياس بعد",
-  "tapToStart": "Tap to start",
-  "durationSec": "{count}s",
+  "tapToStart": "اضغط للبدء",
+  "durationSec": "{count} ث",
   "@durationSec": {
     "placeholders": {
       "count": {
@@ -439,7 +488,7 @@
       }
     }
   },
-  "durationMin": "{count} min",
+  "durationMin": "{count} د",
   "@durationMin": {
     "placeholders": {
       "count": {
@@ -447,8 +496,8 @@
       }
     }
   },
-  "voiceSessionCount": "1 session",
-  "handMeasurementCount": "1 measurement",
+  "voiceSessionCount": "جلسة واحدة",
+  "handMeasurementCount": "قياس واحد",
   "motionCompletionCount": "{done}/{total} تكرار",
   "@motionCompletionCount": {
     "placeholders": {
@@ -463,7 +512,7 @@
   "medicationSetupPrompt": "إعداد تذكيرات الأدوية",
   "medicationSetupSubtitle": "على هذا الجهاز؛ تُزامَن عند تسجيل الدخول",
   "medicationNoUpcoming": "لا تذكيرات قادمة اليوم",
-  "medicationNextDoseLabel": "Next dose",
+  "medicationNextDoseLabel": "الجرعة التالية",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
     "placeholders": {
@@ -472,8 +521,8 @@
       }
     }
   },
-  "medicationStatusUpcoming": "Upcoming",
-  "medicationStatusPending": "Pending",
+  "medicationStatusUpcoming": "قادم",
+  "medicationStatusPending": "معلّق",
   "medicationNotificationBody": "حان وقت: {label}",
   "@medicationNotificationBody": {
     "placeholders": {
@@ -483,7 +532,7 @@
     }
   },
   "medicationNotificationPermissionNote": "اختياري: اسمح بالإشعارات ليذكّرك Amplio في الأوقات التي تحددها. تبقى الإشعارات على هذا الجهاز.",
-  "recentActivity": "Recent Activity",
+  "recentActivity": "النشاط الأخير",
   "nonMedicalDisclaimerTitle": "للمرجع فقط",
   "nonMedicalDisclaimerBody": "القياسات المعروضة هي مرجع لتدريب التأهيل فقط. وهي ليست تشخيصًا طبيًا ولا تحل محل نصيحة فريقك الصحي.",
   "voicePrepHint": "اجلس براحة. أمسك الهاتف على بعد حوالي 30 سم من فمك.",
@@ -520,17 +569,188 @@
       }
     }
   },
-  "voiceLegendTarget": "Target volume",
-  "voiceLegendYours": "Your volume",
-  "voiceShowDetail": "Show number",
-  "voiceHideDetail": "Hide number",
+  "voiceLegendTarget": "مستوى الصوت المستهدف",
+  "voiceLegendYours": "مستوى صوتك",
+  "voiceShowDetail": "إظهار الرقم",
+  "voiceHideDetail": "إخفاء الرقم",
   "voiceCompletedTitle": "اكتمل التمرين",
-  "voiceCompletedDurationLabel": "This session",
+  "voiceCompletedDurationLabel": "هذه الجلسة",
   "voiceCompletedTargetLabel": "الوقت عند مستوى الصوت المستهدف",
   "voiceCompletedEncourageGood": "أحسنت! واصل عادة التحدث بصوت عالٍ.",
   "voiceCompletedEncourageTryMore": "محاولة جيدة. حاول التحدث بصوت أعلى قليلًا في المرة القادمة.",
-  "voiceRetryButton": "Practice Again",
-  "voiceFinishButton": "Done",
+  "voiceRetryButton": "التدرّب مجددًا",
+  "voiceFinishButton": "تم",
   "voicePracticeFooterHint": "يشجّع هذا التمرين على التحدث بصوت عالٍ لتدريب الصوت. للمرجع فقط، وليس تشخيصًا طبيًا.",
-  "voiceSessionTooShort": "كانت الجلسة قصيرة جدًا ولم تُحفظ"
+  "voiceSessionTooShort": "كانت الجلسة قصيرة جدًا ولم تُحفظ",
+  "voiceProtocolPickerTitle": "اختر أسلوب التدريب",
+  "voiceProtocolSteady": "مستوى صوت ثابت",
+  "voiceProtocolSteadyDesc": "استمر في نطق صوت «آه» طويل ضمن نطاق مستوى الصوت المستهدف.",
+  "voiceProtocolLadder": "تدرّج مستوى الصوت",
+  "voiceProtocolLadderDesc": "هادئ ← مستهدف ← أقوى قليلًا ← أخفض تدريجيًا.",
+  "voiceProtocolMultiSet": "3 مجموعات قصيرة",
+  "voiceProtocolMultiSetDesc": "ثلاث جولات قصيرة تتخللها استراحة وجيزة.",
+  "voiceTrainingReferenceDisclaimer": "للتدريب التأهيلي الشخصي فقط. ليس تشخيصًا ولا علاجًا.",
+  "voiceLadderPhaseSoft": "المرحلة 1: صوت أخفض",
+  "voiceLadderPhaseTarget": "المرحلة 2: مستوى الصوت المستهدف",
+  "voiceLadderPhaseStrong": "المرحلة 3: أقوى قليلًا",
+  "voiceLadderPhaseCoolDown": "المرحلة 4: خفض الصوت تدريجيًا",
+  "voiceLadderChip": "المتبقي من المرحلة: {seconds} ث",
+  "@voiceLadderChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceSetChip": "المجموعة {current}/{total} · {seconds} ث",
+  "@voiceSetChip": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" },
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestChip": "استراحة {seconds} ث",
+  "@voiceRestChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestTitle": "استراحة",
+  "voiceRestBody": "التالي: المجموعة {next} من {total}. أرخِ صوتك.",
+  "@voiceRestBody": {
+    "placeholders": {
+      "next": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "tremorDurationPickerTitle": "مدة الجلسة",
+  "tremorDurationSeconds": "{seconds} ث",
+  "@tremorDurationSeconds": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorTestInstructionDynamic": "أمسك الهاتف بثبات لمدة {seconds} ثانية، وحافظ على ثبات ذراعك.",
+  "@tremorTestInstructionDynamic": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorMotionBandDisclaimer": "نطاقات الحركة للمرجع الشخصي فقط، وليست تقييمًا طبيًا.",
+  "planTodayTitle": "تدريب اليوم",
+  "planTodaySubtitle": "اقتراحات من وحدات التدريب لديك. اضغط للبدء.",
+  "planEmptyHint": "لا توجد اقتراحات بعد. جرّب تدريبًا من الصفحة الرئيسية.",
+  "planDomainHand": "اليد",
+  "planDomainVoice": "الصوت",
+  "planDomainMotion": "الحركة",
+  "planGoalProgress": "اليوم: {done}/{target} جلسات",
+  "@planGoalProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "planGoalCompleted": "اكتمل هدف اليوم. أحسنت.",
+  "planWeeklyProgress": "هذا الأسبوع: {done}/{target} جلسات",
+  "@planWeeklyProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "planOpenTask": "بدء",
+  "planMotionShelvedNote": "قد يكون اكتشاف الحركة محدودًا على بعض الهواتف، لكن لا يزال بإمكانك فتح شاشة التدريب.",
+  "voiceProtocolClarity": "عبارات واضحة",
+  "voiceProtocolClarityDesc": "اقرأ عبارات قصيرة بصوت عالٍ. لا يجري تقييم النطق.",
+  "voiceClarityHint": "اقرأ العبارة بوضوح. نتحقق فقط من أنك تحدثت، لا من أن النطق كان «صحيحًا».",
+  "voiceClarityPhraseProgress": "العبارة {current} من {total}",
+  "@voiceClarityPhraseProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "voiceClarityVoiceDetected": "تم اكتشاف الصوت — رائع",
+  "voiceClarityWaitingVoice": "انطق العبارة بصوت عالٍ",
+  "voiceClarityNextPhrase": "العبارة التالية",
+  "voiceClarityFinish": "إنهاء",
+  "voiceClarityPhrase1": "صباح الخير",
+  "voiceClarityPhrase2": "كيف حالك اليوم؟",
+  "voiceClarityPhrase3": "يرجى تمرير الماء",
+  "voiceClarityPhrase4": "أنا بخير",
+  "voiceClarityPhrase5": "أراك غدًا",
+  "handModePickerTitle": "أسلوب التدريب",
+  "handModeStillHold": "الثبات",
+  "handModeStillHoldDesc": "أمسك الهاتف بثبات بينما تقيس المستشعرات الحركة.",
+  "handModeObjectHold": "إمساك غرض",
+  "handModeObjectHoldDesc": "أمسك كوبًا أو كرة لينة بثبات. مؤقت إرشادي فقط، من دون اكتشاف الغرض.",
+  "handModeFineMotor": "لمس الأصابع",
+  "handModeFineMotorDesc": "المس بإبهامك كل إصبع بالتتابع، واحسب الدورات بنفسك.",
+  "handGuidedDisclaimer": "تدريب موجّه لدعم التأهيل الشخصي فقط. ليس تقييمًا طبيًا.",
+  "handObjectHoldInstruction": "اجلس براحة. أمسك كوبًا أو كرة لينة بيد واحدة وحافظ على ثباتها من دون الضغط عليها بقوة.",
+  "handObjectHoldStart": "بدء الإمساك",
+  "handObjectHoldRunning": "واصل الإمساك بثبات…",
+  "handObjectHoldDone": "اكتمل الإمساك",
+  "handFineMotorInstruction": "المس بإبهامك السبابة ثم الوسطى ثم البنصر ثم الخنصر. هذه دورة واحدة.",
+  "handFineMotorMarkCycle": "أكملت دورة واحدة",
+  "handFineMotorProgress": "الدورات: {done}/{target}",
+  "@handFineMotorProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "handGuidedCompleteTitle": "اكتمل التدريب",
+  "handGuidedCompleteBody": "أحسنت. حُفظت هذه الجلسة كتدريب شخصي فقط.",
+  "dataTabTitle": "بياناتك",
+  "dataTabSubtitle": "درجات التدريب واتجاهاته الأسبوعية لمرجعك الشخصي.",
+  "dataTrendsTitle": "هذا الأسبوع مقارنة بالأسبوع الماضي",
+  "dataOpenFullReport": "فتح تقرير التأهيل الكامل",
+  "dataRecentSessions": "الجلسات الأخيرة",
+  "dataStreakDays": "سلسلة التدريب: {days} يومًا",
+  "@dataStreakDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "reportShareButton": "مشاركة التقرير",
+  "reportShareConsentTitle": "هل تريد مشاركة ملخص التأهيل؟",
+  "reportShareConsentBody": "يؤدي ذلك إلى إنشاء ملف نصي يتضمن درجات تدريبك واتجاهاته، ثم يفتح قائمة المشاركة في النظام، مثل الرسائل والبريد والملفات.\n\nللمرجع الشخصي فقط، وليس تشخيصًا طبيًا.\n\nبعد إرسال الملف، لا يمكن لـ Amplio استرجاعه من المستلم. يمكنك الإلغاء الآن أو عدم اختيار أي وجهة مشاركة في الشاشة التالية.",
+  "reportShareConsentConfirm": "أفهم — متابعة",
+  "reportShareFileTitle": "ملخص التأهيل من Amplio Care",
+  "reportShareSuccess": "فُتحت قائمة المشاركة",
+  "reportShareFailed": "تعذرت مشاركة التقرير. يرجى المحاولة مرة أخرى.",
+  "reportShareFooterNote": "تتطلب كل مشاركة تأكيدك. لا يرسل Amplio التقارير إلى الأطباء تلقائيًا.",
+  "profileTabTitle": "الملف الشخصي",
+  "profileGuestLabel": "ضيف",
+  "profileGuestSubtitle": "تم الدخول محليًا. تتوفر المزامنة السحابية بعد تسجيل الدخول.",
+  "profileSignedInLabel": "تم تسجيل الدخول",
+  "profileSectionPreferences": "التفضيلات",
+  "profileSectionAccount": "الحساب والبيانات",
+  "profileSectionLegal": "الخصوصية والشروط",
+  "accessibilitySettings": "تسهيلات الاستخدام",
+  "exitGuestMode": "الخروج من وضع الضيف",
+  "exitGuestModeConfirm": "هل تريد مغادرة وضع الضيف؟ ستحتاج إلى تسجيل الدخول أو المتابعة كضيف مرة أخرى.",
+  "trainingReminderPageTitle": "تذكيرات التدريب",
+  "trainingReminderTitle": "Amplio",
+  "trainingReminderBody": "تدريب قصير عندما يتاح لك الوقت. لا بأس إذا فاتك.",
+  "trainingReminderDisclaimer": "تذكيرات محلية اختيارية وليست جدولًا علاجيًا. يمكنك إيقافها في أي وقت. لا يؤثر تفويت التذكير في درجاتك.",
+  "trainingReminderEnable": "ذكّرني بالتدريب",
+  "trainingReminderTimeLabel": "الوقت {n}",
+  "@trainingReminderTimeLabel": {
+    "placeholders": {
+      "n": { "type": "int" }
+    }
+  },
+  "trainingReminderAddTime": "إضافة وقت ثانٍ",
+  "trainingReminderRemoveTime": "إزالة هذا الوقت",
+  "trainingReminderQuietWeekends": "تخطي عطلة نهاية الأسبوع",
+  "trainingReminderQuietWeekendsHint": "لا تذكيرات يومي السبت والأحد.",
+  "trainingReminderPermissionDenied": "لم يُسمح بالإشعارات. يمكنك تمكينها لاحقًا من إعدادات iPhone.",
+  "planReminderOff": "إعداد تذكير بالتدريب",
+  "planReminderOn": "التذكيرات: {times}",
+  "@planReminderOn": {
+    "placeholders": {
+      "times": { "type": "String" }
+    }
+  }
 }

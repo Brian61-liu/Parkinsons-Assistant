@@ -138,7 +138,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get waveformHint => 'كلما ارتفعت الموجة زاد وضوح رعشة اليد';
 
   @override
-  String get tremorSeverity => 'الشدة';
+  String get tremorSeverity => 'نطاق الحركة';
 
   @override
   String get tremorFrequency => 'التردد';
@@ -153,25 +153,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get variability => 'التباين';
 
   @override
-  String get sampleRate => 'العينة';
+  String get sampleRate => 'معدل أخذ العينات';
 
   @override
-  String get dataPoints => 'البيانات';
+  String get dataPoints => 'نقاط البيانات';
 
   @override
-  String get severityNormal => 'طبيعي';
+  String get severityNormal => 'حركة أقل';
 
   @override
-  String get severityMild => 'خفيف';
+  String get severityMild => 'حركة خفيفة';
 
   @override
-  String get severityModerate => 'معتدل';
+  String get severityModerate => 'حركة متوسطة';
 
   @override
-  String get severityModerateSevere => 'متوسط-شديد';
+  String get severityModerateSevere => 'حركة أكبر';
 
   @override
-  String get severitySevere => 'شديد';
+  String get severitySevere => 'أعلى نطاق';
 
   @override
   String get appSubtitle => 'مساعدك الشخصي لمرض باركنسون لتتبع وتحليل الحركة';
@@ -216,7 +216,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dataSynced => 'تمت مزامنة البيانات بنجاح';
 
   @override
-  String get syncing => 'Syncing…';
+  String get syncing => 'جارٍ المزامنة…';
 
   @override
   String get syncFailed => 'فشلت المزامنة. تحقق من الشبكة وحاول مرة أخرى.';
@@ -225,7 +225,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get syncFailedHint => 'فشلت المزامنة — اضغط لإعادة المحاولة';
 
   @override
-  String get syncRetry => 'Retry';
+  String get syncRetry => 'إعادة المحاولة';
 
   @override
   String get loginRequiredForSync =>
@@ -286,14 +286,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dataSecurityText =>
-      'نحمي بياناتك بضوابط الأمان المتاحة في مجموعتنا التقنية الحالية:\n\n• TLS لطلبات السحابة\n• Firebase Authentication للحسابات المسجّلة الدخول\n• قواعد Firestore التي تقيّد الوصول إلى بياناتك فقط\n• التصدير وحذف الحساب داخل التطبيق\n\nحماية أقوى مثل التشفير الكامل لقاعدة البيانات المحلية ما زالت قيد التحسين ولا تُعرَض على أنها مكتملة.';
+      'نحمي بياناتك باستخدام ضوابط الأمان المتاحة في بنيتنا التقنية الحالية:\n\n• TLS للطلبات السحابية\n• Firebase Authentication للحسابات المسجّل الدخول إليها\n• قواعد Firestore التي تقصر الوصول على بياناتك\n• تشفير AES على الجهاز للحقول الصحية المحلية الحساسة، مثل عينات مستشعر الرعاش والأسماء المستعارة للأدوية، مع تخزين المفتاح في سلسلة مفاتيح iOS\n• التصدير وحذف الحساب من داخل التطبيق\n\nتُكتب الملفات التي تصدّرها بتنسيق مقروء لاستخدامك الشخصي. ولا ندّعي تشفير ملف قاعدة البيانات المحلية بالكامل.';
 
   @override
-  String get medicationPrivacy => 'قائمة اختيارية بألقاب الأدوية';
+  String get medicationPrivacy => 'قائمة اختيارية بالأسماء المستعارة للأدوية';
 
   @override
   String get medicationPrivacyText =>
-      'إذا فعّلت قائمة ألقاب الأدوية الاختيارية، تُخزَّن الألقاب وأوقات التذكير وعمليات التسجيل على هذا الجهاز. عند تسجيل الدخول يمكن أيضاً مزامنتها مع حساب Amplio السحابي لاستعادتها على iPhone آخر. قد تظهر الإشعارات المحلية الاختيارية على هذا الجهاز فقط إذا سمحت بإذن الإشعارات. يمكنك حذف هذه البيانات من التطبيق (بما في ذلك حذف الحساب). هذه الميزة ليست نصيحة طبية ولا تُدرج افتراضيًا في تصدير البيانات.';
+      'إذا فعّلت القائمة الاختيارية للأسماء المستعارة للأدوية، فستُخزَّن الأسماء المستعارة وأوقات التذكير وعمليات التسجيل على هذا الجهاز. وعند تسجيل الدخول، يمكن مزامنتها أيضًا مع حساب Amplio السحابي لاستعادتها على جهاز iPhone آخر. لا تظهر الإشعارات المحلية الاختيارية على هذا الجهاز إلا إذا منحت إذن الإشعارات. ويمكنك حذف هذه البيانات من التطبيق، بما في ذلك عند حذف الحساب. هذه الميزة ليست نصيحة طبية، ولا تُدرج البيانات في التصدير إلا إذا وافقت على ذلك بشكل منفصل في كل مرة تصدّر فيها بياناتك.';
 
   @override
   String get contactUs => 'اتصل بنا';
@@ -324,14 +324,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get termsUseOfAppText =>
-      'توفر Amplio أدوات تدريب اختيارية مثل قياس الرعاش وممارسة الصوت وممارسة الحركة وملخصات التقدم وقائمة اختيارية بألقاب الأدوية (على الجهاز للضيوف؛ وقد تُزامَن عند تسجيل الدخول).\n\nتوافق على استخدام التطبيق فقط لأغراض شخصية مشروعة وعدم إساءة استخدام المستشعرات أو الحسابات أو البيانات المصدّرة بطرق تضر بالآخرين أو تنتهك القانون المعمول به.';
+      'توفر Amplio أدوات تدريب اختيارية مثل قياس الرعاش وممارسة الصوت وممارسة الحركة وملخصات التقدم وقائمة اختيارية بالأسماء المستعارة للأدوية (على الجهاز للضيوف؛ وقد تُزامَن عند تسجيل الدخول).\n\nتوافق على استخدام التطبيق فقط لأغراض شخصية مشروعة وعدم إساءة استخدام المستشعرات أو الحسابات أو البيانات المصدّرة بطرق تضر بالآخرين أو تنتهك القانون المعمول به.';
 
   @override
   String get termsMedicalDisclaimer => 'ليست نصيحة طبية';
 
   @override
   String get termsMedicalDisclaimerText =>
-      'Amplio مساعدة للعافية والتدريب التأهيلي. لا تشخّص ولا تعالج ولا تشفي ولا تمنع مرض باركنسون أو أي حالة أخرى.\n\nالدرجات والاتجاهات والتقارير والتذكيرات للمرجع الشخصي فقط ولا تحل محل نصيحة طبيب أو معالج طبيعي أو أخصائي نطق أو أي مهني مؤهل آخر. اطلب الرعاية المهنية للقرارات الطبية. أوقف أي تمرين يسبب ألمًا أو دوارًا أو ظروفًا غير آمنة.';
+      'Amplio أداة مساعدة للعافية والتدريب التأهيلي. وهي لا تشخّص مرض باركنسون أو أي حالة أخرى ولا تعالجها أو تشفيها أو تقي منها.\n\nالدرجات والاتجاهات والتقارير والتذكيرات للمرجع الشخصي فقط، ولا تحل محل نصيحة طبيب أو اختصاصي علاج طبيعي أو اختصاصي نطق أو أي مهني مؤهل آخر. اطلب رعاية متخصصة عند اتخاذ قرارات طبية. وأوقف أي تمرين يسبب ألمًا أو دوارًا أو يجعلك في وضع غير آمن.';
 
   @override
   String get termsAccounts => 'الحسابات والبيانات';
@@ -372,7 +372,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get exportDataDescription =>
-      'قم بتنزيل نسخة كاملة من جميع بياناتك (تنسيق JSON).';
+      'صدّر ملفك الشخصي وسجلات التدريب في ملف CSV. يمكنك حفظه أو مشاركته من خلال قائمة المشاركة في النظام. لا تُدرج الأسماء المستعارة للأدوية إلا إذا وافقت على ذلك لهذا التصدير.';
 
   @override
   String get export => 'تصدير';
@@ -384,20 +384,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exportSuccess => 'تم التصدير بنجاح';
 
   @override
-  String get exportSuccessMessage => 'تم نسخ بياناتك إلى الحافظة.';
+  String get exportSuccessMessage =>
+      'ملف CSV جاهز. استخدم قائمة المشاركة لحفظه في «الملفات» أو إرساله. تُلخَّص عينات المستشعر الخام بعددها فقط.';
 
   @override
-  String get exportMedicationConsentTitle => 'Include medication nicknames?';
+  String get exportMedicationConsentTitle =>
+      'هل تريد تضمين الأسماء المستعارة للأدوية؟';
 
   @override
   String get exportMedicationConsentBody =>
-      'Training records will be exported as a CSV file.\n\nMedication nicknames, reminder times, and check-ins are not included unless you choose Include this time. This is not a prescription or medical record.\n\nCancel to stop. You can still export without medication data.';
+      'ستُصدَّر سجلات التدريب في ملف CSV.\n\nلن تُدرج الأسماء المستعارة للأدوية وأوقات التذكير وعمليات التسجيل إلا إذا اخترت «التضمين هذه المرة». هذا ليس وصفة طبية ولا سجلًا طبيًا.\n\nاختر «إلغاء» لإيقاف التصدير. ولا يزال بإمكانك التصدير دون بيانات الأدوية.';
 
   @override
-  String get exportMedicationExclude => 'Export without medication';
+  String get exportMedicationExclude => 'التصدير دون بيانات الأدوية';
 
   @override
-  String get exportMedicationInclude => 'Include medication list';
+  String get exportMedicationInclude => 'تضمين قائمة الأدوية';
 
   @override
   String get deleteAllRecords => 'حذف جميع السجلات';
@@ -506,7 +508,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get voiceTrainingInstruction =>
-      'بناءً على مبادئ علاج LSVT LOUD، يرجى التحدث بصوت عالٍ. سيتغير حجم الدائرة في الوقت الفعلي بناءً على مستوى الصوت. عندما يصل إلى 75-85 ديسيبل، ستصبح الدائرة خضراء.';
+      'تدرّب على التحدث بصوت واضح وقوي. يتغير حجم الدائرة بحسب مستوى صوتك، وتتحول إلى اللون الأخضر عند بلوغ النطاق المستهدف. للتدريب الشخصي فقط، وليس علاجًا طبيًا.';
 
   @override
   String get voiceTrainingReady => 'جاهز للبدء';
@@ -650,7 +652,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trainingType => 'نوع التدريب';
 
   @override
-  String get medicationList => 'Medication list';
+  String get medicationList => 'قائمة الأدوية';
 
   @override
   String get medicationListEnable => 'إعداد قائمة الأدوية';
@@ -663,19 +665,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get medicationDisclaimerAccept => 'أفهم وأفعّل';
 
   @override
-  String get medicationLabel => 'Label';
+  String get medicationLabel => 'الاسم';
 
   @override
-  String get medicationLabelHint => 'مثل: بعد الإفطار (يمكن استخدام لقب)';
+  String get medicationLabelHint =>
+      'مثل: بعد الإفطار (يمكن استخدام اسم مستعار)';
 
   @override
-  String get medicationTime => 'Time';
+  String get medicationTime => 'الوقت';
 
   @override
-  String get medicationTaken => 'Taken';
+  String get medicationTaken => 'تم التناول';
 
   @override
-  String get medicationUndo => 'Undo';
+  String get medicationUndo => 'تراجع';
 
   @override
   String get medicationUndoConfirm => 'إزالة تسجيل اليوم لهذا العنصر؟';
@@ -686,13 +689,13 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get medicationManage => 'Manage';
+  String get medicationManage => 'إدارة';
 
   @override
-  String get medicationAdd => 'Add reminder';
+  String get medicationAdd => 'إضافة تذكير';
 
   @override
-  String get medicationEdit => 'Edit reminder';
+  String get medicationEdit => 'تعديل التذكير';
 
   @override
   String get medicationClose => 'إيقاف قائمة الأدوية';
@@ -702,7 +705,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'يمكنك إخفاء القائمة أو حذف جميع بيانات الأدوية على هذا الجهاز أيضًا.';
 
   @override
-  String get medicationCloseHideOnly => 'Hide only';
+  String get medicationCloseHideOnly => 'إخفاء فقط';
 
   @override
   String get medicationCloseAndDelete => 'إخفاء وحذف جميع البيانات';
@@ -719,24 +722,24 @@ class AppLocalizationsAr extends AppLocalizations {
       'حذف جميع بيانات قائمة الأدوية على هذا الجهاز؟ لا يمكن التراجع عن ذلك.';
 
   @override
-  String get medicationCollapse => 'Collapse';
+  String get medicationCollapse => 'طي';
 
   @override
-  String get medicationExpand => 'Expand';
+  String get medicationExpand => 'توسيع';
 
   @override
   String get medicationEmptyToday => 'لا تذكيرات لليوم. أضف واحدًا من الإدارة.';
 
   @override
   String medicationCompletedAt(String time) {
-    return 'Done at $time';
+    return 'تم في $time';
   }
 
   @override
-  String get medicationSave => 'Save';
+  String get medicationSave => 'حفظ';
 
   @override
-  String get medicationDeleteReminder => 'Delete reminder';
+  String get medicationDeleteReminder => 'حذف التذكير';
 
   @override
   String get medicationDeleteReminderConfirm => 'حذف هذا التذكير؟';
@@ -748,14 +751,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get medicationDeleteSuccess => 'تم حذف بيانات قائمة الأدوية';
 
   @override
-  String get rehabReport => 'Rehab report';
+  String get rehabReport => 'تقرير التأهيل';
 
   @override
   String get rehabReportDisclaimer =>
       'للمرجع التأهيلي فقط. ليس تشخيصًا طبيًا ولا يحل محل نصيحة فريق الرعاية.';
 
   @override
-  String get reportOverallScore => 'Overall score';
+  String get reportOverallScore => 'الدرجة الإجمالية';
 
   @override
   String reportDailyProgress(int percent) {
@@ -776,48 +779,48 @@ class AppLocalizationsAr extends AppLocalizations {
   String get reportNoData => 'لا توجد بيانات تدريب كافية بعد';
 
   @override
-  String get handTraining => 'Hand';
+  String get handTraining => 'اليد';
 
   @override
-  String get voiceTrainingShort => 'Voice';
+  String get voiceTrainingShort => 'الصوت';
 
   @override
-  String get motionTrainingShort => 'Movement';
+  String get motionTrainingShort => 'الحركة';
 
   @override
-  String get tabHome => 'Home';
+  String get tabHome => 'الرئيسية';
 
   @override
-  String get tabPlan => 'Plan';
+  String get tabPlan => 'الخطة';
 
   @override
-  String get tabData => 'Data';
+  String get tabData => 'البيانات';
 
   @override
-  String get tabProfile => 'Profile';
+  String get tabProfile => 'الملف الشخصي';
 
   @override
-  String get comingSoon => 'Coming soon';
+  String get comingSoon => 'قريبًا';
 
   @override
   String trainingStreak(int days) {
-    return '$days days';
+    return '$days يومًا';
   }
 
   @override
-  String get trainingStreakLabel => 'Training Streak';
+  String get trainingStreakLabel => 'سلسلة التدريب';
 
   @override
-  String get voiceClarity => 'Voice Clarity';
+  String get voiceClarity => 'وضوح الصوت';
 
   @override
-  String get handStability => 'Hand Stability';
+  String get handStability => 'ثبات اليد';
 
   @override
-  String get movementAbility => 'تدريب الحركة';
+  String get movementAbility => 'القدرة الحركية';
 
   @override
-  String get medicationReminder => 'Medication';
+  String get medicationReminder => 'الأدوية';
 
   @override
   String lastTrainingAgo(String timeAgo) {
@@ -830,40 +833,40 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get relativeToday => 'Today';
+  String get relativeToday => 'اليوم';
 
   @override
-  String get relativeYesterday => 'Yesterday';
+  String get relativeYesterday => 'أمس';
 
   @override
   String relativeDaysAgo(int days) {
-    return '$days days ago';
+    return 'منذ $days أيام';
   }
 
   @override
-  String get noTrainingYet => 'No training yet';
+  String get noTrainingYet => 'لا يوجد تدريب بعد';
 
   @override
   String get noMeasurementYet => 'لا قياس بعد';
 
   @override
-  String get tapToStart => 'Tap to start';
+  String get tapToStart => 'اضغط للبدء';
 
   @override
   String durationSec(int count) {
-    return '${count}s';
+    return '$count ث';
   }
 
   @override
   String durationMin(int count) {
-    return '$count min';
+    return '$count د';
   }
 
   @override
-  String get voiceSessionCount => '1 session';
+  String get voiceSessionCount => 'جلسة واحدة';
 
   @override
-  String get handMeasurementCount => '1 measurement';
+  String get handMeasurementCount => 'قياس واحد';
 
   @override
   String motionCompletionCount(int done, int total) {
@@ -881,7 +884,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get medicationNoUpcoming => 'لا تذكيرات قادمة اليوم';
 
   @override
-  String get medicationNextDoseLabel => 'Next dose';
+  String get medicationNextDoseLabel => 'الجرعة التالية';
 
   @override
   String medicationNextDoseTime(String time) {
@@ -889,10 +892,10 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get medicationStatusUpcoming => 'Upcoming';
+  String get medicationStatusUpcoming => 'قادم';
 
   @override
-  String get medicationStatusPending => 'Pending';
+  String get medicationStatusPending => 'معلّق';
 
   @override
   String medicationNotificationBody(String label) {
@@ -904,7 +907,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'اختياري: اسمح بالإشعارات ليذكّرك Amplio في الأوقات التي تحددها. تبقى الإشعارات على هذا الجهاز.';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'النشاط الأخير';
 
   @override
   String get nonMedicalDisclaimerTitle => 'للمرجع فقط';
@@ -941,22 +944,22 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get voiceLegendTarget => 'Target volume';
+  String get voiceLegendTarget => 'مستوى الصوت المستهدف';
 
   @override
-  String get voiceLegendYours => 'Your volume';
+  String get voiceLegendYours => 'مستوى صوتك';
 
   @override
-  String get voiceShowDetail => 'Show number';
+  String get voiceShowDetail => 'إظهار الرقم';
 
   @override
-  String get voiceHideDetail => 'Hide number';
+  String get voiceHideDetail => 'إخفاء الرقم';
 
   @override
   String get voiceCompletedTitle => 'اكتمل التمرين';
 
   @override
-  String get voiceCompletedDurationLabel => 'This session';
+  String get voiceCompletedDurationLabel => 'هذه الجلسة';
 
   @override
   String get voiceCompletedTargetLabel => 'الوقت عند مستوى الصوت المستهدف';
@@ -970,10 +973,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'محاولة جيدة. حاول التحدث بصوت أعلى قليلًا في المرة القادمة.';
 
   @override
-  String get voiceRetryButton => 'Practice Again';
+  String get voiceRetryButton => 'التدرّب مجددًا';
 
   @override
-  String get voiceFinishButton => 'Done';
+  String get voiceFinishButton => 'تم';
 
   @override
   String get voicePracticeFooterHint =>
@@ -983,351 +986,351 @@ class AppLocalizationsAr extends AppLocalizations {
   String get voiceSessionTooShort => 'كانت الجلسة قصيرة جدًا ولم تُحفظ';
 
   @override
-  String get voiceProtocolPickerTitle => 'Choose a practice style';
+  String get voiceProtocolPickerTitle => 'اختر أسلوب التدريب';
 
   @override
-  String get voiceProtocolSteady => 'Steady volume';
+  String get voiceProtocolSteady => 'مستوى صوت ثابت';
 
   @override
   String get voiceProtocolSteadyDesc =>
-      'Sustain a long “Ah” in the target volume zone.';
+      'استمر في نطق صوت «آه» طويل ضمن نطاق مستوى الصوت المستهدف.';
 
   @override
-  String get voiceProtocolLadder => 'Volume ladder';
+  String get voiceProtocolLadder => 'تدرّج مستوى الصوت';
 
   @override
   String get voiceProtocolLadderDesc =>
-      'Soft → target → a bit stronger → ease down.';
+      'هادئ ← مستهدف ← أقوى قليلًا ← أخفض تدريجيًا.';
 
   @override
-  String get voiceProtocolMultiSet => '3 short sets';
+  String get voiceProtocolMultiSet => '3 مجموعات قصيرة';
 
   @override
   String get voiceProtocolMultiSetDesc =>
-      'Three short rounds with a brief rest between.';
+      'ثلاث جولات قصيرة تتخللها استراحة وجيزة.';
 
   @override
   String get voiceTrainingReferenceDisclaimer =>
-      'For personal rehabilitation practice only. Not a diagnosis or treatment.';
+      'للتدريب التأهيلي الشخصي فقط. ليس تشخيصًا ولا علاجًا.';
 
   @override
-  String get voiceLadderPhaseSoft => 'Phase 1: softer voice';
+  String get voiceLadderPhaseSoft => 'المرحلة 1: صوت أخفض';
 
   @override
-  String get voiceLadderPhaseTarget => 'Phase 2: target volume';
+  String get voiceLadderPhaseTarget => 'المرحلة 2: مستوى الصوت المستهدف';
 
   @override
-  String get voiceLadderPhaseStrong => 'Phase 3: a bit stronger';
+  String get voiceLadderPhaseStrong => 'المرحلة 3: أقوى قليلًا';
 
   @override
-  String get voiceLadderPhaseCoolDown => 'Phase 4: ease down';
+  String get voiceLadderPhaseCoolDown => 'المرحلة 4: خفض الصوت تدريجيًا';
 
   @override
   String voiceLadderChip(int seconds) {
-    return 'Phase left: ${seconds}s';
+    return 'المتبقي من المرحلة: $seconds ث';
   }
 
   @override
   String voiceSetChip(int current, int total, int seconds) {
-    return 'Set $current/$total · ${seconds}s';
+    return 'المجموعة $current/$total · $seconds ث';
   }
 
   @override
   String voiceRestChip(int seconds) {
-    return 'Rest ${seconds}s';
+    return 'استراحة $seconds ث';
   }
 
   @override
-  String get voiceRestTitle => 'Rest';
+  String get voiceRestTitle => 'استراحة';
 
   @override
   String voiceRestBody(int next, int total) {
-    return 'Next: set $next of $total. Relax your voice.';
+    return 'التالي: المجموعة $next من $total. أرخِ صوتك.';
   }
 
   @override
-  String get tremorDurationPickerTitle => 'Session length';
+  String get tremorDurationPickerTitle => 'مدة الجلسة';
 
   @override
   String tremorDurationSeconds(int seconds) {
-    return '${seconds}s';
+    return '$seconds ث';
   }
 
   @override
   String tremorTestInstructionDynamic(int seconds) {
-    return 'Hold your phone still for $seconds seconds. Keep your arm steady.';
+    return 'أمسك الهاتف بثبات لمدة $seconds ثانية، وحافظ على ثبات ذراعك.';
   }
 
   @override
   String get tremorMotionBandDisclaimer =>
-      'Motion bands are for personal reference only — not a medical assessment.';
+      'نطاقات الحركة للمرجع الشخصي فقط، وليست تقييمًا طبيًا.';
 
   @override
-  String get planTodayTitle => 'Today’s practice';
+  String get planTodayTitle => 'تدريب اليوم';
 
   @override
-  String get planTodaySubtitle =>
-      'Suggested from your training modules. Tap to start.';
+  String get planTodaySubtitle => 'اقتراحات من وحدات التدريب لديك. اضغط للبدء.';
 
   @override
-  String get planEmptyHint => 'No suggestions yet. Try a training from Home.';
+  String get planEmptyHint =>
+      'لا توجد اقتراحات بعد. جرّب تدريبًا من الصفحة الرئيسية.';
 
   @override
-  String get planDomainHand => 'Hand';
+  String get planDomainHand => 'اليد';
 
   @override
-  String get planDomainVoice => 'Voice';
+  String get planDomainVoice => 'الصوت';
 
   @override
-  String get planDomainMotion => 'Movement';
+  String get planDomainMotion => 'الحركة';
 
   @override
   String planGoalProgress(int done, int target) {
-    return 'Today: $done/$target sessions';
+    return 'اليوم: $done/$target جلسات';
   }
 
   @override
-  String get planGoalCompleted => 'Today’s goal is done. Nice work.';
+  String get planGoalCompleted => 'اكتمل هدف اليوم. أحسنت.';
 
   @override
   String planWeeklyProgress(int done, int target) {
-    return 'This week: $done/$target sessions';
+    return 'هذا الأسبوع: $done/$target جلسات';
   }
 
   @override
-  String get planOpenTask => 'Start';
+  String get planOpenTask => 'بدء';
 
   @override
   String get planMotionShelvedNote =>
-      'Movement detection is limited on some phones; you can still open the practice screen.';
+      'قد يكون اكتشاف الحركة محدودًا على بعض الهواتف، لكن لا يزال بإمكانك فتح شاشة التدريب.';
 
   @override
-  String get voiceProtocolClarity => 'Clear phrases';
+  String get voiceProtocolClarity => 'عبارات واضحة';
 
   @override
   String get voiceProtocolClarityDesc =>
-      'Read short phrases aloud. No pronunciation scoring.';
+      'اقرأ عبارات قصيرة بصوت عالٍ. لا يجري تقييم النطق.';
 
   @override
   String get voiceClarityHint =>
-      'Read the phrase clearly. We only check that you spoke — not whether it was “correct”.';
+      'اقرأ العبارة بوضوح. نتحقق فقط من أنك تحدثت، لا من أن النطق كان «صحيحًا».';
 
   @override
   String voiceClarityPhraseProgress(int current, int total) {
-    return 'Phrase $current of $total';
+    return 'العبارة $current من $total';
   }
 
   @override
-  String get voiceClarityVoiceDetected => 'Voice detected — nice';
+  String get voiceClarityVoiceDetected => 'تم اكتشاف الصوت — رائع';
 
   @override
-  String get voiceClarityWaitingVoice => 'Speak the phrase aloud';
+  String get voiceClarityWaitingVoice => 'انطق العبارة بصوت عالٍ';
 
   @override
-  String get voiceClarityNextPhrase => 'Next phrase';
+  String get voiceClarityNextPhrase => 'العبارة التالية';
 
   @override
-  String get voiceClarityFinish => 'Finish';
+  String get voiceClarityFinish => 'إنهاء';
 
   @override
-  String get voiceClarityPhrase1 => 'Good morning';
+  String get voiceClarityPhrase1 => 'صباح الخير';
 
   @override
-  String get voiceClarityPhrase2 => 'How are you today?';
+  String get voiceClarityPhrase2 => 'كيف حالك اليوم؟';
 
   @override
-  String get voiceClarityPhrase3 => 'Please pass the water';
+  String get voiceClarityPhrase3 => 'يرجى تمرير الماء';
 
   @override
-  String get voiceClarityPhrase4 => 'I am doing well';
+  String get voiceClarityPhrase4 => 'أنا بخير';
 
   @override
-  String get voiceClarityPhrase5 => 'See you tomorrow';
+  String get voiceClarityPhrase5 => 'أراك غدًا';
 
   @override
-  String get handModePickerTitle => 'Practice style';
+  String get handModePickerTitle => 'أسلوب التدريب';
 
   @override
-  String get handModeStillHold => 'Still hold';
+  String get handModeStillHold => 'الثبات';
 
   @override
   String get handModeStillHoldDesc =>
-      'Hold the phone still while sensors measure motion.';
+      'أمسك الهاتف بثبات بينما تقيس المستشعرات الحركة.';
 
   @override
-  String get handModeObjectHold => 'Object hold';
+  String get handModeObjectHold => 'إمساك غرض';
 
   @override
   String get handModeObjectHoldDesc =>
-      'Hold a cup or soft ball steady. Guided timer — no object detection.';
+      'أمسك كوبًا أو كرة لينة بثبات. مؤقت إرشادي فقط، من دون اكتشاف الغرض.';
 
   @override
-  String get handModeFineMotor => 'Finger taps';
+  String get handModeFineMotor => 'لمس الأصابع';
 
   @override
   String get handModeFineMotorDesc =>
-      'Tap thumb to each finger. You count the cycles.';
+      'المس بإبهامك كل إصبع بالتتابع، واحسب الدورات بنفسك.';
 
   @override
   String get handGuidedDisclaimer =>
-      'Guided practice for personal rehab support only. Not a medical assessment.';
+      'تدريب موجّه لدعم التأهيل الشخصي فقط. ليس تقييمًا طبيًا.';
 
   @override
   String get handObjectHoldInstruction =>
-      'Sit comfortably. Hold a cup or soft ball in one hand. Keep it steady without squeezing hard.';
+      'اجلس براحة. أمسك كوبًا أو كرة لينة بيد واحدة وحافظ على ثباتها من دون الضغط عليها بقوة.';
 
   @override
-  String get handObjectHoldStart => 'Start hold';
+  String get handObjectHoldStart => 'بدء الإمساك';
 
   @override
-  String get handObjectHoldRunning => 'Keep holding steadily…';
+  String get handObjectHoldRunning => 'واصل الإمساك بثبات…';
 
   @override
-  String get handObjectHoldDone => 'Hold complete';
+  String get handObjectHoldDone => 'اكتمل الإمساك';
 
   @override
   String get handFineMotorInstruction =>
-      'Touch your thumb to index, middle, ring, then pinky. That is one cycle.';
+      'المس بإبهامك السبابة ثم الوسطى ثم البنصر ثم الخنصر. هذه دورة واحدة.';
 
   @override
-  String get handFineMotorMarkCycle => 'I finished one cycle';
+  String get handFineMotorMarkCycle => 'أكملت دورة واحدة';
 
   @override
   String handFineMotorProgress(int done, int target) {
-    return 'Cycles: $done/$target';
+    return 'الدورات: $done/$target';
   }
 
   @override
-  String get handGuidedCompleteTitle => 'Practice complete';
+  String get handGuidedCompleteTitle => 'اكتمل التدريب';
 
   @override
   String get handGuidedCompleteBody =>
-      'Nice work. This session is saved as personal practice only.';
+      'أحسنت. حُفظت هذه الجلسة كتدريب شخصي فقط.';
 
   @override
-  String get dataTabTitle => 'Your data';
+  String get dataTabTitle => 'بياناتك';
 
   @override
   String get dataTabSubtitle =>
-      'Weekly practice scores and trends for personal reference.';
+      'درجات التدريب واتجاهاته الأسبوعية لمرجعك الشخصي.';
 
   @override
-  String get dataTrendsTitle => 'This week vs last week';
+  String get dataTrendsTitle => 'هذا الأسبوع مقارنة بالأسبوع الماضي';
 
   @override
-  String get dataOpenFullReport => 'Open full rehab report';
+  String get dataOpenFullReport => 'فتح تقرير التأهيل الكامل';
 
   @override
-  String get dataRecentSessions => 'Recent sessions';
+  String get dataRecentSessions => 'الجلسات الأخيرة';
 
   @override
   String dataStreakDays(int days) {
-    return 'Training streak: $days days';
+    return 'سلسلة التدريب: $days يومًا';
   }
 
   @override
-  String get reportShareButton => 'Share report';
+  String get reportShareButton => 'مشاركة التقرير';
 
   @override
-  String get reportShareConsentTitle => 'Share your rehab summary?';
+  String get reportShareConsentTitle => 'هل تريد مشاركة ملخص التأهيل؟';
 
   @override
   String get reportShareConsentBody =>
-      'This creates a text file with your practice scores and trends, then opens the system share sheet (Messages, Mail, Files, etc.).\n\nFor personal reference only — not a medical diagnosis.\n\nOnce you send the file, Amplio cannot recall it from the recipient. You can cancel now, or decline any share target on the next screen.';
+      'يؤدي ذلك إلى إنشاء ملف نصي يتضمن درجات تدريبك واتجاهاته، ثم يفتح قائمة المشاركة في النظام، مثل الرسائل والبريد والملفات.\n\nللمرجع الشخصي فقط، وليس تشخيصًا طبيًا.\n\nبعد إرسال الملف، لا يمكن لـ Amplio استرجاعه من المستلم. يمكنك الإلغاء الآن أو عدم اختيار أي وجهة مشاركة في الشاشة التالية.';
 
   @override
-  String get reportShareConsentConfirm => 'I understand — continue';
+  String get reportShareConsentConfirm => 'أفهم — متابعة';
 
   @override
-  String get reportShareFileTitle => 'Amplio Care rehab summary';
+  String get reportShareFileTitle => 'ملخص التأهيل من Amplio Care';
 
   @override
-  String get reportShareSuccess => 'Share sheet opened';
+  String get reportShareSuccess => 'فُتحت قائمة المشاركة';
 
   @override
   String get reportShareFailed =>
-      'Could not share the report. Please try again.';
+      'تعذرت مشاركة التقرير. يرجى المحاولة مرة أخرى.';
 
   @override
   String get reportShareFooterNote =>
-      'Sharing requires your confirmation each time. Amplio does not email doctors automatically.';
+      'تتطلب كل مشاركة تأكيدك. لا يرسل Amplio التقارير إلى الأطباء تلقائيًا.';
 
   @override
-  String get profileTabTitle => 'Profile';
+  String get profileTabTitle => 'الملف الشخصي';
 
   @override
-  String get profileGuestLabel => 'Guest';
+  String get profileGuestLabel => 'ضيف';
 
   @override
   String get profileGuestSubtitle =>
-      'Signed in locally. Cloud sync is available after you sign in.';
+      'تم الدخول محليًا. تتوفر المزامنة السحابية بعد تسجيل الدخول.';
 
   @override
-  String get profileSignedInLabel => 'Signed in';
+  String get profileSignedInLabel => 'تم تسجيل الدخول';
 
   @override
-  String get profileSectionPreferences => 'Preferences';
+  String get profileSectionPreferences => 'التفضيلات';
 
   @override
-  String get profileSectionAccount => 'Account & data';
+  String get profileSectionAccount => 'الحساب والبيانات';
 
   @override
-  String get profileSectionLegal => 'Privacy & terms';
+  String get profileSectionLegal => 'الخصوصية والشروط';
 
   @override
-  String get accessibilitySettings => 'Accessibility';
+  String get accessibilitySettings => 'تسهيلات الاستخدام';
 
   @override
-  String get exitGuestMode => 'Exit guest mode';
+  String get exitGuestMode => 'الخروج من وضع الضيف';
 
   @override
   String get exitGuestModeConfirm =>
-      'Leave guest mode? You will need to sign in or continue as a guest again.';
+      'هل تريد مغادرة وضع الضيف؟ ستحتاج إلى تسجيل الدخول أو المتابعة كضيف مرة أخرى.';
 
   @override
-  String get trainingReminderPageTitle => 'Practice reminders';
+  String get trainingReminderPageTitle => 'تذكيرات التدريب';
 
   @override
   String get trainingReminderTitle => 'Amplio';
 
   @override
   String get trainingReminderBody =>
-      'A short practice when you can. Missing it is fine.';
+      'تدريب قصير عندما يتاح لك الوقت. لا بأس إذا فاتك.';
 
   @override
   String get trainingReminderDisclaimer =>
-      'Optional local reminders, not a treatment schedule. You can turn them off anytime. Missing a reminder does not change your scores.';
+      'تذكيرات محلية اختيارية وليست جدولًا علاجيًا. يمكنك إيقافها في أي وقت. لا يؤثر تفويت التذكير في درجاتك.';
 
   @override
-  String get trainingReminderEnable => 'Remind me to practice';
+  String get trainingReminderEnable => 'ذكّرني بالتدريب';
 
   @override
   String trainingReminderTimeLabel(int n) {
-    return 'Time $n';
+    return 'الوقت $n';
   }
 
   @override
-  String get trainingReminderAddTime => 'Add a second time';
+  String get trainingReminderAddTime => 'إضافة وقت ثانٍ';
 
   @override
-  String get trainingReminderRemoveTime => 'Remove this time';
+  String get trainingReminderRemoveTime => 'إزالة هذا الوقت';
 
   @override
-  String get trainingReminderQuietWeekends => 'Skip weekends';
+  String get trainingReminderQuietWeekends => 'تخطي عطلة نهاية الأسبوع';
 
   @override
   String get trainingReminderQuietWeekendsHint =>
-      'No reminders on Saturday or Sunday.';
+      'لا تذكيرات يومي السبت والأحد.';
 
   @override
   String get trainingReminderPermissionDenied =>
-      'Notifications were not allowed. You can enable them later in iPhone Settings.';
+      'لم يُسمح بالإشعارات. يمكنك تمكينها لاحقًا من إعدادات iPhone.';
 
   @override
-  String get planReminderOff => 'Set a practice reminder';
+  String get planReminderOff => 'إعداد تذكير بالتدريب';
 
   @override
   String planReminderOn(String times) {
-    return 'Reminders: $times';
+    return 'التذكيرات: $times';
   }
 }

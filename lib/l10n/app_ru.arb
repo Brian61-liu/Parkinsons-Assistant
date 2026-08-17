@@ -68,18 +68,18 @@
   "waveformAxisTime": "Время",
   "waveformAxisAmplitude": "Амплитуда",
   "waveformHint": "Чем выше волна — тем заметнее дрожание руки",
-  "tremorSeverity": "Тяжесть",
+  "tremorSeverity": "Диапазон движений",
   "tremorFrequency": "Частота",
   "avgAmplitude": "Ср. Ампл.",
   "maxAmp": "Макс Ампл.",
   "variability": "Изменчив.",
-  "sampleRate": "Частота",
-  "dataPoints": "Данные",
-  "severityNormal": "Норма",
-  "severityMild": "Легко",
-  "severityModerate": "Умеренно",
-  "severityModerateSevere": "Ум-Тяжело",
-  "severitySevere": "Тяжело",
+  "sampleRate": "Частота дискретизации",
+  "dataPoints": "Точки данных",
+  "severityNormal": "Более слабое движение",
+  "severityMild": "Слабое движение",
+  "severityModerate": "Умеренное движение",
+  "severityModerateSevere": "Более сильное движение",
+  "severitySevere": "Самый высокий диапазон",
   "appSubtitle": "Ваш персональный помощник при болезни Паркинсона для отслеживания и анализа движений",
   "signInWithGoogle": "Войти через Google",
   "signInWithApple": "Войти через Apple",
@@ -100,12 +100,19 @@
   },
   "syncToCloud": "Синхронизация с облаком",
   "dataSynced": "Данные успешно синхронизированы",
-  "syncing": "Syncing…",
+  "syncing": "Синхронизация…",
   "syncFailed": "Сбой синхронизации. Проверьте сеть и попробуйте снова.",
   "syncFailedHint": "Сбой синхронизации — нажмите, чтобы повторить",
-  "syncRetry": "Retry",
+  "syncRetry": "Повторить",
   "loginRequiredForSync": "Войдите в аккаунт, чтобы использовать облачную синхронизацию",
   "lastSyncedAt": "Последняя синхронизация: {time}",
+  "@lastSyncedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "privacyPolicy": "Политика Конфиденциальности",
   "privacyPolicyIntro": "Введение",
   "privacyPolicyIntroText": "Amplio стремится защитить вашу конфиденциальность и данные о здоровье. Эта политика объясняет, как мы собираем, используем, храним и защищаем вашу информацию.",
@@ -120,9 +127,9 @@
   "userRights": "Ваши Права на Данные",
   "userRightsText": "У вас есть право на:\n\n• Доступ: Просмотр всех данных\n• Переносимость: Экспорт данных\n• Удаление: Удаление данных\n• Отзыв: Отзыв согласия\n• Контакт: По вопросам конфиденциальности",
   "dataSecurity": "Меры Безопасности",
-  "dataSecurityText": "Мы защищаем ваши данные средствами безопасности текущего стека:\n\n• TLS для облачных запросов\n• Firebase Authentication для вошедших аккаунтов\n• Правила Firestore, ограничивающие доступ вашими данными\n• Экспорт и удаление аккаунта в приложении\n\nБолее сильные меры, такие как полное шифрование локальной базы, всё ещё улучшаются и не заявляются как завершённые.",
-  "medicationPrivacy": "Необязательный список прозвищ лекарств",
-  "medicationPrivacyText": "Если вы включите необязательный список прозвищ лекарств, прозвища, время напоминаний и отметки хранятся на этом устройстве. При входе они также могут синхронизироваться с облачным аккаунтом Amplio для восстановления на другом iPhone. Необязательные локальные уведомления могут появляться только на этом устройстве при разрешении уведомлений. Эти данные можно удалить в приложении (включая удаление аккаунта). Функция не является медицинской рекомендацией и по умолчанию не включается в экспорт данных.",
+  "dataSecurityText": "Мы защищаем ваши данные с помощью средств безопасности, доступных в текущем техническом стеке:\n\n• TLS для облачных запросов\n• Firebase Authentication для вошедших в систему аккаунтов\n• Правила Firestore, ограничивающие доступ только вашими данными\n• Шифрование AES на устройстве для конфиденциальных локальных медицинских данных, таких как образцы датчика тремора и условные названия лекарств, при этом ключ хранится в Связке ключей iOS\n• Экспорт данных и удаление аккаунта в приложении\n\nЭкспортируемые файлы записываются в читаемом формате для вашего использования. Мы не заявляем о полном шифровании файла всей локальной базы данных.",
+  "medicationPrivacy": "Необязательный список условных названий лекарств",
+  "medicationPrivacyText": "Если вы включите необязательный список условных названий лекарств, условные названия, время напоминаний и отметки будут храниться на этом устройстве. После входа они также могут синхронизироваться с вашим облачным аккаунтом Amplio, чтобы их можно было восстановить на другом iPhone. Необязательные локальные уведомления могут появляться на этом устройстве, только если вы разрешите их. Эти данные можно удалить в приложении, в том числе при удалении аккаунта. Эта функция не является медицинской рекомендацией, а данные не включаются в экспорт, если вы отдельно не дадите согласие при каждом экспорте.",
   "contactUs": "Связаться с Нами",
   "contactUsText": "Amplio управляется независимым индивидуальным разработчиком (домен: ampliocare.com).\n\n• Конфиденциальность / запросы данных: privacy@ampliocare.com\n• Поддержка пользователей: support@ampliocare.com\n• Клинические партнёрства: clinical@ampliocare.com\n• Бизнес: hello@ampliocare.com",
   "termsOfService": "Условия использования",
@@ -131,7 +138,7 @@
   "termsAcceptance": "Принятие",
   "termsAcceptanceText": "Входя в аккаунт, продолжая как гость или иным образом используя Amplio, вы соглашаетесь с этими Условиями и Политикой конфиденциальности. Если вы не согласны, не используйте приложение.",
   "termsUseOfApp": "Использование Amplio",
-  "termsUseOfAppText": "Amplio предоставляет необязательные инструменты тренировки, такие как измерение тремора, голосовые упражнения, упражнения на движение, сводки прогресса и необязательный список прозвищ лекарств (на устройстве для гостей; синхронизация возможна при входе).\n\nВы соглашаетесь использовать приложение только в законных личных целях и не злоупотреблять датчиками, аккаунтами или экспортированными данными способами, вредящими другим или нарушающими применимое право.",
+  "termsUseOfAppText": "Amplio предоставляет необязательные инструменты тренировки, такие как измерение тремора, голосовые упражнения, упражнения на движение, сводки прогресса и необязательный список условных названий лекарств (на устройстве для гостей; синхронизация возможна при входе).\n\nВы соглашаетесь использовать приложение только в законных личных целях и не злоупотреблять датчиками, аккаунтами или экспортированными данными способами, вредящими другим или нарушающими применимое право.",
   "termsMedicalDisclaimer": "Не медицинская рекомендация",
   "termsMedicalDisclaimerText": "Amplio — вспомогательное средство для оздоровления и реабилитационных тренировок. Оно не диагностирует, не лечит, не излечивает и не предотвращает болезнь Паркинсона или любое другое состояние.\n\nОценки, тенденции, отчёты и напоминания предназначены только для личного ознакомления и не заменяют совет врача, физиотерапевта, логопеда или другого квалифицированного специалиста. За медицинскими решениями обращайтесь к специалистам. Прекратите упражнение при боли, головокружении или небезопасных условиях.",
   "termsAccounts": "Аккаунты и данные",
@@ -145,11 +152,15 @@
   "dataManagement": "Управление Данными",
   "gdprRights": "Вы можете получить доступ, экспортировать и удалить свои данные о здоровье в любое время.",
   "exportData": "Экспорт Моих Данных",
-  "exportDataDescription": "Загрузите полную копию всех ваших данных (формат JSON).",
+  "exportDataDescription": "Экспортируйте профиль и записи тренировок в файл CSV. Его можно сохранить или отправить через системное меню «Поделиться». Условные названия лекарств не включаются без вашего согласия для конкретного экспорта.",
   "export": "Экспорт",
   "exporting": "Экспорт...",
   "exportSuccess": "Экспорт Успешен",
-  "exportSuccessMessage": "Ваши данные скопированы в буфер обмена.",
+  "exportSuccessMessage": "Файл CSV готов. Используйте меню «Поделиться», чтобы сохранить его в «Файлы» или отправить. Необработанные образцы датчиков представлены только их количеством.",
+  "exportMedicationConsentTitle": "Включить условные названия лекарств?",
+  "exportMedicationConsentBody": "Записи тренировок будут экспортированы в файл CSV.\n\nУсловные названия лекарств, время напоминаний и отметки не включаются, если вы не выберете «Включить в этот раз». Это не рецепт и не медицинская карта.\n\nНажмите «Отмена», чтобы остановить экспорт. Экспорт без данных о лекарствах по-прежнему доступен.",
+  "exportMedicationExclude": "Экспортировать без данных о лекарствах",
+  "exportMedicationInclude": "Включить список лекарств",
   "deleteAllRecords": "Удалить Все Записи",
   "deleteAllRecordsDescription": "Навсегда удалите все записи тестов. Это действие нельзя отменить.",
   "deleteAllData": "Удалить Все Данные",
@@ -198,7 +209,7 @@
   },
   "voiceTraining": "Голосовая Тренировка",
   "voiceTrainingMainInstruction": "Пожалуйста, удерживайте длинный звук — Ах —",
-  "voiceTrainingInstruction": "Основываясь на принципах терапии LSVT LOUD, пожалуйста, говорите громко. Размер круга будет изменяться в реальном времени в зависимости от вашей громкости. Когда он достигнет 75-85 дБ, круг станет зелёным.",
+  "voiceTrainingInstruction": "Тренируйтесь говорить чётким, сильным голосом. Размер круга меняется в зависимости от громкости. При достижении целевого диапазона круг становится зелёным. Только для личной практики — не является лечением.",
   "voiceTrainingReady": "Готов к началу",
   "voiceTrainingCalibrating": "Калибровка фонового шума...",
   "voiceTrainingTooQuiet": "Говорите громче!",
@@ -344,52 +355,90 @@
   "@trainingType": {
     "description": "Training type label"
   },
-  "medicationList": "Medication list",
+  "medicationList": "Список лекарств",
   "medicationListEnable": "Настроить список лекарств",
   "medicationDisclaimer": "Список лекарств Amplio помогает только самостоятельно отмечать время приёма. Это не медицинская рекомендация и не содержит указаний по дозировке. В гостевом режиме данные хранятся только на этом устройстве. При входе напоминания и отметки могут синхронизироваться с вашим аккаунтом Amplio.",
   "medicationDisclaimerAccept": "Понимаю и включаю",
-  "medicationLabel": "Label",
-  "medicationLabelHint": "напр. После завтрака (можно использовать прозвище)",
-  "medicationTime": "Time",
-  "medicationTaken": "Taken",
-  "medicationUndo": "Undo",
+  "medicationLabel": "Название",
+  "medicationLabelHint": "например, после завтрака (можно использовать условное название)",
+  "medicationTime": "Время",
+  "medicationTaken": "Принято",
+  "medicationUndo": "Отменить",
   "medicationUndoConfirm": "Удалить сегодняшнюю отметку для этого пункта?",
   "medicationTodayProgress": "Сегодня {done}/{total}",
-  "medicationManage": "Manage",
-  "medicationAdd": "Add reminder",
-  "medicationEdit": "Edit reminder",
+  "@medicationTodayProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "medicationManage": "Управление",
+  "medicationAdd": "Добавить напоминание",
+  "medicationEdit": "Изменить напоминание",
   "medicationClose": "Отключить список лекарств",
   "medicationCloseConfirm": "Можно скрыть список или также удалить все данные о лекарствах на этом устройстве.",
-  "medicationCloseHideOnly": "Hide only",
+  "medicationCloseHideOnly": "Только скрыть",
   "medicationCloseAndDelete": "Скрыть и удалить все данные",
   "medicationDeleteAllData": "Удалить данные списка лекарств",
   "medicationDeleteAllDataDescription": "Навсегда удалить все напоминания и отметки о лекарствах на этом устройстве.",
   "medicationDeleteAllDataConfirm": "Удалить все данные списка лекарств на этом устройстве? Это действие нельзя отменить.",
-  "medicationCollapse": "Collapse",
-  "medicationExpand": "Expand",
+  "medicationCollapse": "Свернуть",
+  "medicationExpand": "Развернуть",
   "medicationEmptyToday": "Нет напоминаний на сегодня. Добавьте в разделе «Управление».",
-  "medicationCompletedAt": "Done at {time}",
-  "medicationSave": "Save",
-  "medicationDeleteReminder": "Delete reminder",
+  "medicationCompletedAt": "Отмечено в {time}",
+  "@medicationCompletedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "medicationSave": "Сохранить",
+  "medicationDeleteReminder": "Удалить напоминание",
   "medicationDeleteReminderConfirm": "Удалить это напоминание?",
   "medicationNoReminders": "Пока нет напоминаний",
   "medicationDeleteSuccess": "Данные списка лекарств удалены",
-  "rehabReport": "Rehab report",
-  "rehabReportDisclaimer": "Только для реабилитационной справки. Не является медицинским диагнозом и не заменяет рекомендации вашей команды ухода.",
-  "reportOverallScore": "Overall score",
+  "rehabReport": "Отчёт о реабилитации",
+  "rehabReportDisclaimer": "Только для справки о реабилитации. Не является медицинским диагнозом и не заменяет рекомендации ваших лечащих специалистов.",
+  "reportOverallScore": "Общая оценка",
   "reportDailyProgress": "Цели на сегодня: {percent}%",
+  "@reportDailyProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "reportWeeklyProgress": "На этой неделе: {percent}%",
+  "@reportWeeklyProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "reportStreak": "Серия: {days} дн.",
+  "@reportStreak": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "reportNoData": "Пока недостаточно данных тренировок",
-  "handTraining": "Hand",
-  "voiceTrainingShort": "Voice",
-  "motionTrainingShort": "Movement",
-  "tabHome": "Home",
-  "tabPlan": "Plan",
-  "tabData": "Data",
-  "tabProfile": "Profile",
-  "comingSoon": "Coming soon",
-  "trainingStreak": "{days} days",
+  "handTraining": "Рука",
+  "voiceTrainingShort": "Голос",
+  "motionTrainingShort": "Движение",
+  "tabHome": "Главная",
+  "tabPlan": "План",
+  "tabData": "Данные",
+  "tabProfile": "Профиль",
+  "comingSoon": "Скоро",
+  "trainingStreak": "{days} дн.",
   "@trainingStreak": {
     "placeholders": {
       "days": {
@@ -397,11 +446,11 @@
       }
     }
   },
-  "trainingStreakLabel": "Training Streak",
-  "voiceClarity": "Voice Clarity",
-  "handStability": "Hand Stability",
-  "movementAbility": "Тренировка движений",
-  "medicationReminder": "Medication",
+  "trainingStreakLabel": "Серия тренировок",
+  "voiceClarity": "Чёткость речи",
+  "handStability": "Стабильность руки",
+  "movementAbility": "Двигательная активность",
+  "medicationReminder": "Лекарства",
   "lastTrainingAgo": "Последняя тренировка · {timeAgo}",
   "@lastTrainingAgo": {
     "placeholders": {
@@ -418,9 +467,9 @@
       }
     }
   },
-  "relativeToday": "Today",
-  "relativeYesterday": "Yesterday",
-  "relativeDaysAgo": "{days} days ago",
+  "relativeToday": "Сегодня",
+  "relativeYesterday": "Вчера",
+  "relativeDaysAgo": "{days} дн. назад",
   "@relativeDaysAgo": {
     "placeholders": {
       "days": {
@@ -428,10 +477,10 @@
       }
     }
   },
-  "noTrainingYet": "No training yet",
+  "noTrainingYet": "Тренировок пока нет",
   "noMeasurementYet": "Ещё нет измерений",
-  "tapToStart": "Tap to start",
-  "durationSec": "{count}s",
+  "tapToStart": "Нажмите, чтобы начать",
+  "durationSec": "{count} с",
   "@durationSec": {
     "placeholders": {
       "count": {
@@ -439,7 +488,7 @@
       }
     }
   },
-  "durationMin": "{count} min",
+  "durationMin": "{count} мин",
   "@durationMin": {
     "placeholders": {
       "count": {
@@ -447,8 +496,8 @@
       }
     }
   },
-  "voiceSessionCount": "1 session",
-  "handMeasurementCount": "1 measurement",
+  "voiceSessionCount": "1 сеанс",
+  "handMeasurementCount": "1 измерение",
   "motionCompletionCount": "{done}/{total} повт.",
   "@motionCompletionCount": {
     "placeholders": {
@@ -463,7 +512,7 @@
   "medicationSetupPrompt": "Настроить напоминания о лекарствах",
   "medicationSetupSubtitle": "На устройстве; синхронизация при входе",
   "medicationNoUpcoming": "Сегодня нет предстоящих напоминаний",
-  "medicationNextDoseLabel": "Next dose",
+  "medicationNextDoseLabel": "Следующий приём",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
     "placeholders": {
@@ -472,8 +521,8 @@
       }
     }
   },
-  "medicationStatusUpcoming": "Upcoming",
-  "medicationStatusPending": "Pending",
+  "medicationStatusUpcoming": "Скоро",
+  "medicationStatusPending": "Ожидается",
   "medicationNotificationBody": "Время для: {label}",
   "@medicationNotificationBody": {
     "placeholders": {
@@ -483,7 +532,7 @@
     }
   },
   "medicationNotificationPermissionNote": "По желанию: разрешите уведомления, чтобы Amplio напоминал в заданное вами время. Уведомления остаются на этом устройстве.",
-  "recentActivity": "Recent Activity",
+  "recentActivity": "Недавняя активность",
   "nonMedicalDisclaimerTitle": "Только для справки",
   "nonMedicalDisclaimerBody": "Показанные измерения предназначены только как справка для реабилитационных тренировок. Они не являются медицинским диагнозом и не заменяют рекомендации вашей медицинской команды.",
   "voicePrepHint": "Сядьте удобно. Держите телефон примерно в 30 см от рта.",
@@ -520,17 +569,188 @@
       }
     }
   },
-  "voiceLegendTarget": "Target volume",
-  "voiceLegendYours": "Your volume",
-  "voiceShowDetail": "Show number",
-  "voiceHideDetail": "Hide number",
+  "voiceLegendTarget": "Целевая громкость",
+  "voiceLegendYours": "Ваша громкость",
+  "voiceShowDetail": "Показать значение",
+  "voiceHideDetail": "Скрыть значение",
   "voiceCompletedTitle": "Практика завершена",
-  "voiceCompletedDurationLabel": "This session",
+  "voiceCompletedDurationLabel": "Эта сессия",
   "voiceCompletedTargetLabel": "Время на целевой громкости",
   "voiceCompletedEncourageGood": "Отлично! Продолжайте привычку говорить громко.",
   "voiceCompletedEncourageTryMore": "Хорошая попытка. В следующий раз постарайтесь говорить чуть громче.",
-  "voiceRetryButton": "Practice Again",
-  "voiceFinishButton": "Done",
+  "voiceRetryButton": "Повторить",
+  "voiceFinishButton": "Готово",
   "voicePracticeFooterHint": "Это упражнение побуждает говорить громко для голосовой тренировки. Только для справки, не медицинский диагноз.",
-  "voiceSessionTooShort": "Сеанс был слишком коротким и не был сохранён"
+  "voiceSessionTooShort": "Сеанс был слишком коротким и не был сохранён",
+  "voiceProtocolPickerTitle": "Выберите формат тренировки",
+  "voiceProtocolSteady": "Ровная громкость",
+  "voiceProtocolSteadyDesc": "Тяните долгий звук «А-а» в целевом диапазоне громкости.",
+  "voiceProtocolLadder": "Лестница громкости",
+  "voiceProtocolLadderDesc": "Тихо → целевой уровень → немного громче → постепенно тише.",
+  "voiceProtocolMultiSet": "3 коротких подхода",
+  "voiceProtocolMultiSetDesc": "Три коротких подхода с небольшим отдыхом между ними.",
+  "voiceTrainingReferenceDisclaimer": "Только для личной реабилитационной практики. Не является диагностикой или лечением.",
+  "voiceLadderPhaseSoft": "Этап 1: более тихий голос",
+  "voiceLadderPhaseTarget": "Этап 2: целевая громкость",
+  "voiceLadderPhaseStrong": "Этап 3: немного громче",
+  "voiceLadderPhaseCoolDown": "Этап 4: постепенно тише",
+  "voiceLadderChip": "До конца этапа: {seconds} с",
+  "@voiceLadderChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceSetChip": "Подход {current}/{total} · {seconds} с",
+  "@voiceSetChip": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" },
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestChip": "Отдых: {seconds} с",
+  "@voiceRestChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestTitle": "Отдых",
+  "voiceRestBody": "Далее: подход {next} из {total}. Расслабьте голос.",
+  "@voiceRestBody": {
+    "placeholders": {
+      "next": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "tremorDurationPickerTitle": "Длительность сеанса",
+  "tremorDurationSeconds": "{seconds} с",
+  "@tremorDurationSeconds": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorTestInstructionDynamic": "Держите телефон неподвижно в течение {seconds} секунд. Старайтесь не двигать рукой.",
+  "@tremorTestInstructionDynamic": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorMotionBandDisclaimer": "Диапазоны движения предназначены только для личного ознакомления и не являются медицинской оценкой.",
+  "planTodayTitle": "Тренировка на сегодня",
+  "planTodaySubtitle": "Рекомендации из ваших тренировочных модулей. Нажмите, чтобы начать.",
+  "planEmptyHint": "Рекомендаций пока нет. Попробуйте начать тренировку на главной странице.",
+  "planDomainHand": "Рука",
+  "planDomainVoice": "Голос",
+  "planDomainMotion": "Движение",
+  "planGoalProgress": "Сегодня: {done}/{target} сеансов",
+  "@planGoalProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "planGoalCompleted": "Цель на сегодня выполнена. Отличная работа.",
+  "planWeeklyProgress": "На этой неделе: {done}/{target} сеансов",
+  "@planWeeklyProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "planOpenTask": "Начать",
+  "planMotionShelvedNote": "На некоторых телефонах распознавание движений ограничено, но экран тренировки всё равно можно открыть.",
+  "voiceProtocolClarity": "Чёткие фразы",
+  "voiceProtocolClarityDesc": "Прочитайте короткие фразы вслух. Произношение не оценивается.",
+  "voiceClarityHint": "Прочитайте фразу чётко. Мы проверяем только наличие голоса, а не «правильность» произношения.",
+  "voiceClarityPhraseProgress": "Фраза {current} из {total}",
+  "@voiceClarityPhraseProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "voiceClarityVoiceDetected": "Голос распознан — отлично",
+  "voiceClarityWaitingVoice": "Произнесите фразу вслух",
+  "voiceClarityNextPhrase": "Следующая фраза",
+  "voiceClarityFinish": "Завершить",
+  "voiceClarityPhrase1": "Доброе утро",
+  "voiceClarityPhrase2": "Как вы сегодня?",
+  "voiceClarityPhrase3": "Передайте, пожалуйста, воду",
+  "voiceClarityPhrase4": "У меня всё хорошо",
+  "voiceClarityPhrase5": "До завтра",
+  "handModePickerTitle": "Формат тренировки",
+  "handModeStillHold": "Неподвижное удержание",
+  "handModeStillHoldDesc": "Держите телефон неподвижно, пока датчики измеряют движение.",
+  "handModeObjectHold": "Удержание предмета",
+  "handModeObjectHoldDesc": "Неподвижно держите чашку или мягкий мяч. Работает только таймер, распознавания предмета нет.",
+  "handModeFineMotor": "Касания пальцев",
+  "handModeFineMotorDesc": "Поочерёдно касайтесь большим пальцем остальных пальцев. Считайте циклы самостоятельно.",
+  "handGuidedDisclaimer": "Упражнение предназначено только для личной поддержки реабилитации. Не является медицинской оценкой.",
+  "handObjectHoldInstruction": "Сядьте удобно. Удерживайте чашку или мягкий мяч одной рукой. Держите предмет неподвижно, не сжимая его сильно.",
+  "handObjectHoldStart": "Начать удержание",
+  "handObjectHoldRunning": "Продолжайте держать неподвижно…",
+  "handObjectHoldDone": "Удержание завершено",
+  "handFineMotorInstruction": "Коснитесь большим пальцем указательного, среднего, безымянного пальца, затем мизинца. Это один цикл.",
+  "handFineMotorMarkCycle": "Я завершил один цикл",
+  "handFineMotorProgress": "Циклы: {done}/{target}",
+  "@handFineMotorProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "handGuidedCompleteTitle": "Тренировка завершена",
+  "handGuidedCompleteBody": "Отличная работа. Этот сеанс сохранён только как личная тренировка.",
+  "dataTabTitle": "Ваши данные",
+  "dataTabSubtitle": "Недельные оценки и тенденции тренировок для личного ознакомления.",
+  "dataTrendsTitle": "Эта неделя и прошлая неделя",
+  "dataOpenFullReport": "Открыть полный отчёт о реабилитации",
+  "dataRecentSessions": "Недавние сеансы",
+  "dataStreakDays": "Серия тренировок: {days} дн.",
+  "@dataStreakDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "reportShareButton": "Поделиться отчётом",
+  "reportShareConsentTitle": "Поделиться сводкой реабилитации?",
+  "reportShareConsentBody": "Будет создан текстовый файл с оценками и тенденциями ваших тренировок, после чего откроется системное меню «Поделиться» («Сообщения», «Почта», «Файлы» и другие приложения).\n\nТолько для личного ознакомления — не является медицинским диагнозом.\n\nПосле отправки Amplio не сможет отозвать файл у получателя. Вы можете отменить действие сейчас или не выбирать получателя на следующем экране.",
+  "reportShareConsentConfirm": "Понимаю — продолжить",
+  "reportShareFileTitle": "Сводка реабилитации Amplio Care",
+  "reportShareSuccess": "Меню «Поделиться» открыто",
+  "reportShareFailed": "Не удалось поделиться отчётом. Попробуйте ещё раз.",
+  "reportShareFooterNote": "Для каждой отправки требуется ваше подтверждение. Amplio не отправляет отчёты врачам автоматически.",
+  "profileTabTitle": "Профиль",
+  "profileGuestLabel": "Гость",
+  "profileGuestSubtitle": "Вы вошли локально. Облачная синхронизация станет доступна после входа в аккаунт.",
+  "profileSignedInLabel": "Выполнен вход",
+  "profileSectionPreferences": "Настройки",
+  "profileSectionAccount": "Аккаунт и данные",
+  "profileSectionLegal": "Конфиденциальность и условия",
+  "accessibilitySettings": "Универсальный доступ",
+  "exitGuestMode": "Выйти из гостевого режима",
+  "exitGuestModeConfirm": "Выйти из гостевого режима? Вам потребуется войти в аккаунт или снова продолжить как гость.",
+  "trainingReminderPageTitle": "Напоминания о тренировках",
+  "trainingReminderTitle": "Amplio",
+  "trainingReminderBody": "Небольшая тренировка, когда вам удобно. Ничего страшного, если вы её пропустите.",
+  "trainingReminderDisclaimer": "Необязательные локальные напоминания, а не расписание лечения. Их можно отключить в любое время. Пропущенное напоминание не влияет на оценки.",
+  "trainingReminderEnable": "Напоминать о тренировке",
+  "trainingReminderTimeLabel": "Время {n}",
+  "@trainingReminderTimeLabel": {
+    "placeholders": {
+      "n": { "type": "int" }
+    }
+  },
+  "trainingReminderAddTime": "Добавить второе время",
+  "trainingReminderRemoveTime": "Удалить это время",
+  "trainingReminderQuietWeekends": "Пропускать выходные",
+  "trainingReminderQuietWeekendsHint": "Не напоминать в субботу и воскресенье.",
+  "trainingReminderPermissionDenied": "Уведомления не разрешены. Их можно включить позже в настройках iPhone.",
+  "planReminderOff": "Настроить напоминание о тренировке",
+  "planReminderOn": "Напоминания: {times}",
+  "@planReminderOn": {
+    "placeholders": {
+      "times": { "type": "String" }
+    }
+  }
 }

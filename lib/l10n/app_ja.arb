@@ -2,8 +2,8 @@
   "@@locale": "ja",
   "appTitle": "Amplio",
   "selectTraining": "実施したいトレーニングを選択してください",
-  "clickToStartTest": "クリックしてテストを開始",
-  "clickToStartTraining": "クリックして訓練を開始",
+  "clickToStartTest": "タップしてテストを開始",
+  "clickToStartTraining": "タップしてトレーニングを開始",
   "tremorTest": "手の震えテスト",
   "tremorTestTitle": "手の震えテスト",
   "tremorTestInstruction": "スマートフォンを手に持ち、30秒間腕を静止させてください",
@@ -68,18 +68,18 @@
   "waveformAxisTime": "時間",
   "waveformAxisAmplitude": "振幅",
   "waveformHint": "波が高いほど手の震えが目立ちます",
-  "tremorSeverity": "重症度",
+  "tremorSeverity": "動きの程度",
   "tremorFrequency": "周波数",
   "avgAmplitude": "平均振幅",
   "maxAmp": "最大振幅",
   "variability": "変動性",
   "sampleRate": "サンプル",
   "dataPoints": "データ",
-  "severityNormal": "正常",
-  "severityMild": "軽度",
-  "severityModerate": "中度",
-  "severityModerateSevere": "中重度",
-  "severitySevere": "重度",
+  "severityNormal": "動きが少ない",
+  "severityMild": "わずかな動き",
+  "severityModerate": "中程度の動き",
+  "severityModerateSevere": "大きな動き",
+  "severitySevere": "最も大きい範囲",
   "appSubtitle": "パーキンソン病の動作追跡と分析のためのパーソナルアシスタント",
   "signInWithGoogle": "Google でログイン",
   "signInWithApple": "Apple でログイン",
@@ -100,12 +100,19 @@
   },
   "syncToCloud": "クラウドに同期",
   "dataSynced": "データが正常に同期されました",
-  "syncing": "Syncing…",
+  "syncing": "同期中…",
   "syncFailed": "同期に失敗しました。ネットワークを確認して再試行してください。",
   "syncFailedHint": "同期失敗 — タップして再試行",
-  "syncRetry": "Retry",
+  "syncRetry": "再試行",
   "loginRequiredForSync": "クラウド同期を使うにはサインインしてください",
   "lastSyncedAt": "最終同期：{time}",
+  "@lastSyncedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "privacyPolicy": "プライバシーポリシー",
   "privacyPolicyIntro": "はじめに",
   "privacyPolicyIntroText": "Amplioはお客様のプライバシーと健康データの保護に努めています。本ポリシーでは、情報の収集、使用、保存、保護について説明します。",
@@ -120,9 +127,9 @@
   "userRights": "お客様のデータ権利",
   "userRightsText": "以下の権利があります：\n\n• アクセス権：すべてのデータを閲覧\n• ポータビリティ：データをエクスポート\n• 削除権：データを削除\n• 撤回権：いつでも同意を撤回\n• お問い合わせ：プライバシーに関するご質問はこちら",
   "dataSecurity": "セキュリティ対策",
-  "dataSecurityText": "現行の技術スタックで利用可能な管理によりデータを保護します：\n\n• クラウド通信の TLS\n• サインインアカウントの Firebase Authentication\n• 自分のデータのみにアクセスを制限する Firestore ルール\n• アプリ内の書き出しとアカウント削除\n\n端末データベースの完全暗号化など、より強い保護は改善中であり、完了済みとは主張しません。",
+  "dataSecurityText": "現行の技術スタックで利用可能なセキュリティ対策によりデータを保護します：\n\n• クラウド通信の TLS\n• サインイン済みアカウントの Firebase Authentication\n• 自分のデータのみにアクセスを制限する Firestore ルール\n• 振戦センサーのサンプルや服薬ニックネームなど、機密性の高いローカルの健康関連フィールドを端末上で AES 暗号化し、鍵を iOS キーチェーンに保存\n• アプリ内での書き出しとアカウント削除\n\n書き出したファイルは、ご自身で利用できる読み取り可能な形式です。ローカルデータベース全体のファイル暗号化を行っているとは表明しません。",
   "medicationPrivacy": "任意の服薬ニックネームリスト",
-  "medicationPrivacyText": "任意の服薬ニックネームリストを有効にすると、ニックネーム、リマインダー時刻、チェックインはこの端末に保存されます。サインインすると Amplio クラウドアカウントにも同期でき、別の iPhone で復元できます。通知を許可した場合、任意のローカル通知はこの端末でのみ表示されます。このデータはアプリ内で削除できます（アカウント削除を含む）。本機能は医療アドバイスではなく、データ書き出しには既定で含まれません。",
+  "medicationPrivacyText": "任意の服薬ニックネームリストを有効にすると、ニックネーム、リマインダー時刻、チェックインはこの端末に保存されます。サインインすると Amplio クラウドアカウントにも同期でき、別の iPhone で復元できます。通知を許可した場合、任意のローカル通知はこの端末でのみ表示されます。このデータはアプリ内で削除できます（アカウント削除を含む）。本機能は医療アドバイスではなく、書き出すたびに別途同意しない限り、服薬データは書き出しに含まれません。",
   "contactUs": "お問い合わせ",
   "contactUsText": "Amplio は個人の独立開発者により運営されています（ドメイン：ampliocare.com）。\n\n• プライバシー／データ請求：privacy@ampliocare.com\n• ユーザーサポート：support@ampliocare.com\n• 臨床連携：clinical@ampliocare.com\n• ビジネス：hello@ampliocare.com",
   "termsOfService": "利用規約",
@@ -133,7 +140,7 @@
   "termsUseOfApp": "Amplio の利用",
   "termsUseOfAppText": "Amplio は、振戦測定、音声練習、動作練習、進捗要約、および任意の服薬ニックネームリスト（ゲストは端末内；サインイン時は同期可）などの任意の訓練ツールを提供します。\n\nお客様は、合法的な個人目的でのみアプリを使用し、他者に害を与えたり適用法に違反したりする形でセンサー、アカウント、書き出しデータを濫用しないことに同意します。",
   "termsMedicalDisclaimer": "医療アドバイスではありません",
-  "termsMedicalDisclaimerText": "Amplio はウェルネスおよびリハビリテーション訓練の補助です。パーキンソン病やその他の疾患を診断、治療、治癒、予防しません。\n\nスコア、傾向、レポート、リマインダーは個人参照のみであり、医師、理学療法士、言語聴覚士、その他の資格ある専門家の助言に代わるものではありません。医療上の判断は専門家に相談してください。痛み、めまい、または不安全な状態を引き起こす運動は中止してください。",
+  "termsMedicalDisclaimerText": "Amplio はウェルネスおよびリハビリテーション訓練の補助です。パーキンソン病やその他の疾患を診断、治療、治癒、予防しません。\n\nスコア、傾向、レポート、リマインダーは個人参照のみであり、医師、理学療法士、言語聴覚士、その他の資格ある専門家の助言に代わるものではありません。医療上の判断は専門家に相談してください。痛みやめまいを感じた場合、または安全に続けられない場合は、運動を中止してください。",
   "termsAccounts": "アカウントとデータ",
   "termsAccountsText": "Amplio は Apple サインイン、Google サインイン、またはゲストとして利用できます。サインインアカウント下の活動についてお客様が責任を負います。\n\nアプリ内で一部データの書き出しまたは削除が可能です。アカウント削除により、技術的・法的制限の範囲で当社が管理する関連クラウドデータは削除されます。ゲストおよび端末のみのデータは、消去するまで端末に残る場合があります。",
   "termsLimitation": "責任の制限",
@@ -145,11 +152,15 @@
   "dataManagement": "データ管理",
   "gdprRights": "お客様はいつでも個人健康データにアクセス、エクスポート、削除する権利があります。",
   "exportData": "データをエクスポート",
-  "exportDataDescription": "すべてのデータの完全なコピーをダウンロードします（JSON形式）。",
+  "exportDataDescription": "プロフィールとトレーニング記録を CSV ファイルとして書き出します。システムの共有シートから保存または共有できます。服薬ニックネームは、その書き出し時に同意しない限り含まれません。",
   "export": "エクスポート",
   "exporting": "エクスポート中...",
   "exportSuccess": "エクスポート成功",
-  "exportSuccessMessage": "データがクリップボードにコピーされました。",
+  "exportSuccessMessage": "CSV ファイルの準備ができました。共有シートから「ファイル」に保存するか送信できます。生のセンサーサンプルは件数のみが記載されます。",
+  "exportMedicationConsentTitle": "服薬ニックネームを含めますか？",
+  "exportMedicationConsentBody": "トレーニング記録は CSV ファイルとして書き出されます。\n\n「今回のみ含める」を選択しない限り、服薬ニックネーム、リマインダー時刻、チェックインは含まれません。これは処方箋や医療記録ではありません。\n\nキャンセルすると書き出しを中止します。服薬データを含めずに書き出すこともできます。",
+  "exportMedicationExclude": "服薬データを含めずに書き出す",
+  "exportMedicationInclude": "服薬リストを含める",
   "deleteAllRecords": "すべてのテスト記録を削除",
   "deleteAllRecordsDescription": "すべての振戦テスト記録を永久に削除します。この操作は取り消せません。",
   "deleteAllData": "すべてのデータを削除",
@@ -198,7 +209,7 @@
   },
   "voiceTraining": "音声訓練",
   "voiceTrainingMainInstruction": "長い音を続けて発音してください —— あ ——",
-  "voiceTrainingInstruction": "LSVT LOUD療法の原則に基づき、大きな声で話してください。円のサイズは音量に応じてリアルタイムで変化します。75-85 dBに達すると、円が緑色になります。",
+  "voiceTrainingInstruction": "明瞭でしっかりした声で話す練習をしてください。円の大きさは声量に応じて変化し、目標範囲に達すると緑色になります。個人練習用であり、医療行為ではありません。",
   "voiceTrainingReady": "準備完了",
   "voiceTrainingCalibrating": "環境ノイズを校正中...",
   "voiceTrainingTooQuiet": "もっと大きな声で！",
@@ -344,52 +355,90 @@
   "@trainingType": {
     "description": "Training type label"
   },
-  "medicationList": "Medication list",
+  "medicationList": "服薬リスト",
   "medicationListEnable": "服薬リストを設定",
   "medicationDisclaimer": "Amplio の服薬リストは、ご自身で時間を記録するためのものです。医学的助言ではなく、用量の案内も行いません。ゲストの場合、データはこの端末のみに保存されます。サインインすると、リマインダーとチェックインを Amplio アカウントに同期できます。",
   "medicationDisclaimerAccept": "理解して有効にする",
-  "medicationLabel": "Label",
+  "medicationLabel": "表示名",
   "medicationLabelHint": "例：朝食後（ニックネーム可）",
-  "medicationTime": "Time",
-  "medicationTaken": "Taken",
-  "medicationUndo": "Undo",
+  "medicationTime": "時刻",
+  "medicationTaken": "服用済み",
+  "medicationUndo": "元に戻す",
   "medicationUndoConfirm": "この項目の本日のチェックインを削除しますか？",
   "medicationTodayProgress": "本日 {done}/{total}",
-  "medicationManage": "Manage",
-  "medicationAdd": "Add reminder",
-  "medicationEdit": "Edit reminder",
+  "@medicationTodayProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "medicationManage": "管理",
+  "medicationAdd": "リマインダーを追加",
+  "medicationEdit": "リマインダーを編集",
   "medicationClose": "服薬リストをオフにする",
   "medicationCloseConfirm": "リストを非表示にするか、この端末の服薬データをすべて削除することもできます。",
-  "medicationCloseHideOnly": "Hide only",
+  "medicationCloseHideOnly": "非表示のみ",
   "medicationCloseAndDelete": "非表示にしてすべてのデータを削除",
   "medicationDeleteAllData": "服薬リストのデータを削除",
   "medicationDeleteAllDataDescription": "この端末上の服薬リマインダーとチェックインをすべて完全に削除します。",
   "medicationDeleteAllDataConfirm": "この端末の服薬リストデータをすべて削除しますか？この操作は元に戻せません。",
-  "medicationCollapse": "Collapse",
-  "medicationExpand": "Expand",
+  "medicationCollapse": "折りたたむ",
+  "medicationExpand": "展開する",
   "medicationEmptyToday": "本日のリマインダーはありません。管理で追加してください。",
-  "medicationCompletedAt": "Done at {time}",
-  "medicationSave": "Save",
-  "medicationDeleteReminder": "Delete reminder",
+  "medicationCompletedAt": "{time}に完了",
+  "@medicationCompletedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "medicationSave": "保存",
+  "medicationDeleteReminder": "リマインダーを削除",
   "medicationDeleteReminderConfirm": "このリマインダーを削除しますか？",
   "medicationNoReminders": "まだリマインダーがありません",
   "medicationDeleteSuccess": "服薬リストのデータを削除しました",
-  "rehabReport": "Rehab report",
+  "rehabReport": "リハビリレポート",
   "rehabReportDisclaimer": "リハビリテーションの参考用です。医学的診断ではなく、ケアチームの助言の代わりにはなりません。",
-  "reportOverallScore": "Overall score",
+  "reportOverallScore": "総合スコア",
   "reportDailyProgress": "本日の目標：{percent}%",
+  "@reportDailyProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "reportWeeklyProgress": "今週：{percent}%",
+  "@reportWeeklyProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "reportStreak": "連続：{days}日",
+  "@reportStreak": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "reportNoData": "まだ十分なトレーニングデータがありません",
-  "handTraining": "Hand",
-  "voiceTrainingShort": "Voice",
-  "motionTrainingShort": "Movement",
-  "tabHome": "Home",
-  "tabPlan": "Plan",
-  "tabData": "Data",
-  "tabProfile": "Profile",
-  "comingSoon": "Coming soon",
-  "trainingStreak": "{days} days",
+  "handTraining": "手",
+  "voiceTrainingShort": "音声",
+  "motionTrainingShort": "動作",
+  "tabHome": "ホーム",
+  "tabPlan": "プラン",
+  "tabData": "データ",
+  "tabProfile": "プロフィール",
+  "comingSoon": "近日公開",
+  "trainingStreak": "{days}日",
   "@trainingStreak": {
     "placeholders": {
       "days": {
@@ -397,11 +446,11 @@
       }
     }
   },
-  "trainingStreakLabel": "Training Streak",
-  "voiceClarity": "Voice Clarity",
-  "handStability": "Hand Stability",
+  "trainingStreakLabel": "連続トレーニング",
+  "voiceClarity": "声の明瞭さ",
+  "handStability": "手の安定性",
   "movementAbility": "動作トレーニング",
-  "medicationReminder": "Medication",
+  "medicationReminder": "服薬",
   "lastTrainingAgo": "前回のトレーニング · {timeAgo}",
   "@lastTrainingAgo": {
     "placeholders": {
@@ -418,9 +467,9 @@
       }
     }
   },
-  "relativeToday": "Today",
-  "relativeYesterday": "Yesterday",
-  "relativeDaysAgo": "{days} days ago",
+  "relativeToday": "今日",
+  "relativeYesterday": "昨日",
+  "relativeDaysAgo": "{days}日前",
   "@relativeDaysAgo": {
     "placeholders": {
       "days": {
@@ -428,10 +477,10 @@
       }
     }
   },
-  "noTrainingYet": "No training yet",
+  "noTrainingYet": "まだトレーニングがありません",
   "noMeasurementYet": "まだ測定がありません",
-  "tapToStart": "Tap to start",
-  "durationSec": "{count}s",
+  "tapToStart": "タップして開始",
+  "durationSec": "{count}秒",
   "@durationSec": {
     "placeholders": {
       "count": {
@@ -439,7 +488,7 @@
       }
     }
   },
-  "durationMin": "{count} min",
+  "durationMin": "{count}分",
   "@durationMin": {
     "placeholders": {
       "count": {
@@ -447,8 +496,8 @@
       }
     }
   },
-  "voiceSessionCount": "1 session",
-  "handMeasurementCount": "1 measurement",
+  "voiceSessionCount": "1セッション",
+  "handMeasurementCount": "1回の測定",
   "motionCompletionCount": "{done}/{total} 回",
   "@motionCompletionCount": {
     "placeholders": {
@@ -463,7 +512,7 @@
   "medicationSetupPrompt": "服薬リマインダーを設定",
   "medicationSetupSubtitle": "端末に保存；サインインで同期",
   "medicationNoUpcoming": "本日の予定リマインダーはありません",
-  "medicationNextDoseLabel": "Next dose",
+  "medicationNextDoseLabel": "次の服薬",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
     "placeholders": {
@@ -472,8 +521,8 @@
       }
     }
   },
-  "medicationStatusUpcoming": "Upcoming",
-  "medicationStatusPending": "Pending",
+  "medicationStatusUpcoming": "予定",
+  "medicationStatusPending": "未完了",
   "medicationNotificationBody": "時間です：{label}",
   "@medicationNotificationBody": {
     "placeholders": {
@@ -483,7 +532,7 @@
     }
   },
   "medicationNotificationPermissionNote": "任意：通知を許可すると、Amplio が設定した時刻に本機でリマインドします。通知はこの端末に留まります。",
-  "recentActivity": "Recent Activity",
+  "recentActivity": "最近のアクティビティ",
   "nonMedicalDisclaimerTitle": "参考情報のみ",
   "nonMedicalDisclaimerBody": "表示される測定値はリハビリテーション訓練の参考用です。医学的診断ではなく、医療チームの助言の代わりにはなりません。",
   "voicePrepHint": "楽な姿勢で座ってください。スマホを口から約30cm離して持ってください。",
@@ -520,17 +569,188 @@
       }
     }
   },
-  "voiceLegendTarget": "Target volume",
-  "voiceLegendYours": "Your volume",
-  "voiceShowDetail": "Show number",
-  "voiceHideDetail": "Hide number",
+  "voiceLegendTarget": "目標音量",
+  "voiceLegendYours": "あなたの音量",
+  "voiceShowDetail": "数値を表示",
+  "voiceHideDetail": "数値を非表示",
   "voiceCompletedTitle": "練習完了",
-  "voiceCompletedDurationLabel": "This session",
+  "voiceCompletedDurationLabel": "今回のセッション",
   "voiceCompletedTargetLabel": "目標音量に達した時間",
   "voiceCompletedEncourageGood": "よくできました！大きな声で話す習慣を続けましょう。",
   "voiceCompletedEncourageTryMore": "いい練習です。次回はもう少し大きな声を目指しましょう。",
-  "voiceRetryButton": "Practice Again",
-  "voiceFinishButton": "Done",
+  "voiceRetryButton": "もう一度練習",
+  "voiceFinishButton": "完了",
   "voicePracticeFooterHint": "このエクササイズは音声トレーニングのため大きな声で話すことを促します。参考用であり、医学的診断ではありません。",
-  "voiceSessionTooShort": "セッションが短すぎたため保存されませんでした"
+  "voiceSessionTooShort": "セッションが短すぎたため保存されませんでした",
+  "voiceProtocolPickerTitle": "練習方法を選択",
+  "voiceProtocolSteady": "一定の音量",
+  "voiceProtocolSteadyDesc": "長く「あー」と発声し、目標音量の範囲を保ちます。",
+  "voiceProtocolLadder": "音量ステップ",
+  "voiceProtocolLadderDesc": "小さめ → 目標 → 少し大きめ → 徐々に下げる。",
+  "voiceProtocolMultiSet": "短い3セット",
+  "voiceProtocolMultiSetDesc": "短い練習を3回行い、各セットの間に少し休みます。",
+  "voiceTrainingReferenceDisclaimer": "個人のリハビリ練習用です。診断や治療を目的としたものではありません。",
+  "voiceLadderPhaseSoft": "フェーズ1：小さめの声",
+  "voiceLadderPhaseTarget": "フェーズ2：目標音量",
+  "voiceLadderPhaseStrong": "フェーズ3：少し大きめ",
+  "voiceLadderPhaseCoolDown": "フェーズ4：徐々に下げる",
+  "voiceLadderChip": "残り：{seconds}秒",
+  "@voiceLadderChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceSetChip": "セット {current}/{total} · {seconds}秒",
+  "@voiceSetChip": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" },
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestChip": "休憩 {seconds}秒",
+  "@voiceRestChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestTitle": "休憩",
+  "voiceRestBody": "次は全{total}セット中の{next}セット目です。声を休めてください。",
+  "@voiceRestBody": {
+    "placeholders": {
+      "next": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "tremorDurationPickerTitle": "測定時間",
+  "tremorDurationSeconds": "{seconds}秒",
+  "@tremorDurationSeconds": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorTestInstructionDynamic": "スマートフォンを{seconds}秒間動かさずに持ち、腕を安定させてください。",
+  "@tremorTestInstructionDynamic": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorMotionBandDisclaimer": "動きの区分は個人の参考用であり、医学的評価ではありません。",
+  "planTodayTitle": "今日の練習",
+  "planTodaySubtitle": "トレーニング内容に基づく提案です。タップして開始します。",
+  "planEmptyHint": "まだ提案はありません。ホームからトレーニングを試してください。",
+  "planDomainHand": "手",
+  "planDomainVoice": "音声",
+  "planDomainMotion": "動作",
+  "planGoalProgress": "今日：{done}/{target}セッション",
+  "@planGoalProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "planGoalCompleted": "今日の目標を達成しました。お疲れさまでした。",
+  "planWeeklyProgress": "今週：{done}/{target}セッション",
+  "@planWeeklyProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "planOpenTask": "開始",
+  "planMotionShelvedNote": "一部のスマートフォンでは動作検出に制限がありますが、練習画面は開けます。",
+  "voiceProtocolClarity": "明瞭なフレーズ",
+  "voiceProtocolClarityDesc": "短いフレーズを声に出して読みます。発音の採点は行いません。",
+  "voiceClarityHint": "フレーズを明瞭に読んでください。発声したかどうかのみを確認し、「正しい」発音かどうかは判定しません。",
+  "voiceClarityPhraseProgress": "フレーズ {current}/{total}",
+  "@voiceClarityPhraseProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "voiceClarityVoiceDetected": "声を検出しました",
+  "voiceClarityWaitingVoice": "フレーズを声に出してください",
+  "voiceClarityNextPhrase": "次のフレーズ",
+  "voiceClarityFinish": "終了",
+  "voiceClarityPhrase1": "おはようございます",
+  "voiceClarityPhrase2": "今日の調子はいかがですか？",
+  "voiceClarityPhrase3": "お水を取ってください",
+  "voiceClarityPhrase4": "元気に過ごしています",
+  "voiceClarityPhrase5": "また明日",
+  "handModePickerTitle": "練習方法",
+  "handModeStillHold": "静止保持",
+  "handModeStillHoldDesc": "スマートフォンを動かさずに持ち、センサーで動きを測定します。",
+  "handModeObjectHold": "物を持つ",
+  "handModeObjectHoldDesc": "カップまたは柔らかいボールを安定して持ちます。タイマーによる案内のみで、物体検出は行いません。",
+  "handModeFineMotor": "指のタップ",
+  "handModeFineMotorDesc": "親指を各指に順番に触れます。回数はご自身で数えてください。",
+  "handGuidedDisclaimer": "個人のリハビリ支援を目的としたガイド付き練習です。医学的評価ではありません。",
+  "handObjectHoldInstruction": "楽な姿勢で座り、片手でカップまたは柔らかいボールを持ってください。強く握らず、安定させてください。",
+  "handObjectHoldStart": "保持を開始",
+  "handObjectHoldRunning": "安定させたまま持ってください…",
+  "handObjectHoldDone": "保持完了",
+  "handFineMotorInstruction": "親指を人差し指、中指、薬指、小指の順に触れます。ここまでで1回です。",
+  "handFineMotorMarkCycle": "1回完了",
+  "handFineMotorProgress": "回数：{done}/{target}",
+  "@handFineMotorProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "handGuidedCompleteTitle": "練習完了",
+  "handGuidedCompleteBody": "お疲れさまでした。このセッションは個人練習としてのみ保存されます。",
+  "dataTabTitle": "あなたのデータ",
+  "dataTabSubtitle": "個人の参考用に、週間の練習スコアと傾向を表示します。",
+  "dataTrendsTitle": "今週と先週の比較",
+  "dataOpenFullReport": "リハビリレポート全体を開く",
+  "dataRecentSessions": "最近のセッション",
+  "dataStreakDays": "連続トレーニング：{days}日",
+  "@dataStreakDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "reportShareButton": "レポートを共有",
+  "reportShareConsentTitle": "リハビリ概要を共有しますか？",
+  "reportShareConsentBody": "練習スコアと傾向を含むテキストファイルを作成し、システムの共有シート（メッセージ、メール、ファイルなど）を開きます。\n\n個人の参考用であり、医学的診断ではありません。\n\n送信後、Amplio は受信者からファイルを回収できません。今キャンセルするか、次の画面で共有先を選ばずに閉じることができます。",
+  "reportShareConsentConfirm": "理解して続ける",
+  "reportShareFileTitle": "Amplio Care リハビリ概要",
+  "reportShareSuccess": "共有シートを開きました",
+  "reportShareFailed": "レポートを共有できませんでした。もう一度お試しください。",
+  "reportShareFooterNote": "共有するたびに確認が必要です。Amplio が医師へ自動的にメールを送ることはありません。",
+  "profileTabTitle": "プロフィール",
+  "profileGuestLabel": "ゲスト",
+  "profileGuestSubtitle": "端末内で利用中です。サインインするとクラウド同期を利用できます。",
+  "profileSignedInLabel": "サインイン済み",
+  "profileSectionPreferences": "環境設定",
+  "profileSectionAccount": "アカウントとデータ",
+  "profileSectionLegal": "プライバシーと利用規約",
+  "accessibilitySettings": "アクセシビリティ",
+  "exitGuestMode": "ゲストモードを終了",
+  "exitGuestModeConfirm": "ゲストモードを終了しますか？もう一度サインインするか、ゲストとして続ける必要があります。",
+  "trainingReminderPageTitle": "練習リマインダー",
+  "trainingReminderTitle": "Amplio",
+  "trainingReminderBody": "できるときに短い練習を。できない日があっても大丈夫です。",
+  "trainingReminderDisclaimer": "任意のローカルリマインダーであり、治療スケジュールではありません。いつでもオフにできます。通知を見逃してもスコアには影響しません。",
+  "trainingReminderEnable": "練習をリマインド",
+  "trainingReminderTimeLabel": "時刻 {n}",
+  "@trainingReminderTimeLabel": {
+    "placeholders": {
+      "n": { "type": "int" }
+    }
+  },
+  "trainingReminderAddTime": "2つ目の時刻を追加",
+  "trainingReminderRemoveTime": "この時刻を削除",
+  "trainingReminderQuietWeekends": "週末は通知しない",
+  "trainingReminderQuietWeekendsHint": "土曜日と日曜日は通知しません。",
+  "trainingReminderPermissionDenied": "通知が許可されませんでした。後から iPhone の「設定」で有効にできます。",
+  "planReminderOff": "練習リマインダーを設定",
+  "planReminderOn": "リマインダー：{times}",
+  "@planReminderOn": {
+    "placeholders": {
+      "times": { "type": "String" }
+    }
+  }
 }

@@ -75,11 +75,11 @@
   "variability": "Variabilität",
   "sampleRate": "Abtastrate",
   "dataPoints": "Punkte",
-  "severityNormal": "Normal",
-  "severityMild": "Leicht",
-  "severityModerate": "Mäßig",
-  "severityModerateSevere": "Mäßig-Schwer",
-  "severitySevere": "Schwer",
+  "severityNormal": "Geringere Bewegung",
+  "severityMild": "Leichte Bewegung",
+  "severityModerate": "Mäßige Bewegung",
+  "severityModerateSevere": "Stärkere Bewegung",
+  "severitySevere": "Höchster Bereich",
   "appSubtitle": "Ihr persönlicher Parkinson-Assistent für Bewegungsverfolgung und -analyse",
   "signInWithGoogle": "Mit Google anmelden",
   "signInWithApple": "Mit Apple anmelden",
@@ -100,12 +100,19 @@
   },
   "syncToCloud": "In Cloud synchronisieren",
   "dataSynced": "Daten erfolgreich synchronisiert",
-  "syncing": "Syncing…",
+  "syncing": "Synchronisierung…",
   "syncFailed": "Synchronisierung fehlgeschlagen. Prüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut.",
   "syncFailedHint": "Synchronisierung fehlgeschlagen — tippen zum erneuten Versuch",
-  "syncRetry": "Retry",
+  "syncRetry": "Erneut versuchen",
   "loginRequiredForSync": "Bitte melden Sie sich an, um die Cloud-Synchronisierung zu nutzen",
   "lastSyncedAt": "Zuletzt synchronisiert: {time}",
+  "@lastSyncedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "privacyPolicy": "Datenschutzrichtlinie",
   "privacyPolicyIntro": "Einführung",
   "privacyPolicyIntroText": "Amplio verpflichtet sich, Ihre Privatsphäre und Gesundheitsdaten zu schützen. Diese Richtlinie erklärt, wie wir Ihre Daten erfassen, verwenden, speichern und schützen.",
@@ -120,9 +127,9 @@
   "userRights": "Ihre Datenschutzrechte",
   "userRightsText": "Sie haben das Recht auf:\n\n• Auskunft: Alle Ihre Daten einsehen\n• Portabilität: Daten exportieren\n• Löschung: Daten löschen\n• Widerruf: Einwilligung jederzeit widerrufen\n• Kontakt: Bei Datenschutzfragen kontaktieren Sie uns",
   "dataSecurity": "Sicherheitsmaßnahmen",
-  "dataSecurityText": "Wir schützen Ihre Daten mit den Sicherheitskontrollen unseres aktuellen Stacks:\n\n• TLS für Cloud-Anfragen\n• Firebase Authentication für angemeldete Konten\n• Firestore-Regeln, die den Zugriff auf Ihre eigenen Daten beschränken\n• Export und Kontolöschung in der App\n\nStärkere Schutzmaßnahmen wie die vollständige lokale Datenbankverschlüsselung werden noch verbessert und nicht als abgeschlossen dargestellt.",
+  "dataSecurityText": "Wir schützen Ihre Daten mit den Sicherheitskontrollen unseres aktuellen Stacks:\n\n• TLS für Cloud-Anfragen\n• Firebase Authentication für angemeldete Konten\n• Firestore-Regeln, die den Zugriff auf Ihre eigenen Daten beschränken\n• AES-Verschlüsselung auf dem Gerät für sensible lokale Gesundheitsdaten (z. B. Tremor-Sensordaten und Medikamenten-Spitznamen), wobei der Schlüssel im iOS-Schlüsselbund gespeichert wird\n• Export und Kontolöschung in der App\n\nExportierte Dateien werden für Ihre eigene Verwendung in einem lesbaren Format erstellt. Eine vollständige Verschlüsselung der gesamten lokalen Datenbank wird nicht zugesichert.",
   "medicationPrivacy": "Optionale Medikamenten-Spitznamenliste",
-  "medicationPrivacyText": "Wenn Sie die optionale Medikamenten-Spitznamenliste aktivieren, werden Spitznamen, Erinnerungszeiten und Check-ins auf diesem Gerät gespeichert. Wenn Sie angemeldet sind, können sie auch mit Ihrem Amplio-Cloud-Konto synchronisiert werden, damit Sie sie auf einem anderen iPhone wiederherstellen können. Optionale lokale Benachrichtigungen erscheinen nur auf diesem Gerät bei erteilter Berechtigung. Sie können diese Daten in der App löschen (einschließlich Kontolöschung). Diese Funktion ist keine medizinische Beratung und ist standardmäßig nicht im Datenexport enthalten.",
+  "medicationPrivacyText": "Wenn Sie die optionale Medikamenten-Spitznamenliste aktivieren, werden Spitznamen, Erinnerungszeiten und Check-ins auf diesem Gerät gespeichert. Wenn Sie angemeldet sind, können sie auch mit Ihrem Amplio-Cloud-Konto synchronisiert werden, damit Sie sie auf einem anderen iPhone wiederherstellen können. Optionale lokale Benachrichtigungen erscheinen nur auf diesem Gerät, wenn Sie die Benachrichtigungsberechtigung erteilen. Sie können diese Daten in der App löschen (auch durch Löschen des Kontos). Diese Funktion ist keine medizinische Beratung und wird nur dann in einen Datenexport aufgenommen, wenn Sie bei jedem Export separat zustimmen.",
   "contactUs": "Kontakt",
   "contactUsText": "Amplio wird von einem unabhängigen Einzelentwickler betrieben (Domain: ampliocare.com).\n\n• Datenschutz / Datenanfragen: privacy@ampliocare.com\n• Nutzersupport: support@ampliocare.com\n• Klinische Partnerschaften: clinical@ampliocare.com\n• Geschäftlich: hello@ampliocare.com",
   "termsOfService": "Nutzungsbedingungen",
@@ -145,11 +152,11 @@
   "dataManagement": "Datenverwaltung",
   "gdprRights": "Sie können jederzeit auf Ihre Gesundheitsdaten zugreifen, sie exportieren und löschen.",
   "exportData": "Meine Daten Exportieren",
-  "exportDataDescription": "Laden Sie eine vollständige Kopie aller Daten herunter (JSON-Format).",
+  "exportDataDescription": "Exportieren Sie Ihr Profil und Ihre Trainingsaufzeichnungen als CSV-Datei. Sie können sie über das Teilen-Menü des Systems speichern oder teilen. Medikamenten-Spitznamen werden nur mit Ihrer Zustimmung für diesen Export einbezogen.",
   "export": "Exportieren",
   "exporting": "Exportiere...",
   "exportSuccess": "Export Erfolgreich",
-  "exportSuccessMessage": "Ihre Daten wurden in die Zwischenablage kopiert.",
+  "exportSuccessMessage": "Ihre CSV-Datei ist bereit. Speichern Sie sie über das Teilen-Menü in „Dateien“ oder senden Sie sie. Rohe Sensordaten werden nur als Anzahl zusammengefasst.",
   "deleteAllRecords": "Alle Aufzeichnungen Löschen",
   "deleteAllRecordsDescription": "Alle Zittertestaufzeichnungen dauerhaft löschen. Diese Aktion kann nicht rückgängig gemacht werden.",
   "deleteAllData": "Alle Daten Löschen",
@@ -158,7 +165,7 @@
   "deleteSuccess": "Löschen Erfolgreich",
   "deleteSuccessMessage": "Alle Aufzeichnungen wurden dauerhaft gelöscht.",
   "deleteAccount": "Konto Löschen",
-  "deleteAccountDescription": "Konto und alle zugehörigen Daten dauerhaft löschen.",
+  "deleteAccountDescription": "Löschen Sie Ihr Konto und alle zugehörigen Daten dauerhaft. Dazu gehören alle Testaufzeichnungen und persönlichen Informationen.",
   "deleteAccountWarning": "Ihr Konto und alle Daten werden dauerhaft gelöscht. Diese Aktion ist unwiderruflich.",
   "deleteAccountFinalWarning": "Letzte Warnung: Nach dem Löschen sind Konto und Daten für immer verloren. Sind Sie sicher?",
   "finalWarning": "Letzte Warnung",
@@ -198,7 +205,7 @@
   },
   "voiceTraining": "Stimmtraining",
   "voiceTrainingMainInstruction": "Bitte halten Sie einen langen Ton — Ah —",
-  "voiceTrainingInstruction": "Basierend auf den Prinzipien der LSVT LOUD-Therapie, bitte laut sprechen. Die Größe des Kreises ändert sich in Echtzeit basierend auf Ihrer Lautstärke. Wenn er 75-85 dB erreicht, wird der Kreis grün.",
+  "voiceTrainingInstruction": "Üben Sie mit klarer, kräftiger Stimme. Die Kreisgröße ändert sich mit Ihrer Lautstärke. Im Zielbereich wird der Kreis grün. Nur zur persönlichen Übung – keine medizinische Behandlung.",
   "voiceTrainingReady": "Bereit zum Starten",
   "voiceTrainingCalibrating": "Umgebungsgeräusche werden kalibriert...",
   "voiceTrainingTooQuiet": "Lauter sprechen!",
@@ -344,52 +351,90 @@
   "@trainingType": {
     "description": "Training type label"
   },
-  "medicationList": "Medication list",
+  "medicationList": "Medikamentenliste",
   "medicationListEnable": "Medikamentenliste einrichten",
   "medicationDisclaimer": "Die Medikamentenliste von Amplio hilft Ihnen nur, Zeiten selbst zu erfassen. Sie ist keine medizinische Beratung und gibt keine Dosierungshinweise. Als Gast bleiben Daten nur auf diesem Gerät. Wenn Sie angemeldet sind, können Erinnerungen und Check-ins mit Ihrem Amplio-Konto synchronisiert werden.",
   "medicationDisclaimerAccept": "Ich verstehe und aktiviere",
-  "medicationLabel": "Label",
+  "medicationLabel": "Bezeichnung",
   "medicationLabelHint": "z. B. Nach dem Frühstück (Spitzname ist in Ordnung)",
-  "medicationTime": "Time",
-  "medicationTaken": "Taken",
-  "medicationUndo": "Undo",
+  "medicationTime": "Uhrzeit",
+  "medicationTaken": "Erledigt",
+  "medicationUndo": "Rückgängig",
   "medicationUndoConfirm": "Heutigen Check-in für diesen Eintrag entfernen?",
   "medicationTodayProgress": "Heute {done}/{total}",
-  "medicationManage": "Manage",
-  "medicationAdd": "Add reminder",
-  "medicationEdit": "Edit reminder",
+  "@medicationTodayProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "medicationManage": "Verwalten",
+  "medicationAdd": "Erinnerung hinzufügen",
+  "medicationEdit": "Erinnerung bearbeiten",
   "medicationClose": "Medikamentenliste ausschalten",
   "medicationCloseConfirm": "Sie können die Liste ausblenden oder auch alle Medikamentendaten auf diesem Gerät löschen.",
-  "medicationCloseHideOnly": "Hide only",
+  "medicationCloseHideOnly": "Nur ausblenden",
   "medicationCloseAndDelete": "Ausblenden und alle Daten löschen",
   "medicationDeleteAllData": "Medikamentenlistendaten löschen",
   "medicationDeleteAllDataDescription": "Alle Medikamentenerinnerungen und Check-ins auf diesem Gerät dauerhaft löschen.",
   "medicationDeleteAllDataConfirm": "Alle Medikamentenlistendaten auf diesem Gerät löschen? Dies kann nicht rückgängig gemacht werden.",
-  "medicationCollapse": "Collapse",
-  "medicationExpand": "Expand",
+  "medicationCollapse": "Einklappen",
+  "medicationExpand": "Ausklappen",
   "medicationEmptyToday": "Keine Erinnerungen für heute. Fügen Sie eine unter Verwalten hinzu.",
-  "medicationCompletedAt": "Done at {time}",
-  "medicationSave": "Save",
-  "medicationDeleteReminder": "Delete reminder",
+  "medicationCompletedAt": "Erledigt um {time}",
+  "@medicationCompletedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "medicationSave": "Speichern",
+  "medicationDeleteReminder": "Erinnerung löschen",
   "medicationDeleteReminderConfirm": "Diese Erinnerung löschen?",
   "medicationNoReminders": "Noch keine Erinnerungen",
   "medicationDeleteSuccess": "Medikamentenlistendaten gelöscht",
-  "rehabReport": "Rehab report",
+  "rehabReport": "Reha-Bericht",
   "rehabReportDisclaimer": "Nur zur Rehabilitationsreferenz. Keine medizinische Diagnose und kein Ersatz für den Rat Ihres Behandlungsteams.",
-  "reportOverallScore": "Overall score",
+  "reportOverallScore": "Gesamtbewertung",
   "reportDailyProgress": "Heutige Ziele: {percent}%",
+  "@reportDailyProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "reportWeeklyProgress": "Diese Woche: {percent}%",
+  "@reportWeeklyProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "reportStreak": "Serie: {days} Tage",
+  "@reportStreak": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "reportNoData": "Noch nicht genug Trainingsdaten",
   "handTraining": "Hand",
-  "voiceTrainingShort": "Voice",
-  "motionTrainingShort": "Movement",
-  "tabHome": "Home",
+  "voiceTrainingShort": "Stimme",
+  "motionTrainingShort": "Bewegung",
+  "tabHome": "Start",
   "tabPlan": "Plan",
-  "tabData": "Data",
-  "tabProfile": "Profile",
-  "comingSoon": "Coming soon",
-  "trainingStreak": "{days} days",
+  "tabData": "Daten",
+  "tabProfile": "Profil",
+  "comingSoon": "Demnächst",
+  "trainingStreak": "{days} Tage",
   "@trainingStreak": {
     "placeholders": {
       "days": {
@@ -397,11 +442,11 @@
       }
     }
   },
-  "trainingStreakLabel": "Training Streak",
-  "voiceClarity": "Voice Clarity",
-  "handStability": "Hand Stability",
-  "movementAbility": "Bewegungstraining",
-  "medicationReminder": "Medication",
+  "trainingStreakLabel": "Trainingsserie",
+  "voiceClarity": "Stimmklarheit",
+  "handStability": "Handstabilität",
+  "movementAbility": "Bewegungsfähigkeit",
+  "medicationReminder": "Medikamente",
   "lastTrainingAgo": "Letztes Training · {timeAgo}",
   "@lastTrainingAgo": {
     "placeholders": {
@@ -418,9 +463,9 @@
       }
     }
   },
-  "relativeToday": "Today",
-  "relativeYesterday": "Yesterday",
-  "relativeDaysAgo": "{days} days ago",
+  "relativeToday": "Heute",
+  "relativeYesterday": "Gestern",
+  "relativeDaysAgo": "vor {days} Tagen",
   "@relativeDaysAgo": {
     "placeholders": {
       "days": {
@@ -428,9 +473,9 @@
       }
     }
   },
-  "noTrainingYet": "No training yet",
+  "noTrainingYet": "Noch kein Training",
   "noMeasurementYet": "Noch keine Messung",
-  "tapToStart": "Tap to start",
+  "tapToStart": "Zum Starten tippen",
   "durationSec": "{count}s",
   "@durationSec": {
     "placeholders": {
@@ -447,8 +492,8 @@
       }
     }
   },
-  "voiceSessionCount": "1 session",
-  "handMeasurementCount": "1 measurement",
+  "voiceSessionCount": "1 Sitzung",
+  "handMeasurementCount": "1 Messung",
   "motionCompletionCount": "{done}/{total} Wiederholungen",
   "@motionCompletionCount": {
     "placeholders": {
@@ -463,7 +508,7 @@
   "medicationSetupPrompt": "Medikamentenerinnerungen einrichten",
   "medicationSetupSubtitle": "Auf diesem Gerät; Sync bei Anmeldung",
   "medicationNoUpcoming": "Heute keine anstehenden Erinnerungen",
-  "medicationNextDoseLabel": "Next dose",
+  "medicationNextDoseLabel": "Nächste Einnahme",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
     "placeholders": {
@@ -472,8 +517,8 @@
       }
     }
   },
-  "medicationStatusUpcoming": "Upcoming",
-  "medicationStatusPending": "Pending",
+  "medicationStatusUpcoming": "Demnächst",
+  "medicationStatusPending": "Ausstehend",
   "medicationNotificationBody": "Zeit für: {label}",
   "@medicationNotificationBody": {
     "placeholders": {
@@ -483,7 +528,7 @@
     }
   },
   "medicationNotificationPermissionNote": "Optional: Benachrichtigungen erlauben, damit Amplio Sie zu den von Ihnen festgelegten Zeiten erinnert. Benachrichtigungen bleiben auf diesem Gerät.",
-  "recentActivity": "Recent Activity",
+  "recentActivity": "Letzte Aktivitäten",
   "nonMedicalDisclaimerTitle": "Nur zur Referenz",
   "nonMedicalDisclaimerBody": "Angezeigte Messwerte dienen nur der Rehabilitationsreferenz. Sie sind keine medizinische Diagnose und ersetzen nicht den Rat Ihres Gesundheitsteams.",
   "voicePrepHint": "Sitzen Sie bequem. Halten Sie das Telefon etwa 30 cm vom Mund entfernt.",
@@ -520,17 +565,192 @@
       }
     }
   },
-  "voiceLegendTarget": "Target volume",
-  "voiceLegendYours": "Your volume",
-  "voiceShowDetail": "Show number",
-  "voiceHideDetail": "Hide number",
+  "voiceLegendTarget": "Ziellautstärke",
+  "voiceLegendYours": "Ihre Lautstärke",
+  "voiceShowDetail": "Wert anzeigen",
+  "voiceHideDetail": "Wert ausblenden",
   "voiceCompletedTitle": "Übung abgeschlossen",
-  "voiceCompletedDurationLabel": "This session",
+  "voiceCompletedDurationLabel": "Diese Sitzung",
   "voiceCompletedTargetLabel": "Zeit bei Ziellautstärke",
   "voiceCompletedEncourageGood": "Sehr gut! Behalten Sie die Gewohnheit, laut zu sprechen.",
   "voiceCompletedEncourageTryMore": "Guter Versuch. Versuchen Sie beim nächsten Mal etwas lauter zu sprechen.",
-  "voiceRetryButton": "Practice Again",
-  "voiceFinishButton": "Done",
+  "voiceRetryButton": "Erneut üben",
+  "voiceFinishButton": "Fertig",
   "voicePracticeFooterHint": "Diese Übung fördert lautes Sprechen für das Stimmtraining. Nur zur Referenz, keine medizinische Diagnose.",
-  "voiceSessionTooShort": "Die Sitzung war zu kurz und wurde nicht gespeichert"
+  "voiceSessionTooShort": "Die Sitzung war zu kurz und wurde nicht gespeichert",
+  "exportMedicationConsentTitle": "Medikamenten-Spitznamen einschließen?",
+  "exportMedicationConsentBody": "Trainingsaufzeichnungen werden als CSV-Datei exportiert.\n\nMedikamenten-Spitznamen, Erinnerungszeiten und Check-ins werden nur einbezogen, wenn Sie „Diesmal einschließen“ wählen. Dies ist weder ein Rezept noch eine Krankenakte.\n\nMit „Abbrechen“ stoppen Sie den Vorgang. Sie können weiterhin ohne Medikamentendaten exportieren.",
+  "exportMedicationExclude": "Ohne Medikamentendaten exportieren",
+  "exportMedicationInclude": "Medikamentenliste einschließen",
+  "voiceProtocolPickerTitle": "Übungsart auswählen",
+  "voiceProtocolSteady": "Gleichmäßige Lautstärke",
+  "voiceProtocolSteadyDesc": "Halten Sie ein langes „Ah“ im Ziellautstärkebereich.",
+  "voiceProtocolLadder": "Lautstärkeleiter",
+  "voiceProtocolLadderDesc": "Leise → Zielbereich → etwas kräftiger → wieder leiser.",
+  "voiceProtocolMultiSet": "3 kurze Sätze",
+  "voiceProtocolMultiSetDesc": "Drei kurze Runden mit einer kurzen Pause dazwischen.",
+  "voiceTrainingReferenceDisclaimer": "Nur für persönliche Rehabilitationsübungen. Keine Diagnose oder Behandlung.",
+  "voiceLadderPhaseSoft": "Phase 1: leisere Stimme",
+  "voiceLadderPhaseTarget": "Phase 2: Ziellautstärke",
+  "voiceLadderPhaseStrong": "Phase 3: etwas kräftiger",
+  "voiceLadderPhaseCoolDown": "Phase 4: wieder leiser",
+  "voiceLadderChip": "Verbleibende Phase: {seconds}s",
+  "@voiceLadderChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceSetChip": "Satz {current}/{total} · {seconds}s",
+  "@voiceSetChip": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" },
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestChip": "Pause {seconds}s",
+  "@voiceRestChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestTitle": "Pause",
+  "voiceRestBody": "Als Nächstes: Satz {next} von {total}. Entspannen Sie Ihre Stimme.",
+  "@voiceRestBody": {
+    "placeholders": {
+      "next": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "tremorDurationPickerTitle": "Sitzungsdauer",
+  "tremorDurationSeconds": "{seconds}s",
+  "@tremorDurationSeconds": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorTestInstructionDynamic": "Halten Sie das Telefon {seconds} Sekunden lang still. Halten Sie Ihren Arm ruhig.",
+  "@tremorTestInstructionDynamic": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorMotionBandDisclaimer": "Bewegungsbereiche dienen nur der persönlichen Orientierung – nicht als medizinische Beurteilung.",
+  "planTodayTitle": "Heutige Übungen",
+  "planTodaySubtitle": "Vorschläge aus Ihren Trainingsmodulen. Zum Starten tippen.",
+  "planEmptyHint": "Noch keine Vorschläge. Probieren Sie ein Training auf der Startseite aus.",
+  "planDomainHand": "Hand",
+  "planDomainVoice": "Stimme",
+  "planDomainMotion": "Bewegung",
+  "planGoalProgress": "Heute: {done}/{target} Sitzungen",
+  "@planGoalProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "planGoalCompleted": "Das heutige Ziel ist erreicht. Gut gemacht.",
+  "planWeeklyProgress": "Diese Woche: {done}/{target} Sitzungen",
+  "@planWeeklyProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "planOpenTask": "Starten",
+  "planMotionShelvedNote": "Die Bewegungserkennung ist auf manchen Telefonen eingeschränkt; Sie können den Übungsbildschirm trotzdem öffnen.",
+  "voiceProtocolClarity": "Klare Sätze",
+  "voiceProtocolClarityDesc": "Lesen Sie kurze Sätze laut vor. Die Aussprache wird nicht bewertet.",
+  "voiceClarityHint": "Lesen Sie den Satz deutlich vor. Wir prüfen nur, ob Sie gesprochen haben – nicht, ob es „richtig“ war.",
+  "voiceClarityPhraseProgress": "Satz {current} von {total}",
+  "@voiceClarityPhraseProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "voiceClarityVoiceDetected": "Stimme erkannt – gut",
+  "voiceClarityWaitingVoice": "Lesen Sie den Satz laut vor",
+  "voiceClarityNextPhrase": "Nächster Satz",
+  "voiceClarityFinish": "Beenden",
+  "voiceClarityPhrase1": "Guten Morgen",
+  "voiceClarityPhrase2": "Wie geht es Ihnen heute?",
+  "voiceClarityPhrase3": "Bitte reichen Sie mir das Wasser",
+  "voiceClarityPhrase4": "Mir geht es gut",
+  "voiceClarityPhrase5": "Bis morgen",
+  "handModePickerTitle": "Übungsart",
+  "handModeStillHold": "Ruhig halten",
+  "handModeStillHoldDesc": "Halten Sie das Telefon ruhig, während die Sensoren Bewegungen messen.",
+  "handModeObjectHold": "Gegenstand halten",
+  "handModeObjectHoldDesc": "Halten Sie eine Tasse oder einen weichen Ball ruhig. Geführter Timer – keine Objekterkennung.",
+  "handModeFineMotor": "Fingerberührungen",
+  "handModeFineMotorDesc": "Berühren Sie mit dem Daumen nacheinander jeden Finger. Sie zählen die Zyklen selbst.",
+  "handGuidedDisclaimer": "Geführte Übung nur zur persönlichen Rehabilitationsunterstützung. Keine medizinische Beurteilung.",
+  "handObjectHoldInstruction": "Setzen Sie sich bequem hin. Halten Sie eine Tasse oder einen weichen Ball in einer Hand. Halten Sie den Gegenstand ruhig, ohne fest zuzudrücken.",
+  "handObjectHoldStart": "Halten starten",
+  "handObjectHoldRunning": "Weiter ruhig halten…",
+  "handObjectHoldDone": "Halten abgeschlossen",
+  "handFineMotorInstruction": "Berühren Sie mit dem Daumen nacheinander Zeige-, Mittel-, Ring- und kleinen Finger. Das ist ein Zyklus.",
+  "handFineMotorMarkCycle": "Ich habe einen Zyklus abgeschlossen",
+  "handFineMotorProgress": "Zyklen: {done}/{target}",
+  "@handFineMotorProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "handGuidedCompleteTitle": "Übung abgeschlossen",
+  "handGuidedCompleteBody": "Gut gemacht. Diese Sitzung wird nur als persönliche Übung gespeichert.",
+  "dataTabTitle": "Ihre Daten",
+  "dataTabSubtitle": "Wöchentliche Übungswerte und Trends zur persönlichen Orientierung.",
+  "dataTrendsTitle": "Diese Woche im Vergleich zur letzten Woche",
+  "dataOpenFullReport": "Vollständigen Reha-Bericht öffnen",
+  "dataRecentSessions": "Letzte Sitzungen",
+  "dataStreakDays": "Trainingsserie: {days} Tage",
+  "@dataStreakDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "reportShareButton": "Bericht teilen",
+  "reportShareConsentTitle": "Ihre Reha-Zusammenfassung teilen?",
+  "reportShareConsentBody": "Dadurch wird eine Textdatei mit Ihren Übungswerten und Trends erstellt und anschließend das Teilen-Menü des Systems geöffnet (Nachrichten, Mail, Dateien usw.).\n\nNur zur persönlichen Orientierung – keine medizinische Diagnose.\n\nNachdem Sie die Datei gesendet haben, kann Amplio sie nicht vom Empfänger zurückholen. Sie können jetzt abbrechen oder auf dem nächsten Bildschirm kein Freigabeziel auswählen.",
+  "reportShareConsentConfirm": "Ich verstehe – fortfahren",
+  "reportShareFileTitle": "Amplio Care Reha-Zusammenfassung",
+  "reportShareSuccess": "Teilen-Menü geöffnet",
+  "reportShareFailed": "Der Bericht konnte nicht geteilt werden. Bitte versuchen Sie es erneut.",
+  "reportShareFooterNote": "Für jedes Teilen ist Ihre Bestätigung erforderlich. Amplio sendet Ärzten nicht automatisch E-Mails.",
+  "profileTabTitle": "Profil",
+  "profileGuestLabel": "Gast",
+  "profileGuestSubtitle": "Lokal angemeldet. Die Cloud-Synchronisierung ist nach der Anmeldung verfügbar.",
+  "profileSignedInLabel": "Angemeldet",
+  "profileSectionPreferences": "Einstellungen",
+  "profileSectionAccount": "Konto und Daten",
+  "profileSectionLegal": "Datenschutz und Bedingungen",
+  "accessibilitySettings": "Bedienungshilfen",
+  "exitGuestMode": "Gastmodus verlassen",
+  "exitGuestModeConfirm": "Gastmodus verlassen? Sie müssen sich anschließend anmelden oder erneut als Gast fortfahren.",
+  "trainingReminderPageTitle": "Übungserinnerungen",
+  "trainingReminderTitle": "Amplio",
+  "trainingReminderBody": "Eine kurze Übung, wenn Sie Zeit haben. Es ist in Ordnung, sie auszulassen.",
+  "trainingReminderDisclaimer": "Optionale lokale Erinnerungen, kein Behandlungsplan. Sie können sie jederzeit deaktivieren. Eine verpasste Erinnerung verändert Ihre Werte nicht.",
+  "trainingReminderEnable": "An das Üben erinnern",
+  "trainingReminderTimeLabel": "Zeit {n}",
+  "@trainingReminderTimeLabel": {
+    "placeholders": {
+      "n": { "type": "int" }
+    }
+  },
+  "trainingReminderAddTime": "Zweite Zeit hinzufügen",
+  "trainingReminderRemoveTime": "Diese Zeit entfernen",
+  "trainingReminderQuietWeekends": "Wochenenden auslassen",
+  "trainingReminderQuietWeekendsHint": "Samstags und sonntags keine Erinnerungen.",
+  "trainingReminderPermissionDenied": "Benachrichtigungen wurden nicht erlaubt. Sie können sie später in den iPhone-Einstellungen aktivieren.",
+  "planReminderOff": "Übungserinnerung einrichten",
+  "planReminderOn": "Erinnerungen: {times}",
+  "@planReminderOn": {
+    "placeholders": {
+      "times": { "type": "String" }
+    }
+  }
 }

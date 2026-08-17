@@ -2,8 +2,8 @@
   "@@locale": "ko",
   "appTitle": "Amplio",
   "selectTraining": "수행하려는 훈련을 선택하세요",
-  "clickToStartTest": "테스트 시작을 클릭하세요",
-  "clickToStartTraining": "훈련 시작을 클릭하세요",
+  "clickToStartTest": "탭하여 테스트 시작",
+  "clickToStartTraining": "탭하여 훈련 시작",
   "tremorTest": "손 떨림 테스트",
   "tremorTestTitle": "손 떨림 테스트",
   "tremorTestInstruction": "휴대폰을 손에 들고 30초 동안 팔을 정지 상태로 유지하세요",
@@ -68,18 +68,18 @@
   "waveformAxisTime": "시간",
   "waveformAxisAmplitude": "진폭",
   "waveformHint": "파형이 높을수록 손 떨림이 더 뚜렷합니다",
-  "tremorSeverity": "중증도",
+  "tremorSeverity": "움직임 정도",
   "tremorFrequency": "주파수",
   "avgAmplitude": "평균 진폭",
   "maxAmp": "최대 진폭",
   "variability": "변동성",
   "sampleRate": "샘플링",
   "dataPoints": "데이터",
-  "severityNormal": "정상",
-  "severityMild": "경미",
-  "severityModerate": "중등도",
-  "severityModerateSevere": "중증도",
-  "severitySevere": "심각",
+  "severityNormal": "움직임이 적음",
+  "severityMild": "가벼운 움직임",
+  "severityModerate": "중간 정도의 움직임",
+  "severityModerateSevere": "움직임이 큼",
+  "severitySevere": "가장 높은 구간",
   "appSubtitle": "움직임 추적 및 분석을 위한 파킨슨 개인 도우미",
   "signInWithGoogle": "Google로 로그인",
   "signInWithApple": "Apple로 로그인",
@@ -100,12 +100,19 @@
   },
   "syncToCloud": "클라우드에 동기화",
   "dataSynced": "데이터가 성공적으로 동기화되었습니다",
-  "syncing": "Syncing…",
+  "syncing": "동기화 중…",
   "syncFailed": "동기화에 실패했습니다. 네트워크를 확인한 후 다시 시도하세요.",
   "syncFailedHint": "동기화 실패 — 탭하여 다시 시도",
-  "syncRetry": "Retry",
+  "syncRetry": "다시 시도",
   "loginRequiredForSync": "클라우드 동기화를 사용하려면 로그인하세요",
   "lastSyncedAt": "마지막 동기화: {time}",
+  "@lastSyncedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "privacyPolicy": "개인정보 보호정책",
   "privacyPolicyIntro": "소개",
   "privacyPolicyIntroText": "Amplio는 귀하의 개인정보와 건강 데이터 보호에 최선을 다합니다. 본 정책은 정보 수집, 사용, 저장, 보호에 대해 설명합니다.",
@@ -120,9 +127,9 @@
   "userRights": "귀하의 데이터 권리",
   "userRightsText": "다음 권리가 있습니다:\n\n• 접근권: 모든 데이터 조회\n• 이동권: 데이터 내보내기\n• 삭제권: 데이터 삭제\n• 철회권: 언제든 동의 철회\n• 문의: 개인정보 관련 문의",
   "dataSecurity": "보안 조치",
-  "dataSecurityText": "현재 기술 스택에서 사용 가능한 보안 통제로 데이터를 보호합니다:\n\n• 클라우드 요청용 TLS\n• 로그인 계정의 Firebase Authentication\n• 본인 데이터만 접근하도록 제한하는 Firestore 규칙\n• 앱 내 내보내기 및 계정 삭제\n\n전체 로컬 데이터베이스 암호화 등 더 강한 보호는 개선 중이며 완료되었다고 주장하지 않습니다.",
+  "dataSecurityText": "현재 기술 스택에서 제공하는 보안 조치로 데이터를 보호합니다:\n\n• 클라우드 요청용 TLS\n• 로그인 계정용 Firebase Authentication\n• 본인 데이터에만 접근하도록 제한하는 Firestore 규칙\n• 떨림 센서 샘플과 복약 닉네임 등 민감한 로컬 건강 관련 필드를 기기에서 AES로 암호화하고 키는 iOS 키체인에 저장\n• 앱 내 데이터 내보내기 및 계정 삭제\n\n내보낸 파일은 사용자가 직접 이용할 수 있도록 읽을 수 있는 형식으로 작성됩니다. 로컬 데이터베이스 전체가 파일 단위로 암호화된다고 주장하지 않습니다.",
   "medicationPrivacy": "선택적 복약 닉네임 목록",
-  "medicationPrivacyText": "선택적 복약 닉네임 목록을 켜면 닉네임, 알림 시간, 체크인은 이 기기에 저장됩니다. 로그인하면 Amplio 클라우드 계정에도 동기화되어 다른 iPhone에서 복원할 수 있습니다. 알림 권한을 허용한 경우 선택적 로컬 알림은 이 기기에서만 울립니다. 앱에서 이 데이터를 삭제할 수 있습니다(계정 삭제 포함). 이 기능은 의료 조언이 아니며 데이터 내보내기에 기본적으로 포함되지 않습니다.",
+  "medicationPrivacyText": "선택적 복약 닉네임 목록을 켜면 닉네임, 알림 시간, 체크인은 이 기기에 저장됩니다. 로그인하면 Amplio 클라우드 계정에도 동기화되어 다른 iPhone에서 복원할 수 있습니다. 알림 권한을 허용한 경우 선택적 로컬 알림은 이 기기에서만 울립니다. 앱에서 이 데이터를 삭제할 수 있습니다(계정 삭제 포함). 이 기능은 의료 조언이 아니며, 내보낼 때마다 별도로 동의하지 않는 한 복약 데이터는 내보내기에 포함되지 않습니다.",
   "contactUs": "문의하기",
   "contactUsText": "Amplio는 개인 독립 개발자가 운영합니다(도메인: ampliocare.com).\n\n• 개인정보/데이터 요청: privacy@ampliocare.com\n• 사용자 지원: support@ampliocare.com\n• 임상 협력: clinical@ampliocare.com\n• 비즈니스: hello@ampliocare.com",
   "termsOfService": "서비스 약관",
@@ -133,7 +140,7 @@
   "termsUseOfApp": "Amplio 사용",
   "termsUseOfAppText": "Amplio는 떨림 측정, 음성 연습, 동작 연습, 진행 요약, 선택적 복약 닉네임 목록(게스트는 기기 내; 로그인 시 동기화 가능) 등 선택적 훈련 도구를 제공합니다.\n\n합법적인 개인 목적으로만 앱을 사용하고, 타인에게 해를 끼치거나 적용 법률을 위반하는 방식으로 센서, 계정, 내보내기 데이터를 남용하지 않을 것에 동의합니다.",
   "termsMedicalDisclaimer": "의료 조언이 아님",
-  "termsMedicalDisclaimerText": "Amplio는 웰니스 및 재활 훈련 보조 도구입니다. 파킨슨병이나 다른 질환을 진단, 치료, 치유, 예방하지 않습니다.\n\n점수, 추세, 보고서, 알림은 개인 참고용이며 의사, 물리치료사, 언어치료사 또는 기타 자격 있는 전문가의 조언을 대체하지 않습니다. 의료 결정은 전문가와 상담하세요. 통증, 어지럼증 또는 불안전한 상태를 유발하는 운동은 중단하세요.",
+  "termsMedicalDisclaimerText": "Amplio는 웰니스 및 재활 훈련 보조 도구입니다. 파킨슨병이나 다른 질환을 진단, 치료, 치유, 예방하지 않습니다.\n\n점수, 추세, 보고서, 알림은 개인 참고용이며 의사, 물리치료사, 언어치료사 또는 기타 자격 있는 전문가의 조언을 대체하지 않습니다. 의료 결정은 전문가와 상담하세요. 통증이나 어지럼증이 생기거나 안전하게 계속할 수 없는 경우 운동을 중단하세요.",
   "termsAccounts": "계정 및 데이터",
   "termsAccountsText": "Amplio는 Apple 로그인, Google 로그인 또는 게스트로 사용할 수 있습니다. 로그인 계정에서의 활동에 대한 책임은 사용자에게 있습니다.\n\n앱에서 일부 데이터를 내보내거나 삭제할 수 있습니다. 계정 삭제 시 기술·법적 한도 내에서 당사가 통제하는 관련 클라우드 데이터가 삭제됩니다. 게스트 및 기기 전용 데이터는 삭제할 때까지 기기에만 남을 수 있습니다.",
   "termsLimitation": "책임의 제한",
@@ -145,11 +152,15 @@
   "dataManagement": "데이터 관리",
   "gdprRights": "언제든 개인 건강 데이터에 접근, 내보내기, 삭제할 권리가 있습니다.",
   "exportData": "데이터 내보내기",
-  "exportDataDescription": "모든 데이터의 완전한 사본을 다운로드합니다 (JSON 형식).",
+  "exportDataDescription": "프로필과 훈련 기록을 CSV 파일로 내보냅니다. 시스템 공유 시트에서 저장하거나 공유할 수 있습니다. 해당 내보내기에 동의하지 않는 한 복약 닉네임은 포함되지 않습니다.",
   "export": "내보내기",
   "exporting": "내보내는 중...",
   "exportSuccess": "내보내기 성공",
-  "exportSuccessMessage": "데이터가 클립보드에 복사되었습니다.",
+  "exportSuccessMessage": "CSV 파일이 준비되었습니다. 공유 시트에서 파일 앱에 저장하거나 전송할 수 있습니다. 원시 센서 샘플은 개수만 요약됩니다.",
+  "exportMedicationConsentTitle": "복약 닉네임을 포함할까요?",
+  "exportMedicationConsentBody": "훈련 기록은 CSV 파일로 내보내집니다.\n\n‘이번에만 포함’을 선택하지 않는 한 복약 닉네임, 알림 시간 및 체크인은 포함되지 않습니다. 이는 처방전이나 의료 기록이 아닙니다.\n\n취소하면 내보내기를 중단합니다. 복약 데이터 없이 내보낼 수도 있습니다.",
+  "exportMedicationExclude": "복약 데이터 없이 내보내기",
+  "exportMedicationInclude": "복약 목록 포함",
   "deleteAllRecords": "모든 테스트 기록 삭제",
   "deleteAllRecordsDescription": "모든 떨림 테스트 기록을 영구 삭제합니다. 이 작업은 취소할 수 없습니다.",
   "deleteAllData": "모든 데이터 삭제",
@@ -198,7 +209,7 @@
   },
   "voiceTraining": "음성 훈련",
   "voiceTrainingMainInstruction": "긴 소리를 지속적으로 내주세요 —— 아 ——",
-  "voiceTrainingInstruction": "LSVT LOUD 치료 원칙에 따라 큰 소리로 말하세요. 원의 크기는 볼륨에 따라 실시간으로 변경됩니다. 75-85 dB에 도달하면 원이 녹색으로 변합니다.",
+  "voiceTrainingInstruction": "또렷하고 힘 있는 목소리로 말하는 연습을 하세요. 원의 크기는 음량에 따라 변하며, 목표 범위에 도달하면 초록색으로 바뀝니다. 개인 연습용이며 의료 치료가 아닙니다.",
   "voiceTrainingReady": "시작 준비 완료",
   "voiceTrainingCalibrating": "환경 소음 보정 중...",
   "voiceTrainingTooQuiet": "더 크게 말하세요!",
@@ -344,52 +355,90 @@
   "@trainingType": {
     "description": "Training type label"
   },
-  "medicationList": "Medication list",
+  "medicationList": "복약 목록",
   "medicationListEnable": "복약 목록 설정",
   "medicationDisclaimer": "Amplio 복약 목록은 직접 시간을 기록하도록 돕습니다. 의학적 조언이 아니며 용량 안내를 제공하지 않습니다. 게스트는 데이터가 이 기기에만 저장됩니다. 로그인하면 알림과 체크인을 Amplio 계정에 동기화할 수 있습니다.",
   "medicationDisclaimerAccept": "이해했으며 활성화합니다",
-  "medicationLabel": "Label",
+  "medicationLabel": "표시 이름",
   "medicationLabelHint": "예: 아침 식사 후(별명 사용 가능)",
-  "medicationTime": "Time",
-  "medicationTaken": "Taken",
-  "medicationUndo": "Undo",
+  "medicationTime": "시간",
+  "medicationTaken": "복용 완료",
+  "medicationUndo": "되돌리기",
   "medicationUndoConfirm": "이 항목의 오늘 체크인을 삭제할까요?",
   "medicationTodayProgress": "오늘 {done}/{total}",
-  "medicationManage": "Manage",
-  "medicationAdd": "Add reminder",
-  "medicationEdit": "Edit reminder",
+  "@medicationTodayProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "medicationManage": "관리",
+  "medicationAdd": "알림 추가",
+  "medicationEdit": "알림 수정",
   "medicationClose": "복약 목록 끄기",
   "medicationCloseConfirm": "목록을 숨기거나 이 기기의 모든 복약 데이터를 삭제할 수도 있습니다.",
-  "medicationCloseHideOnly": "Hide only",
+  "medicationCloseHideOnly": "숨기기만",
   "medicationCloseAndDelete": "숨기고 모든 데이터 삭제",
   "medicationDeleteAllData": "복약 목록 데이터 삭제",
   "medicationDeleteAllDataDescription": "이 기기의 모든 복약 알림과 체크인을 영구 삭제합니다.",
   "medicationDeleteAllDataConfirm": "이 기기의 복약 목록 데이터를 모두 삭제할까요? 이 작업은 되돌릴 수 없습니다.",
-  "medicationCollapse": "Collapse",
-  "medicationExpand": "Expand",
+  "medicationCollapse": "접기",
+  "medicationExpand": "펼치기",
   "medicationEmptyToday": "오늘 알림이 없습니다. 관리에서 추가하세요.",
-  "medicationCompletedAt": "Done at {time}",
-  "medicationSave": "Save",
-  "medicationDeleteReminder": "Delete reminder",
+  "medicationCompletedAt": "{time}에 완료",
+  "@medicationCompletedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "medicationSave": "저장",
+  "medicationDeleteReminder": "알림 삭제",
   "medicationDeleteReminderConfirm": "이 알림을 삭제할까요?",
   "medicationNoReminders": "아직 알림이 없습니다",
   "medicationDeleteSuccess": "복약 목록 데이터가 삭제되었습니다",
-  "rehabReport": "Rehab report",
+  "rehabReport": "재활 보고서",
   "rehabReportDisclaimer": "재활 참고용입니다. 의학적 진단이 아니며 케어팀의 조언을 대체하지 않습니다.",
-  "reportOverallScore": "Overall score",
+  "reportOverallScore": "종합 점수",
   "reportDailyProgress": "오늘 목표: {percent}%",
+  "@reportDailyProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "reportWeeklyProgress": "이번 주: {percent}%",
+  "@reportWeeklyProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "reportStreak": "연속: {days}일",
+  "@reportStreak": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "reportNoData": "아직 훈련 데이터가 부족합니다",
-  "handTraining": "Hand",
-  "voiceTrainingShort": "Voice",
-  "motionTrainingShort": "Movement",
-  "tabHome": "Home",
-  "tabPlan": "Plan",
-  "tabData": "Data",
-  "tabProfile": "Profile",
-  "comingSoon": "Coming soon",
-  "trainingStreak": "{days} days",
+  "handTraining": "손",
+  "voiceTrainingShort": "음성",
+  "motionTrainingShort": "동작",
+  "tabHome": "홈",
+  "tabPlan": "계획",
+  "tabData": "데이터",
+  "tabProfile": "프로필",
+  "comingSoon": "출시 예정",
+  "trainingStreak": "{days}일",
   "@trainingStreak": {
     "placeholders": {
       "days": {
@@ -397,11 +446,11 @@
       }
     }
   },
-  "trainingStreakLabel": "Training Streak",
-  "voiceClarity": "Voice Clarity",
-  "handStability": "Hand Stability",
+  "trainingStreakLabel": "연속 훈련",
+  "voiceClarity": "음성 명료도",
+  "handStability": "손 안정성",
   "movementAbility": "동작 훈련",
-  "medicationReminder": "Medication",
+  "medicationReminder": "복약",
   "lastTrainingAgo": "마지막 훈련 · {timeAgo}",
   "@lastTrainingAgo": {
     "placeholders": {
@@ -418,9 +467,9 @@
       }
     }
   },
-  "relativeToday": "Today",
-  "relativeYesterday": "Yesterday",
-  "relativeDaysAgo": "{days} days ago",
+  "relativeToday": "오늘",
+  "relativeYesterday": "어제",
+  "relativeDaysAgo": "{days}일 전",
   "@relativeDaysAgo": {
     "placeholders": {
       "days": {
@@ -428,10 +477,10 @@
       }
     }
   },
-  "noTrainingYet": "No training yet",
+  "noTrainingYet": "아직 훈련 기록이 없습니다",
   "noMeasurementYet": "아직 측정 없음",
-  "tapToStart": "Tap to start",
-  "durationSec": "{count}s",
+  "tapToStart": "탭하여 시작",
+  "durationSec": "{count}초",
   "@durationSec": {
     "placeholders": {
       "count": {
@@ -439,7 +488,7 @@
       }
     }
   },
-  "durationMin": "{count} min",
+  "durationMin": "{count}분",
   "@durationMin": {
     "placeholders": {
       "count": {
@@ -447,8 +496,8 @@
       }
     }
   },
-  "voiceSessionCount": "1 session",
-  "handMeasurementCount": "1 measurement",
+  "voiceSessionCount": "1회 세션",
+  "handMeasurementCount": "1회 측정",
   "motionCompletionCount": "{done}/{total}회",
   "@motionCompletionCount": {
     "placeholders": {
@@ -463,7 +512,7 @@
   "medicationSetupPrompt": "복약 알림 설정",
   "medicationSetupSubtitle": "이 기기에 저장; 로그인 시 동기화",
   "medicationNoUpcoming": "오늘 예정된 알림 없음",
-  "medicationNextDoseLabel": "Next dose",
+  "medicationNextDoseLabel": "다음 복약",
   "medicationNextDoseTime": "{time}",
   "@medicationNextDoseTime": {
     "placeholders": {
@@ -472,8 +521,8 @@
       }
     }
   },
-  "medicationStatusUpcoming": "Upcoming",
-  "medicationStatusPending": "Pending",
+  "medicationStatusUpcoming": "예정",
+  "medicationStatusPending": "대기 중",
   "medicationNotificationBody": "복약 시간: {label}",
   "@medicationNotificationBody": {
     "placeholders": {
@@ -483,7 +532,7 @@
     }
   },
   "medicationNotificationPermissionNote": "선택 사항: 알림을 허용하면 Amplio가 설정한 시간에 이 기기에서 알려 줍니다. 알림은 이 기기에만 유지됩니다.",
-  "recentActivity": "Recent Activity",
+  "recentActivity": "최근 활동",
   "nonMedicalDisclaimerTitle": "참고용입니다",
   "nonMedicalDisclaimerBody": "표시된 측정값은 재활 훈련 참고용입니다. 의학적 진단이 아니며 의료팀의 조언을 대체하지 않습니다.",
   "voicePrepHint": "편하게 앉으세요. 휴대폰을 입에서 약 30cm 떨어뜨려 드세요.",
@@ -520,17 +569,188 @@
       }
     }
   },
-  "voiceLegendTarget": "Target volume",
-  "voiceLegendYours": "Your volume",
-  "voiceShowDetail": "Show number",
-  "voiceHideDetail": "Hide number",
+  "voiceLegendTarget": "목표 음량",
+  "voiceLegendYours": "내 음량",
+  "voiceShowDetail": "수치 표시",
+  "voiceHideDetail": "수치 숨기기",
   "voiceCompletedTitle": "연습 완료",
-  "voiceCompletedDurationLabel": "This session",
+  "voiceCompletedDurationLabel": "이번 세션",
   "voiceCompletedTargetLabel": "목표 음량 도달 시간",
   "voiceCompletedEncourageGood": "잘하셨어요! 크게 말하는 습관을 이어가세요.",
   "voiceCompletedEncourageTryMore": "좋은 시도예요. 다음에는 조금 더 크게 말해 보세요.",
-  "voiceRetryButton": "Practice Again",
-  "voiceFinishButton": "Done",
+  "voiceRetryButton": "다시 연습",
+  "voiceFinishButton": "완료",
   "voicePracticeFooterHint": "이 연습은 음성 훈련을 위해 크게 말하기를 권장합니다. 참고용이며 의학적 진단이 아닙니다.",
-  "voiceSessionTooShort": "세션이 너무 짧아 저장되지 않았습니다"
+  "voiceSessionTooShort": "세션이 너무 짧아 저장되지 않았습니다",
+  "voiceProtocolPickerTitle": "연습 방식 선택",
+  "voiceProtocolSteady": "일정한 음량",
+  "voiceProtocolSteadyDesc": "목표 음량 구간에서 길게 ‘아’ 소리를 냅니다.",
+  "voiceProtocolLadder": "음량 단계",
+  "voiceProtocolLadderDesc": "작게 → 목표 → 조금 더 크게 → 서서히 줄이기.",
+  "voiceProtocolMultiSet": "짧은 3세트",
+  "voiceProtocolMultiSetDesc": "짧게 세 번 연습하고 세트 사이에 잠시 쉽니다.",
+  "voiceTrainingReferenceDisclaimer": "개인 재활 연습용이며 진단이나 치료가 아닙니다.",
+  "voiceLadderPhaseSoft": "1단계: 작은 목소리",
+  "voiceLadderPhaseTarget": "2단계: 목표 음량",
+  "voiceLadderPhaseStrong": "3단계: 조금 더 크게",
+  "voiceLadderPhaseCoolDown": "4단계: 서서히 줄이기",
+  "voiceLadderChip": "단계 남은 시간: {seconds}초",
+  "@voiceLadderChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceSetChip": "{current}/{total}세트 · {seconds}초",
+  "@voiceSetChip": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" },
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestChip": "휴식 {seconds}초",
+  "@voiceRestChip": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "voiceRestTitle": "휴식",
+  "voiceRestBody": "다음은 총 {total}세트 중 {next}세트입니다. 목소리를 편하게 쉬세요.",
+  "@voiceRestBody": {
+    "placeholders": {
+      "next": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "tremorDurationPickerTitle": "측정 시간",
+  "tremorDurationSeconds": "{seconds}초",
+  "@tremorDurationSeconds": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorTestInstructionDynamic": "휴대폰을 {seconds}초 동안 움직이지 말고 팔을 안정적으로 유지하세요.",
+  "@tremorTestInstructionDynamic": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "tremorMotionBandDisclaimer": "움직임 구간은 개인 참고용이며 의학적 평가가 아닙니다.",
+  "planTodayTitle": "오늘의 연습",
+  "planTodaySubtitle": "훈련 모듈을 바탕으로 한 제안입니다. 탭하여 시작하세요.",
+  "planEmptyHint": "아직 제안이 없습니다. 홈에서 훈련을 시작해 보세요.",
+  "planDomainHand": "손",
+  "planDomainVoice": "음성",
+  "planDomainMotion": "동작",
+  "planGoalProgress": "오늘: {done}/{target}회",
+  "@planGoalProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "planGoalCompleted": "오늘의 목표를 달성했습니다. 잘하셨어요.",
+  "planWeeklyProgress": "이번 주: {done}/{target}회",
+  "@planWeeklyProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "planOpenTask": "시작",
+  "planMotionShelvedNote": "일부 휴대폰에서는 동작 감지가 제한될 수 있지만 연습 화면은 열 수 있습니다.",
+  "voiceProtocolClarity": "명료한 문장",
+  "voiceProtocolClarityDesc": "짧은 문장을 소리 내어 읽습니다. 발음 점수는 매기지 않습니다.",
+  "voiceClarityHint": "문장을 또렷하게 읽어 주세요. 말했는지만 확인하며 ‘정확한’ 발음인지는 판단하지 않습니다.",
+  "voiceClarityPhraseProgress": "문장 {current}/{total}",
+  "@voiceClarityPhraseProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "voiceClarityVoiceDetected": "음성이 감지되었습니다",
+  "voiceClarityWaitingVoice": "문장을 소리 내어 읽어 주세요",
+  "voiceClarityNextPhrase": "다음 문장",
+  "voiceClarityFinish": "마치기",
+  "voiceClarityPhrase1": "좋은 아침이에요",
+  "voiceClarityPhrase2": "오늘 기분은 어떠세요?",
+  "voiceClarityPhrase3": "물 좀 건네주세요",
+  "voiceClarityPhrase4": "저는 잘 지내고 있어요",
+  "voiceClarityPhrase5": "내일 만나요",
+  "handModePickerTitle": "연습 방식",
+  "handModeStillHold": "가만히 들기",
+  "handModeStillHoldDesc": "센서가 움직임을 측정하는 동안 휴대폰을 움직이지 말고 잡으세요.",
+  "handModeObjectHold": "물건 들기",
+  "handModeObjectHoldDesc": "컵이나 부드러운 공을 안정적으로 잡으세요. 타이머로만 안내하며 물체를 감지하지 않습니다.",
+  "handModeFineMotor": "손가락 맞대기",
+  "handModeFineMotorDesc": "엄지손가락을 다른 손가락에 차례로 맞댑니다. 횟수는 직접 세어 주세요.",
+  "handGuidedDisclaimer": "개인 재활 지원을 위한 안내 연습이며 의학적 평가가 아닙니다.",
+  "handObjectHoldInstruction": "편하게 앉아 한 손으로 컵이나 부드러운 공을 잡으세요. 세게 쥐지 말고 안정적으로 유지하세요.",
+  "handObjectHoldStart": "들기 시작",
+  "handObjectHoldRunning": "안정적으로 계속 잡으세요…",
+  "handObjectHoldDone": "들기 완료",
+  "handFineMotorInstruction": "엄지손가락을 검지, 중지, 약지, 새끼손가락 순서로 맞대세요. 여기까지가 1회입니다.",
+  "handFineMotorMarkCycle": "1회 완료",
+  "handFineMotorProgress": "횟수: {done}/{target}",
+  "@handFineMotorProgress": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "handGuidedCompleteTitle": "연습 완료",
+  "handGuidedCompleteBody": "잘하셨어요. 이 세션은 개인 연습 기록으로만 저장됩니다.",
+  "dataTabTitle": "내 데이터",
+  "dataTabSubtitle": "개인 참고용 주간 연습 점수와 추세입니다.",
+  "dataTrendsTitle": "이번 주와 지난주 비교",
+  "dataOpenFullReport": "전체 재활 보고서 열기",
+  "dataRecentSessions": "최근 세션",
+  "dataStreakDays": "연속 훈련: {days}일",
+  "@dataStreakDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "reportShareButton": "보고서 공유",
+  "reportShareConsentTitle": "재활 요약을 공유할까요?",
+  "reportShareConsentBody": "연습 점수와 추세가 포함된 텍스트 파일을 만든 후 시스템 공유 시트(메시지, Mail, 파일 등)를 엽니다.\n\n개인 참고용이며 의학적 진단이 아닙니다.\n\n파일을 보낸 후에는 Amplio가 수신자에게서 파일을 회수할 수 없습니다. 지금 취소하거나 다음 화면에서 공유 대상을 선택하지 않고 닫을 수 있습니다.",
+  "reportShareConsentConfirm": "이해했으며 계속합니다",
+  "reportShareFileTitle": "Amplio Care 재활 요약",
+  "reportShareSuccess": "공유 시트를 열었습니다",
+  "reportShareFailed": "보고서를 공유하지 못했습니다. 다시 시도해 주세요.",
+  "reportShareFooterNote": "공유할 때마다 확인이 필요합니다. Amplio는 의사에게 자동으로 이메일을 보내지 않습니다.",
+  "profileTabTitle": "프로필",
+  "profileGuestLabel": "게스트",
+  "profileGuestSubtitle": "기기에서 사용 중입니다. 로그인하면 클라우드 동기화를 사용할 수 있습니다.",
+  "profileSignedInLabel": "로그인됨",
+  "profileSectionPreferences": "환경설정",
+  "profileSectionAccount": "계정 및 데이터",
+  "profileSectionLegal": "개인정보 및 약관",
+  "accessibilitySettings": "손쉬운 사용",
+  "exitGuestMode": "게스트 모드 종료",
+  "exitGuestModeConfirm": "게스트 모드를 종료할까요? 다시 로그인하거나 게스트로 계속해야 합니다.",
+  "trainingReminderPageTitle": "연습 알림",
+  "trainingReminderTitle": "Amplio",
+  "trainingReminderBody": "가능할 때 짧게 연습해 보세요. 놓쳐도 괜찮습니다.",
+  "trainingReminderDisclaimer": "선택적 로컬 알림이며 치료 일정이 아닙니다. 언제든 끌 수 있습니다. 알림을 놓쳐도 점수에는 영향을 주지 않습니다.",
+  "trainingReminderEnable": "연습 시간 알림",
+  "trainingReminderTimeLabel": "시간 {n}",
+  "@trainingReminderTimeLabel": {
+    "placeholders": {
+      "n": { "type": "int" }
+    }
+  },
+  "trainingReminderAddTime": "두 번째 시간 추가",
+  "trainingReminderRemoveTime": "이 시간 삭제",
+  "trainingReminderQuietWeekends": "주말 건너뛰기",
+  "trainingReminderQuietWeekendsHint": "토요일과 일요일에는 알림을 보내지 않습니다.",
+  "trainingReminderPermissionDenied": "알림이 허용되지 않았습니다. 나중에 iPhone 설정에서 활성화할 수 있습니다.",
+  "planReminderOff": "연습 알림 설정",
+  "planReminderOn": "알림: {times}",
+  "@planReminderOn": {
+    "placeholders": {
+      "times": { "type": "String" }
+    }
+  }
 }

@@ -140,7 +140,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get waveformHint => 'Чем выше волна — тем заметнее дрожание руки';
 
   @override
-  String get tremorSeverity => 'Тяжесть';
+  String get tremorSeverity => 'Диапазон движений';
 
   @override
   String get tremorFrequency => 'Частота';
@@ -155,25 +155,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get variability => 'Изменчив.';
 
   @override
-  String get sampleRate => 'Частота';
+  String get sampleRate => 'Частота дискретизации';
 
   @override
-  String get dataPoints => 'Данные';
+  String get dataPoints => 'Точки данных';
 
   @override
-  String get severityNormal => 'Норма';
+  String get severityNormal => 'Более слабое движение';
 
   @override
-  String get severityMild => 'Легко';
+  String get severityMild => 'Слабое движение';
 
   @override
-  String get severityModerate => 'Умеренно';
+  String get severityModerate => 'Умеренное движение';
 
   @override
-  String get severityModerateSevere => 'Ум-Тяжело';
+  String get severityModerateSevere => 'Более сильное движение';
 
   @override
-  String get severitySevere => 'Тяжело';
+  String get severitySevere => 'Самый высокий диапазон';
 
   @override
   String get appSubtitle =>
@@ -219,7 +219,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get dataSynced => 'Данные успешно синхронизированы';
 
   @override
-  String get syncing => 'Syncing…';
+  String get syncing => 'Синхронизация…';
 
   @override
   String get syncFailed =>
@@ -229,7 +229,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get syncFailedHint => 'Сбой синхронизации — нажмите, чтобы повторить';
 
   @override
-  String get syncRetry => 'Retry';
+  String get syncRetry => 'Повторить';
 
   @override
   String get loginRequiredForSync =>
@@ -290,14 +290,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get dataSecurityText =>
-      'Мы защищаем ваши данные средствами безопасности текущего стека:\n\n• TLS для облачных запросов\n• Firebase Authentication для вошедших аккаунтов\n• Правила Firestore, ограничивающие доступ вашими данными\n• Экспорт и удаление аккаунта в приложении\n\nБолее сильные меры, такие как полное шифрование локальной базы, всё ещё улучшаются и не заявляются как завершённые.';
+      'Мы защищаем ваши данные с помощью средств безопасности, доступных в текущем техническом стеке:\n\n• TLS для облачных запросов\n• Firebase Authentication для вошедших в систему аккаунтов\n• Правила Firestore, ограничивающие доступ только вашими данными\n• Шифрование AES на устройстве для конфиденциальных локальных медицинских данных, таких как образцы датчика тремора и условные названия лекарств, при этом ключ хранится в Связке ключей iOS\n• Экспорт данных и удаление аккаунта в приложении\n\nЭкспортируемые файлы записываются в читаемом формате для вашего использования. Мы не заявляем о полном шифровании файла всей локальной базы данных.';
 
   @override
-  String get medicationPrivacy => 'Необязательный список прозвищ лекарств';
+  String get medicationPrivacy =>
+      'Необязательный список условных названий лекарств';
 
   @override
   String get medicationPrivacyText =>
-      'Если вы включите необязательный список прозвищ лекарств, прозвища, время напоминаний и отметки хранятся на этом устройстве. При входе они также могут синхронизироваться с облачным аккаунтом Amplio для восстановления на другом iPhone. Необязательные локальные уведомления могут появляться только на этом устройстве при разрешении уведомлений. Эти данные можно удалить в приложении (включая удаление аккаунта). Функция не является медицинской рекомендацией и по умолчанию не включается в экспорт данных.';
+      'Если вы включите необязательный список условных названий лекарств, условные названия, время напоминаний и отметки будут храниться на этом устройстве. После входа они также могут синхронизироваться с вашим облачным аккаунтом Amplio, чтобы их можно было восстановить на другом iPhone. Необязательные локальные уведомления могут появляться на этом устройстве, только если вы разрешите их. Эти данные можно удалить в приложении, в том числе при удалении аккаунта. Эта функция не является медицинской рекомендацией, а данные не включаются в экспорт, если вы отдельно не дадите согласие при каждом экспорте.';
 
   @override
   String get contactUs => 'Связаться с Нами';
@@ -328,7 +329,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get termsUseOfAppText =>
-      'Amplio предоставляет необязательные инструменты тренировки, такие как измерение тремора, голосовые упражнения, упражнения на движение, сводки прогресса и необязательный список прозвищ лекарств (на устройстве для гостей; синхронизация возможна при входе).\n\nВы соглашаетесь использовать приложение только в законных личных целях и не злоупотреблять датчиками, аккаунтами или экспортированными данными способами, вредящими другим или нарушающими применимое право.';
+      'Amplio предоставляет необязательные инструменты тренировки, такие как измерение тремора, голосовые упражнения, упражнения на движение, сводки прогресса и необязательный список условных названий лекарств (на устройстве для гостей; синхронизация возможна при входе).\n\nВы соглашаетесь использовать приложение только в законных личных целях и не злоупотреблять датчиками, аккаунтами или экспортированными данными способами, вредящими другим или нарушающими применимое право.';
 
   @override
   String get termsMedicalDisclaimer => 'Не медицинская рекомендация';
@@ -376,7 +377,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get exportDataDescription =>
-      'Загрузите полную копию всех ваших данных (формат JSON).';
+      'Экспортируйте профиль и записи тренировок в файл CSV. Его можно сохранить или отправить через системное меню «Поделиться». Условные названия лекарств не включаются без вашего согласия для конкретного экспорта.';
 
   @override
   String get export => 'Экспорт';
@@ -388,20 +389,23 @@ class AppLocalizationsRu extends AppLocalizations {
   String get exportSuccess => 'Экспорт Успешен';
 
   @override
-  String get exportSuccessMessage => 'Ваши данные скопированы в буфер обмена.';
+  String get exportSuccessMessage =>
+      'Файл CSV готов. Используйте меню «Поделиться», чтобы сохранить его в «Файлы» или отправить. Необработанные образцы датчиков представлены только их количеством.';
 
   @override
-  String get exportMedicationConsentTitle => 'Include medication nicknames?';
+  String get exportMedicationConsentTitle =>
+      'Включить условные названия лекарств?';
 
   @override
   String get exportMedicationConsentBody =>
-      'Training records will be exported as a CSV file.\n\nMedication nicknames, reminder times, and check-ins are not included unless you choose Include this time. This is not a prescription or medical record.\n\nCancel to stop. You can still export without medication data.';
+      'Записи тренировок будут экспортированы в файл CSV.\n\nУсловные названия лекарств, время напоминаний и отметки не включаются, если вы не выберете «Включить в этот раз». Это не рецепт и не медицинская карта.\n\nНажмите «Отмена», чтобы остановить экспорт. Экспорт без данных о лекарствах по-прежнему доступен.';
 
   @override
-  String get exportMedicationExclude => 'Export without medication';
+  String get exportMedicationExclude =>
+      'Экспортировать без данных о лекарствах';
 
   @override
-  String get exportMedicationInclude => 'Include medication list';
+  String get exportMedicationInclude => 'Включить список лекарств';
 
   @override
   String get deleteAllRecords => 'Удалить Все Записи';
@@ -512,7 +516,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get voiceTrainingInstruction =>
-      'Основываясь на принципах терапии LSVT LOUD, пожалуйста, говорите громко. Размер круга будет изменяться в реальном времени в зависимости от вашей громкости. Когда он достигнет 75-85 дБ, круг станет зелёным.';
+      'Тренируйтесь говорить чётким, сильным голосом. Размер круга меняется в зависимости от громкости. При достижении целевого диапазона круг становится зелёным. Только для личной практики — не является лечением.';
 
   @override
   String get voiceTrainingReady => 'Готов к началу';
@@ -656,7 +660,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get trainingType => 'Тип Тренировки';
 
   @override
-  String get medicationList => 'Medication list';
+  String get medicationList => 'Список лекарств';
 
   @override
   String get medicationListEnable => 'Настроить список лекарств';
@@ -669,20 +673,20 @@ class AppLocalizationsRu extends AppLocalizations {
   String get medicationDisclaimerAccept => 'Понимаю и включаю';
 
   @override
-  String get medicationLabel => 'Label';
+  String get medicationLabel => 'Название';
 
   @override
   String get medicationLabelHint =>
-      'напр. После завтрака (можно использовать прозвище)';
+      'например, после завтрака (можно использовать условное название)';
 
   @override
-  String get medicationTime => 'Time';
+  String get medicationTime => 'Время';
 
   @override
-  String get medicationTaken => 'Taken';
+  String get medicationTaken => 'Принято';
 
   @override
-  String get medicationUndo => 'Undo';
+  String get medicationUndo => 'Отменить';
 
   @override
   String get medicationUndoConfirm =>
@@ -694,13 +698,13 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get medicationManage => 'Manage';
+  String get medicationManage => 'Управление';
 
   @override
-  String get medicationAdd => 'Add reminder';
+  String get medicationAdd => 'Добавить напоминание';
 
   @override
-  String get medicationEdit => 'Edit reminder';
+  String get medicationEdit => 'Изменить напоминание';
 
   @override
   String get medicationClose => 'Отключить список лекарств';
@@ -710,7 +714,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Можно скрыть список или также удалить все данные о лекарствах на этом устройстве.';
 
   @override
-  String get medicationCloseHideOnly => 'Hide only';
+  String get medicationCloseHideOnly => 'Только скрыть';
 
   @override
   String get medicationCloseAndDelete => 'Скрыть и удалить все данные';
@@ -727,10 +731,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Удалить все данные списка лекарств на этом устройстве? Это действие нельзя отменить.';
 
   @override
-  String get medicationCollapse => 'Collapse';
+  String get medicationCollapse => 'Свернуть';
 
   @override
-  String get medicationExpand => 'Expand';
+  String get medicationExpand => 'Развернуть';
 
   @override
   String get medicationEmptyToday =>
@@ -738,14 +742,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String medicationCompletedAt(String time) {
-    return 'Done at $time';
+    return 'Отмечено в $time';
   }
 
   @override
-  String get medicationSave => 'Save';
+  String get medicationSave => 'Сохранить';
 
   @override
-  String get medicationDeleteReminder => 'Delete reminder';
+  String get medicationDeleteReminder => 'Удалить напоминание';
 
   @override
   String get medicationDeleteReminderConfirm => 'Удалить это напоминание?';
@@ -757,14 +761,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get medicationDeleteSuccess => 'Данные списка лекарств удалены';
 
   @override
-  String get rehabReport => 'Rehab report';
+  String get rehabReport => 'Отчёт о реабилитации';
 
   @override
   String get rehabReportDisclaimer =>
-      'Только для реабилитационной справки. Не является медицинским диагнозом и не заменяет рекомендации вашей команды ухода.';
+      'Только для справки о реабилитации. Не является медицинским диагнозом и не заменяет рекомендации ваших лечащих специалистов.';
 
   @override
-  String get reportOverallScore => 'Overall score';
+  String get reportOverallScore => 'Общая оценка';
 
   @override
   String reportDailyProgress(int percent) {
@@ -785,48 +789,48 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reportNoData => 'Пока недостаточно данных тренировок';
 
   @override
-  String get handTraining => 'Hand';
+  String get handTraining => 'Рука';
 
   @override
-  String get voiceTrainingShort => 'Voice';
+  String get voiceTrainingShort => 'Голос';
 
   @override
-  String get motionTrainingShort => 'Movement';
+  String get motionTrainingShort => 'Движение';
 
   @override
-  String get tabHome => 'Home';
+  String get tabHome => 'Главная';
 
   @override
-  String get tabPlan => 'Plan';
+  String get tabPlan => 'План';
 
   @override
-  String get tabData => 'Data';
+  String get tabData => 'Данные';
 
   @override
-  String get tabProfile => 'Profile';
+  String get tabProfile => 'Профиль';
 
   @override
-  String get comingSoon => 'Coming soon';
+  String get comingSoon => 'Скоро';
 
   @override
   String trainingStreak(int days) {
-    return '$days days';
+    return '$days дн.';
   }
 
   @override
-  String get trainingStreakLabel => 'Training Streak';
+  String get trainingStreakLabel => 'Серия тренировок';
 
   @override
-  String get voiceClarity => 'Voice Clarity';
+  String get voiceClarity => 'Чёткость речи';
 
   @override
-  String get handStability => 'Hand Stability';
+  String get handStability => 'Стабильность руки';
 
   @override
-  String get movementAbility => 'Тренировка движений';
+  String get movementAbility => 'Двигательная активность';
 
   @override
-  String get medicationReminder => 'Medication';
+  String get medicationReminder => 'Лекарства';
 
   @override
   String lastTrainingAgo(String timeAgo) {
@@ -839,40 +843,40 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get relativeToday => 'Today';
+  String get relativeToday => 'Сегодня';
 
   @override
-  String get relativeYesterday => 'Yesterday';
+  String get relativeYesterday => 'Вчера';
 
   @override
   String relativeDaysAgo(int days) {
-    return '$days days ago';
+    return '$days дн. назад';
   }
 
   @override
-  String get noTrainingYet => 'No training yet';
+  String get noTrainingYet => 'Тренировок пока нет';
 
   @override
   String get noMeasurementYet => 'Ещё нет измерений';
 
   @override
-  String get tapToStart => 'Tap to start';
+  String get tapToStart => 'Нажмите, чтобы начать';
 
   @override
   String durationSec(int count) {
-    return '${count}s';
+    return '$count с';
   }
 
   @override
   String durationMin(int count) {
-    return '$count min';
+    return '$count мин';
   }
 
   @override
-  String get voiceSessionCount => '1 session';
+  String get voiceSessionCount => '1 сеанс';
 
   @override
-  String get handMeasurementCount => '1 measurement';
+  String get handMeasurementCount => '1 измерение';
 
   @override
   String motionCompletionCount(int done, int total) {
@@ -890,7 +894,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get medicationNoUpcoming => 'Сегодня нет предстоящих напоминаний';
 
   @override
-  String get medicationNextDoseLabel => 'Next dose';
+  String get medicationNextDoseLabel => 'Следующий приём';
 
   @override
   String medicationNextDoseTime(String time) {
@@ -898,10 +902,10 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get medicationStatusUpcoming => 'Upcoming';
+  String get medicationStatusUpcoming => 'Скоро';
 
   @override
-  String get medicationStatusPending => 'Pending';
+  String get medicationStatusPending => 'Ожидается';
 
   @override
   String medicationNotificationBody(String label) {
@@ -913,7 +917,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'По желанию: разрешите уведомления, чтобы Amplio напоминал в заданное вами время. Уведомления остаются на этом устройстве.';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Недавняя активность';
 
   @override
   String get nonMedicalDisclaimerTitle => 'Только для справки';
@@ -951,22 +955,22 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get voiceLegendTarget => 'Target volume';
+  String get voiceLegendTarget => 'Целевая громкость';
 
   @override
-  String get voiceLegendYours => 'Your volume';
+  String get voiceLegendYours => 'Ваша громкость';
 
   @override
-  String get voiceShowDetail => 'Show number';
+  String get voiceShowDetail => 'Показать значение';
 
   @override
-  String get voiceHideDetail => 'Hide number';
+  String get voiceHideDetail => 'Скрыть значение';
 
   @override
   String get voiceCompletedTitle => 'Практика завершена';
 
   @override
-  String get voiceCompletedDurationLabel => 'This session';
+  String get voiceCompletedDurationLabel => 'Эта сессия';
 
   @override
   String get voiceCompletedTargetLabel => 'Время на целевой громкости';
@@ -980,10 +984,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Хорошая попытка. В следующий раз постарайтесь говорить чуть громче.';
 
   @override
-  String get voiceRetryButton => 'Practice Again';
+  String get voiceRetryButton => 'Повторить';
 
   @override
-  String get voiceFinishButton => 'Done';
+  String get voiceFinishButton => 'Готово';
 
   @override
   String get voicePracticeFooterHint =>
@@ -994,351 +998,352 @@ class AppLocalizationsRu extends AppLocalizations {
       'Сеанс был слишком коротким и не был сохранён';
 
   @override
-  String get voiceProtocolPickerTitle => 'Choose a practice style';
+  String get voiceProtocolPickerTitle => 'Выберите формат тренировки';
 
   @override
-  String get voiceProtocolSteady => 'Steady volume';
+  String get voiceProtocolSteady => 'Ровная громкость';
 
   @override
   String get voiceProtocolSteadyDesc =>
-      'Sustain a long “Ah” in the target volume zone.';
+      'Тяните долгий звук «А-а» в целевом диапазоне громкости.';
 
   @override
-  String get voiceProtocolLadder => 'Volume ladder';
+  String get voiceProtocolLadder => 'Лестница громкости';
 
   @override
   String get voiceProtocolLadderDesc =>
-      'Soft → target → a bit stronger → ease down.';
+      'Тихо → целевой уровень → немного громче → постепенно тише.';
 
   @override
-  String get voiceProtocolMultiSet => '3 short sets';
+  String get voiceProtocolMultiSet => '3 коротких подхода';
 
   @override
   String get voiceProtocolMultiSetDesc =>
-      'Three short rounds with a brief rest between.';
+      'Три коротких подхода с небольшим отдыхом между ними.';
 
   @override
   String get voiceTrainingReferenceDisclaimer =>
-      'For personal rehabilitation practice only. Not a diagnosis or treatment.';
+      'Только для личной реабилитационной практики. Не является диагностикой или лечением.';
 
   @override
-  String get voiceLadderPhaseSoft => 'Phase 1: softer voice';
+  String get voiceLadderPhaseSoft => 'Этап 1: более тихий голос';
 
   @override
-  String get voiceLadderPhaseTarget => 'Phase 2: target volume';
+  String get voiceLadderPhaseTarget => 'Этап 2: целевая громкость';
 
   @override
-  String get voiceLadderPhaseStrong => 'Phase 3: a bit stronger';
+  String get voiceLadderPhaseStrong => 'Этап 3: немного громче';
 
   @override
-  String get voiceLadderPhaseCoolDown => 'Phase 4: ease down';
+  String get voiceLadderPhaseCoolDown => 'Этап 4: постепенно тише';
 
   @override
   String voiceLadderChip(int seconds) {
-    return 'Phase left: ${seconds}s';
+    return 'До конца этапа: $seconds с';
   }
 
   @override
   String voiceSetChip(int current, int total, int seconds) {
-    return 'Set $current/$total · ${seconds}s';
+    return 'Подход $current/$total · $seconds с';
   }
 
   @override
   String voiceRestChip(int seconds) {
-    return 'Rest ${seconds}s';
+    return 'Отдых: $seconds с';
   }
 
   @override
-  String get voiceRestTitle => 'Rest';
+  String get voiceRestTitle => 'Отдых';
 
   @override
   String voiceRestBody(int next, int total) {
-    return 'Next: set $next of $total. Relax your voice.';
+    return 'Далее: подход $next из $total. Расслабьте голос.';
   }
 
   @override
-  String get tremorDurationPickerTitle => 'Session length';
+  String get tremorDurationPickerTitle => 'Длительность сеанса';
 
   @override
   String tremorDurationSeconds(int seconds) {
-    return '${seconds}s';
+    return '$seconds с';
   }
 
   @override
   String tremorTestInstructionDynamic(int seconds) {
-    return 'Hold your phone still for $seconds seconds. Keep your arm steady.';
+    return 'Держите телефон неподвижно в течение $seconds секунд. Старайтесь не двигать рукой.';
   }
 
   @override
   String get tremorMotionBandDisclaimer =>
-      'Motion bands are for personal reference only — not a medical assessment.';
+      'Диапазоны движения предназначены только для личного ознакомления и не являются медицинской оценкой.';
 
   @override
-  String get planTodayTitle => 'Today’s practice';
+  String get planTodayTitle => 'Тренировка на сегодня';
 
   @override
   String get planTodaySubtitle =>
-      'Suggested from your training modules. Tap to start.';
+      'Рекомендации из ваших тренировочных модулей. Нажмите, чтобы начать.';
 
   @override
-  String get planEmptyHint => 'No suggestions yet. Try a training from Home.';
+  String get planEmptyHint =>
+      'Рекомендаций пока нет. Попробуйте начать тренировку на главной странице.';
 
   @override
-  String get planDomainHand => 'Hand';
+  String get planDomainHand => 'Рука';
 
   @override
-  String get planDomainVoice => 'Voice';
+  String get planDomainVoice => 'Голос';
 
   @override
-  String get planDomainMotion => 'Movement';
+  String get planDomainMotion => 'Движение';
 
   @override
   String planGoalProgress(int done, int target) {
-    return 'Today: $done/$target sessions';
+    return 'Сегодня: $done/$target сеансов';
   }
 
   @override
-  String get planGoalCompleted => 'Today’s goal is done. Nice work.';
+  String get planGoalCompleted => 'Цель на сегодня выполнена. Отличная работа.';
 
   @override
   String planWeeklyProgress(int done, int target) {
-    return 'This week: $done/$target sessions';
+    return 'На этой неделе: $done/$target сеансов';
   }
 
   @override
-  String get planOpenTask => 'Start';
+  String get planOpenTask => 'Начать';
 
   @override
   String get planMotionShelvedNote =>
-      'Movement detection is limited on some phones; you can still open the practice screen.';
+      'На некоторых телефонах распознавание движений ограничено, но экран тренировки всё равно можно открыть.';
 
   @override
-  String get voiceProtocolClarity => 'Clear phrases';
+  String get voiceProtocolClarity => 'Чёткие фразы';
 
   @override
   String get voiceProtocolClarityDesc =>
-      'Read short phrases aloud. No pronunciation scoring.';
+      'Прочитайте короткие фразы вслух. Произношение не оценивается.';
 
   @override
   String get voiceClarityHint =>
-      'Read the phrase clearly. We only check that you spoke — not whether it was “correct”.';
+      'Прочитайте фразу чётко. Мы проверяем только наличие голоса, а не «правильность» произношения.';
 
   @override
   String voiceClarityPhraseProgress(int current, int total) {
-    return 'Phrase $current of $total';
+    return 'Фраза $current из $total';
   }
 
   @override
-  String get voiceClarityVoiceDetected => 'Voice detected — nice';
+  String get voiceClarityVoiceDetected => 'Голос распознан — отлично';
 
   @override
-  String get voiceClarityWaitingVoice => 'Speak the phrase aloud';
+  String get voiceClarityWaitingVoice => 'Произнесите фразу вслух';
 
   @override
-  String get voiceClarityNextPhrase => 'Next phrase';
+  String get voiceClarityNextPhrase => 'Следующая фраза';
 
   @override
-  String get voiceClarityFinish => 'Finish';
+  String get voiceClarityFinish => 'Завершить';
 
   @override
-  String get voiceClarityPhrase1 => 'Good morning';
+  String get voiceClarityPhrase1 => 'Доброе утро';
 
   @override
-  String get voiceClarityPhrase2 => 'How are you today?';
+  String get voiceClarityPhrase2 => 'Как вы сегодня?';
 
   @override
-  String get voiceClarityPhrase3 => 'Please pass the water';
+  String get voiceClarityPhrase3 => 'Передайте, пожалуйста, воду';
 
   @override
-  String get voiceClarityPhrase4 => 'I am doing well';
+  String get voiceClarityPhrase4 => 'У меня всё хорошо';
 
   @override
-  String get voiceClarityPhrase5 => 'See you tomorrow';
+  String get voiceClarityPhrase5 => 'До завтра';
 
   @override
-  String get handModePickerTitle => 'Practice style';
+  String get handModePickerTitle => 'Формат тренировки';
 
   @override
-  String get handModeStillHold => 'Still hold';
+  String get handModeStillHold => 'Неподвижное удержание';
 
   @override
   String get handModeStillHoldDesc =>
-      'Hold the phone still while sensors measure motion.';
+      'Держите телефон неподвижно, пока датчики измеряют движение.';
 
   @override
-  String get handModeObjectHold => 'Object hold';
+  String get handModeObjectHold => 'Удержание предмета';
 
   @override
   String get handModeObjectHoldDesc =>
-      'Hold a cup or soft ball steady. Guided timer — no object detection.';
+      'Неподвижно держите чашку или мягкий мяч. Работает только таймер, распознавания предмета нет.';
 
   @override
-  String get handModeFineMotor => 'Finger taps';
+  String get handModeFineMotor => 'Касания пальцев';
 
   @override
   String get handModeFineMotorDesc =>
-      'Tap thumb to each finger. You count the cycles.';
+      'Поочерёдно касайтесь большим пальцем остальных пальцев. Считайте циклы самостоятельно.';
 
   @override
   String get handGuidedDisclaimer =>
-      'Guided practice for personal rehab support only. Not a medical assessment.';
+      'Упражнение предназначено только для личной поддержки реабилитации. Не является медицинской оценкой.';
 
   @override
   String get handObjectHoldInstruction =>
-      'Sit comfortably. Hold a cup or soft ball in one hand. Keep it steady without squeezing hard.';
+      'Сядьте удобно. Удерживайте чашку или мягкий мяч одной рукой. Держите предмет неподвижно, не сжимая его сильно.';
 
   @override
-  String get handObjectHoldStart => 'Start hold';
+  String get handObjectHoldStart => 'Начать удержание';
 
   @override
-  String get handObjectHoldRunning => 'Keep holding steadily…';
+  String get handObjectHoldRunning => 'Продолжайте держать неподвижно…';
 
   @override
-  String get handObjectHoldDone => 'Hold complete';
+  String get handObjectHoldDone => 'Удержание завершено';
 
   @override
   String get handFineMotorInstruction =>
-      'Touch your thumb to index, middle, ring, then pinky. That is one cycle.';
+      'Коснитесь большим пальцем указательного, среднего, безымянного пальца, затем мизинца. Это один цикл.';
 
   @override
-  String get handFineMotorMarkCycle => 'I finished one cycle';
+  String get handFineMotorMarkCycle => 'Я завершил один цикл';
 
   @override
   String handFineMotorProgress(int done, int target) {
-    return 'Cycles: $done/$target';
+    return 'Циклы: $done/$target';
   }
 
   @override
-  String get handGuidedCompleteTitle => 'Practice complete';
+  String get handGuidedCompleteTitle => 'Тренировка завершена';
 
   @override
   String get handGuidedCompleteBody =>
-      'Nice work. This session is saved as personal practice only.';
+      'Отличная работа. Этот сеанс сохранён только как личная тренировка.';
 
   @override
-  String get dataTabTitle => 'Your data';
+  String get dataTabTitle => 'Ваши данные';
 
   @override
   String get dataTabSubtitle =>
-      'Weekly practice scores and trends for personal reference.';
+      'Недельные оценки и тенденции тренировок для личного ознакомления.';
 
   @override
-  String get dataTrendsTitle => 'This week vs last week';
+  String get dataTrendsTitle => 'Эта неделя и прошлая неделя';
 
   @override
-  String get dataOpenFullReport => 'Open full rehab report';
+  String get dataOpenFullReport => 'Открыть полный отчёт о реабилитации';
 
   @override
-  String get dataRecentSessions => 'Recent sessions';
+  String get dataRecentSessions => 'Недавние сеансы';
 
   @override
   String dataStreakDays(int days) {
-    return 'Training streak: $days days';
+    return 'Серия тренировок: $days дн.';
   }
 
   @override
-  String get reportShareButton => 'Share report';
+  String get reportShareButton => 'Поделиться отчётом';
 
   @override
-  String get reportShareConsentTitle => 'Share your rehab summary?';
+  String get reportShareConsentTitle => 'Поделиться сводкой реабилитации?';
 
   @override
   String get reportShareConsentBody =>
-      'This creates a text file with your practice scores and trends, then opens the system share sheet (Messages, Mail, Files, etc.).\n\nFor personal reference only — not a medical diagnosis.\n\nOnce you send the file, Amplio cannot recall it from the recipient. You can cancel now, or decline any share target on the next screen.';
+      'Будет создан текстовый файл с оценками и тенденциями ваших тренировок, после чего откроется системное меню «Поделиться» («Сообщения», «Почта», «Файлы» и другие приложения).\n\nТолько для личного ознакомления — не является медицинским диагнозом.\n\nПосле отправки Amplio не сможет отозвать файл у получателя. Вы можете отменить действие сейчас или не выбирать получателя на следующем экране.';
 
   @override
-  String get reportShareConsentConfirm => 'I understand — continue';
+  String get reportShareConsentConfirm => 'Понимаю — продолжить';
 
   @override
-  String get reportShareFileTitle => 'Amplio Care rehab summary';
+  String get reportShareFileTitle => 'Сводка реабилитации Amplio Care';
 
   @override
-  String get reportShareSuccess => 'Share sheet opened';
+  String get reportShareSuccess => 'Меню «Поделиться» открыто';
 
   @override
   String get reportShareFailed =>
-      'Could not share the report. Please try again.';
+      'Не удалось поделиться отчётом. Попробуйте ещё раз.';
 
   @override
   String get reportShareFooterNote =>
-      'Sharing requires your confirmation each time. Amplio does not email doctors automatically.';
+      'Для каждой отправки требуется ваше подтверждение. Amplio не отправляет отчёты врачам автоматически.';
 
   @override
-  String get profileTabTitle => 'Profile';
+  String get profileTabTitle => 'Профиль';
 
   @override
-  String get profileGuestLabel => 'Guest';
+  String get profileGuestLabel => 'Гость';
 
   @override
   String get profileGuestSubtitle =>
-      'Signed in locally. Cloud sync is available after you sign in.';
+      'Вы вошли локально. Облачная синхронизация станет доступна после входа в аккаунт.';
 
   @override
-  String get profileSignedInLabel => 'Signed in';
+  String get profileSignedInLabel => 'Выполнен вход';
 
   @override
-  String get profileSectionPreferences => 'Preferences';
+  String get profileSectionPreferences => 'Настройки';
 
   @override
-  String get profileSectionAccount => 'Account & data';
+  String get profileSectionAccount => 'Аккаунт и данные';
 
   @override
-  String get profileSectionLegal => 'Privacy & terms';
+  String get profileSectionLegal => 'Конфиденциальность и условия';
 
   @override
-  String get accessibilitySettings => 'Accessibility';
+  String get accessibilitySettings => 'Универсальный доступ';
 
   @override
-  String get exitGuestMode => 'Exit guest mode';
+  String get exitGuestMode => 'Выйти из гостевого режима';
 
   @override
   String get exitGuestModeConfirm =>
-      'Leave guest mode? You will need to sign in or continue as a guest again.';
+      'Выйти из гостевого режима? Вам потребуется войти в аккаунт или снова продолжить как гость.';
 
   @override
-  String get trainingReminderPageTitle => 'Practice reminders';
+  String get trainingReminderPageTitle => 'Напоминания о тренировках';
 
   @override
   String get trainingReminderTitle => 'Amplio';
 
   @override
   String get trainingReminderBody =>
-      'A short practice when you can. Missing it is fine.';
+      'Небольшая тренировка, когда вам удобно. Ничего страшного, если вы её пропустите.';
 
   @override
   String get trainingReminderDisclaimer =>
-      'Optional local reminders, not a treatment schedule. You can turn them off anytime. Missing a reminder does not change your scores.';
+      'Необязательные локальные напоминания, а не расписание лечения. Их можно отключить в любое время. Пропущенное напоминание не влияет на оценки.';
 
   @override
-  String get trainingReminderEnable => 'Remind me to practice';
+  String get trainingReminderEnable => 'Напоминать о тренировке';
 
   @override
   String trainingReminderTimeLabel(int n) {
-    return 'Time $n';
+    return 'Время $n';
   }
 
   @override
-  String get trainingReminderAddTime => 'Add a second time';
+  String get trainingReminderAddTime => 'Добавить второе время';
 
   @override
-  String get trainingReminderRemoveTime => 'Remove this time';
+  String get trainingReminderRemoveTime => 'Удалить это время';
 
   @override
-  String get trainingReminderQuietWeekends => 'Skip weekends';
+  String get trainingReminderQuietWeekends => 'Пропускать выходные';
 
   @override
   String get trainingReminderQuietWeekendsHint =>
-      'No reminders on Saturday or Sunday.';
+      'Не напоминать в субботу и воскресенье.';
 
   @override
   String get trainingReminderPermissionDenied =>
-      'Notifications were not allowed. You can enable them later in iPhone Settings.';
+      'Уведомления не разрешены. Их можно включить позже в настройках iPhone.';
 
   @override
-  String get planReminderOff => 'Set a practice reminder';
+  String get planReminderOff => 'Настроить напоминание о тренировке';
 
   @override
   String planReminderOn(String times) {
-    return 'Reminders: $times';
+    return 'Напоминания: $times';
   }
 }

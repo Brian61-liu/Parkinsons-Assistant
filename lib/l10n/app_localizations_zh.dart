@@ -547,7 +547,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get openSettings => '打开设置';
 
   @override
-  String get continueAsGuest => '游客登录';
+  String get continueAsGuest => '以游客身份继续';
 
   @override
   String get movementTraining => '肢体动作训练';
@@ -1441,19 +1441,19 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get dataPoints => '數據點';
 
   @override
-  String get severityNormal => '正常';
+  String get severityNormal => '較低晃動';
 
   @override
-  String get severityMild => '輕度';
+  String get severityMild => '輕微晃動';
 
   @override
-  String get severityModerate => '中度';
+  String get severityModerate => '中等晃動';
 
   @override
-  String get severityModerateSevere => '中重度';
+  String get severityModerateSevere => '較高晃動';
 
   @override
-  String get severitySevere => '重度';
+  String get severitySevere => '最高級距';
 
   @override
   String get appSubtitle => '您的帕金森運動追蹤與分析助手';
@@ -1573,7 +1573,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get medicationPrivacyText =>
-      '若您開啟可選的用藥暱稱清單，暱稱、提醒時間與打卡紀錄會保存在本裝置。登入後還可同步到 Amplio 雲端帳戶，以便在另一台 iPhone 上恢復。若您允許通知權限，可選的本機通知僅在本機觸發。您可在應用內刪除這些資料（含刪除帳戶）。此功能不是醫療建議，且預設不包含在資料匯出中。';
+      '若您開啟可選的用藥暱稱清單，暱稱、提醒時間與打卡紀錄會儲存在本裝置。登入後也可同步到您的 Amplio 雲端帳戶，以便在另一台 iPhone 上還原。若您允許通知權限，可選的本機通知只會在本裝置觸發。您可在 App 內刪除這些資料（包括刪除帳號）。此功能不是醫療建議；除非您每次匯出時另行同意，否則匯出資料不會包含用藥資訊。';
 
   @override
   String get contactUs => '聯絡我們';
@@ -1650,7 +1650,8 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get exportData => '匯出我的資料';
 
   @override
-  String get exportDataDescription => '下載您所有資料的完整副本（JSON 格式）。';
+  String get exportDataDescription =>
+      '將您的個人資料與訓練紀錄匯出為 CSV 檔案。您可透過系統分享面板儲存到「檔案」或傳送；只有本次另行同意時，檔案才會包含用藥暱稱。';
 
   @override
   String get export => '匯出';
@@ -1662,7 +1663,21 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get exportSuccess => '匯出成功';
 
   @override
-  String get exportSuccessMessage => '您的資料已複製到剪貼簿。';
+  String get exportSuccessMessage =>
+      'CSV 檔案已準備完成。請使用分享面板儲存到「檔案」或傳送；原始感測器樣本只會匯總為數量。';
+
+  @override
+  String get exportMedicationConsentTitle => '要包含用藥暱稱嗎？';
+
+  @override
+  String get exportMedicationConsentBody =>
+      '訓練紀錄將匯出為 CSV 檔案。\n\n除非您選擇「本次包含」，否則不會包含用藥暱稱、提醒時間與打卡紀錄。這不是處方或病歷。\n\n選擇取消可停止匯出；您也可以繼續匯出但不包含用藥資料。';
+
+  @override
+  String get exportMedicationExclude => '不含用藥資料並匯出';
+
+  @override
+  String get exportMedicationInclude => '包含用藥清單';
 
   @override
   String get deleteAllRecords => '刪除所有測試記錄';
@@ -1689,7 +1704,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get deleteAccount => '刪除帳戶';
 
   @override
-  String get deleteAccountDescription => '永久刪除您的帳戶及所有相關資料。';
+  String get deleteAccountDescription => '永久刪除您的帳號及所有相關資料，包括所有測試紀錄與個人資訊。';
 
   @override
   String get deleteAccountWarning => '這將永久刪除您的帳戶和所有資料。此操作無法撤銷。';
@@ -1765,7 +1780,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get voiceTrainingInstruction =>
-      '基於 LSVT LOUD 療法理念，請大聲說話。圓的大小會根據您的音量即時變化，達到 75-85 dB 時圓會變綠。';
+      '請用清晰、有力的聲音練習。圓圈大小會隨音量變化；進入目標範圍時，圓圈會變成綠色。僅供個人練習，不是醫療處置。';
 
   @override
   String get voiceTrainingReady => '準備開始';
@@ -1815,7 +1830,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get openSettings => '打開設定';
 
   @override
-  String get continueAsGuest => '遊客登入';
+  String get continueAsGuest => '以訪客身分繼續';
 
   @override
   String get movementTraining => '肢體動作訓練';
@@ -1836,11 +1851,11 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get successCount => '成功次數';
 
   @override
-  String get cameraPermissionRequired => '需要攝像頭權限';
+  String get cameraPermissionRequired => '需要相機權限';
 
   @override
   String get cameraPermissionDeniedMessage =>
-      '攝像頭權限已被拒絕。請在系統設置中手動開啟攝像頭權限以使用肢體動作訓練功能。';
+      '相機權限已被拒絕。請在系統設定中開啟相機權限，以使用肢體動作訓練功能。';
 
   @override
   String get setGoal => '設置目標';
@@ -2001,13 +2016,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get medicationDeleteSuccess => '用藥清單資料已刪除';
 
   @override
-  String get rehabReport => 'Rehab report';
+  String get rehabReport => '復健報告';
 
   @override
   String get rehabReportDisclaimer => '僅供參考，不構成醫學診斷，也不替代醫師或治療師建議。';
 
   @override
-  String get reportOverallScore => 'Overall score';
+  String get reportOverallScore => '綜合評分';
 
   @override
   String reportDailyProgress(int percent) {
@@ -2028,13 +2043,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get reportNoData => '訓練資料尚不足';
 
   @override
-  String get handTraining => 'Hand';
+  String get handTraining => '手部';
 
   @override
-  String get voiceTrainingShort => 'Voice';
+  String get voiceTrainingShort => '語音';
 
   @override
-  String get motionTrainingShort => 'Movement';
+  String get motionTrainingShort => '肢體';
 
   @override
   String get tabHome => '首頁';
@@ -2089,7 +2104,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String relativeDaysAgo(int days) {
-    return '$days days ago';
+    return '$days 天前';
   }
 
   @override
@@ -2103,12 +2118,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String durationSec(int count) {
-    return '${count}s';
+    return '$count 秒';
   }
 
   @override
   String durationMin(int count) {
-    return '$count min';
+    return '$count 分鐘';
   }
 
   @override
@@ -2227,5 +2242,330 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get voicePracticeFooterHint => '此練習透過大聲說話幫助語音訓練，僅供參考，非醫學診斷。';
 
   @override
-  String get voiceSessionTooShort => '練習時間過短，未保存本次記錄';
+  String get voiceSessionTooShort => '練習時間過短，未儲存本次紀錄';
+
+  @override
+  String get voiceProtocolPickerTitle => '選擇練習方式';
+
+  @override
+  String get voiceProtocolSteady => '穩定音量';
+
+  @override
+  String get voiceProtocolSteadyDesc => '持續發長音「啊」，盡量維持在目標音量區間。';
+
+  @override
+  String get voiceProtocolLadder => '音量階梯';
+
+  @override
+  String get voiceProtocolLadderDesc => '輕聲 → 目標音量 → 稍強 → 慢慢降低。';
+
+  @override
+  String get voiceProtocolMultiSet => '3 組短練習';
+
+  @override
+  String get voiceProtocolMultiSetDesc => '進行三組短練習，組間稍作休息。';
+
+  @override
+  String get voiceTrainingReferenceDisclaimer => '僅供個人復健練習參考，不是診斷或治療。';
+
+  @override
+  String get voiceLadderPhaseSoft => '階段 1：輕聲';
+
+  @override
+  String get voiceLadderPhaseTarget => '階段 2：目標音量';
+
+  @override
+  String get voiceLadderPhaseStrong => '階段 3：稍強';
+
+  @override
+  String get voiceLadderPhaseCoolDown => '階段 4：慢慢降低';
+
+  @override
+  String voiceLadderChip(int seconds) {
+    return '本階段剩餘：$seconds 秒';
+  }
+
+  @override
+  String voiceSetChip(int current, int total, int seconds) {
+    return '第 $current/$total 組 · $seconds 秒';
+  }
+
+  @override
+  String voiceRestChip(int seconds) {
+    return '休息 $seconds 秒';
+  }
+
+  @override
+  String get voiceRestTitle => '休息';
+
+  @override
+  String voiceRestBody(int next, int total) {
+    return '下一組：第 $next/$total 組。請讓嗓音放鬆。';
+  }
+
+  @override
+  String get tremorDurationPickerTitle => '測量時間';
+
+  @override
+  String tremorDurationSeconds(int seconds) {
+    return '$seconds 秒';
+  }
+
+  @override
+  String tremorTestInstructionDynamic(int seconds) {
+    return '將手機握穩 $seconds 秒，並保持手臂穩定。';
+  }
+
+  @override
+  String get tremorMotionBandDisclaimer => '晃動級距僅供個人參考，不是醫療評估。';
+
+  @override
+  String get planTodayTitle => '今日練習';
+
+  @override
+  String get planTodaySubtitle => '根據您的訓練模組提供建議。點一下即可開始。';
+
+  @override
+  String get planEmptyHint => '目前沒有建議。請先從首頁開始一項訓練。';
+
+  @override
+  String get planDomainHand => '手部';
+
+  @override
+  String get planDomainVoice => '語音';
+
+  @override
+  String get planDomainMotion => '肢體';
+
+  @override
+  String planGoalProgress(int done, int target) {
+    return '今日：$done/$target 次';
+  }
+
+  @override
+  String get planGoalCompleted => '已完成今日目標，做得很好。';
+
+  @override
+  String planWeeklyProgress(int done, int target) {
+    return '本週：$done/$target 次';
+  }
+
+  @override
+  String get planOpenTask => '開始';
+
+  @override
+  String get planMotionShelvedNote => '部分手機的肢體偵測功能有限；您仍可開啟練習畫面。';
+
+  @override
+  String get voiceProtocolClarity => '清晰短句';
+
+  @override
+  String get voiceProtocolClarityDesc => '大聲朗讀短句，不評分發音是否正確。';
+
+  @override
+  String get voiceClarityHint => '請清楚讀出句子。我們只檢查您是否有發聲，不判斷是否讀得「正確」。';
+
+  @override
+  String voiceClarityPhraseProgress(int current, int total) {
+    return '第 $current/$total 句';
+  }
+
+  @override
+  String get voiceClarityVoiceDetected => '已偵測到聲音，很好';
+
+  @override
+  String get voiceClarityWaitingVoice => '請大聲讀出這句話';
+
+  @override
+  String get voiceClarityNextPhrase => '下一句';
+
+  @override
+  String get voiceClarityFinish => '完成';
+
+  @override
+  String get voiceClarityPhrase1 => '早安';
+
+  @override
+  String get voiceClarityPhrase2 => '您今天好嗎？';
+
+  @override
+  String get voiceClarityPhrase3 => '請把水遞給我';
+
+  @override
+  String get voiceClarityPhrase4 => '我很好';
+
+  @override
+  String get voiceClarityPhrase5 => '明天見';
+
+  @override
+  String get handModePickerTitle => '練習方式';
+
+  @override
+  String get handModeStillHold => '靜止持機';
+
+  @override
+  String get handModeStillHoldDesc => '握穩手機，讓感測器測量晃動。';
+
+  @override
+  String get handModeObjectHold => '穩定持物';
+
+  @override
+  String get handModeObjectHoldDesc => '穩定握住杯子或軟球。僅提供計時引導，不會偵測物體。';
+
+  @override
+  String get handModeFineMotor => '手指對碰';
+
+  @override
+  String get handModeFineMotorDesc => '用拇指依序碰觸每根手指，並自行計算完成次數。';
+
+  @override
+  String get handGuidedDisclaimer => '引導式練習僅供個人復健參考，不是醫療評估。';
+
+  @override
+  String get handObjectHoldInstruction => '請舒適坐好。單手握住杯子或軟球，保持穩定，不要過度用力擠壓。';
+
+  @override
+  String get handObjectHoldStart => '開始持握';
+
+  @override
+  String get handObjectHoldRunning => '請繼續穩定持握…';
+
+  @override
+  String get handObjectHoldDone => '持握完成';
+
+  @override
+  String get handFineMotorInstruction => '用拇指依序碰觸食指、中指、無名指和小指，這樣算一組。';
+
+  @override
+  String get handFineMotorMarkCycle => '我完成了一組';
+
+  @override
+  String handFineMotorProgress(int done, int target) {
+    return '組數：$done/$target';
+  }
+
+  @override
+  String get handGuidedCompleteTitle => '練習完成';
+
+  @override
+  String get handGuidedCompleteBody => '做得很好。本次紀錄已儲存，僅供個人練習參考。';
+
+  @override
+  String get dataTabTitle => '您的資料';
+
+  @override
+  String get dataTabSubtitle => '本週練習分數與趨勢，僅供個人參考。';
+
+  @override
+  String get dataTrendsTitle => '本週與上週比較';
+
+  @override
+  String get dataOpenFullReport => '開啟完整復健報告';
+
+  @override
+  String get dataRecentSessions => '最近練習';
+
+  @override
+  String dataStreakDays(int days) {
+    return '連續訓練：$days 天';
+  }
+
+  @override
+  String get reportShareButton => '分享報告';
+
+  @override
+  String get reportShareConsentTitle => '要分享您的復健摘要嗎？';
+
+  @override
+  String get reportShareConsentBody =>
+      '這會建立一個包含練習分數與趨勢的文字檔，並開啟系統分享面板（訊息、郵件、「檔案」等）。\n\n僅供個人參考，不是醫療診斷。\n\n檔案一旦傳送，Amplio 無法從收件者處撤回。您可以現在取消，也可以在下一個畫面不選擇任何分享對象。';
+
+  @override
+  String get reportShareConsentConfirm => '我了解，繼續';
+
+  @override
+  String get reportShareFileTitle => 'Amplio Care 復健摘要';
+
+  @override
+  String get reportShareSuccess => '已開啟分享面板';
+
+  @override
+  String get reportShareFailed => '無法分享報告，請再試一次。';
+
+  @override
+  String get reportShareFooterNote => '每次分享都需要您的確認。Amplio 不會自動以電子郵件傳送給醫師。';
+
+  @override
+  String get profileTabTitle => '個人資料';
+
+  @override
+  String get profileGuestLabel => '訪客';
+
+  @override
+  String get profileGuestSubtitle => '資料儲存在本機。登入後即可使用雲端同步。';
+
+  @override
+  String get profileSignedInLabel => '已登入';
+
+  @override
+  String get profileSectionPreferences => '偏好設定';
+
+  @override
+  String get profileSectionAccount => '帳號與資料';
+
+  @override
+  String get profileSectionLegal => '隱私權與條款';
+
+  @override
+  String get accessibilitySettings => '輔助使用';
+
+  @override
+  String get exitGuestMode => '離開訪客模式';
+
+  @override
+  String get exitGuestModeConfirm => '要離開訪客模式嗎？您需要登入，或再次選擇以訪客身分繼續。';
+
+  @override
+  String get trainingReminderPageTitle => '練習提醒';
+
+  @override
+  String get trainingReminderTitle => 'Amplio';
+
+  @override
+  String get trainingReminderBody => '方便時做一段短練習即可，錯過也沒關係。';
+
+  @override
+  String get trainingReminderDisclaimer =>
+      '這是可選的本機提醒，不是治療時程。您可隨時關閉；錯過提醒不會影響分數。';
+
+  @override
+  String get trainingReminderEnable => '提醒我練習';
+
+  @override
+  String trainingReminderTimeLabel(int n) {
+    return '時間 $n';
+  }
+
+  @override
+  String get trainingReminderAddTime => '新增第二個時間';
+
+  @override
+  String get trainingReminderRemoveTime => '移除此時間';
+
+  @override
+  String get trainingReminderQuietWeekends => '週末不提醒';
+
+  @override
+  String get trainingReminderQuietWeekendsHint => '星期六與星期日不發送提醒。';
+
+  @override
+  String get trainingReminderPermissionDenied => '未允許通知。您可稍後在 iPhone「設定」中開啟。';
+
+  @override
+  String get planReminderOff => '設定練習提醒';
+
+  @override
+  String planReminderOn(String times) {
+    return '提醒：$times';
+  }
 }
